@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="vm"
+            type="com.braingroom.tutor.viewmodel.item.ClassListItemViewModel" />
+    </data>
+
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="2dp"
+        android:padding="6dp"
+        app:cardBackgroundColor="@android:color/white"
+        app:cardCornerRadius="@dimen/cardview_default_radius"
+        app:cardElevation="@dimen/cardview_default_elevation"
+        app:cardPreventCornerOverlap="true">
+
+        <android.support.constraint.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <android.support.constraint.Guideline
+                android:id="@+id/guideline"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.35" />
+
+
+            <TextView
+                android:id="@+id/title"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:fontFamily="@font/roboto_bold"
+                android:gravity="center_vertical"
+                android:padding="10dp"
+                android:singleLine="true"
+                android:text="@{vm.title}"
+                android:textColor="@color/darkTextColor"
+                app:autoSizeTextType="uniform"
+                app:layout_constraintBottom_toBottomOf="@id/rating"
+                app:layout_constraintEnd_toStartOf="@id/rating"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="Title" />
+
+            <RatingBar
+                android:id="@+id/rating"
+                style="?android:attr/ratingBarStyleIndicator"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:isIndicator="true"
+                android:numStars="5"
+                android:paddingBottom="2dp"
+                android:paddingTop="2dp"
+                android:rating="@{vm.rating}"
+                android:scaleX="0.4"
+                android:scaleY="0.4"
+                android:stepSize="0.5"
+                android:theme="@style/RatingBar"
+                app:layout_constraintStart_toStartOf="@id/guideline2"
+                tools:rating="3" />
+
+            <ImageView
+                android:id="@+id/divider"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:src="@drawable/bottom_line_drawable"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/rating"
+                tools:ignore="ContentDescription" />
+
+            <ImageView
+                android:id="@+id/class_image"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:contentDescription="@{vm.title}"
+                android:padding="10dp"
+                android:scaleType="centerCrop"
+                android:src="@{vm.image}"
+                app:layout_constraintDimensionRatio="1"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/guideline"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/divider"
+                tools:src="@drawable/class_ph_2" />
+
+
+            <TextView
+                android:id="@+id/location"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginTop="2dp"
+                android:drawableLeft="@drawable/ic_location_20dp"
+                android:drawablePadding="5dp"
+                android:drawableStart="@drawable/ic_location_20dp"
+                android:fontFamily="@font/roboto_regular"
+                android:gravity="center_vertical"
+                android:text="@{vm.location}"
+                android:textColor="@color/darkTextColor"
+                app:autoSizeTextType="none"
+                app:layout_constraintBottom_toTopOf="@+id/session"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/guideline"
+                app:layout_constraintTop_toBottomOf="@+id/title"
+                app:layout_constraintVertical_chainStyle="spread"
+                tools:text="Location" />
+
+            <TextView
+                android:id="@+id/session"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:drawableLeft="@drawable/ic_no_session_20dp"
+                android:drawablePadding="5dp"
+                android:drawableStart="@drawable/ic_no_session_20dp"
+                android:fontFamily="@font/roboto_regular"
+                android:gravity="center_vertical"
+                android:text="@{vm.type}"
+                android:textColor="@color/darkTextColor"
+                app:autoSizeTextType="none"
+                app:layout_constraintBottom_toTopOf="@+id/calender"
+                app:layout_constraintEnd_toEndOf="@id/location"
+                app:layout_constraintStart_toStartOf="@id/location"
+                app:layout_constraintTop_toBottomOf="@+id/location"
+                tools:text="Number of Sessions" />
+
+            <!--<LinearLayout
+                android:id="@+id/calender"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                app:layout_constraintBottom_toTopOf="@+id/summary"
+                app:layout_constraintEnd_toEndOf="@id/location"
+                app:layout_constraintStart_toStartOf="@id/location"
+                app:layout_constraintTop_toBottomOf="@+id/session">
+
+                <ImageView
+                    android:layout_width="15dp"
+                    android:layout_height="match_parent"
+                    android:tint="@color/material_grey900"
+                    android:src="@drawable/ic_clock_20dp" />
+
+                <TextView
+                    android:layout_marginLeft="5dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:fontFamily="@font/roboto_regular"
+                    android:textColor="@color/darkTextColor"
+                    android:text="Duration" />
+
+            </LinearLayout>
+-->
+            <TextView
+                android:id="@+id/calender"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:drawableLeft="@drawable/ic_clock_20dp"
+                android:drawablePadding="5dp"
+                android:drawableStart="@drawable/ic_clock_20dp"
+                android:fontFamily="@font/roboto_regular"
+                android:gravity="center_vertical"
+                android:text="@{vm.duration}"
+                android:textColor="@color/darkTextColor"
+                app:autoSizeTextType="none"
+                app:layout_constraintBottom_toTopOf="@+id/summary"
+                app:layout_constraintEnd_toEndOf="@id/location"
+                app:layout_constraintStart_toStartOf="@id/location"
+                app:layout_constraintTop_toBottomOf="@+id/session"
+                tools:text="Duration" />
+
+            <TextView
+                android:id="@+id/summary"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:drawableLeft="@drawable/ic_info_20dp"
+                android:drawablePadding="5dp"
+                android:drawableStart="@drawable/ic_info_20dp"
+                android:ellipsize="end"
+                android:fontFamily="@font/roboto_regular"
+                android:gravity="center_vertical"
+                android:singleLine="true"
+                android:text="@{vm.summary}"
+                android:textColor="@color/darkTextColor"
+                app:autoSizeTextType="none"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="@id/location"
+                app:layout_constraintStart_toStartOf="@id/location"
+                app:layout_constraintTop_toBottomOf="@+id/calender"
+                tools:text="Summary" />
+
+
+            <android.support.constraint.Guideline
+                android:id="@+id/guideline2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.60" />
+
+        </android.support.constraint.ConstraintLayout>
+    </android.support.v7.widget.CardView>
+</layout><!--Todo reduce icon size to 15 dp change rating style -->
