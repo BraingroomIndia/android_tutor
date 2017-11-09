@@ -19,6 +19,7 @@ import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 
 import com.braingroom.tutor.utils.defaultBinder
+import com.braingroom.tutor.viewmodel.item.NotifyDataSetChanged
 import com.braingroom.tutor.viewmodel.item.RefreshViewModel
 
 /*
@@ -29,29 +30,29 @@ class RecyclerViewAdapterReplaySubject : RecyclerView.Adapter<DataBindingViewHol
     private val latestViewModels = ArrayList<ViewModel>(0)
     private val binder: ViewModelBinder = defaultBinder
     private val source: Observable<out ViewModel?>?
-    private val replaySubjectViewModel: Observable<out ViewModel>?
     private val viewProvider: ViewProvider
     private val subscriptions = HashMap<RecyclerView.AdapterDataObserver, Disposable>()
 
 
     constructor(replaySubjectViewModel: Observable<out ViewModel>?,
                 viewProvider: ViewProvider) : super() {
-        this.replaySubjectViewModel = replaySubjectViewModel;
         this.viewProvider = viewProvider
         source = replaySubjectViewModel?.replay()?.observeOn(AndroidSchedulers.mainThread())?.subscribeOn(Schedulers.io())?.
                 doOnNext { viewModel ->
                     val iterator = latestViewModels.listIterator(latestViewModels.size)
                     viewModel?.let {
-                        when (viewModel) {
+                        when (it) {
                             is RemoveLoadingViewModel ->
                                 while (iterator.hasPrevious() && iterator.previous() is LoadingViewModel) iterator.remove()
                             is RefreshViewModel ->
                                 latestViewModels.clear()
+                            is NotifyDataSetChanged ->
+                                if (!latestViewModels.isEmpty())
+                                    notifyDataSetChanged()
                             else ->
                                 iterator.add(viewModel)
                         }
-                        if (!latestViewModels.isEmpty())
-                            notifyDataSetChanged()
+
                     }
 
                 }?.share()
@@ -81,7 +82,7 @@ class RecyclerViewAdapterReplaySubject : RecyclerView.Adapter<DataBindingViewHol
     }
 
     override fun registerAdapterDataObserver(observer: RecyclerView.AdapterDataObserver) {
-         source?.let { subscriptions.put(observer, it.subscribe()) }
+        source?.let { subscriptions.put(observer, it.subscribe()) }
         super.registerAdapterDataObserver(observer)
     }
 

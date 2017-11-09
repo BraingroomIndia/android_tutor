@@ -8,6 +8,7 @@ import com.braingroom.tutor.view.activity.SecondActivity
 import com.braingroom.tutor.view.adapters.ViewProvider
 import com.braingroom.tutor.viewmodel.ViewModel
 import com.braingroom.tutor.viewmodel.item.HomeItemViewModel
+import com.braingroom.tutor.viewmodel.item.NotifyDataSetChanged
 import io.reactivex.functions.Action
 import java.util.ArrayList
 
@@ -22,9 +23,9 @@ class HomeViewModel : ViewModel() {
             navigator?.navigateActivity(SecondActivity::class.java)
         }
     }
-    val spanCount by lazy { 2 }
-    val homeItemViewModels: List<ViewModel>
-    val homeItemViewProvider: ViewProvider by lazy {
+    val spanCount = 2
+
+    val view: ViewProvider by lazy {
         object : ViewProvider {
             override fun getView(vm: ViewModel?): Int {
                 return R.layout.item_home;
@@ -53,7 +54,11 @@ class HomeViewModel : ViewModel() {
         topDrawableList += R.drawable.ic_review_36dp
         topDrawableList += R.drawable.ic_promot_36dp
 
-        homeItemViewModels = (0..7).mapTo(ArrayList<HomeItemViewModel>(8)) { HomeItemViewModel(topDrawableList[it], bottomDrawableList[it], "Hello") }
+        for (i in 0..7)
+            item.onNext(HomeItemViewModel(topDrawableList[i], bottomDrawableList[i], "Hello"))
+        item.onNext(NotifyDataSetChanged())
+
+//            homeItemViewModels = (0..7).mapTo(ArrayList<HomeItemViewModel>(8)) { HomeItemViewModel(topDrawableList[it], bottomDrawableList[it], "Hello") }
 
     }
 }

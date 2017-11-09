@@ -6,7 +6,6 @@ import com.braingroom.tutor.R;
 import com.braingroom.tutor.model.data.ListDialogData;
 import com.braingroom.tutor.model.req.ClassListReq.Snippet;
 import com.braingroom.tutor.model.resp.ClassListResp;
-import com.braingroom.tutor.utils.CommonUtilsKt;
 import com.braingroom.tutor.view.adapters.ViewProvider;
 import com.braingroom.tutor.viewmodel.ViewModel;
 import com.braingroom.tutor.viewmodel.item.ClassListItemViewModel;
@@ -14,8 +13,6 @@ import com.braingroom.tutor.viewmodel.item.ListDialogViewModel;
 import com.braingroom.tutor.viewmodel.item.LoadingViewModel;
 import com.braingroom.tutor.viewmodel.item.NotifyDataSetChanged;
 import com.braingroom.tutor.viewmodel.item.RemoveLoadingViewModel;
-
-import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -33,24 +30,21 @@ public class MyClassesViewModel extends ViewModel {
     public final ListDialogViewModel classType;
     public final ListDialogViewModel classStatus;
     public final Snippet snippet = new Snippet(true, true, getUserId());
-    public int currentPageNumber = 0;
-    public ViewProvider view = new ViewProvider() {
-        @Override
-        public int getView(@Nullable ViewModel vm) {
-            if (vm != null) {
-                if (vm instanceof ClassListItemViewModel)
-                    return R.layout.item_class_list;
-                if (vm instanceof LoadingViewModel)
-                    return R.layout.item_loading_class_list;
-                else
-                    try {
-                        throw new NoSuchFieldException();
-                    } catch (Exception e) {
-                        throw new Error();
-                    }
-            }
-            throw new NullPointerException();
+    private int currentPageNumber = 0;
+    public ViewProvider view = vm -> {
+        if (vm != null) {
+            if (vm instanceof ClassListItemViewModel)
+                return R.layout.item_class_list;
+            if (vm instanceof LoadingViewModel)
+                return R.layout.item_loading_class_list;
+            else
+                try {
+                    throw new NoSuchFieldException();
+                } catch (Exception e) {
+                    throw new Error();
+                }
         }
+        throw new NullPointerException();
     };
 
     public MyClassesViewModel() {

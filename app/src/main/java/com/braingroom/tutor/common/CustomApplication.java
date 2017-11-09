@@ -75,7 +75,7 @@ public class CustomApplication extends Application implements ActivityLifecycleC
 
     public void putFontCache(String key, String name) {
         if (fontCache.get(key) == null) {
-            fontCache.put(key, Typeface.createFromAsset(getApplicationContext().getAssets(), "fonts/" + name));
+            fontCache.put(key, Typeface.createFromAsset(getApplicationContext().getAssets(), "font/" + name));
         } else {
             Log.d(TAG, "putFontCache: Already in cache");
         }

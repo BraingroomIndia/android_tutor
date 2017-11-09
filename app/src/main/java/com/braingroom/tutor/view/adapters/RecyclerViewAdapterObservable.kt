@@ -66,7 +66,6 @@ class RecyclerViewAdapterObservable(observableViewModels: ReplaySubject<out View
                         }
 
                     }
-                    notifyDataSetChanged()
                 }?.doOnSubscribe { Log.d(TAG, "Subscribed") }?.share()
     }
 
