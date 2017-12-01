@@ -89,6 +89,22 @@ fun isValidEmail(target: CharSequence?): Boolean {
     }
 }
 
+fun isValidPhone(target: CharSequence?):Boolean{
+    return if(target==null){
+        false
+    }else{
+        android.util.Patterns.PHONE.matcher(target).matches()
+    }
+}
+
+fun isValidName(target: CharSequence?):Boolean{
+    return if(target==null){
+        false
+    }else{
+        !target.contains("[^a-zA-Z]")
+    }
+}
+
 fun isEmpty(target: String?): Boolean = target.isNullOrBlank()
 fun isEmpty(target: Object?): Boolean = target == null
 fun getNonNull(target: String?) = target ?: "";

@@ -82,7 +82,7 @@ public class CustomDrawable extends ObservableField<Drawable> implements Target 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
             this.color = CustomApplication.getInstance().getColor(color);
         else this.color = CustomApplication.getInstance().getResources().getColor(color);
-        if (CustomApplication.getInstance() != null && CustomApplication.getInstance().getAppModule() != null) {
+        if (CustomApplication.getInstance() != null && CustomApplication.getInstance().getAppModule() != null){
             if (!TextUtils.isEmpty(imageUrl)) {
                 CustomApplication.getInstance().getAppModule().getPicasso().load(imageUrl).placeholder(placeHolder).error(placeHolder).into(this);
             } else {
@@ -95,14 +95,12 @@ public class CustomDrawable extends ObservableField<Drawable> implements Target 
     public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
         if (bitmap != null)
             set(new BitmapDrawable(CustomApplication.getInstance().getResources(), bitmap));
-
     }
 
     @Override
     public void onBitmapFailed(Drawable errorDrawable) {
         if (errorDrawable != null)
             set(errorDrawable);
-
     }
 
     @Override

@@ -43,4 +43,29 @@ class DataFlowService(private val api: ApiService) {
         return api.getAllClasses(if (pageNumber > 0) pageNumber.toString() else "", ClassListReq(snippet)).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).
                 onErrorReturn { ClassListResp() }.map { resp -> resp ?: ClassListResp() }
     }
+
+    fun getInstitute(keyword: String): Observable<CommonIdResp> {
+
+        return api.getInstitute(InstituteReq(InstituteReq.Snippet(keyword))).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+    }
+
+    fun getLearner(keyword: String): Observable<CommonIdResp> {
+
+        return api.getUser(UserListReq(UserListReq.Snippet(keyword, 2, "1"))).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+    }
+
+    fun geTutor(keyword: String): Observable<CommonIdResp> {
+
+        return api.getUser(UserListReq(UserListReq.Snippet(keyword, 1, "1"))).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+    }
+
+
+    fun getSchools(keyword: String): Observable<CommonIdResp> {
+
+        return api.getSchools(InstituteReq(InstituteReq.Snippet(keyword))).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+    }
 }

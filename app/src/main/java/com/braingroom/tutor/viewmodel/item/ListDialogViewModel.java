@@ -57,7 +57,6 @@ public class ListDialogViewModel extends ViewModel {
         setSourceObservable(sourceObservable);
         onOpenClick = this::show;
         setSelectedItemsText();
-
     }
 
 

@@ -23,4 +23,13 @@ interface ApiService {
 
     @POST("getAllClasses/{pageIndex}")
     fun getAllClasses(@Path("pageIndex") pageIndex: String, @Body req: ClassListReq): Observable<ClassListResp?>
+
+    @POST("getInstitions")
+    abstract fun getInstitute(@Body req: InstituteReq): Observable<CommonIdResp>
+
+    @POST("getUsers")
+    abstract fun getUser(@Body req: UserListReq): Observable<CommonIdResp>
+
+    @POST("getSchools")
+    abstract fun getSchools(@Body req: InstituteReq): Observable<CommonIdResp>
 }

@@ -31,8 +31,6 @@ class SplashActivity : AppCompatActivity() {
             CustomApplication.getInstance().userPic = userPreferences.getString(profilePic, "");
             startActivity(Intent(this, BarcodeCaptureActivity::class.java))
         } else startActivityForResult(Intent(this, LoginActivity::class.java), LOG_IN_REQ)
-
-
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -40,6 +38,5 @@ class SplashActivity : AppCompatActivity() {
         if (resultCode == Activity.RESULT_OK) {
             startActivity(Intent(this, BarcodeCaptureActivity::class.java))
         }
-
     }
 }

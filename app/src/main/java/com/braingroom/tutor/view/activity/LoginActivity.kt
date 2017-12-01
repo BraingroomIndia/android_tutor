@@ -18,7 +18,6 @@ import com.facebook.FacebookCallback
 import com.facebook.login.LoginManager
 import com.facebook.CallbackManager
 
-
 /*
  * Created by godara on 13/10/17.
 */
@@ -69,13 +68,10 @@ class LoginActivity : Activity(), OnConnectionFailedListener {
                         parameters.putString("fields", "id,name,email,picture")
                         request.parameters = parameters
                         request.executeAsync()
-
                     }
-
                     override fun onCancel() {
                         messageHelper?.showDismissInfo("Login cancelled by user")
                     }
-
                     override fun onError(exception: FacebookException) {
                         Log.d(TAG, "onError: " + exception.message)
                         exception.printStackTrace()

@@ -4,13 +4,13 @@ package com.braingroom.tutor.viewmodel
 import android.content.Intent
 import android.databinding.ObservableInt
 
-import com.braingroom.tutor.R
 import com.braingroom.tutor.common.CustomApplication
 import com.braingroom.tutor.utils.CustomDrawable
 import com.braingroom.tutor.utils.lodgedIn
 
 import io.reactivex.subjects.ReplaySubject
 import android.databinding.ObservableField
+import com.braingroom.tutor.R
 
 
 /*

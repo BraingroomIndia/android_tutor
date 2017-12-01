@@ -22,16 +22,12 @@ import io.reactivex.Observable;
 import static com.braingroom.tutor.utils.CommonUtilsKt.toObservable;
 
 
-/*
- * Created by godara on 13/10/17.
- */
-
 public class MyClassesViewModel extends ViewModel {
     public final ListDialogViewModel classType;
     public final ListDialogViewModel classStatus;
     public final Snippet snippet = new Snippet(true, true, getUserId());
     private int currentPageNumber = 0;
-    public ViewProvider view = vm -> {
+    public ViewProvider view = vm ->{
         if (vm != null) {
             if (vm instanceof ClassListItemViewModel)
                 return R.layout.item_class_list;
@@ -74,8 +70,6 @@ public class MyClassesViewModel extends ViewModel {
                 reset();
                 Log.d(getTAG(), "classStatus selected items : " + selectedItems.values());
             }
-
-
         }, "");
         toObservable(getCallAgain()).subscribe(integer -> getApiService().getAllClasses(snippet, currentPageNumber).doOnSubscribe(disposable -> {
             for (int i = 0; i < 5; i++)
@@ -109,5 +103,4 @@ public class MyClassesViewModel extends ViewModel {
         currentPageNumber = 0;
         getCallAgain().set(getCallAgain().get() + 1);
     }
-
 }

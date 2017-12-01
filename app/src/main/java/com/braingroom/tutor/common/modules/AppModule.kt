@@ -40,7 +40,6 @@ class AppModule(private val application: Application) {
                 Log.d(value.TAG, "activity set")
             else
                 Log.d("activity null", "activity value set")
-
         }
     private val cacheSize = 10 * 1024 * 1024 // 10 MiB
 
@@ -65,7 +64,6 @@ class AppModule(private val application: Application) {
                     .connectTimeout(1000, SECONDS)
                     .readTimeout(1000, SECONDS)
                     .writeTimeout(1000, SECONDS).build()
-
     }
 
     val picasso: Picasso by lazy {
@@ -86,8 +84,6 @@ class AppModule(private val application: Application) {
                     .baseUrl(BASE_URL)
                     .client(okHttpClient)
                     .build().create(ApiService::class.java)
-
-
     }
 
     val dataFlowService: DataFlowService by lazy {
@@ -105,7 +101,6 @@ class AppModule(private val application: Application) {
             Log.d(activity?.TAG, "fetched navigator")
             return activity?.navigator
         }
-
     var messageHelper: MessageHelper? = null
         get() {
             Log.d(activity?.TAG, "fetched messageHelper")
@@ -116,13 +111,10 @@ class AppModule(private val application: Application) {
             Log.d(activity?.TAG, "fetched dialogHelper")
             return activity?.dialogHelper
         }
-
-
     fun providePicasso(): Picasso {
         val picasso = Picasso.with(application)
         picasso.setIndicatorsEnabled(false)
         picasso.isLoggingEnabled = false
         return picasso
     }
-
 }
