@@ -81,16 +81,10 @@ fun getRandomNumberInRange(min: Int, max: Int): Int {
     return r.nextInt(max - min + 1) + min
 }
 
-fun isValidEmail(target: CharSequence?): Boolean {
-    return if (target == null) {
-        false
-    } else {
-        android.util.Patterns.EMAIL_ADDRESS.matcher(target).matches()
-    }
-}
+fun String?.isValidEmail(): Boolean = !this.isNullOrBlank() && android.util.Patterns.EMAIL_ADDRESS.matcher(this).matches()
 
 fun isEmpty(target: String?): Boolean = target.isNullOrBlank()
-fun isEmpty(target: Object?): Boolean = target == null
+fun isEmpty(target: Any?): Boolean = target == null
 fun getNonNull(target: String?) = target ?: "";
 
 

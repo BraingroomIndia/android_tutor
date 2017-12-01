@@ -3,6 +3,7 @@ package com.braingroom.tutor.view.adapters
 import android.databinding.DataBindingUtil
 import android.databinding.ViewDataBinding
 import android.support.v7.widget.RecyclerView
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 
@@ -21,23 +22,22 @@ import io.reactivex.schedulers.Schedulers
 import com.braingroom.tutor.utils.defaultBinder
 import com.braingroom.tutor.viewmodel.item.NotifyDataSetChanged
 import com.braingroom.tutor.viewmodel.item.RefreshViewModel
+import io.reactivex.functions.Consumer
+import io.reactivex.subjects.ReplaySubject
 
 /*
  * Created by godara on 06/11/17.
  */
 
-class RecyclerViewAdapterReplaySubject : RecyclerView.Adapter<DataBindingViewHolder> {
+class RecyclerViewAdapterReplaySubject(replaySubjectViewModel: ReplaySubject<out ViewModel>?, private val viewProvider: ViewProvider) : RecyclerView.Adapter<DataBindingViewHolder>() {
     private val latestViewModels = ArrayList<ViewModel>(0)
     private val binder: ViewModelBinder = defaultBinder
     private val source: Observable<out ViewModel?>?
-    private val viewProvider: ViewProvider
     private val subscriptions = HashMap<RecyclerView.AdapterDataObserver, Disposable>()
+    private val TAG = this.javaClass.simpleName
 
-
-    constructor(replaySubjectViewModel: Observable<out ViewModel>?,
-                viewProvider: ViewProvider) : super() {
-        this.viewProvider = viewProvider
-        source = replaySubjectViewModel?.replay()?.observeOn(AndroidSchedulers.mainThread())?.subscribeOn(Schedulers.io())?.
+    init {
+        source = replaySubjectViewModel?.replay()?.subscribeOn(Schedulers.computation())?.
                 doOnNext { viewModel ->
                     val iterator = latestViewModels.listIterator(latestViewModels.size)
                     viewModel?.let {
@@ -46,9 +46,6 @@ class RecyclerViewAdapterReplaySubject : RecyclerView.Adapter<DataBindingViewHol
                                 while (iterator.hasPrevious() && iterator.previous() is LoadingViewModel) iterator.remove()
                             is RefreshViewModel ->
                                 latestViewModels.clear()
-                            is NotifyDataSetChanged ->
-                                if (!latestViewModels.isEmpty())
-                                    notifyDataSetChanged()
                             else ->
                                 iterator.add(viewModel)
                         }
@@ -82,7 +79,16 @@ class RecyclerViewAdapterReplaySubject : RecyclerView.Adapter<DataBindingViewHol
     }
 
     override fun registerAdapterDataObserver(observer: RecyclerView.AdapterDataObserver) {
-        source?.let { subscriptions.put(observer, it.subscribe()) }
+        source?.let {
+            subscriptions.put(observer, it.observeOn(AndroidSchedulers.mainThread()).subscribe({ viewModel ->
+                if (viewModel is NotifyDataSetChanged && !latestViewModels.isEmpty())
+                    notifyDataSetChanged()
+            }, { throwable ->
+                Log.d(TAG, throwable.localizedMessage)
+                Log.d(TAG, throwable.message)
+                throwable.printStackTrace()
+            }))
+        }
         super.registerAdapterDataObserver(observer)
     }
 
@@ -90,5 +96,6 @@ class RecyclerViewAdapterReplaySubject : RecyclerView.Adapter<DataBindingViewHol
         super.unregisterAdapterDataObserver(observer)
         subscriptions.remove(observer)?.let { if (!it.isDisposed) it.dispose() }
     }
+
 
 }

@@ -1,3 +1,5 @@
+@file:Suppress("USELESS_ELVIS")
+
 package com.braingroom.tutor.utils
 
 import android.databinding.BindingConversion
@@ -56,6 +58,21 @@ fun toOnClickListener(listener: Action?): View.OnClickListener? {
 fun setImageUri(view: ImageView?, drawable: Drawable?) {
     view?.setImageDrawable(drawable)
 }
+
+@BindingAdapter("android:src")
+fun setImageUri(view: ImageView?, imageUri: String?) {
+    Log.d("Binding Utils", "setImageUrl: " + imageUri)
+    if (!imageUri.isNullOrBlank())
+        view?.let { picasso?.load(imageUri)?.centerInside()?.resize(it.width, it.height)?.into(it) }
+}
+
+@BindingAdapter(value = *arrayOf("android:src", "placeHolder"), requireAll = true)
+fun setImageUrl(imageView: ImageView?, url: String?, placeHolder: Int) {
+    Log.d("Binding Utils", "setImageUrl: " + url ?: "null")
+    if (!url.isNullOrBlank())
+        imageView?.let { picasso?.load(url)?.placeholder(placeHolder)?.error(placeHolder)?.centerInside()?.resize(it.width, it.height)?.into(it) }
+}
+
 
 @BindingAdapter(value = *arrayOf("android:drawableLeft", "android:drawableRight", "android:drawableTop", "android:drawableBottom"), requireAll = false)
 fun setDrawableBottom(view: TextView?,

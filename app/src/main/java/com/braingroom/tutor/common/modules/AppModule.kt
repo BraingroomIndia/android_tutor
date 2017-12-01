@@ -35,11 +35,16 @@ class AppModule(private val application: Application) {
 
     var activity: Activity? = null
         set(value) {
-            field = value
             if (value != null)
-                Log.d(value.TAG, "activity set")
-            else
+                if (value != field) {
+                    field = value
+                    Log.d(value.TAG, "activity set")
+                } else
+                    Log.d(value.TAG, "activity already set")
+            else {
+                field = null
                 Log.d("activity null", "activity value set")
+            }
 
         }
     private val cacheSize = 10 * 1024 * 1024 // 10 MiB
@@ -57,7 +62,7 @@ class AppModule(private val application: Application) {
                     .cache(Cache(application.cacheDir, cacheSize.toLong()))
                     .connectTimeout(1000, SECONDS)
                     .readTimeout(1000, SECONDS)
-                    .writeTimeout(1000, SECONDS).build()
+                    .writeTimeout(1000, SECONDS).addInterceptor(loggingInterceptor).build()
         else
             OkHttpClient.Builder()
                     .addInterceptor(CustomInterceptor())
@@ -68,9 +73,8 @@ class AppModule(private val application: Application) {
 
     }
 
-    val picasso: Picasso by lazy {
-        providePicasso()
-    }
+    val picasso by lazy { providePicasso() }
+
     val apiService: ApiService by lazy {
         if (DEBUG)
             Retrofit.Builder()
@@ -102,23 +106,23 @@ class AppModule(private val application: Application) {
 
     var navigator: Navigator? = null
         get() {
-            Log.d(activity?.TAG, "fetched navigator")
+            Log.d(activity?.TAG, "\tfetched navigator")
             return activity?.navigator
         }
 
     var messageHelper: MessageHelper? = null
         get() {
-            Log.d(activity?.TAG, "fetched messageHelper")
+            Log.d(activity?.TAG, "\tfetched messageHelper")
             return activity?.messageHelper
         }
     var dialogHelper: DialogHelper? = null
         get() {
-            Log.d(activity?.TAG, "fetched dialogHelper")
+            Log.d(activity?.TAG, "\tfetched dialogHelper")
             return activity?.dialogHelper
         }
 
 
-    fun providePicasso(): Picasso {
+    fun providePicasso(): Picasso? {
         val picasso = Picasso.with(application)
         picasso.setIndicatorsEnabled(false)
         picasso.isLoggingEnabled = false

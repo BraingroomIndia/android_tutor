@@ -11,13 +11,14 @@ import com.braingroom.tutor.view.adapters.*
 import com.braingroom.tutor.viewmodel.ViewModel
 import com.braingroom.tutor.viewmodel.item.ListTextIconViewModel
 import com.braingroom.tutor.viewmodel.item.TextIconViewModel
+import io.reactivex.android.schedulers.AndroidSchedulers
 import java.util.ArrayList
 
 /*
  * Created by godara on 11/10/17.
  */
 
-class MyProfileViewModel : ViewModel {
+class MyProfileViewModel() : ViewModel() {
     var items: ObservableField<List<ListTextIconViewModel>> = ObservableField();
     val viewProvider: ViewProvider by lazy {
         object : ViewProvider {
@@ -26,14 +27,15 @@ class MyProfileViewModel : ViewModel {
             }
         }
     }
+
+
     val decor: EqualSpacingItemDecoration  by lazy {
         EqualSpacingItemDecoration(convertDpToPixel(200).toInt(), VERTICAL)
     }
 
-    constructor() : super() {
-        apiService.getMyProfile("1131").subscribe { resp -> if (resp.resCode) handleApiResult(resp.data) }
+    init {
+        apiService.getMyProfile("1131").observeOn(AndroidSchedulers.mainThread()).subscribe { resp -> if (resp.resCode) handleApiResult(resp.data) }
     }
-
 
     private fun handleApiResult(data: Snippet) {
         val source = ArrayList<ListTextIconViewModel>()

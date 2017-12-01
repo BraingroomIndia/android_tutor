@@ -23,50 +23,36 @@ import com.braingroom.tutor.viewmodel.item.LoadingViewModel
 import com.braingroom.tutor.viewmodel.item.NotifyDataSetChanged
 import com.braingroom.tutor.viewmodel.item.RefreshViewModel
 import com.braingroom.tutor.viewmodel.item.RemoveLoadingViewModel
+import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.ReplaySubject
 
 
-class RecyclerViewAdapterObservable(observableViewModels: ReplaySubject<out ViewModel>?,
+class RecyclerViewAdapterObservable(replaySubjectViewModel: ReplaySubject<out ViewModel>?,
                                     private val viewProvider: ViewProvider) : RecyclerView.Adapter<DataBindingViewHolder>() {
     private val latestViewModels = ArrayList<ViewModel>(0)
     private val binder: ViewModelBinder = defaultBinder
     private val source: Observable<out ViewModel>?
-    private val subscriptions = HashMap<RecyclerView.AdapterDataObserver, Disposable>()
+    private val subscriptions = CompositeDisposable()
     public val TAG: String
         get() = this::class.java.simpleName ?: ""
 
     init {
-        source = observableViewModels?.repeat()?.observeOn(AndroidSchedulers.mainThread())?.subscribeOn(Schedulers.io())?.
+        source = replaySubjectViewModel?.replay()?.observeOn(Schedulers.computation())?.subscribeOn(Schedulers.computation())?.
                 doOnNext { viewModel ->
-                    //                    Log.d(TAG, "doOnNext called")
+                    val iterator = latestViewModels.listIterator(latestViewModels.size)
                     viewModel?.let {
-                        val iterator = latestViewModels.listIterator(latestViewModels.size)
                         when (it) {
-                            is RemoveLoadingViewModel -> {
-                                Log.d(TAG, "Removing Loading Items")
+                            is RemoveLoadingViewModel ->
                                 while (iterator.hasPrevious() && iterator.previous() is LoadingViewModel) iterator.remove()
-                            }
-                            is RefreshViewModel -> {
-//                                Log.d(TAG, "Removing All Items")
+                            is RefreshViewModel ->
                                 latestViewModels.clear()
-                            }
-                            is NotifyDataSetChanged -> {
-                                if (!latestViewModels.isEmpty()) {
-                                    notifyDataSetChanged()
-                                    Log.d(TAG, "Updating UI")
-                                } else {
-                                    Log.d(TAG, "No items to Update UI")
-                                }
-                            }
-                            else -> {
-//                                Log.d(TAG, "Added Actual items Named " + it.TAG)
-                                iterator.add(it)
-
-                            }
+                            else ->
+                                iterator.add(viewModel)
                         }
 
                     }
-                }?.doOnSubscribe { Log.d(TAG, "Subscribed") }?.share()
+
+                }?.share()
     }
 
 
@@ -102,13 +88,27 @@ class RecyclerViewAdapterObservable(observableViewModels: ReplaySubject<out View
     }
 
     override fun registerAdapterDataObserver(observer: RecyclerView.AdapterDataObserver) {
-        source?.let { it.subscribe()?.let { subscriptions.put(observer, it) } }
+        source?.let {
+            // if source is non null subscribe to it
+            it.observeOn(AndroidSchedulers.mainThread()).subscribe({ viewModel ->
+                if (viewModel is NotifyDataSetChanged) // call notifyDataChanged if incoming item is instance of NotifyDataSetChanged
+                    if (!latestViewModels.isEmpty())
+                        notifyDataSetChanged()
+                    else Log.d(TAG, "Nothing to update")
+            }, { throwable ->
+                // in case of some error
+                Log.d(TAG, throwable.localizedMessage)
+                Log.d(TAG, throwable.message)
+                throwable.printStackTrace()
+            })?.let { subscriptions.add(it) } // save
+        }
         super.registerAdapterDataObserver(observer)
     }
 
     override fun unregisterAdapterDataObserver(observer: RecyclerView.AdapterDataObserver) {
         super.unregisterAdapterDataObserver(observer)
-        subscriptions.remove(observer)?.let { if (!it.isDisposed) it.dispose() }
+        if (!subscriptions.isDisposed)
+            subscriptions.dispose()
     }
 
 

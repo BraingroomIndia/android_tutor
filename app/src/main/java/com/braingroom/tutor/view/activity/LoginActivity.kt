@@ -73,13 +73,13 @@ class LoginActivity : Activity(), OnConnectionFailedListener {
                     }
 
                     override fun onCancel() {
-                        messageHelper?.showDismissInfo("Login cancelled by user")
+                        messageHelper.showDismissInfo("Login cancelled by user")
                     }
 
                     override fun onError(exception: FacebookException) {
                         Log.d(TAG, "onError: " + exception.message)
                         exception.printStackTrace()
-                        messageHelper?.showDismissInfo("Facebook login error")
+                        messageHelper.showDismissInfo("Facebook login error")
                     }
                 })
     }

@@ -92,7 +92,7 @@ public class ListDialogViewModel extends ViewModel {
         getDialogHelper().setViewModel(this);
 
 
-        disposable = source.subscribe();
+        getCompositeDisposable().add(source.subscribe());
     }
 
     @SuppressWarnings("WeakerAccess")
@@ -161,8 +161,14 @@ public class ListDialogViewModel extends ViewModel {
         dismiss();
     }
 
-    public void dismiss() {
-        if (!disposable.isDisposed())
-            disposable.dispose();
+    private void dismiss() {
+        if (!getCompositeDisposable().isDisposed())
+            getCompositeDisposable().dispose();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        dismiss();
     }
 }

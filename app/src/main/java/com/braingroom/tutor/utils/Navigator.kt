@@ -23,6 +23,8 @@ import com.tbruyelle.rxpermissions2.RxPermissions
 @Suppress("unused", "UNUSED_PARAMETER")
 class Navigator(val activity: Activity?) {
 
+    val TAG = activity?.TAG +"\t"+ this.javaClass.simpleName
+
     fun navigateActivity(destination: Class<out Activity>, bundle: Bundle) {
         val intent = Intent(activity, destination)
         intent.putExtra(bundleData, bundle)

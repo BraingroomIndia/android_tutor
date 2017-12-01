@@ -6,11 +6,13 @@ import com.braingroom.tutor.viewmodel.ViewModel
 import com.braingroom.tutor.viewmodel.item.ListDialogViewModel
 
 
-@Suppress("unused", "UNUSED_PARAMETER")
+@Suppress("unused", "UNUSED_PARAMETER", "UNUSED_ANONYMOUS_PARAMETER")
 /*
  * Created by godara on 27/09/17.
  */
 class DialogHelper(val activity: Activity?) {
+
+    val TAG = activity?.TAG + "\t" + this.javaClass.simpleName
 
     var viewModel: ViewModel? = null
 

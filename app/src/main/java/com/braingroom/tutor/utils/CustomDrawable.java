@@ -28,11 +28,12 @@ public class CustomDrawable extends ObservableField<Drawable> implements Target 
 
     private final Integer color;
 
+
     public CustomDrawable(@Nullable String imageUrl) {
         super();
         this.color = null;
-        if (!TextUtils.isEmpty(imageUrl) && CustomApplication.getInstance() != null && CustomApplication.getInstance().getAppModule() != null) {
-            CustomApplication.getInstance().getAppModule().getPicasso().load(imageUrl).into(this);
+        if (getPicasso() != null)  {
+            getPicasso().load(imageUrl).into(this);
         }
     }
 
@@ -41,8 +42,8 @@ public class CustomDrawable extends ObservableField<Drawable> implements Target 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
             this.color = CustomApplication.getInstance().getColor(color);
         else this.color = CustomApplication.getInstance().getResources().getColor(color);
-        if (!TextUtils.isEmpty(imageUrl) && CustomApplication.getInstance() != null && CustomApplication.getInstance().getAppModule() != null) {
-            CustomApplication.getInstance().getAppModule().getPicasso().load(imageUrl).into(this);
+        if (getPicasso() != null)  {
+            getPicasso().load(imageUrl).into(this);
         }
     }
 
@@ -50,8 +51,8 @@ public class CustomDrawable extends ObservableField<Drawable> implements Target 
     public CustomDrawable(@DrawableRes int resource) {
         super();
         this.color = null;
-        if (CustomApplication.getInstance() != null && CustomApplication.getInstance().getAppModule() != null) {
-            CustomApplication.getInstance().getAppModule().getPicasso().load(resource).into(this);
+        if (getPicasso() != null)  {
+            getPicasso().load(resource).into(this);
         }
     }
 
@@ -60,19 +61,19 @@ public class CustomDrawable extends ObservableField<Drawable> implements Target 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
             this.color = CustomApplication.getInstance().getColor(color);
         else this.color = CustomApplication.getInstance().getResources().getColor(color);
-        if (CustomApplication.getInstance() != null && CustomApplication.getInstance().getAppModule() != null) {
-            CustomApplication.getInstance().getAppModule().getPicasso().load(resource).error(resource).placeholder(resource).into(this);
+        if (getPicasso() != null)  {
+            getPicasso().load(resource).error(resource).placeholder(resource).into(this);
         }
     }
 
     public CustomDrawable(@Nullable String imageUrl, @DrawableRes int placeHolder) {
         super();
         this.color = null;
-        if (CustomApplication.getInstance() != null && CustomApplication.getInstance().getAppModule() != null) {
+        if (getPicasso() != null)  {
             if (!TextUtils.isEmpty(imageUrl)) {
-                CustomApplication.getInstance().getAppModule().getPicasso().load(imageUrl).placeholder(placeHolder).error(placeHolder).into(this);
+                getPicasso().load(imageUrl).placeholder(placeHolder).error(placeHolder).into(this);
             } else {
-                CustomApplication.getInstance().getAppModule().getPicasso().load(placeHolder).into(this);
+                getPicasso().load(placeHolder).into(this);
             }
         }
     }
@@ -82,11 +83,11 @@ public class CustomDrawable extends ObservableField<Drawable> implements Target 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
             this.color = CustomApplication.getInstance().getColor(color);
         else this.color = CustomApplication.getInstance().getResources().getColor(color);
-        if (CustomApplication.getInstance() != null && CustomApplication.getInstance().getAppModule() != null) {
+        if (getPicasso() != null) {
             if (!TextUtils.isEmpty(imageUrl)) {
-                CustomApplication.getInstance().getAppModule().getPicasso().load(imageUrl).placeholder(placeHolder).error(placeHolder).into(this);
+                getPicasso().load(imageUrl).placeholder(placeHolder).error(placeHolder).into(this);
             } else {
-                CustomApplication.getInstance().getAppModule().getPicasso().load(placeHolder).into(this);
+                getPicasso().load(placeHolder).into(this);
             }
         }
     }
@@ -118,8 +119,14 @@ public class CustomDrawable extends ObservableField<Drawable> implements Target 
         final Drawable drawable = super.get();
         if (drawable != null && color != null) {
             if (drawable instanceof GradientDrawable)
-                ((GradientDrawable) drawable).setColor(color);
+                drawable.setColorFilter(new PorterDuffColorFilter(color, PorterDuff.Mode.MULTIPLY));
         }
         return drawable;
+    }
+
+    private Picasso getPicasso() {
+        if (CustomApplication.getInstance() == null || CustomApplication.getInstance().getAppModule() == null)
+            return null;
+        else return CustomApplication.getInstance().getAppModule().getPicasso();
     }
 }
