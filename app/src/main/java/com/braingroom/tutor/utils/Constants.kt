@@ -18,4 +18,5 @@ const val LOG_IN_REQ = 1;
 const val HORIZONTAL = "HORIZONTAL"
 const val VERTICAL = "VERTICAL"
 const val GRID = "GRID"
+const val PASSWORD_INPUT=1212
 

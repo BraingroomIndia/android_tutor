@@ -11,10 +11,11 @@
 
           <import type="android.text.Html" />
 
+          <import type="com.braingroom.tutor.utils.ConstantsKt"/>
+
     <variable
               name="data"
               type="com.braingroom.tutor.viewmodel.item.TextIconViewModel" />
-
 
       </data>
 
@@ -23,17 +24,15 @@
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
           android:layout_margin="@dimen/margin_small"
-
           android:hint="@{data.hinttext}"
-          android:visibility="@{data.text == null ? View.GONE : View.VISIBLE}">
+          android:visibility="@{data.text==null?View.GONE:View.VISIBLE}">
 
           <EditText
               android:id="@+id/input_password"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
-              android:enabled="@{editable}"
-
-              android:inputType="@{data.inputType}"
+              android:enabled="true"
+              android:inputType="@{data.inputType==ConstantsKt.PASSWORD_INPUT?(InputType.TYPE_TEXT_VARIATION_PASSWORD|InputType.TYPE_CLASS_TEXT):data.inputType}"
               android:text="@={data.text}"
               tools:text="Collage Name"
               android:textColor="@color/colorPrimaryDark"

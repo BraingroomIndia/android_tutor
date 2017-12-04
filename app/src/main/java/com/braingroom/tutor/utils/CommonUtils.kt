@@ -98,6 +98,9 @@ fun isValidPhone(target: CharSequence?):Boolean{
 }
 
 fun isValidName(target: CharSequence?):Boolean{
+    if(isEmpty(target.toString()))
+        return false
+    else
     return if(target==null){
         false
     }else{

@@ -9,7 +9,8 @@
     </data>
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@color/material_white">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -22,9 +23,9 @@
                 android:paddingLeft="20dp">
                 <TextView
                     android:layout_width="match_parent"
-                    android:layout_height="40dp"
+                    android:layout_height="80dp"
                     android:text="Register"
-                    android:gravity="bottom"
+                    android:gravity="center_vertical"
                     android:textSize="24sp"
                     android:textColor="@color/white"
                     android:fontFamily="@font/roboto" />
@@ -38,13 +39,38 @@
                     layout="@layout/floating_label_edit_text"
                     app:data="@{vm.name}"
                     />
+                <include
+                    layout="@layout/floating_label_edit_text"
+                    app:data="@{vm.phone}"
+                    />
+                <include
+                    layout="@layout/floating_label_edit_text"
+                    app:data="@{vm.email}"
+                    />
+                <include
+                    layout="@layout/floating_label_edit_text"
+                    app:data="@{vm.password}"
+                    />
+                <include
+                    layout="@layout/floating_label_edit_text"
+                    app:data="@{vm.username}"
+                    />
+                <TextView
+                    android:id="@+id/textView2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background='@{vm.signUpButton}'
+                    android:gravity="center"
+                    android:layout_gravity="center_horizontal"
+                    android:textSize="24sp"
+                    android:onClick="@{vm.onSignupClicked}"
+                    android:paddingBottom="9dp"
+                    android:paddingTop="9dp"
+                    android:layout_marginTop="40dp"
+                    android:text="SignUp"
+                />
             </LinearLayout>
         </LinearLayout>
-
-
-
-
-
     </ScrollView>
     <!--
     <android.support.constraint.ConstraintLayout

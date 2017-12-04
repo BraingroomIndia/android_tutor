@@ -20,14 +20,14 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <!--Launcher Activity -->
-        <activity android:name=".view.activity.RecyclerActivity"
+        <activity android:name=".view.activity.SignupActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".view.activity.SignupActivity"
+        <activity android:name=".view.activity.RecyclerActivity"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
 
