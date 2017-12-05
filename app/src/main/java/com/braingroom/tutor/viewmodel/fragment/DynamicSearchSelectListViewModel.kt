@@ -2,11 +2,8 @@ package com.braingroom.tutor.viewmodel.fragment
 
 import android.databinding.ObservableField
 import android.text.TextUtils
-import com.braingroom.tutor.model.resp.CommonIdResp
 import com.braingroom.tutor.utils.FieldUtils
-import com.braingroom.tutor.utils.MessageHelper
 import com.braingroom.tutor.utils.MyConsumer
-import com.braingroom.tutor.utils.Navigator
 import com.braingroom.tutor.view.fragment.FragmentHelper
 import com.braingroom.tutor.viewmodel.SearchSelectListItemViewModel
 import com.braingroom.tutor.viewmodel.ViewModel
@@ -14,96 +11,60 @@ import io.reactivex.Observable
 import io.reactivex.annotations.NonNull
 import io.reactivex.functions.Action
 import io.reactivex.functions.Consumer
-import io.reactivex.functions.Function
-import io.reactivex.functions.Predicate
+import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.PublishSubject
 import java.util.concurrent.TimeUnit
 
-class DynamicSearchSelectListViewModel constructor() : ViewModel() {
 
-    lateinit var onSaveClicked: Action
-    val onClearClicked: Action by lazy{
-        Action {  }
+class DynamicSearchSelectListViewModel(title: String, searchHint: String, isMultipleSelect: Boolean, private var observableApi: DynamicSearchAPIObservable, private val saveConsumer: Consumer<HashMap<String, Int>>, private var selectedDataMap: HashMap<String, Int>, private val fragmentHelper: FragmentHelper) : ViewModel() {
+
+    interface DynamicSearchAPIObservable {
+        fun getData(keyword: String): Observable<HashMap<String, Int>>?
+
     }
+
+    val onSaveClicked: Action by lazy { Action { fragmentHelper.remove(title) } }
     val onOpenClicked: Action by lazy {
-        Action {  }
+        Action { }
     }
-    lateinit var searchResults: Observable<List<ViewModel>>
     val selectedItemsText = ObservableField("select items")
+
     val searchQuery = ObservableField("")
-    val searchHint = ObservableField<String>()
+    val searchHint = ObservableField<String>(searchHint)
+
     val title = ObservableField<String>()
-    val dataMap: MutableMap<String, Int> = java.util.HashMap()
-    val selectedDataMap = java.util.HashMap<String, Int>()
-    val FRAGMENT_TITLE_COLLEGE = "College"
-    val FRAGMENT_TITLE_SCHOOL = "Schools"
-    val FRAGMENT_TITLE_LEARNER = "Post by"
-    val FRAGMENT_TITLE_Vendor = "Posted by"
+    val dataMap: HashMap<String, Int> = HashMap()
+    val selectedItems: PublishSubject<SearchSelectListItemViewModel> by lazy { PublishSubject.create<SearchSelectListItemViewModel>() }
 
-    internal var singleSelect: PublishSubject<SearchSelectListItemViewModel> = PublishSubject.create()
-    internal var multipleSelect: PublishSubject<SearchSelectListItemViewModel> = PublishSubject.create()
-    internal var selectClear = PublishSubject.create<String>()
-
-    //    Observable<HashMap<String, Int>> apiObservable;
-    init{
-
-    }
-    constructor(title:String,messageHelper: MessageHelper,navigator: Navigator,searchHint:String,isMultipleSelect:Boolean,dependencySelectMessage:String,saveConsumer: Consumer<HashMap<String , Int>>,fragmentHelper: FragmentHelper) : this(){
+    init {
         this.searchHint.set(searchHint)
         this.title.set(title)
-//      this.apiObservable = apiObservableArg;
-//      refreshDataMap(this.apiObservable);
-        onSaveClicked=Action {
-            searchQuery.set("")
-            saveConsumer.accept(selectedDataMap)
-            fragmentHelper.remove(title) }
-        searchResults = FieldUtils.toObservable(searchQuery)
-                .debounce(200, TimeUnit.MILLISECONDS)
-                .filter(Predicate<String> { true }).flatMap(Function<String, Observable<List<ViewModel>>> { keyword ->
-                requestData(keyword)!!.map(Function<Any, List<ViewModel>> { resp ->
-                    val resMap = java.util.HashMap<String, Int>()
-                    if(resp is CommonIdResp)
-                    for (snippet in resp.getData()) {
-                        snippet as CommonIdResp.Snippet;
-                        resMap.put(snippet.getTextValue(),snippet.getId())
-                    }
-                    dataMap.clear()
-                    dataMap.putAll(resMap)
-                    val results = mutableListOf<ViewModel>()
-                    val nameList = ArrayList(dataMap.keys)
-                    for (name in nameList) {
-                        results.add(SearchSelectListItemViewModel(name, dataMap[name]!!, selectedDataMap.containsKey(name), object : MyConsumer<SearchSelectListItemViewModel> {
-                            override fun accept(@NonNull viewModel: SearchSelectListItemViewModel) {
-                            if (viewModel.isSelected.get())
-                                selectedDataMap.remove(viewModel.name)
+        selectedItemsText.set((if (TextUtils.join(" , ", selectedDataMap.keys).isNullOrBlank()) "select items" else TextUtils.join(" , ", selectedDataMap.keys)))
+        FieldUtils.toObservable(searchQuery)
+                .debounce(200, TimeUnit.MILLISECONDS).map({ keyword: String ->
+            observableApi.getData(keyword)?.subscribeOn(Schedulers.io())?.observeOn(Schedulers.computation())?.map { data ->
+                dataMap.clear()
+                dataMap.putAll(data)
+                for (name in dataMap.keys) {
+                    item.onNext(SearchSelectListItemViewModel(name, dataMap.get(name), false,
+                            isMultipleSelect, object : MyConsumer<SearchSelectListItemViewModel> {
+                        override fun accept(@NonNull var1: SearchSelectListItemViewModel) {
+                            if (var1.isSelected.get())
+                                selectedDataMap.remove(var1.name)
                             else {
-                                if (!isMultipleSelect) {
+                                if (!isMultipleSelect)
                                     selectedDataMap.clear()
-                                    selectedDataMap.put(viewModel.name, viewModel.id)
-                                }
+                                selectedDataMap.put(var1.name, var1.id)
                             }
 
                             selectedItemsText.set(TextUtils.join(" , ", selectedDataMap.keys))
-                            if (isMultipleSelect)
-                                multipleSelect.onNext(viewModel)
-                            else
-                                singleSelect.onNext(viewModel)
+                            selectedItems.onNext(var1)
+                            saveConsumer.accept(selectedDataMap)
+
                         }
-                    }, singleSelect, multipleSelect, selectClear))
-
+                    }, selectedItems))
                 }
-                    results
-            })
+            }
         })
-    }
-
-    private fun requestData(keyword: String): Observable<CommonIdResp>? {
-        if (FRAGMENT_TITLE_COLLEGE == title.get())
-            return apiService.getInstitute(keyword)
-        if (FRAGMENT_TITLE_SCHOOL.equals(title.get(), ignoreCase = true))
-            return apiService.getSchools(keyword)
-        if (FRAGMENT_TITLE_LEARNER == title.get())
-            return apiService.getLearner(keyword)
-        return if (FRAGMENT_TITLE_Vendor == title.get()) apiService.geTutor(keyword).mergeWith(apiService.getLearner(keyword)) else null
     }
 }

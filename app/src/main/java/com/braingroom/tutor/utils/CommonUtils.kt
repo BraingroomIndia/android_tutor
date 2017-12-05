@@ -3,17 +3,16 @@ package com.braingroom.tutor.utils
 import android.content.res.Resources
 import android.text.Html
 import android.text.Spanned
-import android.text.TextUtils
 import android.util.DisplayMetrics
 import java.util.*
 import io.reactivex.Observable;
-import kotlin.collections.ArrayList
-import io.reactivex.functions.Cancellable
 import android.databinding.Observable.OnPropertyChangedCallback
-import io.reactivex.ObservableEmitter
 import io.reactivex.ObservableOnSubscribe
 import android.databinding.ObservableField
 import android.util.Log
+
+
+
 
 
 /*
@@ -117,6 +116,7 @@ fun isValidName(target: CharSequence?):Boolean{
         !target.contains("[^a-zA-Z]")
     }
 }
+
 
 fun isEmpty(target: String?): Boolean = target.isNullOrBlank()
 fun isEmpty(target: Object?): Boolean = target == null

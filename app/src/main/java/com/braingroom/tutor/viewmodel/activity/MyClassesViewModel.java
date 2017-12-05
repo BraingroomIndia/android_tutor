@@ -27,7 +27,7 @@ public class MyClassesViewModel extends ViewModel {
     public final ListDialogViewModel classStatus;
     public final Snippet snippet = new Snippet(true, true, getUserId());
     private int currentPageNumber = 0;
-    public ViewProvider view = vm ->{
+    public ViewProvider view = vm -> {
         if (vm != null) {
             if (vm instanceof ClassListItemViewModel)
                 return R.layout.item_class_list;
@@ -58,21 +58,22 @@ public class MyClassesViewModel extends ViewModel {
             if (selectedItems.values().iterator().hasNext()) {
                 snippet.setBatch(selectedItems.values().iterator().next());
                 reset();
-                Log.d(getTAG(), "classType selected items : " + selectedItems.values());
+                Log.d(getTAG(), "classType selectedItems items : " + selectedItems.values());
             }
-        }, "");
+        }, "", null);
 
         classStatus = new ListDialogViewModel("Class Status", Observable.just(new ListDialogData(classStatusData)), new HashMap<>(), false, selectedItems -> {
             if (selectedItems.values().iterator().hasNext()) {
                 snippet.setExpired(selectedItems.values().iterator().next());
                 reset();
-                Log.d(getTAG(), "classStatus selected items : " + selectedItems.values());
+                Log.d(getTAG(), "classStatus selectedItems items : " + selectedItems.values());
             }
-        }, "");
+        }, "", null);
         toObservable(getCallAgain()).subscribe(integer -> getApiService().getAllClasses(snippet, currentPageNumber).doOnSubscribe(disposable -> {
             for (int i = 0; i < 5; i++)
                 getItem().onNext(new LoadingViewModel());
             getItem().onNext(new NotifyDataSetChanged());
+            getCompositeDisposable().add(disposable);
             Log.d(getTAG(), "Added  Loading Items");
         }).
                 doOnComplete(() -> {

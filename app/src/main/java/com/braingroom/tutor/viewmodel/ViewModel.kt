@@ -11,6 +11,7 @@ import com.braingroom.tutor.utils.lodgedIn
 import io.reactivex.subjects.ReplaySubject
 import android.databinding.ObservableField
 import com.braingroom.tutor.R
+import io.reactivex.disposables.CompositeDisposable
 
 
 /*
@@ -21,6 +22,10 @@ import com.braingroom.tutor.R
 open class ViewModel {
 
     val item: ReplaySubject<ViewModel> by lazy { ReplaySubject.create<ViewModel>() }
+
+    val compositeDisposable: CompositeDisposable by lazy {
+        CompositeDisposable()
+    }
 
     @Suppress("PropertyName")
     val TAG: String
@@ -83,6 +88,9 @@ open class ViewModel {
     open fun onResume() {}
 
     open fun onPause() {}
+    open fun onDestroy() {
+        applicationContext.refWatcher.watch(this, TAG);
+    }
 
     open fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {}
 

@@ -43,7 +43,7 @@
             android:baselineAligned="false"
             android:orientation="horizontal">
 
-            <include
+      <!--      <include
                 layout="@layout/item_list_dialog_opener"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -57,7 +57,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_weight="1"
-                app:vm="@{vm.classStatus}" />
+                app:vm="@{vm.classStatus}" />-->
 
         </LinearLayout>
     </RelativeLayout>

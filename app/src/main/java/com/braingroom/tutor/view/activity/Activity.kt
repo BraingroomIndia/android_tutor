@@ -86,11 +86,11 @@ abstract class Activity : AppCompatActivity() {
         DialogHelper(this)
     }
 
-    val userPreferences by lazy {
+    private val userPreferences by lazy {
         CustomApplication.getInstance().appModule.userPreferences
     }
 
-    val preferencesEditor by lazy {
+    private val preferencesEditor by lazy {
         CustomApplication.getInstance().appModule.preferencesEditor
     }
 
@@ -127,6 +127,7 @@ abstract class Activity : AppCompatActivity() {
 
 
     override fun onDestroy() {
+        vm.onDestroy()
         defaultBinder.bind(binding, null)
         binding.executePendingBindings()
         clearReferences()
@@ -136,31 +137,13 @@ abstract class Activity : AppCompatActivity() {
 
 
     @Suppress("unused")
-    fun getIntentString(key: String): String {
-        return if (extras != null) {
-            extras!!.getString(key)
-        } else
-            ""
-
-    }
+    fun getIntentString(key: String) = extras?.getString(key) ?: ""
 
     @Suppress("unused")
-    fun getIntentInt(key: String): Int? {
-        return if (extras != null) {
-            extras!!.getInt(key)
-        } else
-            null
-
-    }
+    fun getIntentInt(key: String) = extras?.getInt(key)
 
     @Suppress("unused")
-    fun getIntentBoolean(key: String): Boolean {
-        return if (extras != null) {
-            extras!!.getBoolean(key)
-        } else
-            false
-
-    }
+    fun getIntentBoolean(key: String) = extras?.getBoolean(key) ?: false
 
 
     @Suppress("unused")

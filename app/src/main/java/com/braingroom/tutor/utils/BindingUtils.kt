@@ -20,7 +20,7 @@ import android.widget.TextView
 /*
  * Created by godara on 27/09/17.
  */
-val defaultBinder: ViewModelBinder by lazy {
+public val defaultBinder: ViewModelBinder by lazy {
     Log.d("Default Binder", "created")
     object : ViewModelBinder {
         override fun bind(viewDataBinding: ViewDataBinding?, viewModel: ViewModel?) {
