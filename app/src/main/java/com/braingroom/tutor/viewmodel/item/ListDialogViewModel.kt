@@ -79,7 +79,9 @@ class ListDialogViewModel(val title: String?, sourceObservable: Observable<ListD
                 return
             }
 
-            else -> dialogHelper?.viewModel = this
+            else ->{ dialogHelper?.viewModel = this
+		source?.subscribe()
+		}
         }
     }
 

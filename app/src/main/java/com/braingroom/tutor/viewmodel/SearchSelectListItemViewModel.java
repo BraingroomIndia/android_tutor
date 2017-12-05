@@ -16,7 +16,8 @@ public class SearchSelectListItemViewModel extends ViewModel {
     public final int id;
 
     @Nullable
-    private final MyConsumer<SearchSelectListItemViewModel> onClicked;
+    public final MyConsumer<SearchSelectListItemViewModel> onClicked;
+
 
     public final ObservableBoolean isSelected = new ObservableBoolean();
 

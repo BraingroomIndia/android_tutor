@@ -18,7 +18,6 @@ import java.util.concurrent.TimeUnit
 class RecyclerTester:ViewModel(){
     var views = object:ViewProvider{
         override fun getView(vm:ViewModel?):Int {
-            Log.d("why","why")
          when (vm){
              is LoadingViewModel -> return R.layout.item_loading_class_list
          }
