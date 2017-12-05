@@ -2,8 +2,10 @@ package com.braingroom.tutor.viewmodel.fragment
 
 import android.databinding.ObservableField
 import android.text.TextUtils
+import com.braingroom.tutor.R
 import com.braingroom.tutor.utils.FieldUtils
 import com.braingroom.tutor.utils.MyConsumer
+import com.braingroom.tutor.view.adapters.ViewProvider
 import com.braingroom.tutor.view.fragment.FragmentHelper
 import com.braingroom.tutor.viewmodel.SearchSelectListItemViewModel
 import com.braingroom.tutor.viewmodel.ViewModel
@@ -22,7 +24,18 @@ class DynamicSearchSelectListViewModel(title: String, searchHint: String, isMult
         fun getData(keyword: String): Observable<HashMap<String, Int>>?
 
     }
+    val onClearClicked = Action {
+            selectedDataMap.clear()
+            searchQuery.set("")
+            selectedItemsText.set("select items")
+            saveConsumer.accept(selectedDataMap)
+        }
 
+    val viewProvider = object :ViewProvider{
+        override fun getView(vm: ViewModel?): Int {
+            return R.layout.item_search_select_text;
+        }
+    }
     val onSaveClicked: Action by lazy { Action { fragmentHelper.remove(title) } }
     val onOpenClicked: Action by lazy {
         Action { }
@@ -31,7 +44,6 @@ class DynamicSearchSelectListViewModel(title: String, searchHint: String, isMult
 
     val searchQuery = ObservableField("")
     val searchHint = ObservableField<String>(searchHint)
-
     val title = ObservableField<String>()
     val dataMap: HashMap<String, Int> = HashMap()
     val selectedItems: PublishSubject<SearchSelectListItemViewModel> by lazy { PublishSubject.create<SearchSelectListItemViewModel>() }
@@ -56,7 +68,6 @@ class DynamicSearchSelectListViewModel(title: String, searchHint: String, isMult
                                     selectedDataMap.clear()
                                 selectedDataMap.put(var1.name, var1.id)
                             }
-
                             selectedItemsText.set(TextUtils.join(" , ", selectedDataMap.keys))
                             selectedItems.onNext(var1)
                             saveConsumer.accept(selectedDataMap)

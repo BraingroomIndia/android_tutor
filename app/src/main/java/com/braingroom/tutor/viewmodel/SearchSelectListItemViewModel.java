@@ -15,12 +15,13 @@ public class SearchSelectListItemViewModel extends ViewModel {
     public final String name;
     public final int id;
 
-    @NonNull
+    @Nullable
     public final MyConsumer<SearchSelectListItemViewModel> onClicked;
+
 
     public final ObservableBoolean isSelected = new ObservableBoolean();
 
-    public SearchSelectListItemViewModel(@NonNull final String name, @Nullable final Integer id, boolean selected, boolean isMultiSelect, @NonNull MyConsumer<SearchSelectListItemViewModel> clickConsumer,
+    public SearchSelectListItemViewModel(@NonNull final String name, @Nullable final Integer id, boolean selected, boolean isMultiSelect, MyConsumer<SearchSelectListItemViewModel> clickConsumer,
                                          @NonNull PublishSubject<SearchSelectListItemViewModel> publishSubject) {
         this.name = name;
         if (id == null)
