@@ -60,8 +60,6 @@ public class MyClassesViewModel extends ViewModel {
                 reset();
                 Log.d(getTAG(), "classType selected items : " + selectedItems.values());
             }
-
-
         }, "");
 
         classStatus = new ListDialogViewModel("Class Status", Observable.just(new ListDialogData(classStatusData)), new HashMap<>(), false, selectedItems -> {

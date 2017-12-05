@@ -82,6 +82,7 @@ class DynamicSearchSelectListViewModel constructor() : ViewModel() {
                                     selectedDataMap.put(viewModel.name, viewModel.id)
                                 }
                             }
+
                             selectedItemsText.set(TextUtils.join(" , ", selectedDataMap.keys))
                             if (isMultipleSelect)
                                 multipleSelect.onNext(viewModel)
