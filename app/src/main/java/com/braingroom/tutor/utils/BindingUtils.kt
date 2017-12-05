@@ -1,13 +1,11 @@
 package com.braingroom.tutor.utils
 
-import android.databinding.BindingConversion
-import android.databinding.ViewDataBinding
+import android.databinding.*
 import android.view.View
 import com.braingroom.tutor.BR
 import com.braingroom.tutor.view.adapters.ViewModelBinder
 import com.braingroom.tutor.viewmodel.ViewModel
 import io.reactivex.functions.Action
-import android.databinding.BindingAdapter
 import android.graphics.PorterDuff
 import android.graphics.drawable.Drawable
 import android.os.Build
@@ -83,8 +81,13 @@ fun setBackground(view: TextView?, color: Int) {
 }
 
 @BindingAdapter("android:errorText")
-fun setErrorMessage(view: TextInputLayout, errorMessage: String?) {
-    view.isErrorEnabled = !TextUtils.isEmpty(errorMessage)
+fun setErrorMessage(view: TextInputLayout, errorMessage: String) {
     view.error = errorMessage
 }
+
+@BindingAdapter("android:errorErrorEnabled")
+fun setErrorMessage(view: TextInputLayout, errorEnabled: Boolean) {
+    view.isErrorEnabled=errorEnabled
+}
+
 

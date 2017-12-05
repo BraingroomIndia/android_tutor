@@ -89,6 +89,16 @@ fun isValidEmail(target: CharSequence?): Boolean {
     }
 }
 
+// Checks if password is lesser than 8 charachters
+
+fun isValidPassword(target: CharSequence?):Boolean{
+    return if (target== null){
+        false
+    }else{
+        target.length>4
+    }
+}
+
 fun isValidPhone(target: CharSequence?):Boolean{
     return if(target==null){
         false
