@@ -19,8 +19,8 @@ import io.reactivex.functions.Consumer
  */
 
 class ListDialogViewModel(val title: String?, sourceObservable: Observable<ListDialogData>?,
-                          private var selectedItemsMap: HashMap<String, Int>, private val isMultiSelect: Boolean,
-                          private val resultConsumer: Consumer<HashMap<String, Int>>?, private val dependencyMessage: String?,
+                          private val selectedItemsMap: HashMap<String, Int>, private val isMultiSelect: Boolean,
+                          private val resultConsumer: Consumer<HashMap<String, Int>>?, private val dependencyMessage: String,
                           private val positiveText: String?) : ViewModel() {
 
     private var dialogData: ListDialogData? = null
@@ -54,6 +54,7 @@ class ListDialogViewModel(val title: String?, sourceObservable: Observable<ListD
     @Suppress("MemberVisibilityCanPrivate")
     fun setSourceObservable(sourceObservable: Observable<ListDialogData>?) {
         if (sourceObservable == null) {
+            Log.w(TAG, "sourceObservable is null")
             return
         }
         source = sourceObservable.doOnNext { items ->
@@ -61,11 +62,16 @@ class ListDialogViewModel(val title: String?, sourceObservable: Observable<ListD
             dialogData = items
             if (dialogData?.getItems()?.isEmpty() == false) {
                 if (isMultiSelect)
-                    dialogHelper?.showMultiSelectList(title ?: "", ArrayList(dialogData?.getItems()?.keys), selectedIndex, positiveText ?: "Done")
+                    messageHelper?.dismissActiveProgress()
+                dialogHelper?.showMultiSelectList(title ?: "", ArrayList(dialogData?.getItems()?.keys), selectedIndex, positiveText ?: "Done")
                 dialogHelper?.showSingleSelectList(title ?: "", ArrayList(dialogData?.getItems()?.keys), selectedIndex, positiveText ?: "Done")
 
             }
-        }.doOnSubscribe { disposable -> compositeDisposable.add(disposable) }.doOnError { throwable -> Log.d("ListDialogViewModel", "onError in source observable", throwable.cause) }.onErrorResumeNext(Observable.empty())
+        }.doOnSubscribe { disposable -> compositeDisposable.add(disposable) }.
+                doOnError { throwable ->
+                    Log.e("ListDialogViewModel", "onError in source observable", throwable.cause)
+                    handleOkClick()
+                }
                 .share()
 
 
@@ -74,12 +80,12 @@ class ListDialogViewModel(val title: String?, sourceObservable: Observable<ListD
     private fun show() {
         when {
             !editable.get() -> return
-            source == null -> {
-                dependencyMessage?.let { messageHelper?.showMessage(it) }
-                return
+            source == null -> messageHelper?.showMessage(dependencyMessage)
+            else -> {
+                messageHelper?.showProgressDialog("Wait", "Loading")
+                dialogHelper?.viewModel = this
+                source?.subscribe()
             }
-
-            else -> dialogHelper?.viewModel = this
         }
     }
 

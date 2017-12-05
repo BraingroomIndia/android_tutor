@@ -51,15 +51,6 @@ fun bindAdapterWithDefaultBinder(recyclerView: RecyclerView?, items: ReplaySubje
     recyclerView?.addItemDecoration(decor)
 }
 
-/*
-@BindingAdapter(value = *arrayOf("items", "view", "decor"), requireAll = true)
-fun bindAdapterWithDefaultBinder(recyclerView: RecyclerView?, items: PublishSubject<out ViewModel>?, viewProvider: ViewProvider?, decor: RecyclerView.ItemDecoration?) {
-    viewProvider?.let { recyclerView?.adapter = RecyclerViewAdapterReplaySubject(items, it) }
-    recyclerView?.layoutManager = LinearLayoutManager(recyclerView?.context)
-    recyclerView?.addItemDecoration(decor)
-}
-*/
-
 
 @BindingAdapter(value = *arrayOf("items", "view", "span"), requireAll = true)
 fun bindAdapterWithDefaultBinder(recyclerView: RecyclerView?, items: List<ViewModel>?, viewProvider: ViewProvider?, span: Int?) {
@@ -75,11 +66,6 @@ fun bindAdapterWithDefaultBinder(recyclerView: RecyclerView?, items: ReplaySubje
     recyclerView?.addItemDecoration(GridSpacingItemDecoration(span ?: 2, convertDpToPixel(5).toInt(), true))
 }
 
-/*@BindingAdapter(value = *arrayOf("items", "view", "span"), requireAll = true)
-fun bindAdapterWithDefaultBinder(recyclerView: RecyclerView?, items: PublishSubject<out ViewModel>?, viewProvider: ViewProvider?, span: Int?) {
-    recyclerView?.layoutManager = GridLayoutManager(recyclerView?.context, span ?: 2)
-    recyclerView?.addItemDecoration(GridSpacingItemDecoration(span ?: 2, convertDpToPixel(5).toInt(), true))
-}*/
 
 @BindingAdapter(value = *arrayOf("items", "view", "span", "decor"), requireAll = true)
 fun bindAdapterWithDefaultBinder(recyclerView: RecyclerView?, items: List<ViewModel>?, viewProvider: ViewProvider?, span: Int?, decor: RecyclerView.ItemDecoration?) {
@@ -94,15 +80,6 @@ fun bindAdapterWithDefaultBinder(recyclerView: RecyclerView?, items: ReplaySubje
     viewProvider?.let { recyclerView?.adapter = RecyclerViewAdapterObservable(items, it) }
     recyclerView?.addItemDecoration(decor)
 }
-
-/*
-@BindingAdapter(value = *arrayOf("items", "view", "span", "decor"), requireAll = true)
-fun bindAdapterWithDefaultBinder(recyclerView: RecyclerView?, items: PublishSubject<out ViewModel>?, viewProvider: ViewProvider?, span: Int?, decor: RecyclerView.ItemDecoration?) {
-    recyclerView?.layoutManager = GridLayoutManager(recyclerView?.context, span ?: 2)
-    viewProvider?.let { recyclerView?.adapter = RecyclerViewAdapterReplaySubject(items, it) }
-    recyclerView?.addItemDecoration(decor)
-}
-*/
 
 
 @BindingAdapter("adapter")

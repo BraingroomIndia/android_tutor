@@ -89,6 +89,9 @@ open class ViewModel {
 
     open fun onPause() {}
     open fun onDestroy() {
+        if (!compositeDisposable.isDisposed) {
+            compositeDisposable.dispose()
+        }
         applicationContext.refWatcher.watch(this, TAG);
     }
 
