@@ -16,20 +16,23 @@ interface ApiService {
     fun login(@Body req: LoginReq): Observable<LoginResp?>
 
     @POST("socialLogin")
-    fun socialLogin(@Body req: SocialLoginReq): Observable<LoginResp?>
+    fun socialLogin(@Body req: SocialLoginReq): Observable<LoginResp>
 
     @POST("getProfile")
-    fun getProfile(@Body req: CommonIdReq): Observable<MyProfileResp?>
+    fun getProfile(@Body req: CommonIdReq): Observable<MyProfileResp>
 
     @POST("getAllClasses/{pageIndex}")
-    fun getAllClasses(@Path("pageIndex") pageIndex: String, @Body req: ClassListReq): Observable<ClassListResp?>
+    fun getAllClasses(@Path("pageIndex") pageIndex: String, @Body req: ClassListReq): Observable<ClassListResp>
 
     @POST("getInstitions")
-    abstract fun getInstitute(@Body req: InstituteReq): Observable<CommonIdResp>
+    fun getInstitute(@Body req: InstituteReq): Observable<CommonIdResp>
 
     @POST("getUsers")
-    abstract fun getUser(@Body req: UserListReq): Observable<CommonIdResp>
+     fun getUser(@Body req: UserListReq): Observable<CommonIdResp>
 
     @POST("getSchools")
-    abstract fun getSchools(@Body req: InstituteReq): Observable<CommonIdResp>
+    fun getSchools(@Body req: InstituteReq): Observable<CommonIdResp>
+
+    @POST("getGallary")
+    fun getGallery(@Body req: GalleryReq):Observable<GalleryResp>
 }

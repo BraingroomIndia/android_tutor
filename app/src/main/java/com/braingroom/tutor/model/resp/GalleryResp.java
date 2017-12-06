@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import static com.braingroom.tutor.utils.CommonUtilsKt.getNonNull;
@@ -22,7 +23,7 @@ public class GalleryResp extends BaseResp {
 
     @Override
     public boolean getResCode() {
-        return data != null;
+        return !isEmpty(data);
     }
 
     public static class Snippet {
@@ -43,9 +44,10 @@ public class GalleryResp extends BaseResp {
         }
     }
 
+
     @NonNull
     public List<Snippet> getData() {
-        return data != null ? data : getNonNullData();
+        return isEmpty(data) ? Collections.singletonList(new Snippet()) : data;
     }
 
     @NonNull

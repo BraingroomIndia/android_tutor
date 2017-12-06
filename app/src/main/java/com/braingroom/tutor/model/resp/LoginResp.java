@@ -18,7 +18,7 @@ public class LoginResp extends BaseResp {
 
     @Override
     public boolean getResCode() {
-        return getData() == null;
+        return !isEmpty(data);
     }
 
     public static class Snippet {

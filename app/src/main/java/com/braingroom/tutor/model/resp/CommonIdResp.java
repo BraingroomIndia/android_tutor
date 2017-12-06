@@ -14,7 +14,7 @@ import static java.util.Collections.singletonList;
 public class CommonIdResp extends BaseResp {
 
     @SerializedName("braingroom")
-    List<Snippet> data;
+    private List<Snippet> data;
 
     @Override
     public boolean getResCode() {
