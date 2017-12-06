@@ -24,6 +24,10 @@ public class GalleryReq {
         @SerializedName("category_id")
         private String categoryId;
 
+        public boolean getIsVideo() {
+            return categoryId.equals("2");
+        }
+
         public Snippet(String userId, boolean isVideo) {
             this.id = userId;
             categoryId = (isVideo ? 2 : 1) + "";

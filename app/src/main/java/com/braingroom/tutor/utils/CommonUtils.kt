@@ -10,9 +10,8 @@ import android.databinding.Observable.OnPropertyChangedCallback
 import io.reactivex.ObservableOnSubscribe
 import android.databinding.ObservableField
 import android.util.Log
-
-
-
+import java.net.MalformedURLException
+import java.net.URL
 
 
 /*
@@ -116,7 +115,25 @@ fun isValidName(target: CharSequence?):Boolean{
         !target.contains("[^a-zA-Z]")
     }
 }
+fun getThumbnail(url:String):String{
+    return "http://img.youtube.com/vi/"+extractYoutubeId(url)+"/0.jpg"
+}
 
+public fun getVideo(video:String?):String {
+    if (video == null) return "";
+    try {
+        return video.substring(video.lastIndexOf("/") + 1);
+    } catch (iobe:IndexOutOfBoundsException ) {
+        return "";
+    }
+}
+@Throws(MalformedURLException::class)
+fun extractYoutubeId(url: String): String? {
+    val query = url
+    val param = query.split("/".toRegex()).toTypedArray()
+    var id: String? = null
+    return param[param.lastIndex]
+}
 
 fun isEmpty(target: String?): Boolean = target.isNullOrBlank()
 fun isEmpty(target: Object?): Boolean = target == null

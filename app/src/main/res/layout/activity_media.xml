@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:bind="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="vm"
+            type="com.braingroom.tutor.viewmodel.activity.MediaViewModel"/>
+    </data>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:layout_alignEnd="@+id/center_media"
+                android:background="@drawable/rounded_corner_line"
+                android:backgroundTint="@color/material_blue400"
+                android:textColor="@color/white"
+                android:text="Images"
+                android:gravity="center_horizontal"
+                android:paddingBottom="@dimen/_5sdp"
+                android:onClick="@{vm.onImage}"
+                android:paddingTop="@dimen/_5sdp"
+                android:textSize="24sp"
+                android:layout_alignParentTop="true"
+                android:layout_alignRight="@+id/center_media"
+                android:id="@+id/media_image" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_height="wrap_content"
+                android:id="@+id/center_media" />
+
+            <TextView
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_toEndOf="@+id/media_image"
+                android:layout_toRightOf="@+id/media_image"
+                android:background="@drawable/rounded_corner_line"
+                android:onClick="@{vm.onVideo}"
+                android:textSize="24sp"
+                android:paddingBottom="@dimen/_5sdp"
+                android:paddingTop="@dimen/_5sdp"
+                android:textColor="@color/white"
+                android:gravity="center_horizontal"
+                android:text="Videos"
+                android:backgroundTint="@color/material_blue400"
+                android:id="@+id/media_video"/>
+        </RelativeLayout>
+        <android.support.v7.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            bind:view="@{vm.viewProvider}"
+            bind:items="@{vm.item}"
+            bind:span="@{3}">
+        </android.support.v7.widget.RecyclerView>
+    </LinearLayout>
+</layout>

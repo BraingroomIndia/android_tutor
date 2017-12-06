@@ -8,8 +8,11 @@ import android.support.annotation.DrawableRes;
 import android.text.InputType;
 import android.view.View;
 
+import com.braingroom.tutor.R;
 import com.braingroom.tutor.utils.CustomDrawable;
 import com.braingroom.tutor.viewmodel.ViewModel;
+
+import io.reactivex.functions.Action;
 
 /*
  * Created by godara on 01/11/17.
@@ -23,6 +26,9 @@ public class TextIconViewModel extends ViewModel {
     public ObservableField<String> hinttext=new ObservableField<>("");
     public String errorMessage="";
     public String hint="";
+    public Action onClick;
+    public String imagePath="";
+    public int placeHolder= R.drawable.class_ph_1;
     public final ObservableInt visibility= new ObservableInt(View.VISIBLE);
 
     public TextIconViewModel(String text, String image) {
@@ -34,6 +40,14 @@ public class TextIconViewModel extends ViewModel {
         this.text.set(text);
         this.image=new CustomDrawable(image);
         this.inputType=InputType.TYPE_CLASS_TEXT;
+    }
+
+    public TextIconViewModel(String text,String imagePath,Action onClick){
+        this.text.set(text);
+        this.imagePath=imagePath;
+        image=null;
+        this.inputType=InputType.TYPE_CLASS_TEXT;
+        this.onClick=onClick;
     }
 
     public TextIconViewModel(String text, CustomDrawable image, int inputType,String hintText) {

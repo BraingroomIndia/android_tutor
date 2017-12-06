@@ -6,6 +6,8 @@ import android.databinding.BindingAdapter
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.util.Log
+import android.widget.ImageView
 import com.braingroom.tutor.view.adapters.*
 import com.braingroom.tutor.viewmodel.ViewModel
 import io.reactivex.Observable
@@ -58,6 +60,8 @@ fun bindAdapterWithDefaultBinder(recyclerView: RecyclerView?, items: List<ViewMo
     viewProvider?.let { recyclerView?.adapter = RecyclerViewAdapter(items, it) }
     recyclerView?.addItemDecoration(GridSpacingItemDecoration(span ?: 2, convertDpToPixel(5).toInt(), true))
 }
+
+
 
 @BindingAdapter(value = *arrayOf("items", "view", "span"), requireAll = true)
 fun bindAdapterWithDefaultBinder(recyclerView: RecyclerView?, items: ReplaySubject<out ViewModel>?, viewProvider: ViewProvider?, span: Int?) {
