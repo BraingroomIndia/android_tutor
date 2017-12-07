@@ -13,7 +13,7 @@ import io.reactivex.functions.Action
 /**
  * Created by ashketchup on 6/12/17.
  */
-class MediaViewModel:ViewModel() {
+class MediaViewModel : ViewModel() {
     val viewProvider: ViewProvider  by lazy {
         object : ViewProvider {
             override fun getView(vm: ViewModel?): Int {
@@ -28,11 +28,11 @@ class MediaViewModel:ViewModel() {
             }
         }
     }
-    var isVideo=false;
-    val onVideo: Action by lazy{
-        object:Action{
+    var isVideo = false;
+    val onVideo: Action by lazy {
+        object : Action {
             override fun run() {
-                if(!isVideo) {
+                if (!isVideo) {
                     isVideo = !isVideo
                     item.onNext(RefreshViewModel())
                     makeCall()
@@ -40,10 +40,10 @@ class MediaViewModel:ViewModel() {
             }
         }
     }
-    val onImage: Action by lazy{
-        object:Action{
+    val onImage: Action by lazy {
+        object : Action {
             override fun run() {
-                if(isVideo) {
+                if (isVideo) {
                     isVideo = !isVideo
                     item.onNext(RefreshViewModel())
                     makeCall()
@@ -51,26 +51,28 @@ class MediaViewModel:ViewModel() {
             }
         }
     }
-    init{
+
+    init {
         makeCall()
     }
-    fun makeCall(){
-        apiService.getGallery(GalleryReq.Snippet("568",isVideo)).doOnSubscribe { disposable ->
-            Log.d("called","called")
-            for(i in 0..4){
+
+    fun makeCall() {
+        apiService.getGallery(GalleryReq.Snippet("568", isVideo)).doOnSubscribe { disposable ->
+            Log.d("called", "called")
+            for (i in 0..4) {
                 item.onNext(LoadingViewModel())
             }
             item.onNext(NotifyDataSetChanged())
             compositeDisposable.add(disposable)
-        }.doOnComplete{
+        }.doOnComplete {
             item.onNext(NotifyDataSetChanged())
         }.subscribe(
                 { resp ->
-                    if(resp.resCode) {
+                    if (resp.resCode) {
                         item.onNext(RemoveLoadingViewModel())
-                        for (resp: GalleryResp.Snippet in resp.data) {
+                        for (snippet in resp.data) {
 
-                            item.onNext(TextIconViewModel(resp.mediaTitle, resp.mediaPath, object : Action {
+                            item.onNext(TextIconViewModel(snippet.mediaTitle, snippet.mediaPath, object : Action {
                                 override fun run() {
                                     if (isVideo) {
 
@@ -83,7 +85,7 @@ class MediaViewModel:ViewModel() {
                         item.onNext(NotifyDataSetChanged())
                     }
                 }, { e ->
-            Log.e("Error",e.message)
+            Log.e("Error", e.message)
             e.printStackTrace()
         })
     }

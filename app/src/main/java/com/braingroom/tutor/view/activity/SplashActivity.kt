@@ -29,14 +29,14 @@ class SplashActivity : AppCompatActivity() {
             CustomApplication.getInstance().userId = userPreferences.getString(braingroomId, "1131")
             CustomApplication.getInstance().userName = userPreferences.getString(name, "Vikas Godara")
             CustomApplication.getInstance().userPic = userPreferences.getString(profilePic, "");
-            startActivity(Intent(this, BarcodeCaptureActivity::class.java))
+            startActivity(Intent(this, SignupActivity::class.java))
         } else startActivityForResult(Intent(this, LoginActivity::class.java), LOG_IN_REQ)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode == Activity.RESULT_OK) {
-            startActivity(Intent(this, BarcodeCaptureActivity::class.java))
+            startActivity(Intent(this, SignupActivity::class.java))
         }
     }
 }

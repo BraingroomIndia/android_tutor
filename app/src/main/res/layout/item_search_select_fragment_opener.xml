@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="vm"
+            type="com.braingroom.tutor.viewmodel.fragment.SearchSelectListViewModel" />
+
+
+    </data>
+
+    <RelativeLayout
+        android:id="@+id/input_layout_search"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bottom_line_drawable"
+        android:onClick="@{vm.onOpenClicked}"
+        android:orientation="vertical"
+        android:paddingBottom="@dimen/padding_medium"
+        android:paddingLeft="@dimen/padding_large"
+        android:paddingRight="@dimen/padding_large"
+        android:paddingTop="@dimen/margin_small">
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="match_parent"
+            android:layout_height="25dp"
+            android:fontFamily="@font/roboto_regular"
+            android:gravity="bottom"
+            android:text="@{vm.title}"
+            android:textColor="@color/colorTextDark"
+            android:textSize="@dimen/text_size_large"
+            tools:text="Title" />
+
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="20dp"
+            android:layout_below="@id/title"
+            android:ellipsize="end"
+            android:gravity="top"
+            android:lines="1"
+            android:text="@{vm.selectedItemsText}"
+            android:textColor="@color/colorTextGray"
+            android:textSize="@dimen/text_size_medium"
+            tools:text="Selected Items" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:contentDescription="TODO"
+            android:src="@drawable/ic_chevron_right_black_24dp" />
+
+
+    </RelativeLayout>
+</layout>

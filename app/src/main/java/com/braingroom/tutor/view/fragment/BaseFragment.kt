@@ -26,6 +26,10 @@ abstract class BaseFragment : Fragment() {
 
     lateinit var activity: Activity
 
+    val TAG by lazy {
+        this::class.java.simpleName
+    }
+
     override fun onAttach(context: Context?) {
         super.onAttach(context)
         if (context is Activity) {
@@ -40,7 +44,6 @@ abstract class BaseFragment : Fragment() {
     }
 
     override fun onDestroy() {
-        vm.onDestroy()
         defaultBinder.bind(binding, null)
         binding.executePendingBindings()
         super.onDestroy()

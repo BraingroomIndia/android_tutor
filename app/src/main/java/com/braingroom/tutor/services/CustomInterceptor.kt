@@ -24,7 +24,7 @@ class CustomInterceptor : Interceptor {
     override fun intercept(chain: Interceptor.Chain): Response {
         val original = chain.request()
         val requestBuilder = original.newBuilder()
-                .addHeader("X-App-Type", "BGTUT01")
+                .addHeader("X-App-Type", "BGUSR01")
         val request = requestBuilder.build()
         val response: Response
         try {

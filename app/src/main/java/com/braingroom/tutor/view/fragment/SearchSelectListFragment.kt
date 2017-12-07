@@ -5,27 +5,24 @@ import com.braingroom.tutor.R
 import com.braingroom.tutor.utils.FRAGMENT_TITLE
 import com.braingroom.tutor.viewmodel.ViewModel
 
-
-/*
- * Created by ashketchup on 6/12/17.
+/**
+ * Created by godara on 07/12/17.
  */
-class DynamicSearchSelectFragment : BaseFragment() {
+class SearchSelectListFragment : BaseFragment() {
+
     companion object {
-        fun newInstance(title: String): DynamicSearchSelectFragment {
+        fun newInstance(title: String): SearchSelectListFragment {
             val bundle = Bundle()
             bundle.putString(FRAGMENT_TITLE, title)
-            val fragment = DynamicSearchSelectFragment()
+            val fragment = SearchSelectListFragment()
             fragment.arguments = bundle
             return fragment
         }
     }
 
-    override val vm: ViewModel by lazy {
-        activity.getFragmentViewModel(getStringArguments(FRAGMENT_TITLE))
-    }
+    override val vm: ViewModel by lazy { activity.getFragmentViewModel(getStringArguments(FRAGMENT_TITLE)) }
 
     override val layoutId: Int by lazy {
-        R.layout.fragment_dynamic_search_select_list
+        R.layout.fragment_search_select_list;
     }
-
 }

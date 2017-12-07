@@ -59,7 +59,7 @@ class Navigator(val activity: Activity?) {
     fun openFragment(fragment: BaseFragment) {
         activity?.fragmentManager?.
                 beginTransaction()?.
-                setCustomAnimations(R.animator.bottom_in, R.animator.top_out)?.
+//                setCustomAnimations(R.animator.bottom_in, R.animator.top_out)?.
                 replace(R.id.fragment_container, fragment)?.
                 addToBackStack(null)?.
                 commit()
@@ -68,7 +68,7 @@ class Navigator(val activity: Activity?) {
     fun openFragment(fragment: BaseFragment, @AnimatorRes outAnimatorRes: Int, @AnimatorRes inAnimatorRes: Int) {
         activity?.fragmentManager?.
                 beginTransaction()?.
-                setCustomAnimations(outAnimatorRes, inAnimatorRes)?.
+//                setCustomAnimations(outAnimatorRes, inAnimatorRes)?.
                 replace(R.id.fragment_container, fragment)?.
                 addToBackStack(null)?.
                 commit()
@@ -77,7 +77,7 @@ class Navigator(val activity: Activity?) {
     fun openFragment(fragment: BaseFragment, fragmentContainer: Int) {
         activity?.fragmentManager?.
                 beginTransaction()?.
-                setCustomAnimations(R.animator.bottom_in, R.animator.top_out)?.
+//                setCustomAnimations(R.animator.bottom_in, R.animator.top_out)?.
                 replace(fragmentContainer, fragment)?.
                 addToBackStack(null)?.
                 commit()
@@ -86,7 +86,7 @@ class Navigator(val activity: Activity?) {
     fun openFragment(fragment: BaseFragment, fragmentContainer: Int, @AnimatorRes outAnimatorRes: Int, @AnimatorRes inAnimatorRes: Int) {
         activity?.fragmentManager?.
                 beginTransaction()?.
-                setCustomAnimations(outAnimatorRes, inAnimatorRes)?.
+//                setCustomAnimations(outAnimatorRes, inAnimatorRes)?.
                 replace(fragmentContainer, fragment)?.
                 addToBackStack(null)?.
                 commit()

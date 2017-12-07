@@ -49,27 +49,30 @@ fun toOnClickListener(listener: Action?): View.OnClickListener? {
         else -> null
     }
 }
+
 @BindingAdapter("android:src")
 fun setImageUri(view: ImageView?, imageUrl: String?) {
-    if(!isEmpty(imageUrl)) {
+    if (!isEmpty(imageUrl)) {
         Log.d("setImageUri", imageUrl)
         view?.let { picasso.load(imageUrl) }
     }
 }
 
-@BindingAdapter(value = *arrayOf("android:src","placeholder") , requireAll = true)
-fun setImageUri(view: ImageView?, imageUrl: String?,placeHolder:Int) {
-    if(!isEmpty(imageUrl))
-        {
-        Log.d("setImageUri", imageUrl+"   "+placeHolder)
-        view?.let { picasso.load(imageUrl).placeholder(placeHolder).error(placeHolder).into(it) }
-        }
+@BindingAdapter(value = *arrayOf("android:src", "placeholder"), requireAll = true)
+fun setImageUri(view: ImageView?, imageUrl: String?, placeHolder: Int?) {
+    if (!isEmpty(imageUrl)) {
+        Log.d("setImageUri", imageUrl + "   " + placeHolder)
+        if (placeHolder != null)
+            view?.let { picasso.load(imageUrl).placeholder(placeHolder).error(placeHolder).into(it) }
+        else setImageUri(view, imageUrl)
     }
+}
 
-@BindingAdapter("app:src")
+@BindingAdapter("android:src")
 fun setImageUri(view: ImageView?, drawable: Drawable?) {
     view?.setImageDrawable(drawable)
 }
+
 @BindingAdapter(value = *arrayOf("android:drawableLeft", "android:drawableRight", "android:drawableTop", "android:drawableBottom"), requireAll = false)
 fun setDrawableBottom(view: TextView?,
                       drawableLeft: Drawable?, drawableRight: Drawable?, drawableTop: Drawable?, drawableBottom: Drawable?) {
@@ -102,7 +105,7 @@ fun setErrorMessage(view: TextInputLayout, errorMessage: String) {
 
 @BindingAdapter("android:errorErrorEnabled")
 fun setErrorMessage(view: TextInputLayout, errorEnabled: Boolean) {
-    view.isErrorEnabled=errorEnabled
+    view.isErrorEnabled = errorEnabled
 }
 
 

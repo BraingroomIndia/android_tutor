@@ -135,9 +135,7 @@ abstract class Activity : AppCompatActivity() {
 
     }
 
-    fun getFragmentViewmodel(title: String): ViewModel {
-        return ViewModel()
-    }
+    open fun getFragmentViewModel(title: String) = ViewModel()
 
     @Suppress("unused")
     fun getIntentString(key: String) = extras?.getString(key) ?: ""

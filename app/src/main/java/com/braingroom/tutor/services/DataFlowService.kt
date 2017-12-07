@@ -7,11 +7,9 @@ import com.braingroom.tutor.model.req.*
 import com.braingroom.tutor.model.resp.*
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.functions.Function
 import io.reactivex.schedulers.Schedulers
 import com.braingroom.tutor.model.resp.MyProfileResp
 import com.braingroom.tutor.model.req.CommonIdReq
-import com.braingroom.tutor.utils.braingroomId
 
 
 /*
@@ -72,15 +70,35 @@ class DataFlowService(private val api: ApiService) {
 
     fun getGallery(snippet: GalleryReq.Snippet): Observable<GalleryResp> {
         return api.getGallery(GalleryReq(snippet)).subscribeOn(Schedulers.io()).observeOn(Schedulers.computation()).onErrorReturn { GalleryResp() }.map { resp -> resp ?: GalleryResp() }.map { resp ->
-            for(res in resp.data){
-                Log.d("logger",res.mediaTitle);
-                res.isVideo=snippet.isVideo
+            for (res in resp.data) {
+                Log.d("logger", res.mediaTitle);
+                res.isVideo = snippet.isVideo
             }
             resp
         }
     }
 
-    fun getCategories():Observable<CategoryResp>{
-        return api.getCategories().subscribeOn(Schedulers.io()).observeOn(Schedulers.computation()).onErrorReturn { CategoryResp() }.map { resp-> resp?:CategoryResp() }
+    fun getCategories(): Observable<CommonIdResp> {
+        return api.getCategories().subscribeOn(Schedulers.io()).observeOn(Schedulers.computation()).onErrorReturn { CommonIdResp() }.map { resp -> resp ?: CommonIdResp() }
+    }
+
+    fun getCommunity(): Observable<CommonIdResp> {
+        return api.getCommunity().subscribeOn(Schedulers.io()).observeOn(Schedulers.computation()).onErrorReturn { CommonIdResp() }.map { resp -> resp ?: CommonIdResp() }
+    }
+
+    fun getCountry(): Observable<CommonIdResp> {
+        return api.getCountry().subscribeOn(Schedulers.io()).observeOn(Schedulers.computation()).onErrorReturn { CommonIdResp() }.map { resp -> resp ?: CommonIdResp() }
+    }
+
+    fun getState(countryId: Int): Observable<CommonIdResp> {
+        return api.getState(StateReq(countryId)).subscribeOn(Schedulers.io()).observeOn(Schedulers.computation()).onErrorReturn { CommonIdResp() }.map { resp -> resp ?: CommonIdResp() }
+    }
+
+    fun getCity(stateId: Int): Observable<CommonIdResp> {
+        return api.getCity(CityReq(stateId)).subscribeOn(Schedulers.io()).observeOn(Schedulers.computation()).onErrorReturn { CommonIdResp() }.map { resp -> resp ?: CommonIdResp() }
+    }
+
+    fun getLocality(cityId: Int): Observable<CommonIdResp> {
+        return api.getLocalities(LocalityReq(cityId)).subscribeOn(Schedulers.io()).observeOn(Schedulers.computation()).onErrorReturn { CommonIdResp() }.map { resp -> resp ?: CommonIdResp() }
     }
 }

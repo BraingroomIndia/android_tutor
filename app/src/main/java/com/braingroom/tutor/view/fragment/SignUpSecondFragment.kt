@@ -5,16 +5,15 @@ import com.braingroom.tutor.R
 import com.braingroom.tutor.utils.FRAGMENT_TITLE
 import com.braingroom.tutor.viewmodel.ViewModel
 
-
-/*
- * Created by ashketchup on 6/12/17.
+/**
+ * Created by godara on 07/12/17.
  */
-class DynamicSearchSelectFragment : BaseFragment() {
+class SignUpSecondFragment : BaseFragment() {
     companion object {
-        fun newInstance(title: String): DynamicSearchSelectFragment {
+        fun newInstance(title: String): SignUpSecondFragment {
             val bundle = Bundle()
             bundle.putString(FRAGMENT_TITLE, title)
-            val fragment = DynamicSearchSelectFragment()
+            val fragment = SignUpSecondFragment()
             fragment.arguments = bundle
             return fragment
         }
@@ -25,7 +24,6 @@ class DynamicSearchSelectFragment : BaseFragment() {
     }
 
     override val layoutId: Int by lazy {
-        R.layout.fragment_dynamic_search_select_list
+        R.layout.fragment_signup_2
     }
-
 }

@@ -18,27 +18,34 @@ import io.reactivex.subjects.PublishSubject
 import java.util.concurrent.TimeUnit
 
 
-class DynamicSearchSelectListViewModel(title: String, searchHint: String, isMultipleSelect: Boolean, private var observableApi: DynamicSearchAPIObservable, private val saveConsumer: Consumer<HashMap<String, Int>>, private var selectedDataMap: HashMap<String, Int>, private val fragmentHelper: FragmentHelper) : ViewModel() {
+class DynamicSearchSelectListViewModel(title: String, searchHint: String, dependencyMessage: String, isMultipleSelect: Boolean, private var observableApi: DynamicSearchAPIObservable?, private val saveConsumer: Consumer<HashMap<String, Int>>, private var selectedDataMap: HashMap<String, Int>, private val fragmentHelper: FragmentHelper) : ViewModel() {
 
     interface DynamicSearchAPIObservable {
         fun getData(keyword: String): Observable<HashMap<String, Int>>?
 
     }
-    val onClearClicked = Action {
-            selectedDataMap.clear()
-            searchQuery.set("")
-            selectedItemsText.set("select items")
-            saveConsumer.accept(selectedDataMap)
-        }
 
-    val viewProvider = object :ViewProvider{
+    val onClearClicked = Action {
+        selectedDataMap.clear()
+        searchQuery.set("")
+        selectedItemsText.set("select items")
+        saveConsumer.accept(selectedDataMap)
+    }
+
+    val viewProvider = object : ViewProvider {
         override fun getView(vm: ViewModel?): Int {
             return R.layout.item_search_select_text;
         }
     }
     val onSaveClicked: Action by lazy { Action { fragmentHelper.remove(title) } }
     val onOpenClicked: Action by lazy {
-        Action { }
+        Action {
+            if (observableApi == null)
+                messageHelper?.showMessage(dependencyMessage)
+            else
+                fragmentHelper.show(title)
+        }
+
     }
     val selectedItemsText = ObservableField("select items")
 
@@ -54,7 +61,7 @@ class DynamicSearchSelectListViewModel(title: String, searchHint: String, isMult
         selectedItemsText.set((if (TextUtils.join(" , ", selectedDataMap.keys).isNullOrBlank()) "select items" else TextUtils.join(" , ", selectedDataMap.keys)))
         FieldUtils.toObservable(searchQuery)
                 .debounce(200, TimeUnit.MILLISECONDS).map({ keyword: String ->
-            observableApi.getData(keyword)?.subscribeOn(Schedulers.io())?.observeOn(Schedulers.computation())?.map { data ->
+            observableApi?.getData(keyword)?.subscribeOn(Schedulers.io())?.observeOn(Schedulers.computation())?.map { data ->
                 dataMap.clear()
                 dataMap.putAll(data)
                 for (name in dataMap.keys) {
@@ -78,4 +85,6 @@ class DynamicSearchSelectListViewModel(title: String, searchHint: String, isMult
             }
         })
     }
+
+
 }

@@ -9,6 +9,8 @@ import com.braingroom.tutor.viewmodel.activity.MediaViewModel
  * Created by ashketchup on 6/12/17.
  */
 class MediaActivity:Activity(){
+
+
     override val vm: MediaViewModel by lazy{
         MediaViewModel()
     }

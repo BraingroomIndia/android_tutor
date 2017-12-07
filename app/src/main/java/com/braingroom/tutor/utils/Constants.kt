@@ -18,5 +18,9 @@ const val LOG_IN_REQ = 1;
 const val HORIZONTAL = "HORIZONTAL"
 const val VERTICAL = "VERTICAL"
 const val GRID = "GRID"
-const val PASSWORD_INPUT=1212
+const val FRAGMENT_TITLE = "FragmentTitle"
+const val Country = "Country"
+const val State = "State"
+const val City = "City"
+const val Locality = "Locality"
 

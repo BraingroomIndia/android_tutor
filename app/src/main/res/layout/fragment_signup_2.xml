@@ -10,9 +10,10 @@
             type="com.braingroom.tutor.viewmodel.activity.SignupViewModel" />
     </data>
 
-    <android.support.constraint.ConstraintLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
         <include
             layout="@layout/item_list_dialog_opener"
@@ -26,48 +27,49 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            app:vm="@{vm.category}" />
+            app:vm="@{vm.categoryVm}" />
 
         <include
             layout="@layout/item_list_dialog_opener"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            app:vm="@{vm.category}" />
+            app:vm="@{vm.communityVm}" />
 
         <include
             layout="@layout/item_list_dialog_opener"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            app:vm="@{vm.category}" />
+            app:vm="@{vm.categoryVm}" />
 
         <include
-            layout="@layout/fragment_dynamic_search_select_list"
+            layout="@layout/item_search_select_fragment_opener"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             app:vm="@{vm.countryVm}" />
-
         <include
-            layout="@layout/fragment_dynamic_search_select_list"
+            layout="@layout/item_search_select_fragment_opener"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            app:vm="@{vm.countryVm}" />
+            app:vm="@{vm.stateVm}" />
 
         <include
-            layout="@layout/fragment_dynamic_search_select_list"
+            layout="@layout/item_search_select_fragment_opener"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            app:vm="@{vm.countryVm}" />
+            app:vm="@{vm.cityVm}" />
 
         <include
-            layout="@layout/fragment_dynamic_search_select_list"
+            layout="@layout/item_search_select_fragment_opener"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            app:vm="@{vm.countryVm}" />
-    </android.support.constraint.ConstraintLayout>
+            app:vm="@{vm.localityVm}" />
+
+
+    </LinearLayout>
 </layout>

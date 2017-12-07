@@ -11,6 +11,7 @@ import java.util.ArrayList
 import java.util.HashMap
 
 import io.reactivex.Observable
+import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.functions.Action
 import io.reactivex.functions.Consumer
 
@@ -56,7 +57,7 @@ class ListDialogViewModel(val title: String?, sourceObservable: Observable<ListD
         if (sourceObservable == null) {
             return
         }
-        source = sourceObservable.doOnNext { items ->
+        source = sourceObservable.observeOn(AndroidSchedulers.mainThread()).doOnNext { items ->
             messageHelper?.dismissActiveProgress()
             dialogData = items
             if (dialogData?.getItems()?.isEmpty() == false) {
@@ -65,8 +66,11 @@ class ListDialogViewModel(val title: String?, sourceObservable: Observable<ListD
                 dialogHelper?.showSingleSelectList(title ?: "", ArrayList(dialogData?.getItems()?.keys), selectedIndex, positiveText ?: "Done")
 
             }
-        }.doOnSubscribe { disposable -> compositeDisposable.add(disposable) }.doOnError { throwable -> Log.d("ListDialogViewModel", "onError in source observable", throwable.cause) }.onErrorResumeNext(Observable.empty())
-                .share()
+        }.doOnSubscribe { disposable -> compositeDisposable.add(disposable) }.
+                doOnError { throwable ->
+                    Log.d("ListDialogViewModel", "onError in source observable", throwable.cause)
+                    throwable.printStackTrace()
+                }.share()
 
 
     }
@@ -79,9 +83,10 @@ class ListDialogViewModel(val title: String?, sourceObservable: Observable<ListD
                 return
             }
 
-            else ->{ dialogHelper?.viewModel = this
-		source?.subscribe()
-		}
+            else -> {
+                dialogHelper?.viewModel = this
+                source?.subscribe()
+            }
         }
     }
 

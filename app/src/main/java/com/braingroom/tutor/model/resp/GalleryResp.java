@@ -20,6 +20,7 @@ public class GalleryResp extends BaseResp {
     public boolean isVideo;
     @SerializedName("braingroom")
     private List<Snippet> data;
+
     @Override
     public boolean getResCode() {
         return !isEmpty(data);
@@ -31,14 +32,17 @@ public class GalleryResp extends BaseResp {
         private String mediaTitle;
         @SerializedName("media_path")
         private String mediaPath;
+
         @NonNull
         public String getMediaTitle() {
             return getNonNull(mediaTitle);
         }
-        public boolean isVideo=false;
+
+        public boolean isVideo = false;
+
         @NonNull
         public String getMediaPath() {
-            return isVideo?getNonNull("http://img.youtube.com/vi/" + getNonNull(getVideo(mediaPath)) + "/hqdefault.jpg"):getNonNull(mediaPath);
+            return isVideo ? getNonNull("http://img.youtube.com/vi/" + getNonNull(getVideo(mediaPath)) + "/hqdefault.jpg") : getNonNull(mediaPath);
         }
     }
 

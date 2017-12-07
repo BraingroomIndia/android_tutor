@@ -8,6 +8,8 @@ import com.braingroom.tutor.viewmodel.activity.MyClassesViewModel
  * Created by godara on 14/10/17.
  */
 class MyClassesActivity : Activity() {
+
+
     override val vm: MyClassesViewModel by lazy {
         MyClassesViewModel()
     }

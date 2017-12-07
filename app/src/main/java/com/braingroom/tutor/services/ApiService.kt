@@ -7,6 +7,12 @@ import retrofit2.http.Body
 import retrofit2.http.POST
 import retrofit2.http.Path
 import com.braingroom.tutor.model.resp.CategoryResp
+import retrofit2.http.GET
+import com.braingroom.tutor.model.req.InstituteReq
+import com.braingroom.tutor.model.resp.CommonIdResp
+import com.braingroom.tutor.model.req.CityReq
+import com.braingroom.tutor.model.req.LocalityReq
+
 
 
 
@@ -31,14 +37,31 @@ interface ApiService {
     fun getInstitute(@Body req: InstituteReq): Observable<CommonIdResp>
 
     @POST("getUsers")
-     fun getUser(@Body req: UserListReq): Observable<CommonIdResp>
+    fun getUser(@Body req: UserListReq): Observable<CommonIdResp>
 
     @POST("getSchools")
     fun getSchools(@Body req: InstituteReq): Observable<CommonIdResp>
 
     @POST("getGallary")
-    fun getGallery(@Body req: GalleryReq):Observable<GalleryResp>
+    fun getGallery(@Body req: GalleryReq): Observable<GalleryResp>
 
     @POST("getCategory")
-    fun getCategories(): Observable<CategoryResp>
+    fun getCategories(): Observable<CommonIdResp>
+
+    @GET("getCategory")
+    fun getCommunity(): Observable<CommonIdResp>
+
+    @POST("getCountry")
+    fun getCountry(): Observable<CommonIdResp>
+
+    @POST("getState")
+    fun getState(@Body req: StateReq): Observable<CommonIdResp>
+
+    @POST("getCity")
+    fun getCity(@Body req: CityReq): Observable<CommonIdResp>
+
+    @POST("getLocality")
+    fun getLocalities(@Body req: LocalityReq): Observable<CommonIdResp>
+
+
 }
