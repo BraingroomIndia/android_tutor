@@ -6,6 +6,9 @@ import io.reactivex.Observable
 import retrofit2.http.Body
 import retrofit2.http.POST
 import retrofit2.http.Path
+import com.braingroom.tutor.model.resp.CategoryResp
+
+
 
 /*
  * Created by godara on 26/09/17.
@@ -35,4 +38,7 @@ interface ApiService {
 
     @POST("getGallary")
     fun getGallery(@Body req: GalleryReq):Observable<GalleryResp>
+
+    @POST("getCategory")
+    fun getCategories(): Observable<CategoryResp>
 }

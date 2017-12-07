@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
@@ -21,44 +22,44 @@
         android:layout_height="wrap_content"
         android:background="@drawable/bottom_line_drawable"
         android:onClick="@{editable ? vm.onOpenClicked : null}"
-        android:paddingBottom="@dimen/padding_large"
+        android:orientation="vertical"
+        android:paddingBottom="@dimen/padding_medium"
         android:paddingLeft="@dimen/padding_large"
+        android:paddingRight="@dimen/padding_large"
         android:paddingTop="@dimen/margin_small">
 
         <TextView
             android:id="@+id/title"
             android:layout_width="match_parent"
             android:layout_height="25dp"
-            android:layout_alignParentTop="true"
-            android:layout_toLeftOf="@+id/arrow"
+            android:fontFamily="@font/roboto_regular"
             android:gravity="bottom"
             android:text="@{vm.title}"
             android:textColor="@color/colorTextDark"
             android:textSize="@dimen/text_size_large"
-            />
-<!--            app:font='@{@string/robotoRegular}' -->
+            tools:text="Title" />
 
 
         <TextView
             android:layout_width="match_parent"
-            android:layout_height="25dp"
-            android:layout_below="@+id/title"
-            android:layout_toLeftOf="@+id/arrow"
+            android:layout_height="20dp"
+            android:layout_below="@id/title"
             android:ellipsize="end"
             android:gravity="top"
             android:lines="1"
             android:text="@{vm.selectedItemsText}"
             android:textColor="@color/colorTextGray"
             android:textSize="@dimen/text_size_medium"
-            />
+            tools:text="Selected Items" />
 
         <ImageView
-            android:id="@+id/arrow"
-            android:layout_width="50dp"
+            android:layout_width="wrap_content"
             android:layout_height="50dp"
+            android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
-            android:padding="@dimen/margin_small"
             android:src="@drawable/ic_chevron_right_black_24dp"
-            android:tint="@color/colorTextGray" />
+            android:contentDescription="TODO" />
+
+
     </RelativeLayout>
 </layout>

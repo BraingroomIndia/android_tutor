@@ -6,33 +6,77 @@ import android.text.InputType
 import android.util.Log
 import android.view.View
 import com.braingroom.tutor.R
+import com.braingroom.tutor.model.data.InputTypeEnum
+import com.braingroom.tutor.model.data.ListDialogData
 import com.braingroom.tutor.utils.*
 import com.braingroom.tutor.view.activity.SignupActivity
 import com.braingroom.tutor.view.fragment.FragmentHelper
 import com.braingroom.tutor.viewmodel.ViewModel
+import com.braingroom.tutor.viewmodel.item.ListDialogViewModel
 import io.reactivex.functions.Action
 import com.braingroom.tutor.viewmodel.item.TextIconViewModel
+import io.reactivex.disposables.Disposable
+import io.reactivex.functions.Consumer
+
 /*
  * Created by ashketchup on 30/11/17.
  */
-class SignupViewModel constructor():ViewModel(){
-    val name = TextIconViewModel("",null,InputType.TYPE_CLASS_TEXT, View.VISIBLE,"Name","Enter Valid Name")
-    val phone = TextIconViewModel("",null,InputType.TYPE_CLASS_PHONE, View.VISIBLE,"Phone","Enter Valid Phone Number")
-    val email = TextIconViewModel("",null,InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS,View.VISIBLE,"Email","Enter Valid Email")
-    val password = TextIconViewModel("",null, PASSWORD_INPUT, View.VISIBLE,"Password","Enter Valid Password")
-    val username= TextIconViewModel("",null,InputType.TYPE_CLASS_TEXT, View.VISIBLE,"Username","Enter Valid UserName")
-    val signUpButton: CustomDrawable = CustomDrawable(R.drawable.rounded_corner_line,R.color.materialBlue)
-    val onSignupClicked = Action{
-        signup()
+class SignupViewModel constructor() : ViewModel() {
+    val name by lazy {
+        TextIconViewModel("", null, InputTypeEnum.Text, View.VISIBLE, "Name", "Enter Valid Name")
     }
-    constructor(messageHelper: MessageHelper,navigator:Navigator,uiHelper:SignupActivity.UiHelper,fragmentHelper: FragmentHelper,dynamicHelper: FragmentHelper) :this(){
+    val phone by lazy {
+        TextIconViewModel("", null, InputTypeEnum.Number, View.VISIBLE, "Phone", "Enter Valid Phone Number")
+    }
+    val email by lazy {
+        TextIconViewModel("", null, InputTypeEnum.Text, View.VISIBLE, "Email", "Enter Valid Email")
+    }
+    val password by lazy {
+        TextIconViewModel("", null, InputTypeEnum.Password, View.VISIBLE, "Password", "Enter Valid Password")
+    }
+    val confirmPassword by lazy {
+        TextIconViewModel("", null, InputTypeEnum.Password, View.VISIBLE, "Confirm Password", "Password doesn't match")
+    }
+    val referralCode by lazy {
+        TextIconViewModel("", null, InputTypeEnum.Text, View.VISIBLE, "Referral Code (Optional)", "")
+    }
+    val signUpButton by lazy {
+        CustomDrawable(R.drawable.rounded_corner_line, R.color.materialBlue)
+    }
+
+    val categoryVm by lazy {
+        ListDialogViewModel("Interest", apiService.getCategories().doOnSubscribe { disposable -> compositeDisposable.add(disposable) }.map { resp ->
+
+            val list: ListDialogData = ListDialogData(LinkedHashMap())
+            for (snippet in resp.data)
+                list.getItems().put(snippet.categoryName, snippet.id)
+            list
+
+        }, HashMap(), true, Consumer { /*TODO*/ },"", "Done" )
+    }
+    val categoryVm by lazy {
+        ListDialogViewModel("Interest", apiService.getCategories().doOnSubscribe { disposable -> compositeDisposable.add(disposable) }.map { resp ->
+
+            val list: ListDialogData = ListDialogData(LinkedHashMap())
+            for (snippet in resp.data)
+                list.getItems().put(snippet.categoryName, snippet.id)
+            list
+
+        }, HashMap(), true, Consumer { /*TODO*/ },"", "Done" )
+    }
+    val onSignupClicked by lazy {
+        Action {
+            signup()
+        }
+    }
+
+    constructor(messageHelper: MessageHelper, navigator: Navigator, uiHelper: SignupActivity.UiHelper, fragmentHelper: FragmentHelper, dynamicHelper: FragmentHelper) : this() {
 
     }
 
-    fun signup(){
-        if(!(isValidEmail(email.text.get())&& isValidName(name.text.get()) && isValidPhone(phone.text.get()) && isValidName(username.text.get()))&&isValidPassword(password.text.get()))
-        {
-            if(!isValidEmail(email.text.get())) {
+    fun signup() {
+        if (!(isValidEmail(email.text.get()) && isValidName(name.text.get()) && isValidPhone(phone.text.get()) && isValidName(confirmPassword.text.get())) && isValidPassword(password.text.get())) {
+            if (!isValidEmail(email.text.get())) {
                 email.setError(true)
             } else {
                 email.setError(false)
@@ -48,15 +92,15 @@ class SignupViewModel constructor():ViewModel(){
                 phone.setError(false)
             }
 
-            if (!isValidName(username.text.get())) {
-                username.setError(true)
+            if (!isValidName(confirmPassword.text.get())) {
+                confirmPassword.setError(true)
             } else {
-                username.setError(false)
+                confirmPassword.setError(false)
             }
         } else {
             email.setError(false)
             phone.setError(false)
-            username.setError(false)
+            confirmPassword.setError(false)
             name.setError(false)
             password.setError(false)
         }

@@ -72,4 +72,8 @@ class DataFlowService(private val api: ApiService) {
     fun getGallery(snippet: GalleryReq.Snippet): Observable<GalleryResp> {
         return api.getGallery(GalleryReq(snippet)).subscribeOn(Schedulers.io()).observeOn(Schedulers.computation()).onErrorReturn { GalleryResp() }.map { resp -> resp ?: GalleryResp() }
     }
+
+    fun getCategories():Observable<CategoryResp>{
+        return api.getCategories().subscribeOn(Schedulers.io()).observeOn(Schedulers.computation()).onErrorReturn { CategoryResp() }.map { resp-> resp?:CategoryResp() }
+    }
 }

@@ -35,16 +35,23 @@ public class CommonIdResp extends BaseResp {
         }
 
         @SerializedName(value = "name", alternate = {"college_name", "activity_name", "school_name", "ngo_name", "segment_name", "city_name", "first_name", "version", "geo"})
-        String textValue;
+        private String textValue;
+
+        @SerializedName("")
+        private String imageUrl;
 
         public Snippet() {
             this.id = -1;
             this.textValue = "";
+            this.imageUrl="";
         }
 
         @NonNull
         public String getTextValue() {
             return getNonNull(textValue);
         }
+
+        @NonNull
+        public String getImageUrl(){return getNonNull(imageUrl);}
     }
 }

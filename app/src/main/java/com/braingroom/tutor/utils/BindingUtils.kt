@@ -55,6 +55,12 @@ fun setImageUri(view: ImageView?, drawable: Drawable?) {
     view?.setImageDrawable(drawable)
 }
 
+@BindingAdapter("android:src")
+fun setImageUri(view: ImageView?, imageUrl: String?) {
+    Log.d("setImageUri", imageUrl)
+    view?.let { picasso.load(imageUrl).resize(it.width, it.height).into(it) }
+}
+
 @BindingAdapter(value = *arrayOf("android:drawableLeft", "android:drawableRight", "android:drawableTop", "android:drawableBottom"), requireAll = false)
 fun setDrawableBottom(view: TextView?,
                       drawableLeft: Drawable?, drawableRight: Drawable?, drawableTop: Drawable?, drawableBottom: Drawable?) {
@@ -87,7 +93,7 @@ fun setErrorMessage(view: TextInputLayout, errorMessage: String) {
 
 @BindingAdapter("android:errorErrorEnabled")
 fun setErrorMessage(view: TextInputLayout, errorEnabled: Boolean) {
-    view.isErrorEnabled=errorEnabled
+    view.isErrorEnabled = errorEnabled
 }
 
 

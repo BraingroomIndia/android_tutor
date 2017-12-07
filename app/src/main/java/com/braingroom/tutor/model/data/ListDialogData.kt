@@ -14,7 +14,7 @@ class ListDialogData(items: LinkedHashMap<String, Int>?) {
         this.items = items ?: LinkedHashMap()
     }
 
-    fun getItems(): Map<String, Int> {
+    fun getItems(): LinkedHashMap<String, Int> {
         return items ?: LinkedHashMap()
     }
 

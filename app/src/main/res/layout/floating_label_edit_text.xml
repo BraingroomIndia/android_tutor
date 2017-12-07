@@ -3,40 +3,33 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-      <data>
+    <data>
 
-          <import type="android.view.View" />
 
-          <import type="android.text.InputType" />
+        <variable
+            name="data"
+            type="com.braingroom.tutor.viewmodel.item.TextIconViewModel" />
 
-          <import type="android.text.Html" />
+    </data>
 
-          <import type="com.braingroom.tutor.utils.ConstantsKt"/>
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/input_layout_floating_label"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/margin_small"
+        android:hint="@{data.hinttext}"
+        android:visibility="@{data.visibility}"
+        tools:hint="Hint text ">
 
-    <variable
-              name="data"
-              type="com.braingroom.tutor.viewmodel.item.TextIconViewModel" />
+        <EditText
+            android:id="@+id/text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="@{data.inputType}"
+            android:text="@={data.text}"
+            android:textColor="@color/colorPrimaryDark"
+            tools:ignore="LabelFor"
+            tools:text="Input Field" />
 
-      </data>
-
-      <android.support.design.widget.TextInputLayout
-          android:id="@+id/input_layout_floating_label"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:layout_margin="@dimen/margin_small"
-          android:hint="@{data.hinttext}"
-          android:visibility="@{data.text==null?View.GONE:View.VISIBLE}">
-
-          <EditText
-              android:id="@+id/input_password"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:enabled="true"
-              android:inputType="@{data.inputType==ConstantsKt.PASSWORD_INPUT?(InputType.TYPE_TEXT_VARIATION_PASSWORD|InputType.TYPE_CLASS_TEXT):data.inputType}"
-              android:text="@={data.text}"
-              tools:text="Collage Name"
-              android:textColor="@color/colorPrimaryDark"
-              />
-
-      </android.support.design.widget.TextInputLayout>
+    </android.support.design.widget.TextInputLayout>
 </layout>
