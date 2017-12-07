@@ -54,7 +54,7 @@ fun toOnClickListener(listener: Action?): View.OnClickListener? {
 fun setImageUri(view: ImageView?, imageUrl: String?) {
     if (!isEmpty(imageUrl)) {
         Log.d("setImageUri", imageUrl)
-        view?.let { picasso.load(imageUrl) }
+        view?.let { picasso.load(imageUrl).into(it) }
     }
 }
 

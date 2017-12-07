@@ -39,6 +39,14 @@
             android:name=".view.activity.LoginActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar" />
+        <!--Message Activity-->
+        <activity android:name=".view.activity.MessageActivity"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:label="@string/app_name"/>
+        <!--Notification Activity-->
+        <activity android:name=".view.activity.NotificationActivity"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:label="@string/app_name"/>
         <!--DashBoard-->
         <activity
             android:name=".view.activity.HomeActivity"
