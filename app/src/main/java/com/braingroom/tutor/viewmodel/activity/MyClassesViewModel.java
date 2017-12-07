@@ -82,7 +82,6 @@ public class MyClassesViewModel extends ViewModel {
                 }).
                 subscribe(resp ->
                 {
-
                     getItem().onNext(new RemoveLoadingViewModel());
                     Log.d(getTAG(), "Removed Loading Items");
                     if (resp.getResCode()) {

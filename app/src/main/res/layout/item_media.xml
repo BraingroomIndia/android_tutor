@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="vm"
+            type="com.braingroom.tutor.viewmodel.item.TextIconViewModel"/>
+    </data>
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+        <ImageView
+            android:id="@+id/media_image"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:src="@{vm.imagePath}"
+            app:placeholder="@{vm.placeHolder}"
+            android:minHeight="@dimen/_20sdp"
+            android:minWidth="@dimen/_20sdp"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/media_image"
+            android:text="@{vm.text}"
+            android:textSize="24sp"
+            android:alpha="0.7"
+            android:gravity="center_horizontal"
+            android:textColor="@color/material_white"
+            android:background="@color/black" />
+    </RelativeLayout>
+</layout>
