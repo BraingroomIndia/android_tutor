@@ -32,7 +32,7 @@
             android:layout_above="@id/filter"
             android:src="@drawable/bottom_line_drawable"
             android:tint="@color/material_grey500"
-            bind:ignore="ContentDescription" />
+            tools:ignore="ContentDescription" />
 
         <LinearLayout
             android:id="@+id/filter"

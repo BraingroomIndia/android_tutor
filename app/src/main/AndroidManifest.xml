@@ -20,18 +20,24 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <!--Launcher Activity -->
+        
+        <activity android:name=".view.activity.MessageActivity">
+        </activity>
         <activity android:name=".view.activity.NotificationActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity android:name=".view.activity.MediaActivity"
+
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
         <activity android:name=".view.activity.SignupActivity"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
+
 
 
         <activity
@@ -83,5 +89,4 @@
             android:name=".view.activity.barcodereader.BarcodeCaptureActivity"
             android:theme="@style/AppTheme.NoActionBar" />
     </application>
-
 </manifest>

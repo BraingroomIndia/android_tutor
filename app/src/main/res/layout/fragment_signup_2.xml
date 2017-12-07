@@ -14,6 +14,9 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+=======
+<!--
+>>>>>>> Remove this
         <include
             layout="@layout/item_list_dialog_opener"
             android:layout_width="match_parent"
@@ -69,5 +72,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             app:vm="@{vm.countryVm}" />
+<<<<<<< dc399faaf5fa8917d22dcd159aa81a1d81638d6a
+=======
+            -->
     </android.support.constraint.ConstraintLayout>
 </layout>

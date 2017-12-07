@@ -36,6 +36,7 @@ class SignupViewModel constructor() : ViewModel() {
     }
     val confirmPassword by lazy {
         TextIconViewModel("", null, InputTypeEnum.Password, View.VISIBLE, "Confirm Password", "Password doesn't match")
+
     }
     val referralCode by lazy {
         TextIconViewModel("", null, InputTypeEnum.Text, View.VISIBLE, "Referral Code (Optional)", "")
@@ -44,7 +45,8 @@ class SignupViewModel constructor() : ViewModel() {
         CustomDrawable(R.drawable.rounded_corner_line, R.color.materialBlue)
     }
 
-    val categoryVm by lazy {
+
+    val countryVm by lazy {
         ListDialogViewModel("Interest", apiService.getCategories().doOnSubscribe { disposable -> compositeDisposable.add(disposable) }.map { resp ->
 
             val list: ListDialogData = ListDialogData(LinkedHashMap())
@@ -105,5 +107,4 @@ class SignupViewModel constructor() : ViewModel() {
             password.setError(false)
         }
     }
-
 }
