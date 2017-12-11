@@ -1,7 +1,6 @@
 package com.braingroom.tutor.services
 
 import com.braingroom.tutor.model.data.CommonIdRealmWrapper
-import com.braingroom.tutor.model.data.CountryCache
 import com.braingroom.tutor.model.data.CommonIdSnippetWrapper
 import com.braingroom.tutor.model.resp.CommonIdResp
 import io.reactivex.Observable
@@ -13,29 +12,29 @@ import io.realm.RealmList
  * Created by ashketchup on 11/12/17.
  */
 public class RealmCacheService:CacheService{
-    override fun getCachedCountries(): Observable<CommonIdResp>{
+    override fun getCachedCommon(searchQuery: String): Observable<CommonIdResp>{
         val realm = Realm.getDefaultInstance()
-        val x = CountryCache()
-        val country:MutableList<CommonIdResp.Snippet> = mutableListOf()
-        var data :CountryCache ?=realm.where(x.javaClass).equalTo("searchQuery","country").findFirst()
+        val x = CommonIdRealmWrapper()
+        val item:MutableList<CommonIdResp.Snippet> = mutableListOf()
+        var data : CommonIdRealmWrapper?=realm.where(x.javaClass).equalTo("searchQuery",searchQuery).findFirst()
         if(data==null)
             return Observable.just(CommonIdResp(null))
         (data.data.isNotEmpty()).let {
                 for(d in data.data){
-                    country.add(d.toSnippet())
+                    item.add(d.toSnippet())
                 }
         }
-        return Observable.just(CommonIdResp(country))
+        return Observable.just(CommonIdResp(item))
     }
 
-    override fun putCountries(countriesList: List<CommonIdResp.Snippet>):CommonIdResp{
+    override fun putCachedCommon(countriesList: List<CommonIdResp.Snippet>, searchQuery:String):CommonIdResp{
         var realmList = RealmList<CommonIdSnippetWrapper>()
         for(snippet in countriesList){
             realmList.add(CommonIdSnippetWrapper(snippet))
         }
         val realm = Realm.getDefaultInstance()
         realm.executeTransaction { realm ->
-            realm.insert(CountryCache.create(realmList))
+            realm.insert(CommonIdRealmWrapper.create(realmList,searchQuery))
         }
         return CommonIdResp(countriesList)
     }

@@ -11,7 +11,8 @@ import static com.braingroom.tutor.utils.CommonUtilsKt.getNonNull;
  * Created by godara on 06/12/17.
  */
 
-public class CategoryResp extends BaseResp {
+public class
+CategoryResp extends BaseResp {
     @Override
     public boolean getResCode() {
         return isEmpty(data);

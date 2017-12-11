@@ -79,26 +79,52 @@ class DataFlowService(private val api: ApiService,private val realmCacheService:
     }
 
     fun getCategories(): Observable<CommonIdResp> {
+        return realmCacheService.getCachedCommon("category").
+                defaultIfEmpty(CommonIdResp(null)).
+                flatMap { data ->
+                    if (data == null)//TODO Handle this case
+                        Observable.just(CommonIdResp())
+                    if (data.data.size == 1)
+                        api.getCategories().subscribeOn(Schedulers.io()).observeOn(Schedulers.computation()).onErrorReturn { CommonIdResp() }.map{resp ->
+                            realmCacheService.putCachedCommon(resp.data,"category")
+                            resp
+                        }.map { resp -> resp ?: CommonIdResp() }
+                    return@flatMap Observable.just(data)
+                }
         return api.getCategories().subscribeOn(Schedulers.io()).observeOn(Schedulers.computation()).onErrorReturn { CommonIdResp() }.map { resp -> resp ?: CommonIdResp() }
     }
 
     fun getCommunity(): Observable<CommonIdResp> {
-        return api.getCommunity().subscribeOn(Schedulers.io()).observeOn(Schedulers.computation()).onErrorReturn { CommonIdResp() }.map { resp -> resp ?: CommonIdResp() }
+        return realmCacheService.getCachedCommon("community").
+                defaultIfEmpty(CommonIdResp(null)).
+                flatMap { data ->
+                    if (data == null)//TODO Handle this case
+                        api.getCommunity().subscribeOn(Schedulers.io()).observeOn(Schedulers.computation()).onErrorReturn { CommonIdResp() }.map{resp ->
+                            realmCacheService.putCachedCommon(resp.data,"community")
+                            resp
+                        }.map { resp -> resp ?: CommonIdResp() }
+                    if (data.data.size == 1)
+                        api.getCommunity().subscribeOn(Schedulers.io()).observeOn(Schedulers.computation()).onErrorReturn { CommonIdResp() }.map{resp ->
+                            realmCacheService.putCachedCommon(resp.data,"community")
+                            resp
+                        }.map { resp -> resp ?: CommonIdResp() }
+                    return@flatMap Observable.just(data)
+                }
     }
 
     fun getCountry(): Observable<CommonIdResp> {
 
-        return realmCacheService.getCachedCountries().
+        return realmCacheService.getCachedCommon("country").
                 defaultIfEmpty(CommonIdResp(null)).
                 flatMap { data ->
-                    if (data == null)
-                        return@flatMap api.getCountry().subscribeOn(Schedulers.io()).observeOn(Schedulers.computation()).onErrorReturn { CommonIdResp() }.map { resp -> resp ?: CommonIdResp() }
+                    if (data == null)//TODO Handle this case
+                        return@flatMap Observable.just(CommonIdResp())
                     if (data.data.size == 1)
                         return@flatMap api.getCountry().subscribeOn(Schedulers.io()).observeOn(Schedulers.computation()).onErrorReturn { CommonIdResp() }.map{resp ->
-                            realmCacheService.putCountries(resp.data)
+                            realmCacheService.putCachedCommon(resp.data,"country")
                             resp
                         }.map { resp -> resp ?: CommonIdResp() }
-                    return@flatMap realmCacheService.getCachedCountries()
+                    return@flatMap realmCacheService.getCachedCommon("country")
                 }
 
         }
