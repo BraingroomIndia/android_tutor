@@ -22,16 +22,16 @@ public class RealmCacheService:CacheService{
             return Observable.just(CommonIdResp(null))
         (data.data.isNotEmpty()).let {
                 for(d in data.data){
-                    country.add(d.data.toSnippet())
+                    country.add(d.toSnippet())
                 }
         }
         return Observable.just(CommonIdResp(country))
     }
 
     override fun putCountries(countriesList: List<CommonIdResp.Snippet>):CommonIdResp{
-        var realmList = RealmList<CommonIdRealmWrapper>()
+        var realmList = RealmList<CommonIdSnippetWrapper>()
         for(snippet in countriesList){
-            realmList.add(CommonIdRealmWrapper(CommonIdSnippetWrapper(snippet)))
+            realmList.add(CommonIdSnippetWrapper(snippet))
         }
         val realm = Realm.getDefaultInstance()
         realm.executeTransaction { realm ->

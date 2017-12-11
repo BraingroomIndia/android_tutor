@@ -12,28 +12,30 @@ import io.realm.annotations.PrimaryKey;
  * Created by ashketchup on 11/12/17.
  */
 public class CountryCache extends RealmObject{
-    RealmList<CommonIdRealmWrapper> data;
-    @PrimaryKey
-    public String searchQuery="country";
-    public void setData(RealmList<CommonIdRealmWrapper> data){
+    RealmList<CommonIdSnippetWrapper> data;
+    public void setData(RealmList<CommonIdSnippetWrapper> data){
         this.data=data;
     }
     public CountryCache(){
 
     }
-    public List<CommonIdRealmWrapper> getData(){
-        return data;
-    }
-    public void setSearchKey(String searchKey){
-        this.searchQuery=searchKey;
-    }
-    public String getSearchKey(){
+    @PrimaryKey
+    public String searchQuery="country";
+
+    public String getSearchQuery() {
         return searchQuery;
     }
-        public CountryCache(RealmList<CommonIdRealmWrapper> data){
+
+    public void setSearchQuery(String searchQuery) {
+        this.searchQuery = searchQuery;
+    }
+    public List<CommonIdSnippetWrapper> getData(){
+        return data;
+    }
+        public CountryCache(RealmList<CommonIdSnippetWrapper> data){
             this.data=data;
         }
-        public static CountryCache create(RealmList<CommonIdRealmWrapper> realmList){
+        public static CountryCache create(RealmList<CommonIdSnippetWrapper> realmList){
             return new CountryCache(realmList);
         }
     }
