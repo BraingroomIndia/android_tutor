@@ -10,6 +10,7 @@ import com.braingroom.tutor.BuildConfig.DEBUG
 import com.braingroom.tutor.services.ApiService
 import com.braingroom.tutor.services.CustomInterceptor
 import com.braingroom.tutor.services.DataFlowService
+import com.braingroom.tutor.services.RealmCacheService
 import com.braingroom.tutor.utils.*
 import com.braingroom.tutor.view.activity.Activity
 import com.facebook.stetho.okhttp3.StethoInterceptor
@@ -85,9 +86,11 @@ class AppModule(private val application: Application) {
                     .client(okHttpClient)
                     .build().create(ApiService::class.java)
     }
-
+    val realmCacheService by lazy {
+        RealmCacheService()
+    }
     val dataFlowService: DataFlowService by lazy {
-        DataFlowService(apiService)
+        DataFlowService(apiService,realmCacheService)
     }
     val userPreferences: SharedPreferences by lazy {
         PreferenceManager.getDefaultSharedPreferences(application)

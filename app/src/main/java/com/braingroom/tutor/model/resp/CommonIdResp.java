@@ -7,6 +7,8 @@ import com.google.gson.annotations.SerializedName;
 import java.util.Collections;
 import java.util.List;
 
+import io.realm.RealmObject;
+
 import static com.braingroom.tutor.utils.CommonUtilsKt.getNonNull;
 import static java.util.Collections.singletonList;
 
@@ -21,8 +23,14 @@ public class CommonIdResp extends BaseResp {
         return !isEmpty(data);
     }
 
+    public CommonIdResp(List<Snippet> data) {
+        this.data = data;
+    }
+    public CommonIdResp(){
 
-    public static class Snippet {
+    }
+
+    public static class Snippet{
 
         @SerializedName("id")
         int id;
@@ -37,6 +45,18 @@ public class CommonIdResp extends BaseResp {
             this.id = -1;
             this.textValue = "";
             this.imageUrl = "";
+        }
+
+        public void setId(int id) {
+            this.id = id;
+        }
+
+        public void setImageUrl(String imageUrl) {
+            this.imageUrl = imageUrl;
+        }
+
+        public void setTextValue(String textValue) {
+            this.textValue = textValue;
         }
 
         @NonNull

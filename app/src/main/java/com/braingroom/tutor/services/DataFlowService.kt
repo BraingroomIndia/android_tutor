@@ -17,7 +17,7 @@ import com.braingroom.tutor.model.req.CommonIdReq
  */
 
 @Suppress("unused")
-class DataFlowService(private val api: ApiService) {
+class DataFlowService(private val api: ApiService,private val realmCacheService: RealmCacheService) {
 
     var userId = CustomApplication.getInstance().userId
         get() = CustomApplication.getInstance().userId
@@ -87,9 +87,21 @@ class DataFlowService(private val api: ApiService) {
     }
 
     fun getCountry(): Observable<CommonIdResp> {
-        return api.getCountry().subscribeOn(Schedulers.io()).observeOn(Schedulers.computation()).onErrorReturn { CommonIdResp() }.map { resp -> resp ?: CommonIdResp() }
-    }
 
+        return realmCacheService.getCachedCountries().
+                defaultIfEmpty(CommonIdResp(null)).
+                flatMap { data ->
+                    if (data == null)
+                        return@flatMap api.getCountry().subscribeOn(Schedulers.io()).observeOn(Schedulers.computation()).onErrorReturn { CommonIdResp() }.map { resp -> resp ?: CommonIdResp() }
+                    if (data.data.size == 1)
+                        return@flatMap api.getCountry().subscribeOn(Schedulers.io()).observeOn(Schedulers.computation()).onErrorReturn { CommonIdResp() }.map{resp ->
+                            realmCacheService.putCountries(resp.data)
+                            resp
+                        }.map { resp -> resp ?: CommonIdResp() }
+                    return@flatMap realmCacheService.getCachedCountries()
+                }
+
+        }
     fun getState(countryId: Int): Observable<CommonIdResp> {
         return api.getState(StateReq(countryId)).subscribeOn(Schedulers.io()).observeOn(Schedulers.computation()).onErrorReturn { CommonIdResp() }.map { resp -> resp ?: CommonIdResp() }
     }
