@@ -33,12 +33,15 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+
     productFlavors {
     }
 }
 
 dependencies {
-
+    compile('com.bignerdranch.android:expandablerecyclerview:3.0.0-RC1') {
+        exclude group: 'com.android.support', module: 'support-v4'
+    }
     //      Kotlin
     kapt "com.android.databinding:compiler:$plugin_version"
 
