@@ -2,7 +2,7 @@
 
 buildscript {
     ext.kotlin_version = '1.1.51'
-    ext.plugin_version = '3.1.0-alpha04'
+    ext.plugin_version = '3.1.0-alpha05'
     repositories {
         google()
         jcenter()
@@ -23,7 +23,7 @@ allprojects {
     }
     gradle.projectsEvaluated {
         tasks.withType(JavaCompile) {
-            options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"
+           // options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"
         }
     }
 }

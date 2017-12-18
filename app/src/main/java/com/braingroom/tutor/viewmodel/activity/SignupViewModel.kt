@@ -45,7 +45,7 @@ class SignupViewModel(val uiHelper: SignupActivity.UiHelper, val fragmentHelper:
     }
 
 
-    val countryVm by lazy {
+    val categoryVm by lazy {
         ListDialogViewModel("Interest", apiService.getCategories().doOnSubscribe { disposable -> compositeDisposable.add(disposable) }.map { resp ->
 
             val list: ListDialogData = ListDialogData(LinkedHashMap())
