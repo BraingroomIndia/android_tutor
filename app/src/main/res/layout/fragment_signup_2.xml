@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="vm"
+            type="com.braingroom.tutor.viewmodel.activity.SignupViewModel" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <include
+            layout="@layout/item_list_dialog_opener"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            app:vm="@{vm.categoryVm}" />
+
+        <include
+            layout="@layout/item_list_dialog_opener"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            app:vm="@{vm.categoryVm}" />
+
+        <include
+            layout="@layout/item_list_dialog_opener"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            app:vm="@{vm.communityVm}" />
+
+        <include
+            layout="@layout/item_list_dialog_opener"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            app:vm="@{vm.categoryVm}" />
+
+        <include
+            layout="@layout/item_search_select_fragment_opener"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            app:vm="@{vm.countryVm}" />
+        <include
+            layout="@layout/item_search_select_fragment_opener"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            app:vm="@{vm.stateVm}" />
+
+        <include
+            layout="@layout/item_search_select_fragment_opener"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            app:vm="@{vm.cityVm}" />
+
+        <include
+            layout="@layout/item_search_select_fragment_opener"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            app:vm="@{vm.localityVm}" />
+
+
+    </LinearLayout>
+</layout>

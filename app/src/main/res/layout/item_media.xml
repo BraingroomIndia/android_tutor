@@ -1,44 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
 
         <variable
             name="vm"
-            type="com.braingroom.tutor.viewmodel.item.TextIconViewModel" />
-
-
-        <import type="android.view.View" />
-
-
+            type="com.braingroom.tutor.viewmodel.item.TextIconViewModel"/>
     </data>
-
-    <android.support.v7.widget.CardView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:cardCornerRadius="@dimen/cardview_default_radius"
-        app:cardElevation="@dimen/cardview_default_elevation"
-        app:cardPreventCornerOverlap="true"
-        app:cardUseCompatPadding="true">
-
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+        <ImageView
+            android:id="@+id/media_image"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:src="@{vm.imagePath}"
+            app:placeholder="@{vm.placeHolder}"
+            android:minHeight="@dimen/_20sdp"
+            android:minWidth="@dimen/_20sdp"/>
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="bottom|center_horizontal"
-            android:drawablePadding="@dimen/drawablePadding"
-            android:drawableTop="@{vm.image}"
-            android:fontFamily="@font/roboto_regular"
-            android:gravity="center"
+            android:layout_alignBottom="@+id/media_image"
             android:text="@{vm.text}"
-            android:textSize="16sp"
-            tools:drawableTop="@drawable/class_ph_2"
-            tools:ignore="RtlHardcoded"
-            tools:text="Name" />
-
-
-    </android.support.v7.widget.CardView>
-
+            android:textSize="24sp"
+            android:alpha="0.7"
+            android:gravity="center_horizontal"
+            android:textColor="@color/material_white"
+            android:background="@color/black" />
+    </RelativeLayout>
 </layout>

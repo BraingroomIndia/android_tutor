@@ -1,6 +1,5 @@
 package com.braingroom.tutor.viewmodel.activity;
 
-import android.content.Intent;
 import android.util.Log;
 
 import com.braingroom.tutor.R;
@@ -15,21 +14,13 @@ import com.braingroom.tutor.viewmodel.item.LoadingViewModel;
 import com.braingroom.tutor.viewmodel.item.NotifyDataSetChanged;
 import com.braingroom.tutor.viewmodel.item.RemoveLoadingViewModel;
 
-import org.jetbrains.annotations.Nullable;
-
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 
 import io.reactivex.Observable;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.functions.Consumer;
 
 import static com.braingroom.tutor.utils.CommonUtilsKt.toObservable;
 
-
-/*
- * Created by godara on 13/10/17.
- */
 
 public class MyClassesViewModel extends ViewModel {
     public final ListDialogViewModel classType;
@@ -67,81 +58,47 @@ public class MyClassesViewModel extends ViewModel {
             if (selectedItems.values().iterator().hasNext()) {
                 snippet.setBatch(selectedItems.values().iterator().next());
                 reset();
-                Log.d(getTAG(), "classType selected items : " + selectedItems.values());
+                Log.d(getTAG(), "classType selectedItems items : " + selectedItems.values());
             }
-
-
-        }, "");
+        }, "", null);
 
         classStatus = new ListDialogViewModel("Class Status", Observable.just(new ListDialogData(classStatusData)), new HashMap<>(), false, selectedItems -> {
             if (selectedItems.values().iterator().hasNext()) {
                 snippet.setExpired(selectedItems.values().iterator().next());
                 reset();
-                Log.d(getTAG(), "classStatus selected items : " + selectedItems.values());
+                Log.d(getTAG(), "classStatus selectedItems items : " + selectedItems.values());
             }
+        }, "", null);
+        toObservable(getCallAgain()).subscribe(integer -> getApiService().getAllClasses(snippet, currentPageNumber).doOnSubscribe(disposable -> {
+            for (int i = 0; i < 5; i++)
+                getItem().onNext(new LoadingViewModel());
+            getItem().onNext(new NotifyDataSetChanged());
+            getCompositeDisposable().add(disposable);
+            Log.d(getTAG(), "Added  Loading Items");
+        }).
+                doOnComplete(() -> {
+                    Log.d(getTAG(), "Updating UI");
+                    getItem().onNext(new NotifyDataSetChanged());
+                }).
+                subscribe(resp ->
+                {
+                    getItem().onNext(new RemoveLoadingViewModel());
+                    Log.d(getTAG(), "Removed Loading Items");
+                    if (resp.getResCode()) {
+                        for (ClassListResp.Snippet snippet : resp.getData())
+                            getItem().onNext(new ClassListItemViewModel(snippet));
+                        Log.d(getTAG(), "Added Actual items");
+                        currentPageNumber++;
+                    }
 
-
-        }, "");
-        toObservable(getCallAgain()).doOnSubscribe(disposable -> getCompositeDisposable().add(disposable)).
-                subscribe(a -> getApiService().getAllClasses(snippet, currentPageNumber).
-                        doOnSubscribe(disposable -> {
-                            getCompositeDisposable().add(disposable);
-                            for (int i = 0; i < 5; i++)
-                                getItem().onNext(new LoadingViewModel());
-                            getItem().onNext(new NotifyDataSetChanged());
-                            Log.d(getTAG(), "Added  Loading Items");
-                        }).
-                        doOnComplete(() -> {
-                            Log.d(getTAG(), "Updating UI");
-                            getItem().onNext(new NotifyDataSetChanged());
-                        }).
-                        subscribe(resp ->
-                        {
-
-                            getItem().onNext(new RemoveLoadingViewModel());
-                            Log.d(getTAG(), "Removed Loading Items");
-                            if (resp.getResCode()) {
-                                for (ClassListResp.Snippet snippet : resp.getData())
-                                    getItem().onNext(new ClassListItemViewModel(snippet));
-                                Log.d(getTAG(), "Added Actual items");
-                                currentPageNumber++;
-                            }
-
-                        }, throwable -> {
-                            Log.d(getTAG(), throwable.getMessage());
-                            throwable.printStackTrace();
-                        }));
+                }, throwable -> {
+                    Log.d(getTAG(), throwable.getMessage());
+                    throwable.printStackTrace();
+                }));
     }
 
     private void reset() {
         currentPageNumber = 0;
         getCallAgain().set(getCallAgain().get() + 1);
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        classStatus.onResume();
-        classType.onResume();
-    }
-
-    @Override
-    public void onPause() {
-        classStatus.onPause();
-        classType.onPause();
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        classStatus.onDestroy();
-        classType.onDestroy();
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        classStatus.onActivityResult(requestCode, resultCode, data);
-        classType.onActivityResult(requestCode, resultCode, data);
     }
 }

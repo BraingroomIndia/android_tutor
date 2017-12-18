@@ -14,11 +14,11 @@ import static com.braingroom.tutor.utils.CommonUtilsKt.getNonNull;
 public class LoginResp extends BaseResp {
 
     @SerializedName("braingroom")
-    protected List<Snippet> data;
+    private List<Snippet> data;
 
     @Override
     public boolean getResCode() {
-        return data == null;
+        return !isEmpty(data);
     }
 
     public static class Snippet {
@@ -35,8 +35,6 @@ public class LoginResp extends BaseResp {
         private String mCityId;
         @SerializedName("is_mobile_verified")
         private int mIsMobileVerified;
-        @SerializedName("email_id")
-        private String mEmmailId;
         @SerializedName("referal_code")
         private String mReferralCode;
         @SerializedName("uuid")
@@ -78,11 +76,6 @@ public class LoginResp extends BaseResp {
         }
 
         @NonNull
-        public String getEmailId() {
-            return getNonNull(mEmmailId);
-        }
-
-        @NonNull
         public String getUuid() {
             return getNonNull(mUuid);
         }
@@ -90,10 +83,9 @@ public class LoginResp extends BaseResp {
 
     }
 
-
-    @NonNull
+    @Nullable
     public Snippet getData() {
-        return isEmpty(data) ? new Snippet() : data.get(0);
+        return isEmpty(data) ? null : data.get(0);
     }
 
 

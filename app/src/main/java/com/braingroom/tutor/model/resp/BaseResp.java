@@ -7,6 +7,8 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
+import io.realm.RealmObject;
+
 import static com.braingroom.tutor.utils.CommonUtilsKt.getNonNull;
 
 /*

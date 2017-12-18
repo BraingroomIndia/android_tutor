@@ -10,6 +10,7 @@ import com.braingroom.tutor.BuildConfig.DEBUG
 import com.braingroom.tutor.services.ApiService
 import com.braingroom.tutor.services.CustomInterceptor
 import com.braingroom.tutor.services.DataFlowService
+import com.braingroom.tutor.services.RealmCacheService
 import com.braingroom.tutor.utils.*
 import com.braingroom.tutor.view.activity.Activity
 import com.facebook.stetho.okhttp3.StethoInterceptor
@@ -35,17 +36,11 @@ class AppModule(private val application: Application) {
 
     var activity: Activity? = null
         set(value) {
+            field = value
             if (value != null)
-                if (value != field) {
-                    field = value
-                    Log.d(value.TAG, "activity set")
-                } else
-                    Log.d(value.TAG, "activity already set")
-            else {
-                field = null
+                Log.d(value.TAG, "activity set")
+            else
                 Log.d("activity null", "activity value set")
-            }
-
         }
     private val cacheSize = 10 * 1024 * 1024 // 10 MiB
 
@@ -62,7 +57,7 @@ class AppModule(private val application: Application) {
                     .cache(Cache(application.cacheDir, cacheSize.toLong()))
                     .connectTimeout(1000, SECONDS)
                     .readTimeout(1000, SECONDS)
-                    .writeTimeout(1000, SECONDS).addInterceptor(loggingInterceptor).build()
+                    .writeTimeout(1000, SECONDS).build()
         else
             OkHttpClient.Builder()
                     .addInterceptor(CustomInterceptor())
@@ -70,11 +65,11 @@ class AppModule(private val application: Application) {
                     .connectTimeout(1000, SECONDS)
                     .readTimeout(1000, SECONDS)
                     .writeTimeout(1000, SECONDS).build()
-
     }
 
-    val picasso by lazy { providePicasso() }
-
+    val picasso: Picasso by lazy {
+        providePicasso()
+    }
     val apiService: ApiService by lazy {
         if (DEBUG)
             Retrofit.Builder()
@@ -90,12 +85,12 @@ class AppModule(private val application: Application) {
                     .baseUrl(BASE_URL)
                     .client(okHttpClient)
                     .build().create(ApiService::class.java)
-
-
     }
-
+    val realmCacheService by lazy {
+        RealmCacheService()
+    }
     val dataFlowService: DataFlowService by lazy {
-        DataFlowService(apiService)
+        DataFlowService(apiService,realmCacheService)
     }
     val userPreferences: SharedPreferences by lazy {
         PreferenceManager.getDefaultSharedPreferences(application)
@@ -106,27 +101,23 @@ class AppModule(private val application: Application) {
 
     var navigator: Navigator? = null
         get() {
-            Log.d(activity?.TAG, "\tfetched navigator")
+            Log.d(activity?.TAG, "fetched navigator")
             return activity?.navigator
         }
-
     var messageHelper: MessageHelper? = null
         get() {
-            Log.d(activity?.TAG, "\tfetched messageHelper")
+            Log.d(activity?.TAG, "fetched messageHelper")
             return activity?.messageHelper
         }
     var dialogHelper: DialogHelper? = null
         get() {
-            Log.d(activity?.TAG, "\tfetched dialogHelper")
+            Log.d(activity?.TAG, "fetched dialogHelper")
             return activity?.dialogHelper
         }
-
-
-    fun providePicasso(): Picasso? {
+    fun providePicasso(): Picasso {
         val picasso = Picasso.with(application)
         picasso.setIndicatorsEnabled(false)
         picasso.isLoggingEnabled = false
         return picasso
     }
-
 }

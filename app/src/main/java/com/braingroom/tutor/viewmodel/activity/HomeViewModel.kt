@@ -4,7 +4,6 @@ package com.braingroom.tutor.viewmodel.activity
 import android.support.annotation.ColorRes
 import android.support.annotation.DrawableRes
 import com.braingroom.tutor.R
-import com.braingroom.tutor.view.activity.SecondActivity
 import com.braingroom.tutor.view.adapters.ViewProvider
 import com.braingroom.tutor.viewmodel.ViewModel
 import com.braingroom.tutor.viewmodel.item.HomeItemViewModel
@@ -20,7 +19,6 @@ class HomeViewModel : ViewModel() {
 
     val onClick: Action by lazy {
         Action {
-            navigator?.navigateActivity(SecondActivity::class.java)
         }
     }
     val spanCount = 2

@@ -26,4 +26,8 @@
     <string name="fb_login_protocol_scheme" translatable="false">fb275714292949781</string>
     <string name="enter_start_end_code">Enter Start/End Code</string>
     <string name="scan_qr_code">Scan Qr Code</string>
+    <string name="sign_up">Sign Up</string>
+    <string name="step_1">Step 1</string>
+    <string name="save">SAVE</string>
+    <string name="clear">CLEAR</string>
 </resources>
