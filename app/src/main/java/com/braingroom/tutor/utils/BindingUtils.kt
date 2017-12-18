@@ -2,14 +2,12 @@
 
 package com.braingroom.tutor.utils
 
-import android.databinding.BindingConversion
-import android.databinding.ViewDataBinding
+import android.databinding.*
 import android.view.View
 import com.braingroom.tutor.BR
 import com.braingroom.tutor.view.adapters.ViewModelBinder
 import com.braingroom.tutor.viewmodel.ViewModel
 import io.reactivex.functions.Action
-import android.databinding.BindingAdapter
 import android.graphics.PorterDuff
 import android.graphics.drawable.Drawable
 import android.os.Build
@@ -24,7 +22,7 @@ import android.widget.TextView
 /*
  * Created by godara on 27/09/17.
  */
-val defaultBinder: ViewModelBinder by lazy {
+public val defaultBinder: ViewModelBinder by lazy {
     Log.d("Default Binder", "created")
     object : ViewModelBinder {
         override fun bind(viewDataBinding: ViewDataBinding?, viewModel: ViewModel?) {
@@ -51,6 +49,24 @@ fun toOnClickListener(listener: Action?): View.OnClickListener? {
             }
         }
         else -> null
+    }
+}
+
+@BindingAdapter("android:src")
+fun setImageUri(view: ImageView?, imageUrl: String?) {
+    if (!isEmpty(imageUrl)) {
+        Log.d("setImageUri", imageUrl)
+        view?.let { picasso.load(imageUrl).into(it) }
+    }
+}
+
+@BindingAdapter(value = *arrayOf("android:src", "placeholder"), requireAll = true)
+fun setImageUri(view: ImageView?, imageUrl: String?, placeHolder: Int?) {
+    if (!isEmpty(imageUrl)) {
+        Log.d("setImageUri", imageUrl + "   " + placeHolder)
+        if (placeHolder != null)
+            view?.let { picasso.load(imageUrl).placeholder(placeHolder).error(placeHolder).into(it) }
+        else setImageUri(view, imageUrl)
     }
 }
 
@@ -100,8 +116,13 @@ fun setBackground(view: TextView?, color: Int) {
 }
 
 @BindingAdapter("android:errorText")
-fun setErrorMessage(view: TextInputLayout, errorMessage: String?) {
-    view.isErrorEnabled = !TextUtils.isEmpty(errorMessage)
+fun setErrorMessage(view: TextInputLayout, errorMessage: String) {
     view.error = errorMessage
 }
+
+@BindingAdapter("android:errorErrorEnabled")
+fun setErrorMessage(view: TextInputLayout, errorEnabled: Boolean) {
+    view.isErrorEnabled = errorEnabled
+}
+
 

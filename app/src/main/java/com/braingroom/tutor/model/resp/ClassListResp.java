@@ -20,7 +20,6 @@ public class ClassListResp extends BaseResp {
     @SerializedName("braingroom")
     private List<Snippet> data;
 
-
     public List<Snippet> getData() {
         return isEmpty(data) ? Collections.singletonList(new Snippet()) : data;
     }

@@ -18,6 +18,8 @@ import com.squareup.leakcanary.RefWatcher;
 
 import java.util.HashMap;
 
+import io.realm.Realm;
+
 import static com.braingroom.tutor.utils.ConstantsKt.FONT_REGULAR;
 import static com.braingroom.tutor.utils.ConstantsKt.FONT_BOLD;
 
@@ -42,6 +44,7 @@ public class CustomApplication extends Application implements ActivityLifecycleC
         super.onCreate();
         appModule = new AppModule(this);
         sInstance = this;
+        Realm.init(this);
         if (BuildConfig.DEBUG)
             Stetho.initializeWithDefaults(this);
         if (!BuildConfig.DEBUG || !LeakCanary.isInAnalyzerProcess(this)) {

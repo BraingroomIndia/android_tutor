@@ -3,17 +3,15 @@ package com.braingroom.tutor.utils
 import android.content.res.Resources
 import android.text.Html
 import android.text.Spanned
-import android.text.TextUtils
 import android.util.DisplayMetrics
 import java.util.*
 import io.reactivex.Observable;
-import kotlin.collections.ArrayList
-import io.reactivex.functions.Cancellable
 import android.databinding.Observable.OnPropertyChangedCallback
-import io.reactivex.ObservableEmitter
 import io.reactivex.ObservableOnSubscribe
 import android.databinding.ObservableField
 import android.util.Log
+import java.net.MalformedURLException
+import java.net.URL
 
 
 /*
@@ -82,6 +80,54 @@ fun getRandomNumberInRange(min: Int, max: Int): Int {
 }
 
 fun String?.isValidEmail(): Boolean = !this.isNullOrBlank() && android.util.Patterns.EMAIL_ADDRESS.matcher(this).matches()
+
+// Checks if password is lesser than 8 charachters
+
+fun isValidPassword(target: CharSequence?):Boolean{
+    return if (target== null){
+        false
+    }else{
+        target.length>4
+    }
+}
+
+fun isValidPhone(target: CharSequence?):Boolean{
+    return if(target==null){
+        false
+    }else{
+        android.util.Patterns.PHONE.matcher(target).matches()
+    }
+}
+
+fun isValidName(target: CharSequence?):Boolean{
+    if(isEmpty(target.toString()))
+        return false
+    else
+    return if(target==null){
+        false
+    }else{
+        !target.contains("[^a-zA-Z]")
+    }
+}
+fun getThumbnail(url:String):String{
+    return "http://img.youtube.com/vi/"+extractYoutubeId(url)+"/0.jpg"
+}
+
+public fun getVideo(video:String?):String {
+    if (video == null) return "";
+    try {
+        return video.substring(video.lastIndexOf("/") + 1);
+    } catch (iobe:IndexOutOfBoundsException ) {
+        return "";
+    }
+}
+@Throws(MalformedURLException::class)
+fun extractYoutubeId(url: String): String? {
+    val query = url
+    val param = query.split("/".toRegex()).toTypedArray()
+    var id: String? = null
+    return param[param.lastIndex]
+}
 
 fun isEmpty(target: String?): Boolean = target.isNullOrBlank()
 fun isEmpty(target: Any?): Boolean = target == null

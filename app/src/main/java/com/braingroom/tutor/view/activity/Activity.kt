@@ -86,15 +86,12 @@ abstract class Activity : AppCompatActivity() {
         DialogHelper(this)
     }
 
-    val userPreferences by lazy {
+    private val userPreferences by lazy {
         CustomApplication.getInstance().appModule.userPreferences
     }
 
-    val preferencesEditor by lazy {
+    private val preferencesEditor by lazy {
         CustomApplication.getInstance().appModule.preferencesEditor
-    }
-    val refWatcher by lazy {
-        CustomApplication.getInstance().refWatcher;
     }
 
 
@@ -102,6 +99,7 @@ abstract class Activity : AppCompatActivity() {
         CustomApplication.getInstance().appModule.activity = this
         super.onCreate(savedInstanceState)
         requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+        CustomApplication.getInstance().refWatcher?.watch(this)
         CustomApplication.getInstance().appModule.activity = this
         binding = DataBindingUtil.setContentView(this, layoutId)
         defaultBinder.bind(binding, vm)
@@ -133,28 +131,24 @@ abstract class Activity : AppCompatActivity() {
         defaultBinder.bind(binding, null)
         binding.executePendingBindings()
         clearReferences()
-        messageHelper.dismissActiveProgress()
-        refWatcher.watch(this, TAG)
-        refWatcher.watch(navigator, navigator.TAG)
-        refWatcher.watch(messageHelper, messageHelper.TAG)
-        refWatcher.watch(dialogHelper, dialogHelper.TAG)
         super.onDestroy()
 
     }
 
+    open fun getFragmentViewModel(title: String) = ViewModel()
 
     @Suppress("unused")
-    fun getIntentString(key: String): String? = extras?.getString(key)
+    fun getIntentString(key: String) = extras?.getString(key) ?: ""
 
     @Suppress("unused")
-    fun getIntentInt(key: String): Int? = extras?.getInt(key)
+    fun getIntentInt(key: String) = extras?.getInt(key)
 
     @Suppress("unused")
-    fun getIntentBoolean(key: String): Boolean = extras?.getBoolean(key) ?: false
+    fun getIntentBoolean(key: String) = extras?.getBoolean(key) ?: false
+
 
     @Suppress("unused")
     fun getIntentSerializable(key: String): Serializable? = extras?.getSerializable(key)
-
 
     private fun clearReferences() {
         if (this == CustomApplication.getInstance().appModule.activity)

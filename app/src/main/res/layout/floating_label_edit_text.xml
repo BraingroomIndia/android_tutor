@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+
+        <variable
+            name="data"
+            type="com.braingroom.tutor.viewmodel.item.TextIconViewModel" />
+
+    </data>
+
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/input_layout_floating_label"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/margin_small"
+        android:hint="@{data.hinttext}"
+        android:visibility="@{data.visibility}"
+        tools:hint="Hint text ">
+
+        <EditText
+            android:id="@+id/text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="@{data.inputType}"
+            android:text="@={data.text}"
+            android:textColor="@color/colorPrimaryDark"
+            tools:ignore="LabelFor"
+            tools:text="Input Field" />
+
+    </android.support.design.widget.TextInputLayout>
+</layout>
