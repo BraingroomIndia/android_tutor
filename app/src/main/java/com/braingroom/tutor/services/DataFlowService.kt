@@ -17,9 +17,9 @@ import com.braingroom.tutor.model.req.CommonIdReq
  */
 
 @Suppress("unused")
-class DataFlowService(private val api: ApiService,private val realmCacheService: RealmCacheService) {
+class DataFlowService(private val api: ApiService, private val realmCacheService: RealmCacheService) {
 
-    var userId = CustomApplication.getInstance().userId
+    var userId: String = CustomApplication.getInstance().userId
         get() = CustomApplication.getInstance().userId
 
 
@@ -85,8 +85,8 @@ class DataFlowService(private val api: ApiService,private val realmCacheService:
                     if (data == null)//TODO Handle this case
                         return@flatMap realmCacheService.getCachedCommon("category")
                     if (data.data.size == 1)
-                        return@flatMap api.getCategories().subscribeOn(Schedulers.io()).observeOn(Schedulers.computation()).onErrorReturn { CommonIdResp() }.map{resp ->
-                            realmCacheService.putCachedCommon(resp.data,"category")
+                        return@flatMap api.getCategories().subscribeOn(Schedulers.io()).observeOn(Schedulers.computation()).onErrorReturn { CommonIdResp() }.map { resp ->
+                            realmCacheService.putCachedCommon(resp.data, "category")
                             resp
                         }.map { resp -> resp ?: CommonIdResp() }
                     return@flatMap realmCacheService.getCachedCommon("category")
@@ -100,8 +100,8 @@ class DataFlowService(private val api: ApiService,private val realmCacheService:
                     if (data == null)//TODO Handle this case
                         return@flatMap realmCacheService.getCachedCommon("community")
                     if (data.data.size == 1)
-                        api.getCommunity().subscribeOn(Schedulers.io()).observeOn(Schedulers.computation()).onErrorReturn { CommonIdResp() }.map{resp ->
-                            realmCacheService.putCachedCommon(resp.data,"community")
+                        api.getCommunity().subscribeOn(Schedulers.io()).observeOn(Schedulers.computation()).onErrorReturn { CommonIdResp() }.map { resp ->
+                            realmCacheService.putCachedCommon(resp.data, "community")
                             resp
                         }.map { resp -> resp ?: CommonIdResp() }
                     return@flatMap realmCacheService.getCachedCommon("community")
@@ -116,13 +116,14 @@ class DataFlowService(private val api: ApiService,private val realmCacheService:
                     if (data == null)//TODO Handle this case
                         return@flatMap realmCacheService.getCachedCommon("country")
                     if (data.data.size == 1)
-                        return@flatMap api.getCountry().subscribeOn(Schedulers.io()).observeOn(Schedulers.computation()).onErrorReturn { CommonIdResp() }.map{resp ->
-                            realmCacheService.putCachedCommon(resp.data,"country")
+                        return@flatMap api.getCountry().subscribeOn(Schedulers.io()).observeOn(Schedulers.computation()).onErrorReturn { CommonIdResp() }.map { resp ->
+                            realmCacheService.putCachedCommon(resp.data, "country")
                             resp
                         }.map { resp -> resp ?: CommonIdResp() }
                     return@flatMap realmCacheService.getCachedCommon("country")
                 }
-        }
+    }
+
     fun getState(countryId: Int): Observable<CommonIdResp> {
         return api.getState(StateReq(countryId)).subscribeOn(Schedulers.io()).observeOn(Schedulers.computation()).onErrorReturn { CommonIdResp() }.map { resp -> resp ?: CommonIdResp() }
     }

@@ -121,34 +121,35 @@ class SignupViewModel(val uiHelper: SignupActivity.UiHelper, val fragmentHelper:
     fun signup() {
         uiHelper.secondFragment()
         return
-        if (!(isValidEmail(email.text.get()) && isValidName(name.text.get()) && isValidPhone(phone.text.get()) && isValidName(confirmPassword.text.get())) && isValidPassword(password.text.get())) {
-            if (!isValidEmail(email.text.get())) {
-                email.setError(true)
-            } else {
-                email.setError(false)
-            }
-            if (!isValidName(name.text.get())) {
-                name.setError(true)
-            } else {
-                name.setError(false)
-            }
-            if (!isValidPhone(phone.text.get())) {
-                phone.setError(true)
-            } else {
-                phone.setError(false)
-            }
+        /*   if (!(isValidEmail(email.text.get()) && isValidName(name.text.get()) && isValidPhone(phone.text.get()) && isValidName(confirmPassword.text.get())) && isValidPassword(password.text.get())) {
+               if (!isValidEmail(email.text.get())) {
+                   email.setError(true)
+               } else {
+                   email.setError(false)
+               }
+               if (!isValidName(name.text.get())) {
+                   name.setError(true)
+               } else {
+                   name.setError(false)
+               }
+               if (!isValidPhone(phone.text.get())) {
+                   phone.setError(true)
+               } else {
+                   phone.setError(false)
+               }
 
-            if (!isValidName(confirmPassword.text.get())) {
-                confirmPassword.setError(true)
-            } else {
-                confirmPassword.setError(false)
-            }
-        } else {
-            email.setError(false)
-            phone.setError(false)
-            confirmPassword.setError(false)
-            name.setError(false)
-            password.setError(false)
-        }
+               if (!isValidName(confirmPassword.text.get())) {
+                   confirmPassword.setError(true)
+               } else {
+                   confirmPassword.setError(false)
+               }
+           } else {
+               email.setError(false)
+               phone.setError(false)
+               confirmPassword.setError(false)
+               name.setError(false)
+               password.setError(false)
+           }
+       }*/
     }
 }

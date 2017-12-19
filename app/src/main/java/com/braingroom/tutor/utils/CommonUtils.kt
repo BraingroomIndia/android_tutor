@@ -22,20 +22,23 @@ import java.net.URL
 
 fun <T> toObservable(field: ObservableField<T>): Observable<T> {
 
-    return Observable.create(ObservableOnSubscribe<T> { e ->
-        e.onNext(field.get())
-        val callback = object : OnPropertyChangedCallback() {
-            override fun onPropertyChanged(observable: android.databinding.Observable, i: Int) {
-                e.onNext(field.get())
-                Log.d("onPropertyChanged", "cancel: " + field.toString())
+    when {
+        field.get() == null -> throw NullPointerException()
+        else -> return Observable.create(ObservableOnSubscribe<T> { e ->
+            e.onNext(field.get()!!)
+            val callback = object : OnPropertyChangedCallback() {
+                override fun onPropertyChanged(observable: android.databinding.Observable, i: Int) {
+                    e.onNext(field.get()!!)
+                    Log.d("onPropertyChanged", "cancel: " + field.toString())
+                }
             }
-        }
-        field.addOnPropertyChangedCallback(callback)
-        e.setCancellable {
-            field.removeOnPropertyChangedCallback(callback)
-            Log.d("removeOnProperty", "cancel: " + field.toString())
-        }
-    })
+            field.addOnPropertyChangedCallback(callback)
+            e.setCancellable {
+                field.removeOnPropertyChangedCallback(callback)
+                Log.d("removeOnProperty", "cancel: " + field.toString())
+            }
+        })
+    }
 }
 
 
@@ -83,44 +86,46 @@ fun String?.isValidEmail(): Boolean = !this.isNullOrBlank() && android.util.Patt
 
 // Checks if password is lesser than 8 charachters
 
-fun isValidPassword(target: CharSequence?):Boolean{
-    return if (target== null){
+fun isValidPassword(target: CharSequence?): Boolean {
+    return if (target == null) {
         false
-    }else{
-        target.length>4
+    } else {
+        target.length > 4
     }
 }
 
-fun isValidPhone(target: CharSequence?):Boolean{
-    return if(target==null){
+fun isValidPhone(target: CharSequence?): Boolean {
+    return if (target == null) {
         false
-    }else{
+    } else {
         android.util.Patterns.PHONE.matcher(target).matches()
     }
 }
 
-fun isValidName(target: CharSequence?):Boolean{
-    if(isEmpty(target.toString()))
+fun isValidName(target: CharSequence?): Boolean {
+    if (isEmpty(target.toString()))
         return false
     else
-    return if(target==null){
-        false
-    }else{
-        !target.contains("[^a-zA-Z]")
-    }
-}
-fun getThumbnail(url:String):String{
-    return "http://img.youtube.com/vi/"+extractYoutubeId(url)+"/0.jpg"
+        return if (target == null) {
+            false
+        } else {
+            !target.contains("[^a-zA-Z]")
+        }
 }
 
-public fun getVideo(video:String?):String {
+fun getThumbnail(url: String): String {
+    return "http://img.youtube.com/vi/" + extractYoutubeId(url) + "/0.jpg"
+}
+
+public fun getVideo(video: String?): String {
     if (video == null) return "";
     try {
         return video.substring(video.lastIndexOf("/") + 1);
-    } catch (iobe:IndexOutOfBoundsException ) {
+    } catch (iobe: IndexOutOfBoundsException) {
         return "";
     }
 }
+
 @Throws(MalformedURLException::class)
 fun extractYoutubeId(url: String): String? {
     val query = url
