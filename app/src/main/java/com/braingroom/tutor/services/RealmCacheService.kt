@@ -1,5 +1,6 @@
 package com.braingroom.tutor.services
 
+import android.util.Log
 import com.braingroom.tutor.model.data.CommonIdRealmWrapper
 import com.braingroom.tutor.model.data.CommonIdSnippetWrapper
 import com.braingroom.tutor.model.resp.CommonIdResp
@@ -27,15 +28,18 @@ public class RealmCacheService:CacheService{
         return Observable.just(CommonIdResp(item))
     }
 
+
     override fun putCachedCommon(countriesList: List<CommonIdResp.Snippet>, searchQuery:String):CommonIdResp{
         var realmList = RealmList<CommonIdSnippetWrapper>()
         for(snippet in countriesList){
             realmList.add(CommonIdSnippetWrapper(snippet))
         }
         val realm = Realm.getDefaultInstance()
-        realm.executeTransaction { realm ->
+        realm.executeTransactionAsync({ realm ->
             realm.insert(CommonIdRealmWrapper.create(realmList,searchQuery))
-        }
+        }, { e ->
+            Log.d("Realm Error", e.message)
+        })
         return CommonIdResp(countriesList)
     }
 }

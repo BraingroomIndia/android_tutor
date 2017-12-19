@@ -12,6 +12,7 @@ import io.reactivex.functions.Cancellable
 
 object FieldUtils {
     fun <T> toObservable(field: ObservableField<T>): Observable<T> {
+
         when {
             field.get() == null -> throw NullPointerException()
             else -> return Observable.create { e ->

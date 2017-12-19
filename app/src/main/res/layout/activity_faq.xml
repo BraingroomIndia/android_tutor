@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+    xmlns:bind="http://schemas.android.com/apk/res-auto"
+    tools:context=".view.activity.FAQActivity">
+    <data>
+        <variable
+            type="com.braingroom.tutor.viewmodel.activity.FAQViewModel"
+            name="vm"/>
+    </data>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recyclerview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        bind:layoutManager="@{vm.layoutManager}"
+        bind:adapter="@{vm.adapter}"
+        >
+    </android.support.v7.widget.RecyclerView>
+</RelativeLayout>
+</layout>
