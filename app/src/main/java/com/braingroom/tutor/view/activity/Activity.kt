@@ -6,6 +6,7 @@ import android.content.pm.ActivityInfo
 import android.databinding.DataBindingUtil
 import android.databinding.ViewDataBinding
 import android.os.Bundle
+import android.support.v4.app.FragmentManager
 import android.support.v4.widget.DrawerLayout
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
@@ -157,6 +158,14 @@ abstract class Activity : AppCompatActivity() {
     private fun clearReferences() {
         if (this == CustomApplication.getInstance().appModule.activity)
             CustomApplication.getInstance().appModule.activity = null
+    }
+
+    fun popBackStack(title: String) {
+        val count = fragmentManager.backStackEntryCount
+        if (count > 0) {
+            fragmentManager.popBackStack(title, FragmentManager.POP_BACK_STACK_INCLUSIVE)
+        }
+
     }
 
     protected abstract val vm: ViewModel

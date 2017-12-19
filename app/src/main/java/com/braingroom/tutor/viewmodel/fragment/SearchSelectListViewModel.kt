@@ -18,12 +18,13 @@ import io.reactivex.functions.Action
 import io.reactivex.functions.Consumer
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.PublishSubject
+import java.util.*
 import java.util.concurrent.TimeUnit
 
 /*
  * Created by ashketchup on 6/12/17.
  */
-class SearchSelectListViewModel(title: String, searchHint: String, val dependencyMessage: String, isMultipleSelect: Boolean, private var observableApi: Observable<HashMap<String, Int>>?, private val saveConsumer: Consumer<HashMap<String, Int>>, private var selectedDataMap: HashMap<String, Int>, private val fragmentHelper: FragmentHelper) : ViewModel() {
+class SearchSelectListViewModel(val title: String, val searchHint: String, val dependencyMessage: String, isMultipleSelect: Boolean, private var observableApi: Observable<HashMap<String, Int>>?, private val saveConsumer: Consumer<HashMap<String, Int>>, private var selectedDataMap: HashMap<String, Int>, private val fragmentHelper: FragmentHelper) : ViewModel() {
 
 
     val onClearClicked = Action {
@@ -38,14 +39,19 @@ class SearchSelectListViewModel(title: String, searchHint: String, val dependenc
             return R.layout.item_search_select_text;
         }
     }
-    val onSaveClicked: Action by lazy { Action { fragmentHelper.remove(title) } }
+    val onSaveClicked: Action by lazy {
+        Action {
+            saveConsumer.accept(selectedDataMap)
+            fragmentHelper.remove(title)
+        }
+    }
     val onOpenClicked: Action by lazy {
         Action {
             if (observableApi == null)
                 messageHelper?.showMessage(dependencyMessage)
             else {
                 messageHelper?.showProgressDialog("Wait", "Loading")
-                observableApi?.subscribe({ map ->
+                observableApi?.doFinally({ start.subscribe() })?.subscribe({ map ->
                     if (map.isEmpty()) {
                         messageHelper?.showMessage("Not available")
                     } else {
@@ -56,7 +62,7 @@ class SearchSelectListViewModel(title: String, searchHint: String, val dependenc
                     messageHelper?.dismissActiveProgress()
                 }, { throwable ->
                     messageHelper?.dismissActiveProgress()
-                    Log.d("Search select List VM", "accept: " + throwable.message)
+                    Log.e("Search select List VM", "accept: " + throwable.message)
                 })
 
             }
@@ -65,19 +71,11 @@ class SearchSelectListViewModel(title: String, searchHint: String, val dependenc
     }
     val selectedItemsText = ObservableField("select items")
 
-    val searchQuery = ObservableField("")
-    val searchHint = ObservableField<String>(searchHint)
-    val title = ObservableField<String>()
-    val dataMap: HashMap<String, Int> = HashMap()
-    val selectedItems: PublishSubject<SearchSelectListItemViewModel> by lazy { PublishSubject.create<SearchSelectListItemViewModel>() }
 
-    init {
-        this.searchHint.set(searchHint)
-        this.title.set(title)
-        selectedItemsText.set((if (TextUtils.join(" , ", selectedDataMap.keys).isNullOrBlank()) "select items" else TextUtils.join(" , ", selectedDataMap.keys)))
-        FieldUtils.toObservable(searchQuery).
+    val start by lazy {
+        FieldUtils.toObservable(searchQuery).doOnSubscribe { disposable -> compositeDisposable.add(disposable) }.
                 subscribeOn(Schedulers.computation()).
-                subscribe { keyword: String ->
+                map { keyword: String ->
                     item.onNext(RefreshViewModel())
                     dataMap.keys
                             .filter { it.contains(keyword, true) }
@@ -95,7 +93,7 @@ class SearchSelectListViewModel(title: String, searchHint: String, val dependenc
                                         }
                                         selectedItemsText.set(TextUtils.join(" , ", selectedDataMap.keys))
                                         selectedItems.onNext(var1)
-                                        saveConsumer.accept(selectedDataMap)
+
                                     }
                                 }, selectedItems))
                             }
@@ -103,24 +101,25 @@ class SearchSelectListViewModel(title: String, searchHint: String, val dependenc
                 }
     }
 
+    val searchQuery = ObservableField("")
+
+    val dataMap: TreeMap<String, Int> = TreeMap()
+    val selectedItems: PublishSubject<SearchSelectListItemViewModel> by lazy { PublishSubject.create<SearchSelectListItemViewModel>() }
+
+
+    init {
+        selectedItemsText.set((if (TextUtils.join(" , ", selectedDataMap.keys).isNullOrBlank()) "select items" else TextUtils.join(" , ", selectedDataMap.keys)))
+    }
+
 
     fun refreshDataMap(dataSource: Observable<HashMap<String, Int>>?) {
-        dataMap.clear()
-        selectedDataMap.clear()
-        observableApi = dataSource
         if (observableApi == null) {
             messageHelper?.showMessage(dependencyMessage)
             return
         }
-        observableApi?.subscribe({ map ->
-            when {
-                !map.isEmpty() -> {
-                    dataMap.putAll(map)
-                    searchQuery.set("")
-                }
-            }
-        }, { throwable ->
-            Log.e("Search select List VM", "accept: " + throwable.message)
-        })
+        dataMap.clear()
+        selectedDataMap.clear()
+        observableApi = dataSource
     }
+
 }
