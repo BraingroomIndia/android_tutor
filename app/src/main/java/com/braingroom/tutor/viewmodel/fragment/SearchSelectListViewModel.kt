@@ -80,7 +80,7 @@ class SearchSelectListViewModel(title: String, searchHint: String, val dependenc
                     dataMap.keys
                             .filter { it.contains(keyword, true) }
                             .forEach {
-                                Log.d(TAG, it)
+                                Log.v(TAG, it)
                                 item.onNext(SearchSelectListItemViewModel(it, dataMap[it], selectedDataMap.containsKey(it),
                                         isMultipleSelect, object : MyConsumer<SearchSelectListItemViewModel> {
                                     override fun accept(@NonNull var1: SearchSelectListItemViewModel) {
@@ -119,7 +119,7 @@ class SearchSelectListViewModel(title: String, searchHint: String, val dependenc
                 }
             }
         }, { throwable ->
-            Log.d("Search select List VM", "accept: " + throwable.message)
+            Log.e("Search select List VM", "accept: " + throwable.message)
         })
     }
 }
