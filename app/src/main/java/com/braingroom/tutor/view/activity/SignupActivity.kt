@@ -37,10 +37,11 @@ class SignupActivity : Activity() {
             }
         }, object : FragmentHelper {
             override fun show(tag: String) {
-                navigator.openFragment(SearchSelectListFragment.newInstance(tag))
+                navigator.openFragment(tag, SearchSelectListFragment.newInstance(tag))
             }
 
             override fun remove(tag: String) {
+                popBackStack(tag)
             }
         })
     }

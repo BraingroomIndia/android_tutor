@@ -23,7 +23,7 @@ import com.tbruyelle.rxpermissions2.RxPermissions
 @Suppress("unused", "UNUSED_PARAMETER")
 class Navigator(val activity: Activity?) {
 
-    val TAG = activity?.TAG +"\t"+ this.javaClass.simpleName
+    val TAG = activity?.TAG + "\t" + this.javaClass.simpleName
 
     fun navigateActivity(destination: Class<out Activity>, bundle: Bundle) {
         val intent = Intent(activity, destination)
@@ -64,6 +64,15 @@ class Navigator(val activity: Activity?) {
 //                setCustomAnimations(R.animator.bottom_in, R.animator.top_out)?.
                 replace(R.id.fragment_container, fragment)?.
                 addToBackStack(null)?.
+                commit()
+    }
+
+    fun openFragment(tag: String, fragment: BaseFragment) {
+        activity?.fragmentManager?.
+                beginTransaction()?.
+//                setCustomAnimations(R.animator.bottom_in, R.animator.top_out)?.
+                replace(R.id.fragment_container, fragment)?.
+                addToBackStack(tag)?.
                 commit()
     }
 
