@@ -1,6 +1,8 @@
 package com.braingroom.tutor.model.resp;
 
 
+import android.support.annotation.NonNull;
+
 import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
@@ -15,9 +17,11 @@ import static com.braingroom.tutor.utils.CommonUtilsKt.getNonNull;
 
 public abstract class BaseResp {
     @SerializedName("res_code")
-    protected int mResCode;
+    private int resCode;
     @SerializedName("res_msg")
-    private String mResMsg;
+    private String resMsg;
+
+
 
     protected boolean isEmpty(String value) {
         return value == null || value.trim().isEmpty();
@@ -27,11 +31,12 @@ public abstract class BaseResp {
         return value == null || value.isEmpty() || value.get(0) == null;
     }
 
+
     public abstract boolean getResCode();
 
 
     public String getResMsg() {
-        return getNonNull(mResMsg);
+        return getNonNull(resMsg);
     }
 
 }

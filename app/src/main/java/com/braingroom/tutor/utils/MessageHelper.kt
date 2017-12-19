@@ -13,6 +13,7 @@ import com.braingroom.tutor.view.activity.Activity
 class MessageHelper(val activity: Activity?) {
     var toast: Toast? = null
     var progressDialog: MaterialDialog? = null
+    val TAG = activity?.TAG +"\t"+  this.javaClass.simpleName
 
     fun showMessage(message: String) {
         dismissActiveProgress()

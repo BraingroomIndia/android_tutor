@@ -84,6 +84,7 @@
                 android:padding="10dp"
                 android:scaleType="centerCrop"
                 android:src="@{vm.image}"
+                app:placeHolder="@{vm.placeHolder}"
                 app:layout_constraintDimensionRatio="1"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintEnd_toStartOf="@id/guideline"

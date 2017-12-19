@@ -19,6 +19,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 
 import org.jetbrains.annotations.Nullable;
 
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Action;
 
 
@@ -43,7 +44,7 @@ public class LoginViewModel extends ViewModel {
     public final Action onLoginClicked = new Action() {
         @Override
         public void run() throws Exception {
-            login();
+            login(emailId.get(), password.get());
         }
     };
     public final Action onGoogleLoginClicked = new Action() {
@@ -62,7 +63,7 @@ public class LoginViewModel extends ViewModel {
 
 
     public LoginViewModel(UIHelper uiHelper) {
-        loginButton = new CustomDrawable(R.drawable.rounded_corner_line, (Integer) R.color.material_deeporange600);
+        loginButton = new CustomDrawable(R.drawable.rounded_corner_line, R.color.material_deeporange600);
         this.uiHelper = uiHelper;
 
     }
@@ -83,25 +84,47 @@ public class LoginViewModel extends ViewModel {
 
 
     public void socialLogin(@NonNull String name, @NonNull String emailId, @NonNull String profilePicture, @NonNull String socialId) {
-
-        getApiService().login(new SocialLoginReq.Snippet(name, "", emailId, socialId)).subscribe(this::handleLoginResponse, throwable -> {
-            Log.d(getTAG(), throwable.getMessage());
-            throwable.printStackTrace();
-        });
+        getApiService().login(new SocialLoginReq.Snippet(name, "", emailId, socialId)).
+                doOnSubscribe(disposable -> getCompositeDisposable().add(disposable)).
+                observeOn(AndroidSchedulers.mainThread()).
+                subscribe(this::handleLoginResponse, throwable -> {
+                    Log.d(getTAG(), throwable.getMessage());
+                    throwable.printStackTrace();
+                });
     }
 
-    public void login() {
-        if (isValidEmail(emailId.get()) && !isEmpty(password.get())) {
-            getMessageHelper().showProgressDialog("Logging in", "Sit back while we connect you...");
-            getApiService().login(new LoginReq.Snippet(emailId.get(), password.get())).subscribe(this::handleLoginResponse, throwable -> {
-                Log.d(getTAG(), throwable.getMessage());
-                throwable.printStackTrace();
-            });
+    public void login(String emailId, String password) {
+        if (isValidEmail(emailId) && !isEmpty(password)) {
+            if (getMessageHelper() != null)
+                getMessageHelper().showProgressDialog("Logging in", "Sit back while we connect you...");
+            getApiService().login(new LoginReq.Snippet(emailId, password)).
+                    doOnSubscribe(disposable -> getCompositeDisposable().add(disposable)).
+                    observeOn(AndroidSchedulers.mainThread()).
+                    subscribe(this::handleLoginResponse, throwable -> {
+                        Log.d(getTAG(), throwable.getMessage());
+                        throwable.printStackTrace();
+                    });
         }
 
     }
 
-    private boolean loginSuccess(@NonNull String userName, @NonNull String emailId, @NonNull String profilePicture, @NonNull String userId) {
+
+    private void handleLoginResponse(LoginResp resp) {
+        if (resp.getResCode()) {
+            LoginResp.Snippet data = resp.getData();
+            if (getMessageHelper() != null)
+                getMessageHelper().dismissActiveProgress();
+            if (getNavigator() != null)
+                getNavigator().finishActivity(new Intent(), loginSuccess(data.getName(), data.getEmailId(), data.getProfilePic(), data.getUserId()));
+        } else {
+            if (getMessageHelper() != null)
+                getMessageHelper().showDismissInfo(resp.getResMsg());
+        }
+
+    }
+
+    private boolean loginSuccess(@NonNull String userName, @NonNull String emailId,
+                                 @NonNull String profilePicture, @NonNull String userId) {
         try {
             setLoggedIn(true);
             getPreferencesEditor().putBoolean(lodgedIn, true);
@@ -119,16 +142,4 @@ public class LoginViewModel extends ViewModel {
         }
         return true;
     }
-
-    private void handleLoginResponse(LoginResp resp) {
-        if (resp != null && resp.getResMsg() != null && resp.getData() != null) {
-            getNavigator().finishActivity(new Intent(), true);
-            getMessageHelper().dismissActiveProgress();
-        } else if (resp != null && !isEmpty(resp.getResMsg())) {
-            getMessageHelper().showDismissInfo(resp.getResMsg());
-        } else
-            getMessageHelper().showDismissInfo("Unable to Login");
-
-    }
-
 }

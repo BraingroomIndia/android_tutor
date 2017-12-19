@@ -18,7 +18,8 @@ public class ClassListItemViewModel extends ViewModel {
     public final String type;
     public final String summary;
     public final int rating;
-    public final CustomDrawable image;
+    public final String image;
+    public final int placeHolder;
 
     public ClassListItemViewModel(Snippet item) {
         this.title = item.getClassTopic();
@@ -27,7 +28,8 @@ public class ClassListItemViewModel extends ViewModel {
         this.type = item.getClassType();
         this.summary = item.getClassSummary();
         this.rating = item.getRating() + 1;
-        this.image = new CustomDrawable(item.getPlaceHolder());
+        this.image = item.getClassImage();
+        this.placeHolder = item.getPlaceHolder();
 
     }
 

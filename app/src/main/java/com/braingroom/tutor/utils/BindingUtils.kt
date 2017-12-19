@@ -1,3 +1,5 @@
+@file:Suppress("USELESS_ELVIS")
+
 package com.braingroom.tutor.utils
 
 import android.databinding.*
@@ -72,6 +74,15 @@ fun setImageUri(view: ImageView?, imageUrl: String?, placeHolder: Int?) {
 fun setImageUri(view: ImageView?, drawable: Drawable?) {
     view?.setImageDrawable(drawable)
 }
+
+
+@BindingAdapter(value = *arrayOf("android:src", "placeHolder"), requireAll = true)
+fun setImageUrl(imageView: ImageView?, url: String?, placeHolder: Int) {
+    Log.d("Binding Utils", "setImageUrl: " + url ?: "null")
+    if (!url.isNullOrBlank())
+        imageView?.let { picasso?.load(url)?.placeholder(placeHolder)?.error(placeHolder)?.centerInside()?.resize(it.width, it.height)?.into(it) }
+}
+
 
 @BindingAdapter(value = *arrayOf("android:drawableLeft", "android:drawableRight", "android:drawableTop", "android:drawableBottom"), requireAll = false)
 fun setDrawableBottom(view: TextView?,
