@@ -11,6 +11,7 @@ import com.braingroom.tutor.view.fragment.FragmentHelper
 import com.braingroom.tutor.viewmodel.SearchSelectListItemViewModel
 import com.braingroom.tutor.viewmodel.ViewModel
 import com.braingroom.tutor.viewmodel.item.NotifyDataSetChanged
+import com.braingroom.tutor.viewmodel.item.RefreshViewModel
 import io.reactivex.Observable
 import io.reactivex.annotations.NonNull
 import io.reactivex.functions.Action
@@ -37,7 +38,7 @@ class SearchSelectListViewModel(title: String, searchHint: String, val dependenc
             return R.layout.item_search_select_text;
         }
     }
-    val onSaveClicked: Action by lazy { Action { Log.d(TAG, searchQuery.get()) } }
+    val onSaveClicked: Action by lazy { Action { fragmentHelper.remove(title) } }
     val onOpenClicked: Action by lazy {
         Action {
             if (observableApi == null)
@@ -75,8 +76,9 @@ class SearchSelectListViewModel(title: String, searchHint: String, val dependenc
         this.title.set(title)
         selectedItemsText.set((if (TextUtils.join(" , ", selectedDataMap.keys).isNullOrBlank()) "select items" else TextUtils.join(" , ", selectedDataMap.keys)))
         FieldUtils.toObservable(searchQuery).
-                debounce(200, TimeUnit.MILLISECONDS).subscribeOn(Schedulers.computation()).
+                subscribeOn(Schedulers.computation()).
                 subscribe { keyword: String ->
+                    item.onNext(RefreshViewModel())
                     dataMap.keys
                             .filter { it.contains(keyword, true) }
                             .forEach {
@@ -94,7 +96,6 @@ class SearchSelectListViewModel(title: String, searchHint: String, val dependenc
                                         selectedItemsText.set(TextUtils.join(" , ", selectedDataMap.keys))
                                         selectedItems.onNext(var1)
                                         saveConsumer.accept(selectedDataMap)
-
                                     }
                                 }, selectedItems))
                             }

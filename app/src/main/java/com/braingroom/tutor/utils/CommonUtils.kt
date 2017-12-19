@@ -22,6 +22,7 @@ import java.net.URL
 
 fun <T> toObservable(field: ObservableField<T>): Observable<T> {
 
+
     when {
         field.get() == null -> throw NullPointerException()
         else -> return Observable.create(ObservableOnSubscribe<T> { e ->
