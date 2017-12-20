@@ -6,12 +6,15 @@ import com.braingroom.tutor.model.data.InputTypeEnum
 import com.braingroom.tutor.model.data.ListDialogData
 import com.braingroom.tutor.utils.*
 import com.braingroom.tutor.view.activity.SignupActivity
+import com.braingroom.tutor.view.fragment.DynamicSearchSelectFragment
 import com.braingroom.tutor.view.fragment.FragmentHelper
 import com.braingroom.tutor.viewmodel.ViewModel
+import com.braingroom.tutor.viewmodel.fragment.DynamicSearchSelectListViewModel
 import com.braingroom.tutor.viewmodel.fragment.SearchSelectListViewModel
 import com.braingroom.tutor.viewmodel.item.ListDialogViewModel
 import io.reactivex.functions.Action
 import com.braingroom.tutor.viewmodel.item.TextIconViewModel
+import io.reactivex.Observable
 import io.reactivex.functions.Consumer
 
 /*
@@ -83,7 +86,7 @@ class SignupViewModel(val uiHelper: SignupActivity.UiHelper, val fragmentHelper:
         }, HashMap(), fragmentHelper)
     }
     val stateVm by lazy {
-        SearchSelectListViewModel(State, "search country", "", false, null, Consumer { selectedData ->
+        SearchSelectListViewModel(State, "search state", "select country first", false, null, Consumer { selectedData ->
             selectedData.values.forEach { id ->
                 cityVm.refreshDataMap(apiService.getCity(id).map { resp ->
                     val list: HashMap<String, Int> = HashMap();
@@ -94,7 +97,7 @@ class SignupViewModel(val uiHelper: SignupActivity.UiHelper, val fragmentHelper:
         }, HashMap(), fragmentHelper)
     }
     val cityVm by lazy {
-        SearchSelectListViewModel(City, "search country", "", false, null, Consumer { selectedData ->
+        SearchSelectListViewModel(City, "search city", "select state first", false, null, Consumer { selectedData ->
             selectedData.values.forEach { id ->
                 localityVm.refreshDataMap(apiService.getLocality(id).map { resp ->
                     val list: HashMap<String, Int> = HashMap();
@@ -105,7 +108,19 @@ class SignupViewModel(val uiHelper: SignupActivity.UiHelper, val fragmentHelper:
         }, HashMap(), fragmentHelper)
     }
     val localityVm by lazy {
-        SearchSelectListViewModel(Locality, "search country", "", false, null, Consumer { /*TODO*/ }, HashMap(), fragmentHelper)
+        SearchSelectListViewModel(Locality, "search locality", "select city first", false, null, Consumer { /*TODO*/ }, HashMap(), fragmentHelper)
+    }
+
+    val instituteVm by lazy {
+        DynamicSearchSelectListViewModel(College, "search colleges", "", false, object : DynamicSearchSelectListViewModel.DynamicSearchAPIObservable {
+            override fun getData(keyword: String): Observable<java.util.HashMap<String, Int>>? {
+                return apiService.getInstitute(keyword).map { resp ->
+                    val list: HashMap<String, Int> = HashMap();
+                    resp.data.forEach { snippet -> list.put(snippet.textValue, snippet.id) }
+                    list
+                }
+            }
+        }, Consumer { /*TODO*/ }, HashMap())
     }
     val onSignupClicked by lazy {
         Action {

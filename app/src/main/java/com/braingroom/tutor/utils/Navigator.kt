@@ -1,6 +1,7 @@
 package com.braingroom.tutor.utils
 
 import android.Manifest
+import android.app.FragmentManager
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -101,6 +102,14 @@ class Navigator(val activity: Activity?) {
                 replace(fragmentContainer, fragment)?.
                 addToBackStack(null)?.
                 commit()
+    }
+
+    fun popBackStack(title: String) {
+        val count = activity?.fragmentManager?.backStackEntryCount ?: 0
+        if (count > 0) {
+            activity?.fragmentManager?.popBackStack(title, FragmentManager.POP_BACK_STACK_INCLUSIVE)
+        }
+
     }
 
     fun openStandaloneYoutube(videoId: String) {

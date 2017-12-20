@@ -23,4 +23,5 @@ const val Country = "Country"
 const val State = "State"
 const val City = "City"
 const val Locality = "Locality"
+const val College="College"
 

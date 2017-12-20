@@ -1,10 +1,7 @@
 package com.braingroom.tutor.view.activity
 
 import com.braingroom.tutor.R
-import com.braingroom.tutor.utils.City
-import com.braingroom.tutor.utils.Country
-import com.braingroom.tutor.utils.Locality
-import com.braingroom.tutor.utils.State
+import com.braingroom.tutor.utils.*
 import com.braingroom.tutor.view.fragment.FragmentHelper
 import com.braingroom.tutor.view.fragment.SearchSelectListFragment
 import com.braingroom.tutor.view.fragment.SignUpFirstFragment
@@ -54,6 +51,7 @@ class SignupActivity : Activity() {
             State -> vm.stateVm
             City -> vm.cityVm
             Locality -> vm.localityVm
+            College -> vm.instituteVm
             else -> vm
         }
 
