@@ -6,6 +6,7 @@ import com.braingroom.tutor.model.data.InputTypeEnum
 import com.braingroom.tutor.model.data.ListDialogData
 import com.braingroom.tutor.utils.*
 import com.braingroom.tutor.view.activity.SignupActivity
+import com.braingroom.tutor.view.fragment.DynamicSearchSelectFragment
 import com.braingroom.tutor.view.fragment.FragmentHelper
 import com.braingroom.tutor.viewmodel.ViewModel
 import com.braingroom.tutor.viewmodel.fragment.SearchSelectListViewModel
@@ -107,6 +108,8 @@ class SignupViewModel(val uiHelper: SignupActivity.UiHelper, val fragmentHelper:
     val localityVm by lazy {
         SearchSelectListViewModel(Locality, "search locality", "select city first", false, null, Consumer { /*TODO*/ }, HashMap(), fragmentHelper)
     }
+
+    val instutueVm by lazy {  DynamicSearchSelectFragment("Collage","sea") }
     val onSignupClicked by lazy {
         Action {
             signup()
