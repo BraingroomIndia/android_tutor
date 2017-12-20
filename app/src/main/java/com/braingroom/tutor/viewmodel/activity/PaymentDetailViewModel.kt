@@ -14,7 +14,7 @@ import io.reactivex.functions.Action
  * Created by ashketchup on 19/12/17.
  */
 public class PaymentDetailViewModel(val total:String, val pending:String, val transferred :String, val tickets:String): ViewModel(){
-
+/*Dummy comment */
     val isVisible:ObservableBoolean by lazy{
         ObservableBoolean(true)}
     val isNotVisible:ObservableBoolean by lazy{
