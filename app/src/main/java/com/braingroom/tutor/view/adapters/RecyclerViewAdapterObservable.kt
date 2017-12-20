@@ -59,7 +59,7 @@ class RecyclerViewAdapterObservable(observableViewModels: ReplaySubject<out View
                                 }
                             }
                             else -> {
-                                Log.d(TAG, "Added Actual items Named " )
+                                //   Log.d(TAG, "Added Actual items Named " )
                                 iterator.add(it)
                             }
                         }

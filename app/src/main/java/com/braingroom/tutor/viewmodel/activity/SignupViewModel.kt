@@ -83,7 +83,7 @@ class SignupViewModel(val uiHelper: SignupActivity.UiHelper, val fragmentHelper:
         }, HashMap(), fragmentHelper)
     }
     val stateVm by lazy {
-        SearchSelectListViewModel(State, "search country", "", false, null, Consumer { selectedData ->
+        SearchSelectListViewModel(State, "search state", "select country first", false, null, Consumer { selectedData ->
             selectedData.values.forEach { id ->
                 cityVm.refreshDataMap(apiService.getCity(id).map { resp ->
                     val list: HashMap<String, Int> = HashMap();
@@ -94,7 +94,7 @@ class SignupViewModel(val uiHelper: SignupActivity.UiHelper, val fragmentHelper:
         }, HashMap(), fragmentHelper)
     }
     val cityVm by lazy {
-        SearchSelectListViewModel(City, "search country", "", false, null, Consumer { selectedData ->
+        SearchSelectListViewModel(City, "search city", "select state first", false, null, Consumer { selectedData ->
             selectedData.values.forEach { id ->
                 localityVm.refreshDataMap(apiService.getLocality(id).map { resp ->
                     val list: HashMap<String, Int> = HashMap();
@@ -105,7 +105,7 @@ class SignupViewModel(val uiHelper: SignupActivity.UiHelper, val fragmentHelper:
         }, HashMap(), fragmentHelper)
     }
     val localityVm by lazy {
-        SearchSelectListViewModel(Locality, "search country", "", false, null, Consumer { /*TODO*/ }, HashMap(), fragmentHelper)
+        SearchSelectListViewModel(Locality, "search locality", "select city first", false, null, Consumer { /*TODO*/ }, HashMap(), fragmentHelper)
     }
     val onSignupClicked by lazy {
         Action {

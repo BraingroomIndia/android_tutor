@@ -51,7 +51,7 @@ class SearchSelectListViewModel(val title: String, val searchHint: String, val d
                 messageHelper?.showMessage(dependencyMessage)
             else {
                 messageHelper?.showProgressDialog("Wait", "Loading")
-                observableApi?.doFinally({ start.subscribe() })?.subscribe({ map ->
+                observableApi?.subscribeOn(Schedulers.computation())?.doFinally({ start.subscribe() })?.subscribe({ map ->
                     if (map.isEmpty()) {
                         messageHelper?.showMessage("Not available")
                     } else {
@@ -113,13 +113,15 @@ class SearchSelectListViewModel(val title: String, val searchHint: String, val d
 
 
     fun refreshDataMap(dataSource: Observable<HashMap<String, Int>>?) {
-        if (observableApi == null) {
-            messageHelper?.showMessage(dependencyMessage)
-            return
+
+        when (dataSource) {
+            null -> messageHelper?.showMessage(dependencyMessage)
+            else -> {
+                dataMap.clear()
+                selectedDataMap.clear()
+                observableApi = dataSource
+            }
         }
-        dataMap.clear()
-        selectedDataMap.clear()
-        observableApi = dataSource
     }
 
 }

@@ -12,33 +12,31 @@ import io.realm.RealmList
 /**
  * Created by ashketchup on 11/12/17.
  */
-public class RealmCacheService:CacheService{
-    override fun getCachedCommon(searchQuery: String): Observable<CommonIdResp>{
+public class RealmCacheService : CacheService {
+    override fun getCachedCommon(searchQuery: String): Observable<CommonIdResp> {
         val realm = Realm.getDefaultInstance()
         val x = CommonIdRealmWrapper()
-        val item:MutableList<CommonIdResp.Snippet> = mutableListOf()
-        var data : CommonIdRealmWrapper?=realm.where(x.javaClass).equalTo("searchQuery",searchQuery).findFirst()
-        if(data==null)
+        val item: MutableList<CommonIdResp.Snippet> = mutableListOf()
+        var data: CommonIdRealmWrapper? = realm.where(x.javaClass).equalTo("searchQuery", searchQuery).findFirst()
+        if (data == null)
             return Observable.just(CommonIdResp(null))
         (data.data.isNotEmpty()).let {
-                for(d in data.data){
-                    item.add(d.toSnippet())
-                }
+            for (d in data.data) {
+                item.add(d.toSnippet())
+            }
         }
         return Observable.just(CommonIdResp(item))
     }
 
 
-    override fun putCachedCommon(countriesList: List<CommonIdResp.Snippet>, searchQuery:String):CommonIdResp{
+    override fun putCachedCommon(countriesList: List<CommonIdResp.Snippet>, searchQuery: String): CommonIdResp {
         var realmList = RealmList<CommonIdSnippetWrapper>()
-        for(snippet in countriesList){
+        for (snippet in countriesList) {
             realmList.add(CommonIdSnippetWrapper(snippet))
         }
         val realm = Realm.getDefaultInstance()
-        realm.executeTransactionAsync({ realm ->
-            realm.insert(CommonIdRealmWrapper.create(realmList,searchQuery))
-        }, { e ->
-            Log.d("Realm Error", e.message)
+        realm.executeTransaction({ realm ->
+            realm.insert(CommonIdRealmWrapper.create(realmList, searchQuery))
         })
         return CommonIdResp(countriesList)
     }
