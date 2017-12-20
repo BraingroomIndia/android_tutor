@@ -8,6 +8,7 @@ import com.braingroom.tutor.utils.FieldUtils
 import com.braingroom.tutor.utils.MyConsumer
 import com.braingroom.tutor.view.adapters.ViewProvider
 import com.braingroom.tutor.view.fragment.FragmentHelper
+import com.braingroom.tutor.view.fragment.SearchSelectListFragment
 import com.braingroom.tutor.viewmodel.SearchSelectListItemViewModel
 import com.braingroom.tutor.viewmodel.ViewModel
 import com.braingroom.tutor.viewmodel.item.NotifyDataSetChanged
@@ -42,7 +43,7 @@ class SearchSelectListViewModel(val title: String, val searchHint: String, val d
     val onSaveClicked: Action by lazy {
         Action {
             saveConsumer.accept(selectedDataMap)
-            fragmentHelper.remove(title)
+            navigator?.popBackStack(title)
         }
     }
     val onOpenClicked: Action by lazy {
@@ -55,9 +56,10 @@ class SearchSelectListViewModel(val title: String, val searchHint: String, val d
                     if (map.isEmpty()) {
                         messageHelper?.showMessage("Not available")
                     } else {
-                        fragmentHelper.show(title)
+
                         dataMap.putAll(map)
                         searchQuery.set("")
+                        navigator?.openFragment(title, SearchSelectListFragment.newInstance(title))
                     }
                     messageHelper?.dismissActiveProgress()
                 }, { throwable ->

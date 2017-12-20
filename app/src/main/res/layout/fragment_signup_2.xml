@@ -69,6 +69,13 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             app:vm="@{vm.localityVm}" />
+        <include
+            layout="@layout/item_dynamic_search_select_fragment_opener"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            app:vm="@{vm.instituteVm}"
+            app:editable="@{true}"/>
 
 
     </LinearLayout>
