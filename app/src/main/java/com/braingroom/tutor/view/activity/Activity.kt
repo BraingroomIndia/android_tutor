@@ -72,19 +72,19 @@ abstract class Activity : AppCompatActivity() {
 
     @Suppress("unused")
     val messageHelper by lazy {
-        Log.d(TAG, "messageHelper created")
+        Log.v(TAG, "messageHelper created")
         MessageHelper(this)
     }
 
     @Suppress("unused")
     val navigator by lazy {
-        Log.d(TAG, "navigator created")
+        Log.v(TAG, "navigator created")
         Navigator(this)
     }
 
     @Suppress("unused")
     val dialogHelper by lazy {
-        Log.d(TAG, "dialogHelper created")
+        Log.v(TAG, "dialogHelper created")
         DialogHelper(this)
     }
 

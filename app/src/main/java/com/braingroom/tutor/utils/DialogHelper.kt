@@ -1,9 +1,14 @@
 package com.braingroom.tutor.utils
 
+import android.view.View
+import android.widget.DatePicker
+import com.afollestad.materialdialogs.DialogAction
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.MaterialDialog.Builder
+import com.braingroom.tutor.R
 import com.braingroom.tutor.view.activity.Activity
 import com.braingroom.tutor.viewmodel.ViewModel
+import com.braingroom.tutor.viewmodel.item.DatePickerViewModel
 import com.braingroom.tutor.viewmodel.item.ListDialogViewModel
 
 
@@ -23,16 +28,28 @@ public class DialogHelper(val activity: Activity?) {
     }
 
     fun showDatePicker() {
-        dismissActiveProgress()
 
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        activity?.let {
+            dismissActiveProgress()
+            Builder(it)
+                    .title("")
+                    .customView(R.layout.item_date_picker, false)
+                    .positiveText(android.R.string.ok)
+                    .onPositive(MaterialDialog.SingleButtonCallback { dialog, which ->
+                        val datePicker = dialog.customView as DatePicker
+                        val month = datePicker.month + 1
+                        (viewModel as DatePickerViewModel).date.set(datePicker.year.toString() + "-" + month + "-" + datePicker.dayOfMonth)
+                        (viewModel as DatePickerViewModel).handleOkClick()
+                    })
+                    .show()
+        }
     }
 
     fun showMultiSelectList(title: String, items: List<String>?, selectedItems: Array<Int>, positiveText: String) {
         dismissActiveProgress()
         when {
             items?.isNotEmpty() == true -> activity?.let {
-                Builder(it).title(title ?: "").items(items).itemsCallbackMultiChoice(if (selectedItems.isNotEmpty()) selectedItems else Array<Int>(1, { -1 })) { materialDialog, selectedIdx, charSequence ->
+                Builder(it).title(title).items(items).itemsCallbackMultiChoice(if (selectedItems.isNotEmpty()) selectedItems else Array<Int>(1, { -1 })) { materialDialog, selectedIdx, charSequence ->
                     when (viewModel) {
                         is ListDialogViewModel -> (viewModel as ListDialogViewModel).setSelectedItems(selectedIdx)
                     }

@@ -38,7 +38,7 @@ fun bindAdapterWithDefaultBinder(recyclerView: RecyclerView?, items: PublishSubj
 }*/
 
 
-@BindingAdapter(value = *arrayOf("decor"), requireAll = true)
+@BindingAdapter(value = *arrayOf("items", "view", "decor"), requireAll = true)
 fun bindAdapterWithDefaultBinder(recyclerView: RecyclerView?, items: List<ViewModel>?, viewProvider: ViewProvider?, decor: RecyclerView.ItemDecoration?) {
     recyclerView?.layoutManager = LinearLayoutManager(recyclerView?.context)
     viewProvider?.let { recyclerView?.adapter = RecyclerViewAdapter(items, it) }

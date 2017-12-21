@@ -12,16 +12,11 @@ public class DialogViewModel extends ViewModel {
     public final ObservableField<String> title, selectedItemsText;
     public final Action onOpenerClick;
 
-    public DialogViewModel(@NonNull final DialogHelper dialogHelper, String title) {
+    public DialogViewModel(final DialogHelper dialogHelper, String title) {
         dialogHelper.setViewModel(this);
         this.title = new ObservableField<>(title);
         this.selectedItemsText = new ObservableField<>();
-        onOpenerClick = new Action() {
-            @Override
-            public void run() throws Exception {
-                show();
-            }
-        };
+        onOpenerClick = this::show;
 
     }
 

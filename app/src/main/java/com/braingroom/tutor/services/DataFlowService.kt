@@ -76,7 +76,6 @@ class DataFlowService(private val api: ApiService, private val realmCacheService
     fun getGallery(snippet: GalleryReq.Snippet): Observable<GalleryResp> {
         return api.getGallery(GalleryReq(snippet)).subscribeOn(Schedulers.io()).observeOn(Schedulers.computation()).onErrorReturn { GalleryResp() }.map { resp -> resp ?: GalleryResp() }.map { resp ->
             for (res in resp.data) {
-                Log.d("logger", res.mediaTitle);
                 res.isVideo = snippet.isVideo
             }
             resp

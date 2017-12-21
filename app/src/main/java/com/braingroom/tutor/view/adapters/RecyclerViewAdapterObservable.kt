@@ -43,29 +43,24 @@ class RecyclerViewAdapterObservable(observableViewModels: ReplaySubject<out View
                         val iterator = latestViewModels.listIterator(latestViewModels.size)
                         when (it) {
                             is RemoveLoadingViewModel -> {
-                                Log.d(TAG, "Removing Loading Items")
+                                Log.v(TAG, "Removing Loading Items")
                                 while (iterator.hasPrevious() && iterator.previous() is LoadingViewModel) iterator.remove()
                             }
                             is RefreshViewModel -> {
-//                                Log.d(TAG, "Removing All Items")
+                                Log.v(TAG, "Removing All Items")
                                 latestViewModels.clear()
                             }
                             is NotifyDataSetChanged -> {
-                                if (!latestViewModels.isEmpty()) {
-                                    notifyDataSetChanged()
-                                    Log.d(TAG, "Updating UI")
-                                } else {
-                                    Log.d(TAG, "No items to Update UI")
-                                }
+
                             }
                             else -> {
-                                Log.d(TAG, "Added Actual items Named " )
+                                Log.v(TAG, "Added Actual items Named ")
                                 iterator.add(it)
                             }
                         }
 
                     }
-                }?.doOnSubscribe { Log.d(TAG, "Subscribed") }?.share()
+                }?.doOnSubscribe { Log.v(TAG, "Subscribed") }?.share()
     }
 
 
@@ -74,10 +69,10 @@ class RecyclerViewAdapterObservable(observableViewModels: ReplaySubject<out View
             return if (latestViewModels.size > position) viewProvider.getView(latestViewModels[position]) else 0
         } catch (e: Exception) {
             if (e is NoSuchFieldException)
-                Log.d(TAG, "No layout found corresponding to " + latestViewModels[position].TAG)
+                Log.e(TAG, "No layout found corresponding to " + latestViewModels[position].TAG)
             e.printStackTrace()
             if (e is NullPointerException)
-                Log.d(TAG, "Null pointer error at position" + position)
+                Log.e(TAG, "Null pointer error at position" + position)
         }
         return 0;
     }
@@ -101,7 +96,24 @@ class RecyclerViewAdapterObservable(observableViewModels: ReplaySubject<out View
     }
 
     override fun registerAdapterDataObserver(observer: RecyclerView.AdapterDataObserver) {
-        source?.let { it.subscribe()?.let { subscriptions.put(observer, it) } }
+        source?.let {
+            it.subscribe({ viewModel ->
+                viewModel?.let {
+                    when (it) {
+                        is NotifyDataSetChanged -> {
+                            if (!latestViewModels.isEmpty()) {
+                                notifyDataSetChanged()
+                                Log.v(TAG, "Updating UI")
+                            } else {
+                                Log.v(TAG, "No items to Update UI")
+                            }
+                        }
+                        else -> {
+                        }
+                    }
+                }
+            })?.let { subscriptions.put(observer, it) }
+        }
         super.registerAdapterDataObserver(observer)
     }
 

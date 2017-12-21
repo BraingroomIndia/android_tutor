@@ -9,36 +9,30 @@ import io.realm.Realm
 import io.realm.RealmList
 
 
-/**
+/*
  * Created by ashketchup on 11/12/17.
  */
-public class RealmCacheService:CacheService{
-    override fun getCachedCommon(searchQuery: String): Observable<CommonIdResp>{
+public class RealmCacheService : CacheService {
+    override fun getCachedCommon(searchQuery: String): Observable<CommonIdResp> {
         val realm = Realm.getDefaultInstance()
         val x = CommonIdRealmWrapper()
-        val item:MutableList<CommonIdResp.Snippet> = mutableListOf()
-        var data : CommonIdRealmWrapper?=realm.where(x.javaClass).equalTo("searchQuery",searchQuery).findFirst()
-        if(data==null)
-            return Observable.just(CommonIdResp(null))
-        (data.data.isNotEmpty()).let {
-                for(d in data.data){
-                    item.add(d.toSnippet())
-                }
+        val item: MutableList<CommonIdResp.Snippet> = mutableListOf()
+        val data: CommonIdRealmWrapper? = realm.where(x.javaClass).equalTo("searchQuery", searchQuery).findFirst() ?: return Observable.just(CommonIdResp(null))
+        (data?.data?.isNotEmpty())?.let {
+            data.data.mapTo(item) { it.toSnippet() }
         }
         return Observable.just(CommonIdResp(item))
     }
 
 
-    override fun putCachedCommon(countriesList: List<CommonIdResp.Snippet>, searchQuery:String):CommonIdResp{
-        var realmList = RealmList<CommonIdSnippetWrapper>()
-        for(snippet in countriesList){
-            realmList.add(CommonIdSnippetWrapper(snippet))
-        }
+    override fun putCachedCommon(countriesList: List<CommonIdResp.Snippet>, searchQuery: String): CommonIdResp {
+        val realmList = RealmList<CommonIdSnippetWrapper>()
+        countriesList.mapTo(realmList) { CommonIdSnippetWrapper(it) }
         val realm = Realm.getDefaultInstance()
-        realm.executeTransactionAsync({ realm ->
-            realm.insert(CommonIdRealmWrapper.create(realmList,searchQuery))
+        realm.executeTransactionAsync({
+            it.insert(CommonIdRealmWrapper.create(realmList, searchQuery))
         }, { e ->
-            Log.d("Realm Error", e.message)
+            Log.e("Realm Error", e.message, e)
         })
         return CommonIdResp(countriesList)
     }

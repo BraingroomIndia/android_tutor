@@ -55,7 +55,7 @@ fun toOnClickListener(listener: Action?): View.OnClickListener? {
 @BindingAdapter("android:src")
 fun setImageUri(view: ImageView?, imageUrl: String?) {
     if (!isEmpty(imageUrl)) {
-        Log.d("setImageUri", imageUrl)
+        Log.v("setImageUri", imageUrl)
         view?.let { picasso.load(imageUrl).into(it) }
     }
 }
@@ -63,7 +63,7 @@ fun setImageUri(view: ImageView?, imageUrl: String?) {
 @BindingAdapter(value = *arrayOf("android:src", "placeholder"), requireAll = true)
 fun setImageUri(view: ImageView?, imageUrl: String?, placeHolder: Int?) {
     if (!isEmpty(imageUrl)) {
-        Log.d("setImageUri", imageUrl + "   " + placeHolder)
+        Log.v("setImageUri", imageUrl + "   " + placeHolder)
         if (placeHolder != null)
             view?.let { picasso.load(imageUrl).placeholder(placeHolder).error(placeHolder).into(it) }
         else setImageUri(view, imageUrl)
@@ -78,7 +78,7 @@ fun setImageUri(view: ImageView?, drawable: Drawable?) {
 
 @BindingAdapter(value = *arrayOf("android:src", "placeHolder"), requireAll = true)
 fun setImageUrl(imageView: ImageView?, url: String?, placeHolder: Int) {
-    Log.d("Binding Utils", "setImageUrl: " + url ?: "null")
+    Log.v("Binding Utils", "setImageUrl: " + url ?: "null")
     if (!url.isNullOrBlank())
         imageView?.let { picasso?.load(url)?.placeholder(placeHolder)?.error(placeHolder)?.centerInside()?.resize(it.width, it.height)?.into(it) }
 }

@@ -39,10 +39,10 @@ class RecyclerViewAdapter(viewModelList: List<ViewModel>?, private val viewProvi
             return if (viewModelList.size > position) viewProvider.getView(viewModelList[position]) else 0
         } catch (e: Exception) {
             if (e is NoSuchFieldException)
-                Log.d("RecyclerViewAdapter", "No layout found corresponding to " + viewModelList[position].TAG)
+                Log.e("RecyclerViewAdapter", "No layout found corresponding to " + viewModelList[position].TAG)
             e.printStackTrace()
             if (e is NullPointerException)
-                Log.d("RecyclerViewAdapter", "Null pointer error at position" + position)
+                Log.e("RecyclerViewAdapter", "Null pointer error at position" + position)
         }
 
         return 0

@@ -55,7 +55,7 @@ class LoginActivity : Activity(), OnConnectionFailedListener {
                     override fun onSuccess(loginResult: LoginResult) {
                         val accessToken = loginResult.accessToken
                         val request = GraphRequest.newMeRequest(accessToken) { user, graphResponse ->
-                            Log.d(TAG, graphResponse.rawResponse)
+                            Log.v(TAG, graphResponse.rawResponse)
                             val name = user.optString("name");
                             val picture = user.optJSONObject("picture").optJSONObject("data").optString("url");
                             var email = user.optString("email");
@@ -69,11 +69,13 @@ class LoginActivity : Activity(), OnConnectionFailedListener {
                         request.parameters = parameters
                         request.executeAsync()
                     }
+
                     override fun onCancel() {
                         messageHelper.showDismissInfo("Login cancelled by user")
                     }
+
                     override fun onError(exception: FacebookException) {
-                        Log.d(TAG, "onError: " + exception.message)
+                        Log.e(TAG, "onError: " + exception.message, exception)
                         exception.printStackTrace()
                         messageHelper.showDismissInfo("Facebook login error")
                     }

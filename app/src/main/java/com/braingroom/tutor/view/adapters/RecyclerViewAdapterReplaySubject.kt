@@ -84,9 +84,7 @@ class RecyclerViewAdapterReplaySubject(replaySubjectViewModel: ReplaySubject<out
                 if (viewModel is NotifyDataSetChanged && !latestViewModels.isEmpty())
                     notifyDataSetChanged()
             }, { throwable ->
-                Log.d(TAG, throwable.localizedMessage)
-                Log.d(TAG, throwable.message)
-                throwable.printStackTrace()
+                Log.e(TAG, throwable.localizedMessage, throwable)
             }))
         }
         super.registerAdapterDataObserver(observer)

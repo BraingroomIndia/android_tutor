@@ -30,13 +30,13 @@ fun <T> toObservable(field: ObservableField<T>): Observable<T> {
             val callback = object : OnPropertyChangedCallback() {
                 override fun onPropertyChanged(observable: android.databinding.Observable, i: Int) {
                     e.onNext(field.get()!!)
-                    Log.d("onPropertyChanged", "cancel: " + field.toString())
+                    Log.v("onPropertyChanged", "cancel: " + field.toString())
                 }
             }
             field.addOnPropertyChangedCallback(callback)
             e.setCancellable {
                 field.removeOnPropertyChangedCallback(callback)
-                Log.d("removeOnProperty", "cancel: " + field.toString())
+                Log.v("removeOnProperty", "cancel: " + field.toString())
             }
         })
     }
@@ -128,12 +128,7 @@ public fun getVideo(video: String?): String {
 }
 
 @Throws(MalformedURLException::class)
-fun extractYoutubeId(url: String): String? {
-    val query = url
-    val param = query.split("/".toRegex()).toTypedArray()
-    var id: String? = null
-    return param[param.lastIndex]
-}
+fun extractYoutubeId(url: String?): String? = (url?.split("/".toRegex())?.toTypedArray())?.last()
 
 fun isEmpty(target: String?): Boolean = target.isNullOrBlank()
 fun isEmpty(target: Any?): Boolean = target == null

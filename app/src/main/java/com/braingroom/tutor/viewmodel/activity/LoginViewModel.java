@@ -88,7 +88,7 @@ public class LoginViewModel extends ViewModel {
                 doOnSubscribe(disposable -> getCompositeDisposable().add(disposable)).
                 observeOn(AndroidSchedulers.mainThread()).
                 subscribe(this::handleLoginResponse, throwable -> {
-                    Log.d(getTAG(), throwable.getMessage());
+                    Log.e(getTAG(), throwable.getMessage(), throwable);
                     throwable.printStackTrace();
                 });
     }
@@ -101,7 +101,7 @@ public class LoginViewModel extends ViewModel {
                     doOnSubscribe(disposable -> getCompositeDisposable().add(disposable)).
                     observeOn(AndroidSchedulers.mainThread()).
                     subscribe(this::handleLoginResponse, throwable -> {
-                        Log.d(getTAG(), throwable.getMessage());
+                        Log.e(getTAG(), throwable.getMessage(), throwable);
                         throwable.printStackTrace();
                     });
         }

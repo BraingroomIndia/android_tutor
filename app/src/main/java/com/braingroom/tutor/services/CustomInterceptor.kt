@@ -30,15 +30,15 @@ class CustomInterceptor : Interceptor {
         try {
             response = chain.proceed(request)
         } catch (e: ConnectException) {
-            Log.d(TAG, "intercept: ConnectException " + e.localizedMessage)
+            Log.e(TAG, "intercept: ConnectException " + e.localizedMessage)
             /* TutorApplication.getInstance().getInternetStatusBus().onNext(false);*/
             throw e
         } catch (e: SocketTimeoutException) {
-            Log.d(TAG, "intercept: SocketTimeoutException " + e.localizedMessage)
+            Log.e(TAG, "intercept: SocketTimeoutException " + e.localizedMessage)
             /* TutorApplication.getInstance().getInternetStatusBus().onNext(false);*/
             throw e
         } catch (e: UnknownHostException) {
-            Log.d(TAG, "intercept: SocketTimeoutException " + e.localizedMessage)
+            Log.e(TAG, "intercept: SocketTimeoutException " + e.localizedMessage)
             /*TutorApplication.getInstance().getInternetStatusBus().onNext(false);*/
             throw e
         }

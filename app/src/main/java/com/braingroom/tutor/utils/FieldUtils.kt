@@ -20,13 +20,13 @@ object FieldUtils {
                 val callback = object : OnPropertyChangedCallback() {
                     override fun onPropertyChanged(observable: android.databinding.Observable, i: Int) {
                         e.onNext(field.get()!!)
-                        Log.d("onPropertyChanged", "cancel: " + field.toString())
+                        Log.v("onPropertyChanged", "cancel: " + field.toString())
                     }
                 }
                 field.addOnPropertyChangedCallback(callback)
                 e.setCancellable {
                     field.removeOnPropertyChangedCallback(callback)
-                    Log.d("removeOnProperty", "cancel: " + field.toString())
+                    Log.e("removeOnProperty", "cancel: " + field.toString())
                 }
             }
         }

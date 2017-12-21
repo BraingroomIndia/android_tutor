@@ -11,9 +11,9 @@ import static com.braingroom.tutor.utils.CommonUtilsKt.isEmpty;
 public class DatePickerViewModel extends DialogViewModel {
 
     public final ObservableField<String> date;
-    public DialogHelper dialogHelper;
+    private DialogHelper dialogHelper;
 
-    public DatePickerViewModel(@NonNull DialogHelper dialogHelper, String title, @NonNull String defaultDate) {
+    public DatePickerViewModel(DialogHelper dialogHelper, String title, String defaultDate) {
         super(dialogHelper, title);
         if (!isEmpty(defaultDate))
             date = new ObservableField<>(defaultDate);
