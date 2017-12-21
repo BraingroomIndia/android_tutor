@@ -25,9 +25,9 @@ import io.reactivex.functions.Consumer
 class SignupViewModel(val uiHelper: SignupActivity.UiHelper, val fragmentHelper: FragmentHelper) : ViewModel() {
 
     val snippet: SignUpReq.Snippet= SignUpReq.Snippet()
-    val FIRST_FRAGMENT = "firstFragment"
+    val FIRST_FRAGMENT = "firstfragment"
     val SECOND_FRAGMENT = "secondFragment"
-
+    val THIRD_FRAGMENT ="thirdfragment"
     val name by lazy {
         TextIconViewModel("", null, InputTypeEnum.Text, View.VISIBLE, "Name", "Enter Valid Name")
     }
@@ -49,6 +49,31 @@ class SignupViewModel(val uiHelper: SignupActivity.UiHelper, val fragmentHelper:
     }
     val signUpButton by lazy {
         CustomDrawable(R.drawable.rounded_corner_line, R.color.materialBlue)
+    }
+
+    val instituteName by lazy{
+        TextIconViewModel("",null,InputTypeEnum.Text,View.VISIBLE,"Institute Name","")
+    }
+
+    val instituteId by lazy{
+        TextIconViewModel("",null,InputTypeEnum.Text,View.VISIBLE,"Institute Id","")
+    }
+
+    val address  by lazy{
+        TextIconViewModel("",null,InputTypeEnum.Text,View.VISIBLE,"Address","")
+    }
+
+    val aboutYou by lazy{
+        TextIconViewModel("",null,InputTypeEnum.Text,View.VISIBLE,"About You","")
+    }
+
+    val expertiseArea by lazy{
+        TextIconViewModel("",null,InputTypeEnum.Text,View.VISIBLE,"Expertise Area","")
+    }
+
+    val uploadImage by lazy{
+        Action{
+        }
     }
 
 
@@ -133,26 +158,35 @@ class SignupViewModel(val uiHelper: SignupActivity.UiHelper, val fragmentHelper:
             }
         }, Consumer { }, HashMap())
     }
-    val onSignupClicked by lazy {
+    val toSecond by lazy {
         Action {
-            signup()
+            toSecond()
+        }
+    }
+    val toThird by lazy{
+        Action{
+            toThird()
         }
     }
     val apiSignUp by lazy{
         Action{
-            signUp2()
+            toThird()
         }
     }
     init {
         uiHelper.firstFragment()
     }
-
-    fun signUp2(){
+    fun signUp(){
         uiHelper.signUp()
+    }
+
+    fun toThird(){
+        uiHelper.thirdFragment()
         return
     }
 
-    fun signup() {
+
+    fun toSecond() {
         uiHelper.secondFragment()
         return
         /*   if (!(isValidEmail(email.text.get()) && isValidName(name.text.get()) && isValidPhone(phone.text.get()) && isValidName(confirmPassword.text.get())) && isValidPassword(password.text.get())) {

@@ -4,10 +4,7 @@ import android.util.Log
 import com.braingroom.tutor.R
 import com.braingroom.tutor.model.req.SignUpReq
 import com.braingroom.tutor.utils.*
-import com.braingroom.tutor.view.fragment.FragmentHelper
-import com.braingroom.tutor.view.fragment.SearchSelectListFragment
-import com.braingroom.tutor.view.fragment.SignUpFirstFragment
-import com.braingroom.tutor.view.fragment.SignUpSecondFragment
+import com.braingroom.tutor.view.fragment.*
 import com.braingroom.tutor.viewmodel.ViewModel
 import com.braingroom.tutor.viewmodel.activity.SignupViewModel
 
@@ -18,6 +15,7 @@ class SignupActivity : Activity() {
 
     val FIRST_FRAGMENT = "firstFragment"
     val SECOND_FRAGMENT = "secondFragment"
+    val THIRD_FRAGMENT= "thirdFragment"
 
     override val layoutId: Int = R.layout.activity_signup;
 
@@ -31,6 +29,10 @@ class SignupActivity : Activity() {
 
             override fun secondFragment() {
                 navigator.openFragment(SignUpSecondFragment.newInstance(SECOND_FRAGMENT))
+            }
+
+            override fun thirdFragment() {
+                navigator.openFragment(SignUpThirdFragment.newInstance(THIRD_FRAGMENT))
             }
 
             override fun signUp() {
@@ -65,6 +67,7 @@ class SignupActivity : Activity() {
     interface UiHelper {
         fun firstFragment()
         fun secondFragment()
+        fun thirdFragment()
         fun signUp()
     }
 }

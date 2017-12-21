@@ -93,7 +93,7 @@
             android:layout_height="wrap_content"
             android:background="@drawable/rounded_corner_line"
             android:fontFamily="@font/roboto_bold"
-            android:onClick="@{vm.onSignupClicked}"
+            android:onClick="@{vm.toSecond}"
             android:padding="@dimen/padding_small"
             android:text="Next"
             android:textColor="@color/material_black"
