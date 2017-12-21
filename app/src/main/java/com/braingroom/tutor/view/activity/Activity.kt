@@ -1,6 +1,5 @@
 package com.braingroom.tutor.view.activity
 
-import android.app.Activity
 import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.databinding.DataBindingUtil
@@ -13,9 +12,7 @@ import android.support.v7.widget.Toolbar
 import android.util.Log
 import com.braingroom.tutor.common.CustomApplication
 import com.braingroom.tutor.utils.*
-import com.braingroom.tutor.view.adapters.ViewModelBinder
 import com.braingroom.tutor.viewmodel.ViewModel
-
 import java.io.Serializable
 
 /*
@@ -73,19 +70,19 @@ abstract class Activity : AppCompatActivity() {
 
     @Suppress("unused")
     val messageHelper by lazy {
-        Log.d(TAG, "messageHelper created")
+        Log.v(TAG, "messageHelper created")
         MessageHelper(this)
     }
 
     @Suppress("unused")
     val navigator by lazy {
-        Log.d(TAG, "navigator created")
+        Log.v(TAG, "navigator created")
         Navigator(this)
     }
 
     @Suppress("unused")
     val dialogHelper by lazy {
-        Log.d(TAG, "dialogHelper created")
+        Log.v(TAG, "dialogHelper created")
         DialogHelper(this)
     }
 

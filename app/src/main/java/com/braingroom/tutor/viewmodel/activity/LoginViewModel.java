@@ -22,7 +22,6 @@ import org.jetbrains.annotations.Nullable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Action;
 
-
 import static com.braingroom.tutor.utils.CommonUtilsKt.isEmpty;
 import static com.braingroom.tutor.utils.CommonUtilsKt.isValidEmail;
 import static com.braingroom.tutor.utils.ConstantsKt.braingroomId;
@@ -39,14 +38,14 @@ public class LoginViewModel extends ViewModel {
     public final ObservableField<String> emailId = new ObservableField<>("");
     public final ObservableField<String> password = new ObservableField<>("");
     public final CustomDrawable loginButton;
-    private final int RC_SIGN_IN = 9001;
-    private final UIHelper uiHelper;
     public final Action onLoginClicked = new Action() {
         @Override
         public void run() throws Exception {
             login(emailId.get(), password.get());
         }
     };
+    private final int RC_SIGN_IN = 9001;
+    private final UIHelper uiHelper;
     public final Action onGoogleLoginClicked = new Action() {
         @Override
         public void run() throws Exception {
@@ -88,7 +87,7 @@ public class LoginViewModel extends ViewModel {
                 doOnSubscribe(disposable -> getCompositeDisposable().add(disposable)).
                 observeOn(AndroidSchedulers.mainThread()).
                 subscribe(this::handleLoginResponse, throwable -> {
-                    Log.d(getTAG(), throwable.getMessage());
+                    Log.e(getTAG(), throwable.getMessage(), throwable);
                     throwable.printStackTrace();
                 });
     }
@@ -101,7 +100,7 @@ public class LoginViewModel extends ViewModel {
                     doOnSubscribe(disposable -> getCompositeDisposable().add(disposable)).
                     observeOn(AndroidSchedulers.mainThread()).
                     subscribe(this::handleLoginResponse, throwable -> {
-                        Log.d(getTAG(), throwable.getMessage());
+                        Log.e(getTAG(), throwable.getMessage(), throwable);
                         throwable.printStackTrace();
                     });
         }

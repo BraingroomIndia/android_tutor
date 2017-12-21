@@ -26,7 +26,6 @@ public class MyClassesViewModel extends ViewModel {
     public final ListDialogViewModel classType;
     public final ListDialogViewModel classStatus;
     public final Snippet snippet = new Snippet(true, true, getUserId());
-    private int currentPageNumber = 0;
     public ViewProvider view = vm -> {
         if (vm != null) {
             if (vm instanceof ClassListItemViewModel)
@@ -42,6 +41,7 @@ public class MyClassesViewModel extends ViewModel {
         }
         throw new NullPointerException();
     };
+    private int currentPageNumber = 0;
 
     public MyClassesViewModel() {
 
@@ -66,7 +66,7 @@ public class MyClassesViewModel extends ViewModel {
             if (selectedItems.values().iterator().hasNext()) {
                 snippet.setExpired(selectedItems.values().iterator().next());
                 reset();
-                Log.d(getTAG(), "classStatus selectedItems items : " + selectedItems.values());
+                Log.v(getTAG(), "classStatus selectedItems items : " + selectedItems.values());
             }
         }, "", null);
         toObservable(getCallAgain()).subscribe(integer -> getApiService().getAllClasses(snippet, currentPageNumber).doOnSubscribe(disposable -> {
@@ -74,25 +74,25 @@ public class MyClassesViewModel extends ViewModel {
                 getItem().onNext(new LoadingViewModel());
             getItem().onNext(new NotifyDataSetChanged());
             getCompositeDisposable().add(disposable);
-            Log.d(getTAG(), "Added  Loading Items");
+            Log.v(getTAG(), "Added  Loading Items");
         }).
                 doOnComplete(() -> {
-                    Log.d(getTAG(), "Updating UI");
+                    Log.v(getTAG(), "Updating UI");
                     getItem().onNext(new NotifyDataSetChanged());
                 }).
                 subscribe(resp ->
                 {
                     getItem().onNext(new RemoveLoadingViewModel());
-                    Log.d(getTAG(), "Removed Loading Items");
+                    Log.v(getTAG(), "Removed Loading Items");
                     if (resp.getResCode()) {
                         for (ClassListResp.Snippet snippet : resp.getData())
                             getItem().onNext(new ClassListItemViewModel(snippet));
-                        Log.d(getTAG(), "Added Actual items");
+                        Log.v(getTAG(), "Added Actual items");
                         currentPageNumber++;
                     }
 
                 }, throwable -> {
-                    Log.d(getTAG(), throwable.getMessage());
+                    Log.e(getTAG(), throwable.getMessage(), throwable);
                     throwable.printStackTrace();
                 }));
     }
