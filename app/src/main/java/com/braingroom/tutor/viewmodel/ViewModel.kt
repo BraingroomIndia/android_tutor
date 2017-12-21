@@ -92,7 +92,7 @@ open class ViewModel {
         if (!compositeDisposable.isDisposed) {
             compositeDisposable.dispose()
         }
-        applicationContext.refWatcher.watch(this, TAG);
+        applicationContext?.refWatcher?.watch(this, TAG);
     }
 
     open fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {}
