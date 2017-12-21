@@ -9,7 +9,7 @@ import com.braingroom.tutor.viewmodel.ViewModel
 import com.braingroom.tutor.viewmodel.item.HomeItemViewModel
 import com.braingroom.tutor.viewmodel.item.NotifyDataSetChanged
 import io.reactivex.functions.Action
-import java.util.ArrayList
+import java.util.*
 
 
 /*
@@ -32,6 +32,7 @@ class HomeViewModel : ViewModel() {
     }
     private val bottomDrawableList = ArrayList<@ColorRes Int>(8)
     private val topDrawableList = ArrayList<@DrawableRes Int>(8)
+    private val textList = ArrayList<String>(8)
 
 
     init {
@@ -51,6 +52,7 @@ class HomeViewModel : ViewModel() {
         topDrawableList += R.drawable.ic_calnder_36dp
         topDrawableList += R.drawable.ic_review_36dp
         topDrawableList += R.drawable.ic_promot_36dp
+        textList += ""
 
         for (i in 0..7)
             item.onNext(HomeItemViewModel(topDrawableList[i], bottomDrawableList[i], "Hello"))
