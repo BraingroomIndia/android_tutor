@@ -58,7 +58,6 @@ class SignupActivity : Activity() {
             State -> vm.stateVm
             City -> vm.cityVm
             Locality -> vm.localityVm
-            College -> vm.instituteVm
             else -> vm
         }
 

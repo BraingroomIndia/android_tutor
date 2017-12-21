@@ -35,18 +35,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             app:vm="@{vm.localityVm}" />
-        <include
-            android:id="@+id/instituteName"
-            layout="@layout/floating_label_edit_text"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:data="@{vm.instituteName}"/>
-        <include
-            android:id="@+id/instituteId"
-            layout="@layout/floating_label_edit_text"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:data="@{vm.instituteId}"/>
+
         <include
             layout="@layout/floating_label_edit_text"
             android:layout_width="match_parent"

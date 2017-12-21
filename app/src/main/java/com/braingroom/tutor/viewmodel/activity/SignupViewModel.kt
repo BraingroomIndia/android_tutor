@@ -1,5 +1,6 @@
 package com.braingroom.tutor.viewmodel.activity
 
+import android.databinding.ObservableBoolean
 import android.text.TextUtils
 import android.view.View
 import com.braingroom.tutor.R
@@ -25,6 +26,7 @@ import io.reactivex.functions.Consumer
 class SignupViewModel(val uiHelper: SignupActivity.UiHelper, val fragmentHelper: FragmentHelper) : ViewModel() {
 
     val snippet: SignUpReq.Snippet= SignUpReq.Snippet()
+    val isIndividual = ObservableBoolean(true)
     val FIRST_FRAGMENT = "firstfragment"
     val SECOND_FRAGMENT = "secondFragment"
     val THIRD_FRAGMENT ="thirdfragment"
@@ -73,12 +75,13 @@ class SignupViewModel(val uiHelper: SignupActivity.UiHelper, val fragmentHelper:
 
     val uploadImage by lazy{
         Action{
+
         }
     }
 
 
     val categoryVm by lazy {
-        ListDialogViewModel("Interest", apiService.getCategories().doOnSubscribe { disposable -> compositeDisposable.add(disposable) }.map { resp ->
+        ListDialogViewModel("Category", apiService.getCategories().doOnSubscribe { disposable -> compositeDisposable.add(disposable) }.map { resp ->
 
             val list: ListDialogData = ListDialogData(LinkedHashMap())
             for (snippet in resp.data)
@@ -91,8 +94,7 @@ class SignupViewModel(val uiHelper: SignupActivity.UiHelper, val fragmentHelper:
         }, "", "Done")
     }
     val communityVm by lazy {
-        ListDialogViewModel("Interest", apiService.getCategories().doOnSubscribe { disposable -> compositeDisposable.add(disposable) }.map { resp ->
-
+        ListDialogViewModel("Community", apiService.getCommunity().doOnSubscribe { disposable -> compositeDisposable.add(disposable) }.map { resp ->
             val list: ListDialogData = ListDialogData(LinkedHashMap())
             for (snippet in resp.data)
                 list.getItems().put(snippet.textValue, snippet.id)
@@ -147,17 +149,6 @@ class SignupViewModel(val uiHelper: SignupActivity.UiHelper, val fragmentHelper:
         SearchSelectListViewModel(Locality, "search locality", "select city first", false, null, Consumer { selectedDataMap -> snippet.locality=toString(selectedDataMap) }, HashMap(), fragmentHelper)
     }
 
-    val instituteVm by lazy {
-        DynamicSearchSelectListViewModel(College, "search colleges", "", false, object : DynamicSearchSelectListViewModel.DynamicSearchAPIObservable {
-            override fun getData(keyword: String): Observable<java.util.HashMap<String, Int>>? {
-                return apiService.getInstitute(keyword).map { resp ->
-                    val list: HashMap<String, Int> = HashMap();
-                    resp.data.forEach { snippet -> list.put(snippet.textValue, snippet.id) }
-                    list
-                }
-            }
-        }, Consumer { }, HashMap())
-    }
     val toSecond by lazy {
         Action {
             toSecond()
@@ -170,10 +161,18 @@ class SignupViewModel(val uiHelper: SignupActivity.UiHelper, val fragmentHelper:
     }
     val apiSignUp by lazy{
         Action{
-            toThird()
+            signUp()
         }
     }
     init {
+        isIndividual.addOnPropertyChangedCallback(object:android.databinding.Observable.OnPropertyChangedCallback(){
+            override fun onPropertyChanged(sender: android.databinding.Observable?, propertyId: Int) {
+                if(isIndividual.get())
+                    aboutYou.hinttext.set("About You")
+                    else
+                    aboutYou.hinttext.set("About Institute")
+            }
+        })
         uiHelper.firstFragment()
     }
     fun signUp(){
@@ -187,6 +186,11 @@ class SignupViewModel(val uiHelper: SignupActivity.UiHelper, val fragmentHelper:
 
 
     fun toSecond() {
+        snippet.name=name.text.get()
+        snippet.mobileNo = phone.text.get()
+        snippet.email = phone.text.get()
+        snippet.password = phone.text.get()
+        snippet.referalCode = referralCode.text.get()
         uiHelper.secondFragment()
         return
         /*   if (!(isValidEmail(email.text.get()) && isValidName(name.text.get()) && isValidPhone(phone.text.get()) && isValidName(confirmPassword.text.get())) && isValidPassword(password.text.get())) {
