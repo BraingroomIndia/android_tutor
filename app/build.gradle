@@ -48,7 +48,7 @@ android {
 
 dependencies {
 
-    compile('com.bignerdranch.android:expandablerecyclerview:3.0.0-RC1') {
+    implementation('com.bignerdranch.android:expandablerecyclerview:3.0.0-RC1') {
         exclude group: 'com.android.support', module: 'support-v4'
     }
 

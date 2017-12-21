@@ -33,6 +33,9 @@ interface ApiService {
     @POST("getAllClasses/{pageIndex}")
     fun getAllClasses(@Path("pageIndex") pageIndex: String, @Body req: ClassListReq): Observable<ClassListResp>
 
+    @POST("getPaymentDetails/{pageIndex}")
+    fun getPaymentDetails(@Path("pageIndex") pageIndex: String, @Body req:CommonIdReq):Observable<PaymentDetailsResp>
+
     @POST("getInstitions")
     fun getInstitute(@Body req: InstituteReq): Observable<CommonIdResp>
 

@@ -68,7 +68,7 @@ class ListDialogViewModel(val title: String?, sourceObservable: Observable<ListD
             }
         }.doOnSubscribe { disposable -> compositeDisposable.add(disposable) }.
                 doOnError { throwable ->
-                    Log.d("ListDialogViewModel", "onError in source observable", throwable.cause)
+                    Log.e("ListDialogViewModel", "onError in source observable", throwable)
                     throwable.printStackTrace()
                 }.share()
 

@@ -91,7 +91,7 @@
                 android:layout_weight="1"/>
             <TextView
                 android:layout_width="0dp"
-                android:text="@{vm.transferred}"
+                android:text="@{vm.receivedAmount}"
                 android:layout_height="wrap_content"
 
                 android:fontFamily="@font/roboto_regular"
@@ -103,7 +103,7 @@
                 android:layout_weight="1"/>
             <TextView
                 android:layout_width="0dp"
-                android:text="@{vm.pending}"
+                android:text="@{vm.pendingAmount}"
 
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/roboto_regular"
@@ -122,7 +122,7 @@
                 android:layout_weight="1"
                 android:gravity="center"
                 android:fontFamily="@font/roboto_regular"
-                android:text="@{vm.total}"
+                android:text="@{vm.totalAmount}"
                 android:textColor="@color/black"
                 android:textSize="15sp" />
         </LinearLayout>

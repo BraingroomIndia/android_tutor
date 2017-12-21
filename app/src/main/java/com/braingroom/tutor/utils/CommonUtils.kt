@@ -137,7 +137,8 @@ fun extractYoutubeId(url: String): String? {
 
 fun isEmpty(target: String?): Boolean = target.isNullOrBlank()
 fun isEmpty(target: Any?): Boolean = target == null
-fun getNonNull(target: String?) = target ?: "";
+fun getNonNull(target: String?) = target ?: ""
+fun getNonNull(target: Int?) = target ?: -1
 
 
 
