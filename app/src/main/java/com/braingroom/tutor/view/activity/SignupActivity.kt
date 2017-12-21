@@ -1,6 +1,8 @@
 package com.braingroom.tutor.view.activity
 
+import android.util.Log
 import com.braingroom.tutor.R
+import com.braingroom.tutor.model.req.SignUpReq
 import com.braingroom.tutor.utils.*
 import com.braingroom.tutor.view.fragment.FragmentHelper
 import com.braingroom.tutor.view.fragment.SearchSelectListFragment
@@ -19,6 +21,8 @@ class SignupActivity : Activity() {
 
     override val layoutId: Int = R.layout.activity_signup;
 
+
+
     override val vm: SignupViewModel by lazy {
         SignupViewModel(object : UiHelper {
             override fun firstFragment() {
@@ -29,8 +33,9 @@ class SignupActivity : Activity() {
                 navigator.openFragment(SignUpSecondFragment.newInstance(SECOND_FRAGMENT))
             }
 
-            override fun thirdFragment() {
-                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+            override fun signUp() {
+                Log.d("why","why")
+                navigator.finishActivity()
             }
         }, object : FragmentHelper {
             override fun show(tag: String) {
@@ -55,12 +60,11 @@ class SignupActivity : Activity() {
             else -> vm
         }
 
-
     }
 
     interface UiHelper {
         fun firstFragment()
         fun secondFragment()
-        fun thirdFragment()
+        fun signUp()
     }
 }

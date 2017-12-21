@@ -1,9 +1,11 @@
 package com.braingroom.tutor.viewmodel.activity
 
+import android.text.TextUtils
 import android.view.View
 import com.braingroom.tutor.R
 import com.braingroom.tutor.model.data.InputTypeEnum
 import com.braingroom.tutor.model.data.ListDialogData
+import com.braingroom.tutor.model.req.SignUpReq
 import com.braingroom.tutor.utils.*
 import com.braingroom.tutor.view.activity.SignupActivity
 import com.braingroom.tutor.view.fragment.DynamicSearchSelectFragment
@@ -21,6 +23,8 @@ import io.reactivex.functions.Consumer
  * Created by ashketchup on 30/11/17.
  */
 class SignupViewModel(val uiHelper: SignupActivity.UiHelper, val fragmentHelper: FragmentHelper) : ViewModel() {
+
+    val snippet: SignUpReq.Snippet= SignUpReq.Snippet()
     val FIRST_FRAGMENT = "firstFragment"
     val SECOND_FRAGMENT = "secondFragment"
 
@@ -56,7 +60,10 @@ class SignupViewModel(val uiHelper: SignupActivity.UiHelper, val fragmentHelper:
                 list.getItems().put(snippet.textValue, snippet.id)
             list
 
-        }, HashMap(), true, Consumer { /*TODO*/ }, "", "Done")
+        }, HashMap(), true, Consumer { selectedData ->
+            snippet.setCategoryId(com.braingroom.tutor.utils.toString(selectedData))
+
+        }, "", "Done")
     }
     val communityVm by lazy {
         ListDialogViewModel("Interest", apiService.getCategories().doOnSubscribe { disposable -> compositeDisposable.add(disposable) }.map { resp ->
@@ -66,7 +73,8 @@ class SignupViewModel(val uiHelper: SignupActivity.UiHelper, val fragmentHelper:
                 list.getItems().put(snippet.textValue, snippet.id)
             list
 
-        }, HashMap(), true, Consumer { /*TODO*/ }, "", "Done")
+        }, HashMap(), true, Consumer { selectedData ->
+            snippet.setCommunityId(com.braingroom.tutor.utils.toString(selectedData))}, "", "Done")
     }
 
     val countryVm by lazy {
@@ -76,6 +84,7 @@ class SignupViewModel(val uiHelper: SignupActivity.UiHelper, val fragmentHelper:
                 list.put(snippet.textValue, snippet.id)
             list
         }, Consumer { selectedData ->
+            snippet.country=com.braingroom.tutor.utils.toString(selectedData)
             selectedData.values.forEach { id ->
                 stateVm.refreshDataMap(apiService.getState(id).map { resp ->
                     val list: HashMap<String, Int> = HashMap();
@@ -87,6 +96,7 @@ class SignupViewModel(val uiHelper: SignupActivity.UiHelper, val fragmentHelper:
     }
     val stateVm by lazy {
         SearchSelectListViewModel(State, "search state", "select country first", false, null, Consumer { selectedData ->
+            snippet.state= toString(selectedData)
             selectedData.values.forEach { id ->
                 cityVm.refreshDataMap(apiService.getCity(id).map { resp ->
                     val list: HashMap<String, Int> = HashMap();
@@ -98,6 +108,7 @@ class SignupViewModel(val uiHelper: SignupActivity.UiHelper, val fragmentHelper:
     }
     val cityVm by lazy {
         SearchSelectListViewModel(City, "search city", "select state first", false, null, Consumer { selectedData ->
+            snippet.cityId=toString(selectedData)
             selectedData.values.forEach { id ->
                 localityVm.refreshDataMap(apiService.getLocality(id).map { resp ->
                     val list: HashMap<String, Int> = HashMap();
@@ -108,7 +119,7 @@ class SignupViewModel(val uiHelper: SignupActivity.UiHelper, val fragmentHelper:
         }, HashMap(), fragmentHelper)
     }
     val localityVm by lazy {
-        SearchSelectListViewModel(Locality, "search locality", "select city first", false, null, Consumer { /*TODO*/ }, HashMap(), fragmentHelper)
+        SearchSelectListViewModel(Locality, "search locality", "select city first", false, null, Consumer { selectedDataMap -> snippet.locality=toString(selectedDataMap) }, HashMap(), fragmentHelper)
     }
 
     val instituteVm by lazy {
@@ -120,18 +131,26 @@ class SignupViewModel(val uiHelper: SignupActivity.UiHelper, val fragmentHelper:
                     list
                 }
             }
-        }, Consumer { /*TODO*/ }, HashMap())
+        }, Consumer { }, HashMap())
     }
     val onSignupClicked by lazy {
         Action {
             signup()
         }
     }
-
+    val apiSignUp by lazy{
+        Action{
+            signUp2()
+        }
+    }
     init {
         uiHelper.firstFragment()
     }
 
+    fun signUp2(){
+        uiHelper.signUp()
+        return
+    }
 
     fun signup() {
         uiHelper.secondFragment()
