@@ -38,7 +38,7 @@ import java.io.Serializable
  * binder provided to the library
  */
 abstract class Activity : AppCompatActivity() {
-    private lateinit var binding: ViewDataBinding
+    protected lateinit var binding: ViewDataBinding
 
 
     private val extras: Bundle? by lazy {
@@ -94,9 +94,9 @@ abstract class Activity : AppCompatActivity() {
         CustomApplication.getInstance().appModule.preferencesEditor
     }
 
-    var drawer: DrawerLayout? = null
 
-    var toolbar: Toolbar? = null
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         CustomApplication.getInstance().appModule.activity = this
         super.onCreate(savedInstanceState)

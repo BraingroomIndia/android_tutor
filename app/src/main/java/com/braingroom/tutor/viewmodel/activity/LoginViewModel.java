@@ -131,7 +131,7 @@ public class LoginViewModel extends ViewModel {
             getPreferencesEditor().putString(email, emailId);
             getPreferencesEditor().putString(profilePic, profilePicture);
             getPreferencesEditor().putString(braingroomId, userId);
-            getPreferencesEditor().commit();
+            getPreferencesEditor().apply();
             CustomApplication.getInstance().userEmail = emailId;
             CustomApplication.getInstance().userId = userId;
             CustomApplication.getInstance().userName = userName;

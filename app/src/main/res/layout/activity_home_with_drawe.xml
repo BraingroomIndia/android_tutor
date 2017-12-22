@@ -23,7 +23,7 @@
         tools:openDrawer="start">
 
         <include
-            layout="@layout/activity_home"
+            layout="@layout/content_home"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:vm="@{vm}" />

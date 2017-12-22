@@ -8,15 +8,19 @@ import android.databinding.ViewDataBinding
 import android.graphics.PorterDuff
 import android.graphics.drawable.Drawable
 import android.os.Build
+import android.support.design.widget.NavigationView
 import android.support.design.widget.TextInputLayout
 import android.util.Log
+import android.view.LayoutInflater
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import com.braingroom.tutor.BR
 import com.braingroom.tutor.common.CustomApplication
+import com.braingroom.tutor.databinding.NavHomeHeaderBinding
 import com.braingroom.tutor.view.adapters.ViewModelBinder
 import com.braingroom.tutor.viewmodel.ViewModel
+import com.braingroom.tutor.viewmodel.activity.HomeViewModel
 import io.reactivex.functions.Action
 
 
@@ -76,6 +80,13 @@ fun setImageUri(view: ImageView?, drawable: Drawable?) {
     view?.setImageDrawable(drawable)
 }
 
+@BindingAdapter("model")
+fun loadHeader(view: NavigationView, model: HomeViewModel) {
+    val binding = NavHomeHeaderBinding.inflate(LayoutInflater.from(view.context))
+    binding.setVm(model)
+    binding.executePendingBindings()
+    view.addHeaderView(binding.getRoot())
+}
 
 @BindingAdapter(value = *arrayOf("android:src", "placeHolder"), requireAll = true)
 fun setImageUrl(imageView: ImageView?, url: String?, placeHolder: Int) {

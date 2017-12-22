@@ -34,13 +34,13 @@ open class ViewModel {
     protected val applicationContext: CustomApplication
         get() = CustomApplication.getInstance()
 
-    var userName: String = CustomApplication.getInstance().userName
+    public var userName: String = CustomApplication.getInstance().userName
         get() = CustomApplication.getInstance().userName
-    var userEmail = CustomApplication.getInstance().userEmail
+    public var userEmail = CustomApplication.getInstance().userEmail
         get() = CustomApplication.getInstance().userEmail
     var userId = CustomApplication.getInstance().userId
         get() = CustomApplication.getInstance().userId
-    var userPic = CustomApplication.getInstance().userPic
+    public var userPic = CustomApplication.getInstance().userPic
         get() = CustomApplication.getInstance().userPic
 
     var loggedIn: Boolean
