@@ -14,6 +14,7 @@ import com.braingroom.tutor.view.fragment.FragmentHelper
 import com.braingroom.tutor.viewmodel.ViewModel
 import com.braingroom.tutor.viewmodel.fragment.DynamicSearchSelectListViewModel
 import com.braingroom.tutor.viewmodel.fragment.SearchSelectListViewModel
+import com.braingroom.tutor.viewmodel.item.DatePickerViewModel
 import com.braingroom.tutor.viewmodel.item.ListDialogViewModel
 import io.reactivex.functions.Action
 import com.braingroom.tutor.viewmodel.item.TextIconViewModel
@@ -79,6 +80,9 @@ class SignupViewModel(val uiHelper: SignupActivity.UiHelper, val fragmentHelper:
         }
     }
 
+    val datePicker by lazy{
+        DatePickerViewModel(dialogHelper,"DOB","12-12-2012")
+    }
 
     val categoryVm by lazy {
         ListDialogViewModel("Category", apiService.getCategories().doOnSubscribe { disposable -> compositeDisposable.add(disposable) }.map { resp ->

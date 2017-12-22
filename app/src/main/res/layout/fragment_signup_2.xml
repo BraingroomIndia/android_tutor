@@ -49,16 +49,15 @@
                 android:src="@drawable/class_ph_3"
                 android:id="@+id/circleImageView" />
 
-            <TextView
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentRight="true"
-                android:layout_alignParentTop="true"
-                android:visibility="@{(vm.isIndividual.get())?View.VISIBLE:View.GONE}"
+
+            <include
+                layout="@layout/item_date_dialog_opener"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                app:vm="@{vm.datePicker}"
+                android:layout_centerVertical="true"
                 android:layout_toEndOf="@+id/circleImageView"
-                android:layout_toRightOf="@+id/circleImageView"
-                android:text="Date" />
+                android:layout_toRightOf="@+id/circleImageView" />
         </RelativeLayout>
             <include
                 layout="@layout/item_list_dialog_opener"
