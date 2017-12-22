@@ -10,7 +10,10 @@ import android.util.Log
 import io.reactivex.Observable
 import io.reactivex.ObservableOnSubscribe
 import java.net.MalformedURLException
-import java.util.*
+
+import java.net.URL
+import kotlin.collections.HashMap
+
 
 
 /*
@@ -100,6 +103,21 @@ fun isValidPhone(target: CharSequence?): Boolean {
     } else {
         android.util.Patterns.PHONE.matcher(target).matches()
     }
+}
+
+fun toString(map:HashMap<String,Int>):String{
+    var result="";
+    var list:MutableList<Int> = mutableListOf()
+    var array = map.values.iterator()
+    if(array.hasNext()){
+        result+=array.next()
+        while (array.hasNext()){
+            result+=",";
+            result+=array.next()
+        }
+        return result
+    }
+    return ""
 }
 
 fun isValidName(target: CharSequence?): Boolean {

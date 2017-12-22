@@ -7,6 +7,12 @@ import com.braingroom.tutor.model.resp.*
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
+import com.braingroom.tutor.model.resp.MyProfileResp
+import com.braingroom.tutor.model.req.CommonIdReq
+import io.reactivex.annotations.NonNull
+import io.reactivex.functions.Function
+import java.util.ArrayList
+
 
 
 /*
@@ -56,6 +62,11 @@ class DataFlowService(private val api: ApiService, private val realmCacheService
 
         return api.getUser(UserListReq(UserListReq.Snippet(keyword, 1, "1"))).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
+    }
+
+    fun signUp(signUpReq: SignUpReq): Observable<SignUpResp> {
+
+        return api.signUp(signUpReq).subscribeOn(Schedulers.io()).observeOn(Schedulers.computation()).subscribeOn(Schedulers.io())
     }
 
 
