@@ -36,10 +36,11 @@ class DialogHelper(val activity: Activity?) {
                     .onPositive(MaterialDialog.SingleButtonCallback { dialog, which ->
                         val datePicker = dialog.customView as DatePicker
                         val month = datePicker.month + 1
-                        (viewModel as DatePickerViewModel).date.set(datePicker.year.toString() + "-" + month + "-" + datePicker.dayOfMonth)
+                        (viewModel as DatePickerViewModel).title.set(datePicker.year.toString() + "-" + month + "-" + datePicker.dayOfMonth)
                         (viewModel as DatePickerViewModel).handleOkClick()
                     })
                     .show()
+
         }
     }
 
