@@ -27,7 +27,7 @@
             android:layout_width="match_parent"
             android:layout_height="25dp"
             android:layout_below="@+id/title"
-            android:gravity="top"
+            android:gravity="center"
             android:text="@{vm.title}"
             android:background="@drawable/bottom_line_drawable"
             android:textColor="@color/colorTextGray"

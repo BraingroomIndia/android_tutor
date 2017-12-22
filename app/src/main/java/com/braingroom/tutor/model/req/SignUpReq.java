@@ -10,6 +10,11 @@ public class SignUpReq extends BaseResp {
     @SerializedName("braingroom")
     Snippet data;
 
+    @Override
+    public boolean getResCode() {
+        return data==null;
+    }
+
     public Snippet getData() {
         return data;
     }
@@ -18,39 +23,7 @@ public class SignUpReq extends BaseResp {
         this.data = data;
     }
 
-    public SignUpReq(Snippet data) {
-        this.data = data;
-    }
-
-    @Override
-    protected boolean isEmpty(String value) {
-        return super.isEmpty(value);
-    }
-
-    @Override
-    protected boolean isEmpty(List<?> value) {
-        return super.isEmpty(value);
-    }
-
-    @Override
-    public boolean getResCode() {
-        return false;
-    }
-
-    @Override
-    public String getResMsg() {
-        return super.getResMsg();
-    }
-
-    public static class Snippet implements Serializable {
-        public String getName() {
-            return name;
-        }
-
-        public void setName(String name) {
-            this.name = name;
-        }
-
+    public static class Snippet {
         public String getEmail() {
             return email;
         }
@@ -73,22 +46,6 @@ public class SignUpReq extends BaseResp {
 
         public void setMobileNo(String mobileNo) {
             this.mobileNo = mobileNo;
-        }
-
-        public String getCountry() {
-            return country;
-        }
-
-        public void setCountry(String country) {
-            this.country = country;
-        }
-
-        public String getState() {
-            return state;
-        }
-
-        public void setState(String state) {
-            this.state = state;
         }
 
         public String getCityId() {
@@ -115,20 +72,28 @@ public class SignUpReq extends BaseResp {
             this.categoryId = categoryId;
         }
 
-        public String getdOB() {
-            return dOB;
+        public String getVendorTypeId() {
+            return vendorTypeId;
         }
 
-        public void setdOB(String dOB) {
-            this.dOB = dOB;
+        public void setVendorTypeId(String vendorTypeId) {
+            this.vendorTypeId = vendorTypeId;
         }
 
-        public String getGender() {
-            return gender;
+        public String getName() {
+            return name;
         }
 
-        public void setGender(String gender) {
-            this.gender = gender;
+        public void setName(String name) {
+            this.name = name;
+        }
+
+        public String getDob() {
+            return dob;
+        }
+
+        public void setDob(String dob) {
+            this.dob = dob;
         }
 
         public String getProfileImage() {
@@ -139,8 +104,160 @@ public class SignUpReq extends BaseResp {
             this.profileImage = profileImage;
         }
 
+        public String getSegmentId() {
+            return segmentId;
+        }
+
+        public void setSegmentId(String segmentId) {
+            this.segmentId = segmentId;
+        }
+
+        public String getAreaOfExpertise() {
+            return areaOfExpertise;
+        }
+
+        public void setAreaOfExpertise(String areaOfExpertise) {
+            this.areaOfExpertise = areaOfExpertise;
+        }
+
+        public String getAddress() {
+            return address;
+        }
+
+        public void setAddress(String address) {
+            this.address = address;
+        }
+
+        public String getDescription() {
+            return description;
+        }
+
+        public void setDescription(String description) {
+            this.description = description;
+        }
+
+        public String getInstituteName() {
+            return instituteName;
+        }
+
+        public void setInstituteName(String instituteName) {
+            this.instituteName = instituteName;
+        }
+
+        public String getRegistrationId() {
+            return registrationId;
+        }
+
+        public void setRegistrationId(String registrationId) {
+            this.registrationId = registrationId;
+        }
+
+        public String getLogoImage() {
+            return logoImage;
+        }
+
+        public void setLogoImage(String logoImage) {
+            this.logoImage = logoImage;
+        }
+
+        public String getCoachingExperience() {
+            return coachingExperience;
+        }
+
+        public void setCoachingExperience(String coachingExperience) {
+            this.coachingExperience = coachingExperience;
+        }
+
+        public String getPrimaryVerificationId1() {
+            return primaryVerificationId1;
+        }
+
+        public void setPrimaryVerificationId1(String primaryVerificationId1) {
+            this.primaryVerificationId1 = primaryVerificationId1;
+        }
+
+        public String getPrimaryVerificationNo1() {
+            return primaryVerificationNo1;
+        }
+
+        public void setPrimaryVerificationNo1(String primaryVerificationNo1) {
+            this.primaryVerificationNo1 = primaryVerificationNo1;
+        }
+
+        public String getPrimaryAttachedImage1() {
+            return primaryAttachedImage1;
+        }
+
+        public void setPrimaryAttachedImage1(String primaryAttachedImage1) {
+            this.primaryAttachedImage1 = primaryAttachedImage1;
+        }
+
+        public String getPrimaryVerificationId2() {
+            return primaryVerificationId2;
+        }
+
+        public void setPrimaryVerificationId2(String primaryVerificationId2) {
+            this.primaryVerificationId2 = primaryVerificationId2;
+        }
+
+        public String getPrimaryVerificationNo2() {
+            return primaryVerificationNo2;
+        }
+
+        public void setPrimaryVerificationNo2(String primaryVerificationNo2) {
+            this.primaryVerificationNo2 = primaryVerificationNo2;
+        }
+
+        public String getPrimaryAttachedImage2() {
+            return primaryAttachedImage2;
+        }
+
+        public void setPrimaryAttachedImage2(String primaryAttachedImage2) {
+            this.primaryAttachedImage2 = primaryAttachedImage2;
+        }
+
+        public String getSecondaryVerificationId1() {
+            return secondaryVerificationId1;
+        }
+
+        public void setSecondaryVerificationId1(String secondaryVerificationId1) {
+            this.secondaryVerificationId1 = secondaryVerificationId1;
+        }
+
+        public String getSecondaryAttachedImage1() {
+            return secondaryAttachedImage1;
+        }
+
+        public void setSecondaryAttachedImage1(String secondaryAttachedImage1) {
+            this.secondaryAttachedImage1 = secondaryAttachedImage1;
+        }
+
+        public String getSecondaryVerificationId2() {
+            return secondaryVerificationId2;
+        }
+
+        public void setSecondaryVerificationId2(String secondaryVerificationId2) {
+            this.secondaryVerificationId2 = secondaryVerificationId2;
+        }
+
+        public String getSecondaryAttachedImage2() {
+            return secondaryAttachedImage2;
+        }
+
+        public void setSecondaryAttachedImage2(String secondaryAttachedImage2) {
+            this.secondaryAttachedImage2 = secondaryAttachedImage2;
+        }
+
         public String getLatitude() {
             return latitude;
+        }
+
+        public String getCommunityId() {
+            return communityId;
+        }
+
+        public void setCommunityId(String communityId) {
+            this.communityId = communityId;
         }
 
         public void setLatitude(String latitude) {
@@ -155,53 +272,100 @@ public class SignUpReq extends BaseResp {
             this.longitude = longitude;
         }
 
-        public String getCommunityId() {
-            return communityId;
+        @SerializedName("email")
+        String email = "";
+        @SerializedName("password")
+        String password = "";
+        @SerializedName("mobile_no")
+        String mobileNo = "";
+        @SerializedName("city_id")
+        String cityId = "";
+        @SerializedName("locality")
+        String locality = "";
+        @SerializedName("category_id")
+        String categoryId = "1";
+        @SerializedName("vendor_type_id")
+        String vendorTypeId = "2";
+        @SerializedName("first_name")
+        String name = "";
+        @SerializedName("d_o_b")
+        String dob = "";
+        @SerializedName("profile_image")
+        String profileImage = "";
+        @SerializedName("segment_id")
+        String segmentId = "1";
+        @SerializedName("area_of_expertise")
+        String areaOfExpertise = "";
+        @SerializedName("address")
+        String address = "";
+        @SerializedName("description")
+        String description = "";
+
+        @SerializedName("institute_name")
+        String instituteName = "";
+
+        @SerializedName("registration_id")
+        String registrationId = "";
+
+        @SerializedName("logo_image")
+        String logoImage = "";
+
+        @SerializedName("coaching_experience")
+        String coachingExperience = "";
+
+        @SerializedName("country_id")
+        String countryId="";
+
+        public String getCountryId() {
+            return countryId;
         }
 
-        public void setCommunityId(String communityId) {
-            this.communityId = communityId;
+        public void setCountryId(String countryId) {
+            this.countryId = countryId;
         }
 
-        public String getSchoolName() {
-            return schoolName;
-        }
+        @SerializedName("identity_of_primary_verification1")
+        String primaryVerificationId1 = "";
 
-        public void setSchoolName(String schoolName) {
-            this.schoolName = schoolName;
-        }
+        @SerializedName("primary_verfication_no1")
+        String primaryVerificationNo1 = "";
 
-        public String getInstituteName1() {
-            return instituteName1;
-        }
+        @SerializedName("primary_attached_media1")
+        String primaryAttachedImage1 = "";
 
-        public void setInstituteName1(String instituteName1) {
-            this.instituteName1 = instituteName1;
-        }
+        @SerializedName("identity_of_primary_verification2")
+        String primaryVerificationId2 = "";
 
-        public String getInstitutePoy1() {
-            return institutePoy1;
-        }
+        @SerializedName("primary_verfication_no2")
+        String primaryVerificationNo2 = "";
 
-        public void setInstitutePoy1(String institutePoy1) {
-            this.institutePoy1 = institutePoy1;
-        }
+        @SerializedName("primary_attached_media2")
+        String primaryAttachedImage2 = "";
 
-        public String getInstituteName2() {
-            return instituteName2;
-        }
+        @SerializedName("identity_of_secoundry_verification1")
+        String secondaryVerificationId1 = "";
 
-        public void setInstituteName2(String instituteName2) {
-            this.instituteName2 = instituteName2;
-        }
+        @SerializedName("secoundry_attached_media1")
+        String secondaryAttachedImage1 = "";
 
-        public String getInstitutePoy2() {
-            return institutePoy2;
-        }
+        @SerializedName("identity_of_secoundry_verification2")
+        String secondaryVerificationId2 = "";
 
-        public void setInstitutePoy2(String institutePoy2) {
-            this.institutePoy2 = institutePoy2;
-        }
+        @SerializedName("secoundry_attached_media2")
+        String secondaryAttachedImage2 = "";
+
+        @SerializedName("latitude")
+        String latitude = "";
+
+        @SerializedName("longitude")
+        String longitude = "";
+        @SerializedName("community_id")
+        String communityId="";
+        @SerializedName("state_id")
+        String stateId="";
+
+        @SerializedName("referal_code")
+        String referalCode="";
 
         public String getReferalCode() {
             return referalCode;
@@ -211,68 +375,12 @@ public class SignUpReq extends BaseResp {
             this.referalCode = referalCode;
         }
 
-        @SerializedName("name")
-        public String name;
+        public String getStateId() {
+            return stateId;
+        }
 
-        @SerializedName("email")
-        public String email;
-
-        @SerializedName("password")
-        public String password;
-
-        @SerializedName("mobile_no")
-        public String mobileNo;
-
-        @SerializedName("country")
-        private String country;
-
-        @SerializedName("state")
-        private String state;
-
-        @SerializedName("city")
-        public String cityId;
-
-        @SerializedName("locality")
-        public String locality;
-
-        @SerializedName("category_id")
-        public String categoryId;
-
-        @SerializedName("d_o_b")
-        public String dOB;
-
-        @SerializedName("gender")
-        public String gender;
-
-        @SerializedName("profile_image")
-        public String profileImage;
-
-        @SerializedName("latitude")
-        public String latitude;
-
-        @SerializedName("longitude")
-        public String longitude;
-
-        @SerializedName("community_id")
-        public String communityId;
-
-        @SerializedName("school_id")
-        String schoolName;
-
-        @SerializedName("institute_name1")
-        private String instituteName1;
-
-        @SerializedName("institute_poy1")
-        private String institutePoy1;
-
-        @SerializedName("institute_name2")
-        private String instituteName2;
-
-        @SerializedName("institute_poy2")
-        private String institutePoy2;
-
-        @SerializedName("referal_code")
-        private String referalCode;
-
+        public void setStateId(String stateId) {
+            this.stateId = stateId;
+        }
     }
 }

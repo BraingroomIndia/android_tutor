@@ -57,15 +57,9 @@ class SignupViewModel(val uiHelper: SignupActivity.UiHelper, val fragmentHelper:
     val instituteName by lazy{
         TextIconViewModel("",null,InputTypeEnum.Text,View.VISIBLE,"Institute Name","")
     }
-
-    val instituteId by lazy{
-        TextIconViewModel("",null,InputTypeEnum.Text,View.VISIBLE,"Institute Id","")
-    }
-
     val address  by lazy{
         TextIconViewModel("",null,InputTypeEnum.Text,View.VISIBLE,"Address","")
     }
-
     val aboutYou by lazy{
         TextIconViewModel("",null,InputTypeEnum.Text,View.VISIBLE,"About You","")
     }
@@ -105,7 +99,7 @@ class SignupViewModel(val uiHelper: SignupActivity.UiHelper, val fragmentHelper:
             list
 
         }, HashMap(), true, Consumer { selectedData ->
-            snippet.setCommunityId(com.braingroom.tutor.utils.toString(selectedData))}, "", "Done")
+            snippet.communityId=(com.braingroom.tutor.utils.toString(selectedData))}, "", "Done")
     }
 
     val countryVm by lazy {
@@ -115,7 +109,7 @@ class SignupViewModel(val uiHelper: SignupActivity.UiHelper, val fragmentHelper:
                 list.put(snippet.textValue, snippet.id)
             list
         }, Consumer { selectedData ->
-            snippet.country=com.braingroom.tutor.utils.toString(selectedData)
+            snippet.countryId=com.braingroom.tutor.utils.toString(selectedData)
             selectedData.values.forEach { id ->
                 stateVm.refreshDataMap(apiService.getState(id).map { resp ->
                     val list: HashMap<String, Int> = HashMap();
@@ -127,7 +121,7 @@ class SignupViewModel(val uiHelper: SignupActivity.UiHelper, val fragmentHelper:
     }
     val stateVm by lazy {
         SearchSelectListViewModel(State, "search state", "select country first", false, null, Consumer { selectedData ->
-            snippet.state= toString(selectedData)
+            snippet.stateId= toString(selectedData)
             selectedData.values.forEach { id ->
                 cityVm.refreshDataMap(apiService.getCity(id).map { resp ->
                     val list: HashMap<String, Int> = HashMap();
@@ -177,13 +171,24 @@ class SignupViewModel(val uiHelper: SignupActivity.UiHelper, val fragmentHelper:
                     aboutYou.hinttext.set("About Institute")
             }
         })
+        isIndividual.set(!isIndividual.get())
         uiHelper.firstFragment()
     }
     fun signUp(){
+        snippet.address=address.text.get()
         uiHelper.signUp()
     }
 
     fun toThird(){
+        if(datePicker.title.get().equals("DOB")) {
+            snippet.dob = ""
+        }
+        else {
+            snippet.dob=datePicker.title.get()
+        }
+        snippet.instituteName=instituteName.text.get()
+        snippet.description=aboutYou.text.get()
+        snippet.areaOfExpertise=expertiseArea.text.get()
         uiHelper.thirdFragment()
         return
     }
