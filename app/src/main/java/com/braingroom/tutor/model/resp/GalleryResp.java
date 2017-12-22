@@ -9,8 +9,7 @@ import java.util.Collections;
 import java.util.List;
 
 import static com.braingroom.tutor.utils.CommonUtilsKt.getNonNull;
-import static com.braingroom.tutor.utils.CommonUtilsKt.getVideo;
-
+import static com.braingroom.tutor.utils.CommonUtilsKt.getThumbnail;
 /*
  * Created by godara on 21/11/17.
  */
@@ -30,6 +29,7 @@ public class GalleryResp extends BaseResp {
 
         @SerializedName("media_title")
         private String mediaTitle;
+
         @SerializedName("media_path")
         private String mediaPath;
 
@@ -42,7 +42,7 @@ public class GalleryResp extends BaseResp {
 
         @NonNull
         public String getMediaPath() {
-            return isVideo ? getNonNull("http://img.youtube.com/vi/" + getNonNull(getVideo(mediaPath)) + "/hqdefault.jpg") : getNonNull(mediaPath);
+            return isVideo ? getNonNull(getThumbnail(mediaPath)) : getNonNull(mediaPath);
         }
     }
 
