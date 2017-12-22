@@ -38,4 +38,3 @@ public class DialogViewModel extends ViewModel {
 
 
 }
-

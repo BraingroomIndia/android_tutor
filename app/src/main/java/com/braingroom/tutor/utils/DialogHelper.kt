@@ -27,7 +27,6 @@ class DialogHelper(val activity: Activity?) {
 
     fun showDatePicker() {
 
-
         activity?.let {
             dismissActiveProgress()
             Builder(it)
@@ -49,7 +48,7 @@ class DialogHelper(val activity: Activity?) {
         dismissActiveProgress()
         when {
             items?.isNotEmpty() == true -> activity?.let {
-                Builder(it).title(title ?: "").items(items).itemsCallbackMultiChoice(if (selectedItems.isNotEmpty()) selectedItems else Array<Int>(1, { -1 })) { materialDialog, selectedIdx, charSequence ->
+                Builder(it).title(title).items(items).itemsCallbackMultiChoice(if (selectedItems.isNotEmpty()) selectedItems else Array<Int>(1, { -1 })) { materialDialog, selectedIdx, charSequence ->
                     when (viewModel) {
                         is ListDialogViewModel -> (viewModel as ListDialogViewModel).setSelectedItems(selectedIdx)
                     }

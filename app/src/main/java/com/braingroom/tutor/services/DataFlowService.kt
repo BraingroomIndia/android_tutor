@@ -1,7 +1,6 @@
 package com.braingroom.tutor.services
 
 
-import android.util.Log
 import com.braingroom.tutor.common.CustomApplication
 import com.braingroom.tutor.model.req.*
 import com.braingroom.tutor.model.resp.*
@@ -13,6 +12,7 @@ import com.braingroom.tutor.model.req.CommonIdReq
 import io.reactivex.annotations.NonNull
 import io.reactivex.functions.Function
 import java.util.ArrayList
+
 
 
 /*
@@ -79,7 +79,6 @@ class DataFlowService(private val api: ApiService, private val realmCacheService
     fun getGallery(snippet: GalleryReq.Snippet): Observable<GalleryResp> {
         return api.getGallery(GalleryReq(snippet)).subscribeOn(Schedulers.io()).observeOn(Schedulers.computation()).onErrorReturn { GalleryResp() }.map { resp -> resp ?: GalleryResp() }.map { resp ->
             for (res in resp.data) {
-                Log.d("logger", res.mediaTitle);
                 res.isVideo = snippet.isVideo
             }
             resp

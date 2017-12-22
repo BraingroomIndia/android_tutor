@@ -22,6 +22,11 @@ public class DatePickerViewModel extends DialogViewModel {
         this.dialogHelper.showDatePicker();
     }
 
+    public void reset() {
+        date.set("YYYY-MM-DD");
+        selectedItemsText.set("select filter values");
+    }
+
     @Override
     public void setTitle(String title) {
         this.title.set(title);
