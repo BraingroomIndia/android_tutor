@@ -79,10 +79,7 @@ class HomeViewModel : ViewModel() {
         topDrawableList += R.drawable.ic_review_36dp//7
         textList += "Review" //7
         bottomDrawableList += R.color.material_pink500//7
-        actionList += Action {
-            Log.d("wtf","wtf")
-            navigator?.navigateActivity(Intent(applicationContext,ReviewActivity::class.java))
-        } //7
+        actionList += Action { navigator?.navigateActivity(ReviewActivity::class.java) } //7
 
 
         topDrawableList += R.drawable.ic_promot_36dp//8

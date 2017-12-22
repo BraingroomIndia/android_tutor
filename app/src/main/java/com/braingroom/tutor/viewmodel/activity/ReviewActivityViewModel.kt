@@ -13,7 +13,6 @@ import com.braingroom.tutor.viewmodel.item.ReviewItemViewModel
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import java.util.concurrent.TimeUnit
-
 /**
  * Created by ashketchup on 22/12/17.
  */
