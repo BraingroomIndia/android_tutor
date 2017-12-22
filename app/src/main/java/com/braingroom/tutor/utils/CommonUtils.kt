@@ -9,11 +9,9 @@ import android.util.DisplayMetrics
 import android.util.Log
 import io.reactivex.Observable
 import io.reactivex.ObservableOnSubscribe
-import java.net.MalformedURLException
-
-import java.net.URL
 import java.util.*
 import kotlin.collections.HashMap
+import java.util.regex.Pattern
 
 
 /*
@@ -135,17 +133,29 @@ fun getThumbnail(url: String): String {
     return "http://img.youtube.com/vi/" + extractYoutubeId(url) + "/0.jpg"
 }
 
-public fun getVideo(video: String?): String {
-    if (video == null) return "";
-    try {
-        return video.substring(video.lastIndexOf("/") + 1);
-    } catch (iobe: IndexOutOfBoundsException) {
-        return "";
-    }
+
+val youTubeUrlRegEx = "^(https?)?(://)?(www.)?(m.)?((youtube.com)|(youtu.be))/"
+val videoIdRegex = arrayOf("\\?vi?=([^&]*)", "watch\\?.*v=([^&]*)", "(?:embed|vi?)/([^/?]*)", "^([A-Za-z0-9\\-]*)")
+
+fun extractYoutubeId(url: String): String {
+    val youTubeLinkWithoutProtocolAndDomain = youTubeLinkWithoutProtocolAndDomain(url)
+
+    return videoIdRegex
+            .map { Pattern.compile(it) }
+            .map { it.matcher(youTubeLinkWithoutProtocolAndDomain) }
+            .firstOrNull { it.find() }
+            ?.group(1) ?: ""
 }
 
-@Throws(MalformedURLException::class)
-fun extractYoutubeId(url: String?): String? = (url?.split("/".toRegex())?.toTypedArray())?.last()
+private fun youTubeLinkWithoutProtocolAndDomain(url: String): String {
+    val compiledPattern = Pattern.compile(youTubeUrlRegEx)
+    val matcher = compiledPattern.matcher(url)
+
+    return if (matcher.find()) {
+        url.replace(matcher.group(), "")
+    } else url
+}
+
 
 fun isEmpty(target: String?): Boolean = target.isNullOrBlank()
 fun isEmpty(target: Any?): Boolean = target == null

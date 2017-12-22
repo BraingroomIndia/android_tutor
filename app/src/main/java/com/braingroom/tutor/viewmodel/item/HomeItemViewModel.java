@@ -22,7 +22,7 @@ public class HomeItemViewModel extends ViewModel {
     public final CustomDrawable drawableTop;
     public final CustomDrawable drawableBottom;
     public final String text;
-    private final Action onClick;
+    public final Action onClick;
 
     public HomeItemViewModel(@DrawableRes int drawableTop, @ColorRes int color, @NonNull String text, Action onClick) {
         this.drawableTop = new CustomDrawable(drawableTop);
