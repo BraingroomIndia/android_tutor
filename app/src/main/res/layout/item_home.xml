@@ -17,6 +17,7 @@
         app:cardBackgroundColor="#64000000"
         app:cardCornerRadius="4dp"
         app:cardElevation="@dimen/cardview_compat_inset_shadow"
+        android:onClick="@{vm.onClick}"
         app:cardUseCompatPadding="true">
 
         <android.support.constraint.ConstraintLayout

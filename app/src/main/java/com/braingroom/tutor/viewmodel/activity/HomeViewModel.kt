@@ -1,9 +1,11 @@
 package com.braingroom.tutor.viewmodel.activity
 
 
+import android.content.Intent
 import android.support.annotation.ColorRes
 import android.support.annotation.DrawableRes
 import com.braingroom.tutor.R
+import com.braingroom.tutor.view.activity.ReviewActivity
 import com.braingroom.tutor.view.adapters.ViewProvider
 import com.braingroom.tutor.viewmodel.ViewModel
 import com.braingroom.tutor.viewmodel.item.HomeItemViewModel
@@ -76,7 +78,7 @@ class HomeViewModel : ViewModel() {
         topDrawableList += R.drawable.ic_review_36dp//7
         textList += "Review" //7
         bottomDrawableList += R.color.material_pink500//7
-        actionList += Action { } //7
+        actionList += Action { navigator?.navigateActivity(ReviewActivity::class.java) } //7
 
 
         topDrawableList += R.drawable.ic_promot_36dp//8
