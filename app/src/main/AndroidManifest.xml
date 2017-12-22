@@ -16,8 +16,7 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme"
-        >
+        android:theme="@style/AppTheme">
         <!--Launcher Activity -->
         <activity
             android:name=".view.activity.SplashActivity"
@@ -31,9 +30,7 @@
         <!--Sign Up Activity-->
         <activity
             android:name=".view.activity.SignupActivity"
-            android:label="@string/app_name"
-             >
-        </activity>
+            android:label="@string/app_name"></activity>
         <!--Login Activity-->
         <activity
             android:name=".view.activity.LoginActivity"
