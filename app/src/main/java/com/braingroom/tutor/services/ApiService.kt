@@ -12,6 +12,10 @@ import com.braingroom.tutor.model.req.InstituteReq
 import com.braingroom.tutor.model.resp.CommonIdResp
 import com.braingroom.tutor.model.req.CityReq
 import com.braingroom.tutor.model.req.LocalityReq
+import com.braingroom.tutor.model.req.ReviewGetReq
+import com.braingroom.tutor.model.resp.ReviewGetResp
+
+
 
 
 
@@ -21,51 +25,53 @@ import com.braingroom.tutor.model.req.LocalityReq
  */
 
 interface ApiService {
-    @POST("login")
+    @POST("apis/login")
     fun login(@Body req: LoginReq): Observable<LoginResp?>
 
-    @POST("socialLogin")
+    @POST("apis/socialLogin")
     fun socialLogin(@Body req: SocialLoginReq): Observable<LoginResp>
 
-    @POST("getProfile")
+    @POST("apis/getProfile")
     fun getProfile(@Body req: CommonIdReq): Observable<MyProfileResp>
 
-    @POST("getAllClasses/{pageIndex}")
+    @POST("apis/getAllClasses/{pageIndex}")
     fun getAllClasses(@Path("pageIndex") pageIndex: String, @Body req: ClassListReq): Observable<ClassListResp>
 
-    @POST("BuyerRegistration")
+    @POST("apis/BuyerRegistration")
     fun signUp(@Body req: SignUpReq): Observable<SignUpResp>
 
 
-    @POST("getInstitions")
+    @POST("apis/getInstitions")
     fun getInstitute(@Body req: InstituteReq): Observable<CommonIdResp>
 
-    @POST("getUsers")
+    @POST("apis/getUsers")
     fun getUser(@Body req: UserListReq): Observable<CommonIdResp>
 
-    @POST("getSchools")
+    @POST("apis/getSchools")
     fun getSchools(@Body req: InstituteReq): Observable<CommonIdResp>
 
-    @POST("getGallary")
+    @POST("apis/getGallary")
     fun getGallery(@Body req: GalleryReq): Observable<GalleryResp>
 
-    @POST("getCategory")
+    @POST("apis/getCategory")
     fun getCategories(): Observable<CommonIdResp>
 
-    @GET("getCategory")
+    @GET("apis/getCategory")
     fun getCommunity(): Observable<CommonIdResp>
 
-    @POST("getCountry")
+    @POST("apis/getCountry")
     fun getCountry(): Observable<CommonIdResp>
 
-    @POST("getState")
+    @POST("apis/getState")
     fun getState(@Body req: StateReq): Observable<CommonIdResp>
 
-    @POST("getCity")
+    @POST("apis/getCity")
     fun getCity(@Body req: CityReq): Observable<CommonIdResp>
 
-    @POST("getLocality")
+    @POST("apis/getLocality")
     fun getLocalities(@Body req: LocalityReq): Observable<CommonIdResp>
 
+    @POST("apis/getReviews")
+    fun reviewGet(@Body reviewGetReq: ReviewGetReq): Observable<ReviewGetResp>
 
 }

@@ -13,7 +13,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             bind:items="@{vm.item}"
-            bind:view="@{vm.view}">
+            bind:view="@{vm.view}"
+            bind:decor="@{vm.decor}">
         </android.support.v7.widget.RecyclerView>
     </RelativeLayout>
 </layout>

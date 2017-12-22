@@ -12,6 +12,10 @@ import com.braingroom.tutor.model.req.CommonIdReq
 import io.reactivex.annotations.NonNull
 import io.reactivex.functions.Function
 import java.util.ArrayList
+import com.braingroom.tutor.model.resp.ReviewGetResp
+import com.braingroom.tutor.model.req.ReviewGetReq
+
+
 
 
 
@@ -160,6 +164,13 @@ class DataFlowService(private val api: ApiService, private val realmCacheService
                     return@flatMap realmCacheService.getCachedCommon("city"+stateId)
                 }
     }
+
+    fun getReview(): Observable<ReviewGetResp> {
+        return api.reviewGet(ReviewGetReq(ReviewGetReq.Snippet(userId))).subscribeOn(Schedulers.io())
+                .observeOn(Schedulers.computation()).onErrorReturnItem(ReviewGetResp())
+
+    }
+
 
     fun getLocality(cityId: Int): Observable<CommonIdResp> {
         return realmCacheService.getCachedCommon("locality"+cityId).
