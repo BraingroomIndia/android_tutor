@@ -14,7 +14,7 @@ public class DatePickerViewModel extends DialogViewModel {
     public DatePickerViewModel(DialogHelper dialogHelper, String title, String defaultDate) {
         super(dialogHelper, title);
         if (!isEmpty(defaultDate))
-        this.dialogHelper = dialogHelper;
+            this.dialogHelper = dialogHelper;
     }
 
     @Override
@@ -23,7 +23,6 @@ public class DatePickerViewModel extends DialogViewModel {
     }
 
     public void reset() {
-        date.set("YYYY-MM-DD");
         selectedItemsText.set("select filter values");
     }
 

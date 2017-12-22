@@ -12,8 +12,8 @@ import io.reactivex.ObservableOnSubscribe
 import java.net.MalformedURLException
 
 import java.net.URL
+import java.util.*
 import kotlin.collections.HashMap
-
 
 
 /*
@@ -105,15 +105,15 @@ fun isValidPhone(target: CharSequence?): Boolean {
     }
 }
 
-fun toString(map:HashMap<String,Int>):String{
-    var result="";
-    var list:MutableList<Int> = mutableListOf()
+fun toString(map: HashMap<String, Int>): String {
+    var result = "";
+    var list: MutableList<Int> = mutableListOf()
     var array = map.values.iterator()
-    if(array.hasNext()){
-        result+=array.next()
-        while (array.hasNext()){
-            result+=",";
-            result+=array.next()
+    if (array.hasNext()) {
+        result += array.next()
+        while (array.hasNext()) {
+            result += ",";
+            result += array.next()
         }
         return result
     }
