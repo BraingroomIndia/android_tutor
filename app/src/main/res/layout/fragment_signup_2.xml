@@ -8,86 +8,103 @@
         <variable
             name="vm"
             type="com.braingroom.tutor.viewmodel.activity.SignupViewModel" />
+        <import type="android.view.View"/>
     </data>
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:onClick="@{null}">
-    <LinearLayout
+        >
+        <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
-        <include
-            layout="@layout/item_list_dialog_opener"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            app:vm="@{vm.categoryVm}" />
+            <RadioGroup
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:orientation="horizontal">
+                <RadioButton
 
-        <include
-            layout="@layout/item_list_dialog_opener"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            app:vm="@{vm.categoryVm}" />
+                    android:layout_marginRight="@dimen/margin_med"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="Organization"
+                    android:checked="@={!vm.isIndividual}"
+                    android:layout_gravity="left"/>
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:checked="@={vm.isIndividual}"
+                    android:text="Institute"
+                    android:layout_gravity="right" />
+            </RadioGroup>
 
-        <include
-            layout="@layout/item_list_dialog_opener"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            app:vm="@{vm.communityVm}" />
+            android:layout_height="wrap_content">
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:onClick="@{vm.uploadImage}"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:src="@drawable/class_ph_3"
+                android:id="@+id/circleImageView" />
 
-        <include
-            layout="@layout/item_list_dialog_opener"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            app:vm="@{vm.categoryVm}" />
+            <TextView
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentTop="true"
+                android:visibility="@{(vm.isIndividual.get())?View.VISIBLE:View.GONE}"
+                android:layout_toEndOf="@+id/circleImageView"
+                android:layout_toRightOf="@+id/circleImageView"
+                android:text="Date" />
+        </RelativeLayout>
+            <include
+                layout="@layout/item_list_dialog_opener"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                app:vm="@{vm.categoryVm}" />
+            <include
+                layout="@layout/item_list_dialog_opener"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                app:vm="@{vm.communityVm}" />
 
+            <include
+                android:id="@+id/instituteName"
+                layout="@layout/floating_label_edit_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="@{(!vm.isIndividual.get())?View.VISIBLE:View.GONE}"
+                app:data="@{vm.instituteName}"/>
+            <include
+                android:id="@+id/instituteId"
+                layout="@layout/floating_label_edit_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="@{(!vm.isIndividual.get())?View.VISIBLE:View.GONE}"
+                app:data="@{vm.instituteId}"/>
         <include
-            layout="@layout/item_search_select_fragment_opener"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            app:vm="@{vm.countryVm}" />
-        <include
-            layout="@layout/item_search_select_fragment_opener"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            app:vm="@{vm.stateVm}" />
+            layout="@layout/floating_label_edit_text"
+            app:data="@{vm.aboutYou}"
+            />
+            <include
+            layout="@layout/floating_label_edit_text"
+            app:data="@{vm.expertiseArea}" />
 
-        <include
-            layout="@layout/item_search_select_fragment_opener"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            app:vm="@{vm.cityVm}" />
-
-        <include
-            layout="@layout/item_search_select_fragment_opener"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            app:vm="@{vm.localityVm}" />
-        <include
-            layout="@layout/item_dynamic_search_select_fragment_opener"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            app:vm="@{vm.instituteVm}"
-            app:editable="@{true}"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Sign Me Up"
+            android:text="Next"
             android:layout_gravity="center"
             android:layout_marginTop="@dimen/margin_med"
             android:fontFamily="@font/roboto_bold"
             android:textSize="@dimen/_16sdp"
             android:textColor="@color/black"
-            android:onClick="@{vm.apiSignUp}"/>
+            android:onClick="@{vm.toThird}"/>
         </LinearLayout>
     </ScrollView>
 </layout>
