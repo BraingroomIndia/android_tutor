@@ -40,14 +40,18 @@ class NotificationViewModel:ViewModel(){
             paginationInProgress = true
             apiService.getNotifications(pageNumber).observeOn(AndroidSchedulers.mainThread()).subscribe { t ->
                 t.data.forEach { elem ->
-                    item.onNext(NotificationsItemViewModel(elem.getNotificationId(), elem.getDescription(), elem.getPostId(),
-                            "1" == elem.getStatus()))
-
+                    item.onNext(NotificationsItemViewModel(elem.getDescription(), elem.getPostId(),
+                            "","1" == elem.getStatus()))
                     item.onNext(NotifyDataSetChanged())
                 }
                 paginationInProgress = false
-                if (t == null || t.data == null || t.data.isEmpty())
+                if (t == null || t.data == null || t.data.isEmpty()) {
                     pageNumber = -1
+                    item.onNext(NotificationsItemViewModel("No more Notifications", "",""
+                            ,
+                            false))
+                    item.onNext(NotifyDataSetChanged())
+                }
                 else pageNumber++
             }
         })

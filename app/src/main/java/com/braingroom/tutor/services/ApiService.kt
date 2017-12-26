@@ -65,7 +65,7 @@ interface ApiService {
     fun getCity(@Body req: CityReq): Observable<CommonIdResp>
 
     @POST("apis/changeNotificationStatus")
-    fun changeNotificationStatus(@Body req: ChangeNotificationStatusReq): Observable<BaseResp>
+    fun changeNotificationStatus(@Body req: ChangeNotificationStatusReq): Observable<CommonIdResp>
 
     @POST("apis/getUnreadNotificationCount")
     fun getUnreadNotificationCount(@Body req: CommonIdReq): Observable<NotificationCountResp>

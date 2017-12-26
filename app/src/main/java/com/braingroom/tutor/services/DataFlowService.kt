@@ -14,6 +14,7 @@ import io.reactivex.functions.Function
 import java.util.ArrayList
 import com.braingroom.tutor.model.resp.ReviewGetResp
 import com.braingroom.tutor.model.req.ReviewGetReq
+import com.facebook.common.Common
 
 
 /*
@@ -186,14 +187,15 @@ class DataFlowService(private val api: ApiService, private val realmCacheService
 
     fun getNotifications(pageIndex:Int): Observable<NotificationListResp> {
         return api.getUserNotifications(""+pageIndex, CommonIdReq(CommonIdReq.Snippet(userId))).subscribeOn(Schedulers.io())
-
+                .onErrorReturn { NotificationListResp() }
                 .observeOn(Schedulers.computation()).map{resp -> resp}
         //TODO Handle error return parts
     }
 
-    fun changeNotificationStatus(notificationId: String): Observable<BaseResp> {
+    fun changeNotificationStatus(notificationId: String): Observable<CommonIdResp> {
 
         return api.changeNotificationStatus(ChangeNotificationStatusReq(ChangeNotificationStatusReq.Snippet(userId, notificationId))).subscribeOn(Schedulers.io())
+                .onErrorReturn { CommonIdResp()}
                 .observeOn(Schedulers.computation())
     }
 

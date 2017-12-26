@@ -14,6 +14,10 @@ public class NotificationListResp extends BaseResp {
         this.data = data;
     }
 
+    public NotificationListResp() {
+        this.data=null;
+    }
+
     public List<Snippet> getData() {
         return data;
     }

@@ -6,6 +6,7 @@ import android.support.annotation.ColorRes
 import android.support.annotation.DrawableRes
 import android.util.Log
 import com.braingroom.tutor.R
+import com.braingroom.tutor.view.activity.NotificationActivity
 import com.braingroom.tutor.view.activity.ReviewActivity
 import com.braingroom.tutor.view.adapters.ViewProvider
 import com.braingroom.tutor.viewmodel.ViewModel
@@ -85,7 +86,7 @@ class HomeViewModel : ViewModel() {
         topDrawableList += R.drawable.ic_promot_36dp//8
         textList += "Promote" //8
         bottomDrawableList += R.color.material_lightgreen600//8
-        actionList += Action { } //8
+        actionList += Action {navigator?.navigateActivity(NotificationActivity::class.java) } //8
 
 
         for (i in 0..7)

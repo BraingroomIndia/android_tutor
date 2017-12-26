@@ -21,7 +21,8 @@ public abstract class BaseResp {
     @SerializedName("res_msg")
     private String resMsg;
 
-
+    public BaseResp() {
+    }
 
     protected boolean isEmpty(String value) {
         return value == null || value.trim().isEmpty();

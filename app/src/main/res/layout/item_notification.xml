@@ -16,6 +16,7 @@
             android:textColor="@color/black"
             android:background="@{vm.color}"
             android:paddingTop="@dimen/margin_med"
+            android:paddingLeft="@dimen/margin_small"
             android:paddingBottom="@dimen/margin_med"
             android:text="@{vm.title}"
             android:onClick="@{vm.onClick}"/>
