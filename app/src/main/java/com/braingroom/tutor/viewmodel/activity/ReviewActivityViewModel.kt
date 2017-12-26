@@ -49,5 +49,8 @@ class ReviewActivityViewModel : ViewModel() {
         })
     }
 
-
+    override fun paginate() {
+        super.paginate()
+        callAgain.set(callAgain.get()!! + 1)
+    }
 }

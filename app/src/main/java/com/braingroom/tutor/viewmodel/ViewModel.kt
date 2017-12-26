@@ -50,7 +50,7 @@ open class ViewModel {
             CustomApplication.getInstance().loggedIn = value
         }
 
-    val callAgain by lazy { ObservableField(0) }
+    val callAgain: ObservableField<Int> by lazy { ObservableField(0) }
 
 
     @Suppress("unused")
@@ -94,6 +94,8 @@ open class ViewModel {
         }
         applicationContext?.refWatcher?.watch(this, TAG);
     }
+
+    open fun paginate() {}
 
     open fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {}
 
