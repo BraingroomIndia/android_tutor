@@ -85,8 +85,8 @@ open class ViewModel {
         CustomDrawable(R.drawable.splash_screen)
     }
 
+    open fun paginate() {}
     open fun onResume() {}
-
     open fun onPause() {}
     open fun onDestroy() {
         if (!compositeDisposable.isDisposed) {

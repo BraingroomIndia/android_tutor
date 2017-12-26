@@ -7,7 +7,7 @@
 
         <variable
             name="vm"
-            type="com.braingroom.tutor.viewmodel.item.ClassListItemViewModel" />
+            type="com.braingroom.tutor.viewmodel.item.ItemPaymentDetailViewModel" />
    </data>
 
     <android.support.v7.widget.CardView
@@ -84,118 +84,80 @@
                 android:padding="10dp"
                 android:scaleType="centerCrop"
                 android:src="@{vm.image}"
-                app:placeHolder="@{vm.placeHolder}"
                 app:layout_constraintDimensionRatio="1"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintEnd_toStartOf="@id/guideline"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/divider"
+                app:placeHolder="@{vm.placeHolder}"
                 tools:src="@drawable/class_ph_2" />
 
 
             <TextView
-                android:id="@+id/location"
+                android:id="@+id/total_amount"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:layout_marginTop="2dp"
-                android:drawableLeft="@drawable/ic_location_20dp"
-                android:drawablePadding="5dp"
-                android:drawableStart="@drawable/ic_location_20dp"
+
                 android:fontFamily="@font/roboto_regular"
                 android:gravity="center_vertical"
-                android:text="@{vm.location}"
+                android:text='@{"Total Amount- "+vm.totalAmount}'
                 android:textColor="@color/darkTextColor"
                 app:autoSizeTextType="none"
-                app:layout_constraintBottom_toTopOf="@+id/session"
+                app:layout_constraintBottom_toTopOf="@+id/received_amount"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/guideline"
                 app:layout_constraintTop_toBottomOf="@+id/title"
                 app:layout_constraintVertical_chainStyle="spread"
-                tools:text="Location" />
+                tools:text="Total Amount- 500" />
 
             <TextView
-                android:id="@+id/session"
+                android:id="@+id/received_amount"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
-                android:drawableLeft="@drawable/ic_no_session_20dp"
-                android:drawablePadding="5dp"
-                android:drawableStart="@drawable/ic_no_session_20dp"
                 android:fontFamily="@font/roboto_regular"
                 android:gravity="center_vertical"
-                android:text="@{vm.type}"
+                android:text='@{"Recived Amount- "+vm.receivedAmount}'
                 android:textColor="@color/darkTextColor"
                 app:autoSizeTextType="none"
-                app:layout_constraintBottom_toTopOf="@+id/calender"
-                app:layout_constraintEnd_toEndOf="@id/location"
-                app:layout_constraintStart_toStartOf="@id/location"
-                app:layout_constraintTop_toBottomOf="@+id/location"
-                tools:text="Number of Sessions" />
+                app:layout_constraintBottom_toTopOf="@+id/pending_amount"
+                app:layout_constraintEnd_toEndOf="@id/total_amount"
+                app:layout_constraintStart_toStartOf="@id/total_amount"
+                app:layout_constraintTop_toBottomOf="@+id/total_amount"
+                tools:text="Recived Amount -200" />
 
-            <!--<LinearLayout
-                android:id="@+id/calender"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:gravity="center_vertical"
-                android:orientation="horizontal"
-                app:layout_constraintBottom_toTopOf="@+id/summary"
-                app:layout_constraintEnd_toEndOf="@id/location"
-                app:layout_constraintStart_toStartOf="@id/location"
-                app:layout_constraintTop_toBottomOf="@+id/session">
 
-                <ImageView
-                    android:layout_width="15dp"
-                    android:layout_height="match_parent"
-                    android:tint="@color/material_grey900"
-                    android:src="@drawable/ic_clock_20dp" />
-
-                <TextView
-                    android:layout_marginLeft="5dp"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:gravity="center_vertical"
-                    android:fontFamily="@font/roboto_regular"
-                    android:textColor="@color/darkTextColor"
-                    android:text="Duration" />
-
-            </LinearLayout>
--->
             <TextView
-                android:id="@+id/calender"
+                android:id="@+id/pending_amount"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
-                android:drawableLeft="@drawable/ic_clock_20dp"
-                android:drawablePadding="5dp"
-                android:drawableStart="@drawable/ic_clock_20dp"
                 android:fontFamily="@font/roboto_regular"
                 android:gravity="center_vertical"
-                android:text="@{vm.duration}"
+                android:text='@{"Pending Amount - "+vm.pendingAmount}'
                 android:textColor="@color/darkTextColor"
                 app:autoSizeTextType="none"
-                app:layout_constraintBottom_toTopOf="@+id/summary"
-                app:layout_constraintEnd_toEndOf="@id/location"
-                app:layout_constraintStart_toStartOf="@id/location"
-                app:layout_constraintTop_toBottomOf="@+id/session"
-                tools:text="Duration" />
+                app:layout_constraintBottom_toTopOf="@+id/refund_amount"
+                app:layout_constraintEnd_toEndOf="@id/total_amount"
+                app:layout_constraintStart_toStartOf="@id/total_amount"
+                app:layout_constraintTop_toBottomOf="@+id/received_amount"
+                tools:text="Pending Amount - 200" />
 
             <TextView
-                android:id="@+id/summary"
+                android:id="@+id/refund_amount"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
-                android:drawableLeft="@drawable/ic_info_20dp"
-                android:drawablePadding="5dp"
-                android:drawableStart="@drawable/ic_info_20dp"
                 android:ellipsize="end"
                 android:fontFamily="@font/roboto_regular"
                 android:gravity="center_vertical"
                 android:singleLine="true"
-                android:text="@{vm.summary}"
+                android:text='@{"Refund amount - "+vm.refundAmount}'
                 android:textColor="@color/darkTextColor"
                 app:autoSizeTextType="none"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="@id/location"
-                app:layout_constraintStart_toStartOf="@id/location"
-                app:layout_constraintTop_toBottomOf="@+id/calender"
-                tools:text="Summary" />
+                app:layout_constraintEnd_toEndOf="@id/total_amount"
+                app:layout_constraintStart_toStartOf="@id/total_amount"
+                app:layout_constraintTop_toBottomOf="@+id/pending_amount"
+                tools:text="Refund amount - 100" />
 
 
             <android.support.constraint.Guideline

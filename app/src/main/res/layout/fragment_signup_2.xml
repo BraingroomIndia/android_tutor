@@ -3,13 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <data>
+   <data>
 
         <variable
             name="vm"
             type="com.braingroom.tutor.viewmodel.activity.SignupViewModel" />
         <import type="android.view.View"/>
-    </data>
+   </data>
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -17,6 +17,7 @@
         <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:onClick="@{null}"
         android:orientation="vertical">
             <RadioGroup
                 android:layout_width="wrap_content"
@@ -79,14 +80,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:visibility="@{(!vm.isIndividual.get())?View.VISIBLE:View.GONE}"
-                app:data="@{vm.instituteName}"/>
+                app:data1="@{vm.instituteName}"/>
         <include
             layout="@layout/floating_label_edit_text"
-            app:data="@{vm.aboutYou}"
+            app:data1="@{vm.aboutYou}"
             />
             <include
             layout="@layout/floating_label_edit_text"
-            app:data="@{vm.expertiseArea}" />
+            app:data1="@{vm.expertiseArea}" />
 
         <TextView
             android:layout_width="wrap_content"

@@ -2,7 +2,7 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <data>
+   <data>
 
         <variable
             name="vm"
@@ -12,16 +12,28 @@
             name="editable"
             type="boolean" />
 
-    </data>
+   </data>
 
     <RelativeLayout
         android:id="@+id/input_layout_date_picker"
         android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:layout_marginRight="@dimen/margin_med"
+        android:background="@drawable/stroke_gray"
         android:onClick="@{!editable ? vm.onOpenerClick : null}"
         android:paddingLeft="@dimen/padding_large">
 
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="match_parent"
+            android:layout_height="25dp"
+            android:layout_alignParentTop="true"
+            android:layout_toLeftOf="@+id/arrow"
+            android:gravity="bottom"
+            android:text="@{vm.title}"
+            android:textColor="@color/colorTextDark"
+            android:textSize="@dimen/text_size_medium"
+            android:fontFamily="@font/roboto_bold" />
 
         <TextView
             android:layout_width="match_parent"
@@ -34,6 +46,14 @@
             android:textSize="@dimen/text_size_small"
             android:fontFamily="@font/roboto_bold" />
 
+        <ImageView
+            android:id="@+id/arrow"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:padding="@dimen/margin_med"
+            android:layout_alignParentRight="true"
+            android:tint="@color/colorTextGray"
+            android:src="@drawable/ic_calnder_36dp" />
 
     </RelativeLayout>
 </layout>

@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android" >
+   <data>
+        <variable
+            name="vm"
+            type="com.braingroom.tutor.viewmodel.item.ItemPaymentDetailViewModel"/>
+   </data>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@{vm.title}"
+            android:fontFamily="@font/roboto_bold"
+            android:textColor="@color/black"
+            android:background="@color/material_deeppurple300"
+            android:textSize="@dimen/_16sdp"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="@dimen/margin_neg">
+            <TextView
+                android:layout_width="0dp"
+                android:text="Total Tickets Sold"
+                android:background="@color/material_blue400"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/roboto_regular"
+                android:layout_marginRight="@dimen/margin_neg"
+                android:layout_marginLeft="@dimen/margin_neg"
+                android:textSize="15sp"
+                android:gravity="center"
+                android:textColor="@color/black"
+                android:layout_weight="1"/>
+            <TextView
+                android:layout_width="0dp"
+                android:text="Transferred Amount"
+                android:layout_height="wrap_content"
+                android:background="@color/material_blue400"
+                android:fontFamily="@font/roboto_regular"
+                android:layout_marginRight="@dimen/margin_neg"
+                android:layout_marginLeft="@dimen/margin_neg"
+                android:textSize="15sp"
+                android:textColor="@color/black"
+                android:gravity="center"
+                android:layout_weight="1"/>
+            <TextView
+                android:layout_width="0dp"
+                android:text="Pending Amount"
+                android:background="@color/material_blue400"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/roboto_regular"
+                android:textSize="15sp"
+                android:textColor="@color/black"
+                android:gravity="center"
+                android:layout_marginRight="@dimen/margin_neg"
+                android:layout_marginLeft="@dimen/margin_neg"
+                android:layout_weight="1"/>
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginRight="@dimen/margin_neg"
+                android:layout_marginLeft="@dimen/margin_neg"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:background="@color/material_blue400"
+                android:fontFamily="@font/roboto_regular"
+                android:text="Total"
+                android:textColor="@color/black"
+                android:textSize="15sp" />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="0dp"
+                android:text="@{vm.tickets}"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/roboto_regular"
+                android:layout_marginRight="@dimen/margin_neg"
+                android:layout_marginLeft="@dimen/margin_neg"
+                android:textSize="15sp"
+                android:gravity="center"
+                android:textColor="@color/black"
+                android:layout_weight="1"/>
+            <TextView
+                android:layout_width="0dp"
+                android:text="@{vm.receivedAmount}"
+                android:layout_height="wrap_content"
+
+                android:fontFamily="@font/roboto_regular"
+                android:layout_marginRight="@dimen/margin_neg"
+                android:layout_marginLeft="@dimen/margin_neg"
+                android:textSize="15sp"
+                android:textColor="@color/black"
+                android:gravity="center"
+                android:layout_weight="1"/>
+            <TextView
+                android:layout_width="0dp"
+                android:text="@{vm.pendingAmount}"
+
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/roboto_regular"
+                android:textSize="15sp"
+                android:textColor="@color/black"
+                android:gravity="center"
+                android:layout_marginRight="@dimen/margin_neg"
+                android:layout_marginLeft="@dimen/margin_neg"
+                android:layout_weight="1"/>
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginRight="@dimen/margin_neg"
+                android:layout_marginLeft="@dimen/margin_neg"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:fontFamily="@font/roboto_regular"
+                android:text="@{vm.totalAmount}"
+                android:textColor="@color/black"
+                android:textSize="15sp" />
+        </LinearLayout>
+    </LinearLayout>
+
+</layout>

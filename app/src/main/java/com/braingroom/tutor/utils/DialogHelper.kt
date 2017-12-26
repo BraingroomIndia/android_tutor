@@ -14,7 +14,7 @@ import com.braingroom.tutor.viewmodel.item.ListDialogViewModel
 /*
  * Created by godara on 27/09/17.
  */
-class DialogHelper(val activity: Activity?) {
+public class DialogHelper(val activity: Activity?) {
 
     val TAG = activity?.TAG + "\t" + this.javaClass.simpleName
 

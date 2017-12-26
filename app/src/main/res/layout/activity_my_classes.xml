@@ -3,12 +3,12 @@
     xmlns:bind="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <data>
+   <data>
 
         <variable
             name="vm"
             type="com.braingroom.tutor.viewmodel.activity.MyClassesViewModel" />
-    </data>
+   </data>
 
     <RelativeLayout
         android:layout_width="match_parent"

@@ -1,6 +1,5 @@
 package com.braingroom.tutor.services
 
-import android.util.Log
 import com.braingroom.tutor.model.data.CommonIdRealmWrapper
 import com.braingroom.tutor.model.data.CommonIdSnippetWrapper
 import com.braingroom.tutor.model.resp.CommonIdResp
@@ -9,7 +8,7 @@ import io.realm.Realm
 import io.realm.RealmList
 
 
-/**
+/*
  * Created by ashketchup on 11/12/17.
  */
 public class RealmCacheService : CacheService {
@@ -17,27 +16,25 @@ public class RealmCacheService : CacheService {
         val realm = Realm.getDefaultInstance()
         val x = CommonIdRealmWrapper()
         val item: MutableList<CommonIdResp.Snippet> = mutableListOf()
-        var data: CommonIdRealmWrapper? = realm.where(x.javaClass).equalTo("searchQuery", searchQuery).findFirst()
-        if (data == null)
-            return Observable.just(CommonIdResp(null))
-        (data.data.isNotEmpty()).let {
-            for (d in data.data) {
-                item.add(d.toSnippet())
+        var data: CommonIdRealmWrapper? = realm.where(x.javaClass).equalTo("searchQuery", searchQuery).findFirst() ?: return Observable.just(CommonIdResp(null))
+        (data?.data?.isNotEmpty()).let {
+            data?.data?.mapTo(item) { it.toSnippet() }
+            val data1: CommonIdRealmWrapper? = realm.where(x.javaClass).equalTo("searchQuery", searchQuery).findFirst() ?: return Observable.just(CommonIdResp(null))
+            (data1?.data?.isNotEmpty())?.let {
+                data1.data.mapTo(item) { it.toSnippet() }
             }
+            return Observable.just(CommonIdResp(item))
         }
-        return Observable.just(CommonIdResp(item))
     }
 
 
     override fun putCachedCommon(countriesList: List<CommonIdResp.Snippet>, searchQuery: String): CommonIdResp {
-        var realmList = RealmList<CommonIdSnippetWrapper>()
-        for (snippet in countriesList) {
-            realmList.add(CommonIdSnippetWrapper(snippet))
-        }
+        val realmList = RealmList<CommonIdSnippetWrapper>()
+        countriesList.mapTo(realmList) { CommonIdSnippetWrapper(it) }
         val realm = Realm.getDefaultInstance()
-        realm.executeTransaction({ realm ->
-            realm.insert(CommonIdRealmWrapper.create(realmList, searchQuery))
-        })
+        realm.executeTransaction {
+            it.insert(CommonIdRealmWrapper.create(realmList, searchQuery))
+        }
         return CommonIdResp(countriesList)
     }
 }

@@ -3,11 +3,11 @@
         xmlns:tools="http://schemas.android.com/tools"
     xmlns:bind="http://schemas.android.com/apk/res-auto"
     tools:context=".view.activity.FAQActivity">
-    <data>
+   <data>
         <variable
             type="com.braingroom.tutor.viewmodel.activity.FAQViewModel"
             name="vm"/>
-    </data>
+   </data>
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
