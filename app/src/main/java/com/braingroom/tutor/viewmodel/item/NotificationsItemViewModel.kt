@@ -1,5 +1,6 @@
 package com.braingroom.tutor.viewmodel.item
 
+import android.graphics.Color
 import android.os.Bundle
 import com.braingroom.tutor.viewmodel.ViewModel
 import io.reactivex.functions.Action
@@ -12,13 +13,14 @@ import java.util.*
 class NotificationsItemViewModel (val title:String,val postId: String,
                                   val classId: String,
                                   val readStatus: Boolean): ViewModel(){
-    val onClicked:Action by lazy{
+    val onClick:Action by lazy{
         Action{
             val data =Bundle()
             data.putString("postId",postId);
             //TODO where to navigate to
         }
     }
+    val color = Color.LTGRAY
 
     private fun getHumanDate(timeStamp: Long): String {
 

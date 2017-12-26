@@ -36,6 +36,7 @@
             android:layout_gravity="start"
             android:fitsSystemWindows="true"
             app:menu="@menu/home"
+            sel
             app:model="@{vm}" />
     </android.support.v4.widget.DrawerLayout>
 

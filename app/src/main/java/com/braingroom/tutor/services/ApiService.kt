@@ -64,11 +64,18 @@ interface ApiService {
     @POST("apis/getCity")
     fun getCity(@Body req: CityReq): Observable<CommonIdResp>
 
+    @POST("apis/changeNotificationStatus")
+    fun changeNotificationStatus(@Body req: ChangeNotificationStatusReq): Observable<BaseResp>
+
+    @POST("apis/getUnreadNotificationCount")
+    fun getUnreadNotificationCount(@Body req: CommonIdReq): Observable<NotificationCountResp>
+
+
     @POST("apis/getLocality")
     fun getLocalities(@Body req: LocalityReq): Observable<CommonIdResp>
 
-    @POST("apis/getNotifications/{pageIndex}")
-    fun notificationsGet(@Path("pageIndex") pageIndex: String, @Body notificationGetReq: CommonIdReq): Observable<NotificationListResp>
+    @POST("apis/getUserNotifications/{pageIndex}")
+    fun getUserNotifications(@Path("pageIndex") pageIndex: String, @Body notificationGetReq: CommonIdReq): Observable<NotificationListResp>
 
     @POST("apis/getReviews/{pageIndex}")
     fun reviewGet(@Path("pageIndex") pageIndex: String, @Body reviewGetReq: ReviewGetReq): Observable<ReviewGetResp>

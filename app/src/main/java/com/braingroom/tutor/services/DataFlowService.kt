@@ -184,8 +184,9 @@ class DataFlowService(private val api: ApiService, private val realmCacheService
                 }
     }
 
-    fun getNotifications(): Observable<NotificationListResp> {
-        return api.getUserNotifications(CommonUserIdReq(CommonUserIdReq.Snippet(userId))).subscribeOn(Schedulers.io())
+    fun getNotifications(pageIndex:Int): Observable<NotificationListResp> {
+        return api.getUserNotifications(""+pageIndex, CommonIdReq(CommonIdReq.Snippet(userId))).subscribeOn(Schedulers.io())
+
                 .observeOn(Schedulers.computation()).map{resp -> resp}
         //TODO Handle error return parts
     }
@@ -197,8 +198,7 @@ class DataFlowService(private val api: ApiService, private val realmCacheService
     }
 
     fun getUnreadNotificationCount(): Observable<NotificationCountResp> {
-
-        return api.getUnreadNotificationCount(CommonUserIdReq(CommonUserIdReq.Snippet(userId))).subscribeOn(Schedulers.io())
+        return api.getUnreadNotificationCount(CommonIdReq(CommonIdReq.Snippet(userId))).subscribeOn(Schedulers.io())
                 .observeOn(Schedulers.computation()).map{resp -> resp}
         //TODO Handle error return parts
     }
