@@ -67,6 +67,9 @@ interface ApiService {
     @POST("apis/getLocality")
     fun getLocalities(@Body req: LocalityReq): Observable<CommonIdResp>
 
+    @POST("apis/getNotifications/{pageIndex}")
+    fun notificationsGet(@Path("pageIndex") pageIndex: String, @Body notificationGetReq: CommonIdReq): Observable<NotificationListResp>
+
     @POST("apis/getReviews/{pageIndex}")
     fun reviewGet(@Path("pageIndex") pageIndex: String, @Body reviewGetReq: ReviewGetReq): Observable<ReviewGetResp>
 

@@ -183,4 +183,23 @@ class DataFlowService(private val api: ApiService, private val realmCacheService
                     return@flatMap realmCacheService.getCachedCommon("locality" + cityId)
                 }
     }
+
+    fun getNotifications(): Observable<NotificationListResp> {
+        return api.getUserNotifications(CommonUserIdReq(CommonUserIdReq.Snippet(userId))).subscribeOn(Schedulers.io())
+                .observeOn(Schedulers.computation()).map{resp -> resp}
+        //TODO Handle error return parts
+    }
+
+    fun changeNotificationStatus(notificationId: String): Observable<BaseResp> {
+
+        return api.changeNotificationStatus(ChangeNotificationStatusReq(ChangeNotificationStatusReq.Snippet(userId, notificationId))).subscribeOn(Schedulers.io())
+                .observeOn(Schedulers.computation())
+    }
+
+    fun getUnreadNotificationCount(): Observable<NotificationCountResp> {
+
+        return api.getUnreadNotificationCount(CommonUserIdReq(CommonUserIdReq.Snippet(userId))).subscribeOn(Schedulers.io())
+                .observeOn(Schedulers.computation()).map{resp -> resp}
+        //TODO Handle error return parts
+    }
 }

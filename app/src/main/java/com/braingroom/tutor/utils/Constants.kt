@@ -5,8 +5,9 @@ package com.braingroom.tutor.utils
  */
 const val FONT_REGULAR = "roboto_regular.ttf"
 const val FONT_BOLD = "roboto_bold.ttf"
-const val BASE_URL = "https://dev.braingroom.com/"
-const val DEV_BASE_URL = "https://dev.braingroom.com/"
+
+const val BASE_URL = "https://www.braingroom.com/";
+const val DEV_BASE_URL = "https://www.braingroom.com/"
 const val bundleData = "bundleData"
 const val lodgedIn = "lodgedIn"
 const val name = "userName"
