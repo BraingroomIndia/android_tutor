@@ -13,12 +13,13 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="@color/black"
             android:background="@{vm.color}"
-            android:paddingTop="@dimen/margin_med"
+            android:onClick="@{vm.onClick}"
             android:paddingBottom="@dimen/margin_med"
-            android:text="@{vm.text}"
-            android:onClick="@{vm.clicked}"/>
+            android:paddingLeft="@dimen/margin_small"
+            android:paddingTop="@dimen/margin_med"
+            android:text="@{vm.title}"
+            android:textColor="@color/black" />
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

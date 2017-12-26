@@ -1,13 +1,9 @@
 package com.braingroom.tutor.model.resp;
 
 
-import android.support.annotation.NonNull;
-
 import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
-
-import io.realm.RealmObject;
 
 import static com.braingroom.tutor.utils.CommonUtilsKt.getNonNull;
 
@@ -21,7 +17,8 @@ public abstract class BaseResp {
     @SerializedName("res_msg")
     private String resMsg;
 
-
+    public BaseResp() {
+    }
 
     protected boolean isEmpty(String value) {
         return value == null || value.trim().isEmpty();

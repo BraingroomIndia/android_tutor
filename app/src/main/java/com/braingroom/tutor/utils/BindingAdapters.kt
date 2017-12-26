@@ -6,12 +6,11 @@ import android.databinding.BindingAdapter
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
-import android.util.Log
-import android.widget.ImageView
-import com.braingroom.tutor.view.adapters.*
+import com.braingroom.tutor.view.adapters.GridSpacingItemDecoration
+import com.braingroom.tutor.view.adapters.RecyclerViewAdapter
+import com.braingroom.tutor.view.adapters.RecyclerViewAdapterObservable
+import com.braingroom.tutor.view.adapters.ViewProvider
 import com.braingroom.tutor.viewmodel.ViewModel
-import io.reactivex.Observable
-import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.ReplaySubject
 
 /*
@@ -90,8 +89,8 @@ fun paginate(recyclerView: RecyclerView?, viewModel: ViewModel) {
         override fun onScrolled(recyclerView: RecyclerView?, dx: Int, dy: Int) {
 
             super.onScrolled(recyclerView, dx, dy)
-            val visibleItemCount = recyclerView?.getChildCount() ?: 2
-            val totalItemCount = recyclerView?.layoutManager?.getItemCount() ?: 5
+            val visibleItemCount = recyclerView?.childCount ?: 2
+            val totalItemCount = recyclerView?.layoutManager?.itemCount ?: 5
             val firstVisibleItemPosition = ((recyclerView?.layoutManager) as LinearLayoutManager).findFirstVisibleItemPosition()
 
             if (dy > 0 && visibleItemCount + firstVisibleItemPosition >= totalItemCount) {

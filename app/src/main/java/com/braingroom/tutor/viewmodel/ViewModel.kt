@@ -2,16 +2,13 @@ package com.braingroom.tutor.viewmodel
 
 
 import android.content.Intent
-import android.databinding.ObservableInt
-
+import android.databinding.ObservableField
+import com.braingroom.tutor.R
 import com.braingroom.tutor.common.CustomApplication
 import com.braingroom.tutor.utils.CustomDrawable
 import com.braingroom.tutor.utils.lodgedIn
-
-import io.reactivex.subjects.ReplaySubject
-import android.databinding.ObservableField
-import com.braingroom.tutor.R
 import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.subjects.ReplaySubject
 
 
 /*
@@ -34,13 +31,13 @@ open class ViewModel {
     protected val applicationContext: CustomApplication
         get() = CustomApplication.getInstance()
 
-    public var userName: String = CustomApplication.getInstance().userName
+    var userName: String = CustomApplication.getInstance().userName
         get() = CustomApplication.getInstance().userName
-    public var userEmail = CustomApplication.getInstance().userEmail
+    var userEmail = CustomApplication.getInstance().userEmail
         get() = CustomApplication.getInstance().userEmail
     var userId = CustomApplication.getInstance().userId
         get() = CustomApplication.getInstance().userId
-    public var userPic = CustomApplication.getInstance().userPic
+    var userPic = CustomApplication.getInstance().userPic
         get() = CustomApplication.getInstance().userPic
 
     var loggedIn: Boolean
@@ -50,7 +47,7 @@ open class ViewModel {
             CustomApplication.getInstance().loggedIn = value
         }
 
-    val callAgain by lazy { ObservableField(0) }
+    val callAgain: ObservableField<Int> by lazy { ObservableField(0) }
 
 
     @Suppress("unused")
@@ -92,8 +89,9 @@ open class ViewModel {
         if (!compositeDisposable.isDisposed) {
             compositeDisposable.dispose()
         }
-        applicationContext?.refWatcher?.watch(this, TAG);
+        applicationContext.refWatcher?.watch(this, TAG)
     }
+
 
     open fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {}
 

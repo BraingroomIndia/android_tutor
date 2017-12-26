@@ -10,7 +10,6 @@ import android.util.Log
 import io.reactivex.Observable
 import io.reactivex.ObservableOnSubscribe
 import java.util.*
-import kotlin.collections.HashMap
 import java.util.regex.Pattern
 
 
@@ -104,13 +103,13 @@ fun isValidPhone(target: CharSequence?): Boolean {
 }
 
 fun toString(map: HashMap<String, Int>): String {
-    var result = "";
+    var result = ""
     var list: MutableList<Int> = mutableListOf()
     var array = map.values.iterator()
     if (array.hasNext()) {
         result += array.next()
         while (array.hasNext()) {
-            result += ",";
+            result += ","
             result += array.next()
         }
         return result
