@@ -8,7 +8,7 @@ import com.braingroom.tutor.viewmodel.activity.NotificationViewModel
  * Created by ashketchup on 26/12/17.
  */
 class NotificationActivity: Activity(){
-    override val vm: ViewModel by lazy{
+    override val vm: NotificationViewModel by lazy{
         NotificationViewModel()
     }
     override val layoutId: Int = R.layout.activity_notification

@@ -1,20 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:bind="http://schemas.android.com/tools">
-   <data>
+
+    <data>
+
         <variable
             name="vm"
-            type="com.braingroom.tutor.viewmodel.activity.NotificationViewModel"/>
-   </data>
-    <LinearLayout
+            type="com.braingroom.tutor.viewmodel.activity.NotificationViewModel" />
+    </data>
+
+    <android.support.v7.widget.RecyclerView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-        <android.support.v7.widget.RecyclerView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            bind:decor="@{vm.spacing}"
-            bind:view="@{vm.viewProvider}"
-            bind:items="@{vm.item}">
-        </android.support.v7.widget.RecyclerView>
-    </LinearLayout>
+        android:layout_height="wrap_content"
+        bind:decor="@{vm.spacing}"
+        bind:items="@{vm.item}"
+        bind:view="@{vm.viewProvider}" />
 </layout>

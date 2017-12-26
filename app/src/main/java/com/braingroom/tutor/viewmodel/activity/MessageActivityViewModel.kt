@@ -5,7 +5,6 @@ import com.braingroom.tutor.view.adapters.SpacingDecoration
 import com.braingroom.tutor.view.adapters.ViewProvider
 import com.braingroom.tutor.viewmodel.ViewModel
 import com.braingroom.tutor.viewmodel.item.MessageItemViewModel
-import com.braingroom.tutor.viewmodel.item.NotificationItemViewModel
 import com.braingroom.tutor.viewmodel.item.NotifyDataSetChanged
 import io.reactivex.Observable
 import java.util.*

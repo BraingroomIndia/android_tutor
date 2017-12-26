@@ -20,14 +20,13 @@ class NotificationsItemViewModel(val title: String, val postId: String,
             //TODO where to navigate to
         }
     }
-    var color = Color.LTGRAY
-
-    init {
+    val color by lazy {
         if (readStatus)
-            color = Color.LTGRAY
+            Color.LTGRAY
         else
-            color = Color.WHITE
+            Color.WHITE
     }
+
 
     private fun getHumanDate(timeStamp: Long): String {
 

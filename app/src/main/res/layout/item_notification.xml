@@ -1,28 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout
-    xmlns:android="http://schemas.android.com/apk/res/android">
-   <data>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
         <variable
             name="vm"
-            type="com.braingroom.tutor.viewmodel.item.NotificationItemViewModel"/>
-   </data>
-    <LinearLayout
+            type="com.braingroom.tutor.viewmodel.item.NotificationsItemViewModel" />
+    </data>
+
+    <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@{vm.color}"
-            android:onClick="@{vm.onClick}"
-            android:paddingBottom="@dimen/margin_med"
-            android:paddingLeft="@dimen/margin_small"
-            android:paddingTop="@dimen/margin_med"
-            android:text="@{vm.title}"
-            android:textColor="@color/black" />
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:src="@drawable/bottom_line_drawable"/>
-    </LinearLayout>
+        android:background="@{vm.color}"
+        android:drawableBottom="@drawable/bottom_line_drawable"
+        android:onClick="@{vm.onClick}"
+        android:paddingBottom="@dimen/margin_med"
+        android:paddingEnd="@dimen/margin_small"
+        android:paddingLeft="@dimen/margin_small"
+        android:paddingRight="@dimen/margin_small"
+        android:paddingStart="@dimen/margin_small"
+        android:paddingTop="@dimen/margin_med"
+        android:text="@{vm.title}"
+        android:textColor="@color/black"
+        tools:text="Title" />
+
 </layout>

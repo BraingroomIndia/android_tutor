@@ -81,11 +81,11 @@ fun setImageUri(view: ImageView?, drawable: Drawable?) {
 }
 
 @BindingAdapter("model")
-fun loadHeader(view: NavigationView, model: HomeViewModel) {
+fun loadHeader(view: NavigationView, model: HomeViewModel?) {
     val binding = NavHomeHeaderBinding.inflate(LayoutInflater.from(view.context))
-    binding.setVm(model)
-    binding.executePendingBindings()
-    view.addHeaderView(binding.getRoot())
+    binding.vm = model
+    binding?.executePendingBindings()
+    view.addHeaderView(binding?.root)
 }
 
 @BindingAdapter(value = *arrayOf("android:src", "placeHolder"), requireAll = true)

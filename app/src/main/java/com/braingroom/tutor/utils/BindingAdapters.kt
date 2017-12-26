@@ -62,8 +62,11 @@ fun bindAdapterWithDefaultBinder(recyclerView: RecyclerView?, items: List<ViewMo
 
 
 @BindingAdapter(value = *arrayOf("items", "view", "span"), requireAll = true)
-fun bindAdapterWithDefaultBinder(recyclerView: RecyclerView?, items: ReplaySubject<out ViewModel>?, viewProvider: ViewProvider?, span: Int?) {
-    recyclerView?.layoutManager = GridLayoutManager(recyclerView?.context, span ?: 2)
+fun bindAdapterWithDefaultBinder(recyclerView: RecyclerView?, items: ReplaySubject<out ViewModel>?, viewProvider: ViewProvider?, span: Int) {
+    when {
+        span < 1 -> recyclerView?.layoutManager = GridLayoutManager(recyclerView?.context, 2)
+        else -> recyclerView?.layoutManager = GridLayoutManager(recyclerView?.context, span)
+    }
     viewProvider?.let { recyclerView?.adapter = RecyclerViewAdapterObservable(items, it) }
     recyclerView?.addItemDecoration(GridSpacingItemDecoration(span ?: 2, convertDpToPixel(5).toInt(), true))
 }
@@ -84,7 +87,7 @@ fun bindAdapterWithDefaultBinder(recyclerView: RecyclerView?, items: ReplaySubje
 }
 
 @BindingAdapter("paginate")
-fun paginate(recyclerView: RecyclerView?, viewModel: ViewModel) {
+fun paginate(recyclerView: RecyclerView?, viewModel: ViewModel?) {
     recyclerView?.addOnScrollListener(object : RecyclerView.OnScrollListener() {
         override fun onScrolled(recyclerView: RecyclerView?, dx: Int, dy: Int) {
 
@@ -94,7 +97,7 @@ fun paginate(recyclerView: RecyclerView?, viewModel: ViewModel) {
             val firstVisibleItemPosition = ((recyclerView?.layoutManager) as LinearLayoutManager).findFirstVisibleItemPosition()
 
             if (dy > 0 && visibleItemCount + firstVisibleItemPosition >= totalItemCount) {
-                viewModel.paginate()
+                viewModel?.paginate()
             }
 
         }
