@@ -16,10 +16,6 @@ import com.braingroom.tutor.model.req.ReviewGetReq
 import com.braingroom.tutor.model.resp.ReviewGetResp
 
 
-
-
-
-
 /*
  * Created by godara on 26/09/17.
  */
@@ -71,7 +67,7 @@ interface ApiService {
     @POST("apis/getLocality")
     fun getLocalities(@Body req: LocalityReq): Observable<CommonIdResp>
 
-    @POST("apis/getReviews")
-    fun reviewGet(@Body reviewGetReq: ReviewGetReq): Observable<ReviewGetResp>
+    @POST("apis/getReviews/{pageIndex}")
+    fun reviewGet(@Path("pageIndex") pageIndex: String, @Body reviewGetReq: ReviewGetReq): Observable<ReviewGetResp>
 
 }

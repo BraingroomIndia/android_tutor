@@ -31,11 +31,11 @@ public class ReviewGetResp {
         this.resMsg = resMsg;
     }
 
-    public List<com.braingroom.tutor.model.resp.ReviewGetResp.Snippet> getData() {
+    public List<Snippet> getData() {
         return data;
     }
 
-    public void setData(List<com.braingroom.tutor.model.resp.ReviewGetResp.Snippet> data) {
+    public void setData(List<Snippet> data) {
         this.data = data;
     }
 
