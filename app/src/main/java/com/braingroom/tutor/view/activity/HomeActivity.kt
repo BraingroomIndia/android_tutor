@@ -1,16 +1,13 @@
 package com.braingroom.tutor.view.activity
 
 
-import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.support.design.widget.NavigationView
 import android.support.v4.widget.DrawerLayout
 import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.widget.Toolbar
 import android.view.MenuItem
-import android.view.View
 import com.braingroom.tutor.R
-import com.braingroom.tutor.databinding.NavHomeHeaderBinding
 import com.braingroom.tutor.viewmodel.activity.HomeViewModel
 
 /*
@@ -55,8 +52,8 @@ class HomeActivity : Activity(), NavigationView.OnNavigationItemSelectedListener
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
-        /*   if(item.itemId==R.id.action_notifications)
-               navigator.navigateActivity(FAQActivity::class.java)*/
+        if (item.itemId == R.id.nav_notification)
+            navigator.navigateActivity(NotificationActivity::class.java)
         return true
     }
 }
