@@ -8,6 +8,7 @@ import com.braingroom.tutor.model.resp.*
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
+import retrofit2.http.Body
 
 
 /*
@@ -83,6 +84,23 @@ class DataFlowService(private val api: ApiService, private val realmCacheService
             }
             resp
         }
+    }
+    fun getMessages():Observable<MessageGetResp>{
+        return api.getMessages(MessagesGetReq(MessagesGetReq.Snippet(userId))).subscribeOn(Schedulers.io()).observeOn(Schedulers.computation()).onErrorReturn { MessageGetResp() }
+    }
+
+    fun getMessageThread(senderId:String):Observable<ChatMessageResp>{
+        return api.getMessageThread(ChatMessageReq(ChatMessageReq.Snippet(userId,senderId))).subscribeOn(Schedulers.io()).observeOn(Schedulers.computation()).onErrorReturn { ChatMessageResp() }
+    }
+
+    fun postReply(senderId: String,message:String):Observable<CommonIdResp>{
+        return api.reply(MessageReplyReq(MessageReplyReq.Snippet(userId,senderId,"","",message,"")))
+    }
+
+    fun changeMessageThreadStatus(senderId: String): Observable<CommonIdResp> {
+
+        return api.changeMessageThreadStatus(ChatMessageReq(ChatMessageReq.Snippet(userId, senderId))).subscribeOn(Schedulers.io())
+                .observeOn(Schedulers.computation())
     }
 
     fun getCategories(): Observable<CommonIdResp> {
@@ -202,4 +220,6 @@ class DataFlowService(private val api: ApiService, private val realmCacheService
                 .observeOn(Schedulers.computation()).map { resp -> resp }
         //TODO Handle error return parts
     }
+
+
 }

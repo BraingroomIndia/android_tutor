@@ -17,10 +17,13 @@
         android:id="@+id/nav_contact"
         android:title="Contact Us" />
     <item
+        android:id="@+id/inbox"
+        android:title="Inbox"/>
+    <item
         android:id="@+id/nav_tnc"
-        android:title="Terms and Condition" />
+        android:title="Terms and Conditions" />
     <item
         android:id="@+id/nav_logout"
-        android:title="Terms &amp; Condition" />
+        android:title="Logout" />
 
 </menu>

@@ -40,6 +40,7 @@
                     android:textColor="@color/colorTextDark"
                     android:textSize="@dimen/text_size_medium" />
 
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -57,6 +58,19 @@
                     android:textSize="@dimen/text_size_medium" />
             </LinearLayout>
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/margin_med"
+                android:layout_gravity="center_vertical"
+                android:gravity="center_vertical"
+                android:paddingBottom="@dimen/padding_small"
+                android:paddingRight="@dimen/padding_small"
+                android:paddingTop="@dimen/padding_small"
+                android:text="@{vm.title}"
+                android:textColor="@color/colorTextDark"
+                android:textSize="@dimen/text_size_medium"
+                android:fontFamily="@font/roboto_regular"/>
 
             <TextView
                 android:layout_width="match_parent"

@@ -4,9 +4,15 @@ import com.braingroom.tutor.R
 import com.braingroom.tutor.view.adapters.SpacingDecoration
 import com.braingroom.tutor.view.adapters.ViewProvider
 import com.braingroom.tutor.viewmodel.ViewModel
+import com.braingroom.tutor.viewmodel.item.LoadingViewModel
 import com.braingroom.tutor.viewmodel.item.MessageItemViewModel
 import com.braingroom.tutor.viewmodel.item.NotifyDataSetChanged
+import com.braingroom.tutor.viewmodel.item.TextIconViewModel
 import io.reactivex.Observable
+import io.reactivex.Scheduler
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.functions.Function
+import io.reactivex.schedulers.Schedulers
 import java.util.*
 
 /**
@@ -21,15 +27,23 @@ class MessageActivityViewModel: ViewModel(){
             override fun getView(vm: ViewModel?): Int {
                 return when(vm){
                     is MessageItemViewModel -> R.layout.item_message
+                    is LoadingViewModel -> R.layout.item_loading_media
                     else -> 0
                 }
             }
         }
     }
     init {
-        Observable.just(0,1).subscribe{ v->
-            item.onNext(MessageItemViewModel("You are dead ","https://pbs.twimg.com/profile_images/839721704163155970/LI_TRk1z_400x400.jpg",userName,"22:22:22"))
-            item.onNext(NotifyDataSetChanged())
-        }
+        apiService.getMessages()
+            .observeOn(Schedulers.io())
+            .subscribe{ resp ->
+                if (resp.getData().isEmpty())
+                    item.onNext(LoadingViewModel())
+                    for (elem in resp.getData()) {
+                        item.onNext(MessageItemViewModel(elem.getMessage().message, elem.getSenderPic(),elem.getSenderName(),
+                                 (elem.getMessage().getModifyDate()),elem.senderId))
+                    }
+                    item.onNext(NotifyDataSetChanged())
+                }
         }
     }

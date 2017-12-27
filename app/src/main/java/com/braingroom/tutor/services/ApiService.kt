@@ -65,6 +65,17 @@ interface ApiService {
     @POST("apis/getUnreadNotificationCount")
     fun getUnreadNotificationCount(@Body req: CommonIdReq): Observable<NotificationCountResp>
 
+    @POST("apis/getMessage")
+    fun getMessages(@Body req:MessagesGetReq):Observable<MessageGetResp>
+
+    @POST("apis/postMessage")
+    fun reply(@Body req:MessageReplyReq):Observable<CommonIdResp>
+
+    @POST("apis/getChatMessages")
+    fun getMessageThread(@Body req:ChatMessageReq):Observable<ChatMessageResp>
+
+    @POST("apis/changeMessageThreadStatus")
+    fun changeMessageThreadStatus(@Body req: ChatMessageReq): Observable<CommonIdResp>
 
     @POST("apis/getLocality")
     fun getLocalities(@Body req: LocalityReq): Observable<CommonIdResp>

@@ -5,6 +5,7 @@ import com.braingroom.tutor.R
 import com.braingroom.tutor.utils.FieldUtils
 import com.braingroom.tutor.utils.VERTICAL
 import com.braingroom.tutor.utils.convertDpToPixel
+import com.braingroom.tutor.utils.isEmpty
 import com.braingroom.tutor.view.adapters.EqualSpacingItemDecoration
 import com.braingroom.tutor.view.adapters.ViewProvider
 import com.braingroom.tutor.viewmodel.ViewModel
@@ -35,7 +36,10 @@ class ReviewActivityViewModel : ViewModel() {
             paginationInProgress = true
             apiService.getReview(pageNumber).observeOn(AndroidSchedulers.mainThread()).subscribe { t ->
                 t.data.forEach { x ->
-                    item.onNext(ReviewItemViewModel(x.reviewMessage, x.rating, x.firstName))
+                    if(isEmpty(x.classId))
+                        item.onNext(ReviewItemViewModel(x.reviewMessage, x.rating, x.firstName,"Vendor Review"))
+                    else
+                        item.onNext(ReviewItemViewModel(x.reviewMessage,x.rating,x.firstName,x.classTopic))
                     item.onNext(NotifyDataSetChanged())
                 }
                 paginationInProgress = false
