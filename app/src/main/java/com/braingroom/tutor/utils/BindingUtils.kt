@@ -92,7 +92,7 @@ fun loadHeader(view: NavigationView, model: HomeViewModel?) {
 fun setImageUrl(imageView: ImageView?, url: String?, placeHolder: Int) {
     Log.v("Binding Utils", "setImageUrl: " + url ?: "null")
     if (!url.isNullOrBlank())
-        imageView?.let { picasso?.load(url)?.placeholder(placeHolder)?.error(placeHolder)?.centerInside()?.resize(it.width, it.height)?.into(it) }
+        imageView?.let { picasso?.load(url)?.placeholder(placeHolder)?.error(placeHolder)?./*centerInside()?.resize(it.width, it.height)?.*/into(it) }
 }
 
 
@@ -113,6 +113,13 @@ fun setBackground(view: View?, drawable: Drawable?) {
     else
         view?.setBackgroundDrawable(drawable)
 }
+
+/*
+@BindingAdapter("android:OnEditorActionListener")
+fun setOnEditorActionListener(view: TextView?, listener: TextView.OnEditorActionListener) {
+    view?.setOnEditorActionListener(listener)
+}
+*/
 
 @BindingAdapter("android:drawableTint")
 fun setBackground(view: TextView?, color: Int) {

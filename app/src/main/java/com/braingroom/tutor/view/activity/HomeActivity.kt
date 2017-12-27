@@ -41,9 +41,6 @@ class HomeActivity : Activity(), NavigationView.OnNavigationItemSelectedListener
         toggle.syncState()
 
 
-        //  hideItem();
-
-
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {

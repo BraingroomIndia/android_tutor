@@ -8,27 +8,24 @@ import com.google.gson.annotations.SerializedName;
  */
 public class ReviewGetReq {
     @SerializedName("braingroom")
-    Snippet braingroom;
+    private final Snippet data;
 
-    public ReviewGetReq(com.braingroom.tutor.model.req.ReviewGetReq.Snippet braingroom) {
-        this.braingroom = braingroom;
+    public ReviewGetReq(Snippet data) {
+        this.data = data;
+    }
+
+    public ReviewGetReq(String vendorId) {
+        this.data = new Snippet(vendorId);
     }
 
     public static class Snippet {
         @SerializedName("vendor_id")
-        String vendorId;
+        private final String vendorId;
 
         public Snippet(String vendorId) {
             this.vendorId = vendorId;
         }
 
-        public String getVendorId() {
-            return vendorId;
-        }
-
-        public void setVendorId(String vendorId) {
-            this.vendorId = vendorId;
-        }
 
     }
 
