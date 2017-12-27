@@ -29,8 +29,8 @@ interface ApiService {
     @POST("apis/BuyerRegistration")
     fun signUp(@Body req: SignUpReq): Observable<SignUpResp>
 
-    @POST("getPaymentDetails/{pageIndex}")
-    fun getPaymentDetails(@Path("pageIndex") pageIndex: String, @Body req:CommonIdReq):Observable<PaymentDetailsResp>
+    @POST("tutorApi/getPaymentSummaryByClasses/{pageIndex}")
+    fun getPaymentSummaryByClasses(@Path("pageIndex") pageIndex: String, @Body req: PaymentSummaryReq): Observable<PaymentDetailsResp>
 
     @POST("getInstitions")
     fun getInstitute(@Body req: InstituteReq): Observable<CommonIdResp>
@@ -85,5 +85,10 @@ interface ApiService {
 
     @POST("apis/getReviews/{pageIndex}")
     fun reviewGet(@Path("pageIndex") pageIndex: String, @Body reviewGetReq: ReviewGetReq): Observable<ReviewGetResp>
+
+
+    @POST("tutorApi/getPaymentSummary")
+    fun getPaymentSummary(@Body req: PaymentSummaryReq): Observable<PaymentSummaryResp>
+
 
 }

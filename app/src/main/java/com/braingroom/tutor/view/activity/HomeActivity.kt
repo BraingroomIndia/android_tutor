@@ -51,6 +51,7 @@ class HomeActivity : Activity(), NavigationView.OnNavigationItemSelectedListener
         vm.preferencesEditor.remove(lodgedIn)
         vm.preferencesEditor.remove(name)
         navigator.navigateActivity(LoginActivity::class.java)
+
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {

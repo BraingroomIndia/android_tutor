@@ -25,13 +25,14 @@ public class PaymentDetailsResp extends BaseResp {
         return isEmpty(data) ? singletonList(new Snippet()) : data;
     }
 
+    @SerializedName("braingroom")
     private List<Snippet> data;
 
     public static class Snippet {
         @SerializedName("class_id")
         private String classId;
 
-        @SerializedName("class_image")
+        @SerializedName("pic_name")
         private String classImage;
 
         @SerializedName("class_topic")

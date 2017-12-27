@@ -4,7 +4,9 @@ package com.braingroom.tutor.viewmodel.activity
 import android.support.annotation.ColorRes
 import android.support.annotation.DrawableRes
 import com.braingroom.tutor.R
+import com.braingroom.tutor.view.activity.AttendanceActivity
 import com.braingroom.tutor.view.activity.NotificationActivity
+import com.braingroom.tutor.view.activity.PaymentDetailActivity
 import com.braingroom.tutor.view.activity.ReviewActivity
 import com.braingroom.tutor.view.adapters.ViewProvider
 import com.braingroom.tutor.viewmodel.ViewModel
@@ -54,13 +56,13 @@ class HomeViewModel : ViewModel() {
         topDrawableList += R.drawable.ic_payment_36dp//3
         textList += "Payment Details" //3
         bottomDrawableList += R.color.material_pink200  //3
-        actionList += Action { } //3
+        actionList += Action { navigator?.navigateActivity(PaymentDetailActivity::class.java) } //3
 
 
         topDrawableList += R.drawable.ic_attendance_36dp//4
         textList += "Attendance" //4
         bottomDrawableList += R.color.material_lightgreen500 //4
-        actionList += Action { } //4
+        actionList += Action { navigator?.navigateActivity(AttendanceActivity::class.java) } //4
 
 
         topDrawableList += R.drawable.ic_gallery_36dp//5

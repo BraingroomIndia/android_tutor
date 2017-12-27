@@ -42,8 +42,8 @@ class DataFlowService(private val api: ApiService, private val realmCacheService
                 onErrorReturn { ClassListResp() }.map { resp -> resp }
     }
 
-    fun getPaymentDetails(pageNumber: Int): Observable<PaymentDetailsResp> {
-        return api.getPaymentDetails(if (pageNumber > 1) pageNumber.toString() else "", CommonIdReq(userId)).subscribeOn(Schedulers.io()).observeOn(Schedulers.computation()).
+    fun getPaymentDetails(pageNumber: Int, starDate: String, endDate: String, keyword: String): Observable<PaymentDetailsResp> {
+        return api.getPaymentSummaryByClasses(if (pageNumber > 1) pageNumber.toString() else "", PaymentSummaryReq(userId, starDate, endDate, keyword)).subscribeOn(Schedulers.io()).observeOn(Schedulers.computation()).
                 onErrorReturn { PaymentDetailsResp() }
     }
 
@@ -180,9 +180,14 @@ class DataFlowService(private val api: ApiService, private val realmCacheService
     }
 
     fun getReview(pageNumber: Int): Observable<ReviewGetResp> {
-        return api.reviewGet(pageNumber.toString(), ReviewGetReq(ReviewGetReq.Snippet(userId))).subscribeOn(Schedulers.io())
+        return api.reviewGet(pageNumber.toString(), ReviewGetReq(userId)).subscribeOn(Schedulers.io())
                 .observeOn(Schedulers.computation()).onErrorReturnItem(ReviewGetResp())
 
+    }
+
+    fun getPaymentSummary(starDate: String, endDate: String): Observable<PaymentSummaryResp> {
+        return api.getPaymentSummary(PaymentSummaryReq(userId, starDate, endDate)).onErrorReturnItem(PaymentSummaryResp()).subscribeOn(Schedulers.io())
+                .observeOn(Schedulers.computation())
     }
 
 
