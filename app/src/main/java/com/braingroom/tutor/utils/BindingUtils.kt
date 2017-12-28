@@ -50,7 +50,7 @@ fun toOnClickListener(listener: Action?): View.OnClickListener? {
             try {
                 listener.run()
             } catch (e: Exception) {
-                e.printStackTrace();
+                Log.e("toOnClickListener", e.message, e)
             }
         }
         else -> null
@@ -70,7 +70,7 @@ fun setImageUri(view: ImageView?, imageUrl: String?, placeHolder: Int?) {
     if (!isEmpty(imageUrl)) {
         Log.v("setImageUri", imageUrl + "   " + placeHolder)
         if (placeHolder != null)
-            view?.let { picasso.load(imageUrl).placeholder(placeHolder).error(placeHolder).into(it) }
+            view?.let { picasso.load(imageUrl).placeholder(placeHolder).error(placeHolder).fit().centerCrop().into(it) }
         else setImageUri(view, imageUrl)
     }
 }

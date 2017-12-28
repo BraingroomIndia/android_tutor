@@ -4,10 +4,7 @@ package com.braingroom.tutor.viewmodel.activity
 import android.support.annotation.ColorRes
 import android.support.annotation.DrawableRes
 import com.braingroom.tutor.R
-import com.braingroom.tutor.view.activity.AttendanceActivity
-import com.braingroom.tutor.view.activity.NotificationActivity
-import com.braingroom.tutor.view.activity.PaymentDetailActivity
-import com.braingroom.tutor.view.activity.ReviewActivity
+import com.braingroom.tutor.view.activity.*
 import com.braingroom.tutor.view.adapters.ViewProvider
 import com.braingroom.tutor.viewmodel.ViewModel
 import com.braingroom.tutor.viewmodel.item.HomeItemViewModel
@@ -50,7 +47,7 @@ class HomeViewModel : ViewModel() {
         topDrawableList += R.drawable.ic_myclass_36dp//2
         textList += "My Class"   //2
         bottomDrawableList += R.color.material_blue400  //2
-        actionList += Action { } //2
+        actionList += Action { navigator?.navigateActivity(MyClassesActivity::class.java) } //2
 
 
         topDrawableList += R.drawable.ic_payment_36dp//3
@@ -68,13 +65,13 @@ class HomeViewModel : ViewModel() {
         topDrawableList += R.drawable.ic_gallery_36dp//5
         textList += "Media" //5
         bottomDrawableList += R.color.material_purpleA100  //5
-        actionList += Action { } //5
+        actionList += Action { navigator?.navigateActivity(MediaActivity::class.java) } //5
 
 
         topDrawableList += R.drawable.ic_calnder_36dp//6
         textList += "Booking Calender" //6
         bottomDrawableList += R.color.material_cyan300  //6
-        actionList += Action { } //6
+        actionList += Action {  } //6
 
 
         topDrawableList += R.drawable.ic_review_36dp//7
@@ -92,8 +89,5 @@ class HomeViewModel : ViewModel() {
         for (i in 0..7)
             item.onNext(HomeItemViewModel(topDrawableList[i], bottomDrawableList[i], textList[i], actionList[i]))
         item.onNext(NotifyDataSetChanged())
-
-//            homeItemViewModels = (0..7).mapTo(ArrayList<HomeItemViewModel>(8)) { HomeItemViewModel(topDrawableList[it], bottomDrawableList[it], "Hello") }
-
     }
 }

@@ -1,5 +1,6 @@
 package com.braingroom.tutor.viewmodel.activity
 
+import android.databinding.ObservableField
 import android.util.Log
 import com.braingroom.tutor.R
 import com.braingroom.tutor.model.req.GalleryReq
@@ -28,26 +29,22 @@ class MediaViewModel : ViewModel() {
             }
         }
     }
-    var isVideo = false;
+    var isVideo = ObservableField<Boolean>(false)
     val onVideo: Action by lazy {
-        object : Action {
-            override fun run() {
-                if (!isVideo) {
-                    isVideo = !isVideo
-                    item.onNext(RefreshViewModel())
-                    makeCall()
-                }
+        Action {
+            if (!isVideo.get()) {
+                isVideo.set(!isVideo.get())
+                item.onNext(RefreshViewModel())
+                makeCall()
             }
         }
     }
     val onImage: Action by lazy {
-        object : Action {
-            override fun run() {
-                if (isVideo) {
-                    isVideo = !isVideo
-                    item.onNext(RefreshViewModel())
-                    makeCall()
-                }
+        Action {
+            if (isVideo.get()) {
+                 isVideo.set(!isVideo.get())
+                item.onNext(RefreshViewModel())
+                makeCall()
             }
         }
     }
@@ -57,7 +54,7 @@ class MediaViewModel : ViewModel() {
     }
 
     fun makeCall() {
-        apiService.getGallery(GalleryReq.Snippet("568", isVideo)).doOnSubscribe { disposable ->
+        apiService.getGallery(GalleryReq.Snippet("568", isVideo.get())).doOnSubscribe { disposable ->
             Log.d("called", "called")
             for (i in 0..4) {
                 item.onNext(LoadingViewModel())
@@ -74,7 +71,7 @@ class MediaViewModel : ViewModel() {
 
                             item.onNext(TextIconViewModel(snippet.mediaTitle, snippet.mediaPath, object : Action {
                                 override fun run() {
-                                    if (isVideo) {
+                                    if (isVideo.get()) {
 
                                     } else {
 

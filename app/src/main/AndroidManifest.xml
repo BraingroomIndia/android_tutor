@@ -83,5 +83,6 @@
             android:name=".view.activity.NotificationActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".view.activity.PaymentDetailActivity" />
+        <activity android:name=".view.activity.MediaActivity" />
     </application>
 </manifest>
