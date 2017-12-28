@@ -35,6 +35,7 @@ class PaymentDetailViewModel() : ViewModel() {
     }
 
     val searchAction: TextView.OnEditorActionListener by lazy {
+        isNotVisible.set(true)
         TextView.OnEditorActionListener { p0, p1, p2 ->
             if (p1 == EditorInfo.IME_ACTION_SEARCH) {
                 item.onNext(RefreshViewModel())
@@ -64,7 +65,6 @@ class PaymentDetailViewModel() : ViewModel() {
                 }, { throwable ->
                     Log.e(TAG, throwable.message, throwable)
                 }, {
-
                     item.onNext(NotifyDataSetChanged())
                 }
                 )

@@ -71,6 +71,9 @@ interface ApiService {
     @POST("apis/postMessage")
     fun reply(@Body req:MessageReplyReq):Observable<CommonIdResp>
 
+    @POST("changePassword")
+    fun changePassword(@Body req: ChangePasswordReq): Observable<ChangePasswordResp>
+
     @POST("apis/getChatMessages")
     fun getMessageThread(@Body req:ChatMessageReq):Observable<ChatMessageResp>
 

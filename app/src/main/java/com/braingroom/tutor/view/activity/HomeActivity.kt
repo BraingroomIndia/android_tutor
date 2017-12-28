@@ -66,6 +66,9 @@ class HomeActivity : Activity(), NavigationView.OnNavigationItemSelectedListener
         if(item.itemId == R.id.nav_faq){
             navigator.navigateActivity(FAQActivity::class.java)
         }
+        if(item.itemId == R.id.nav_change_password){
+            navigator.navigateActivity(ChangePasswordActivity::class.java)
+        }
         return true
     }
 }

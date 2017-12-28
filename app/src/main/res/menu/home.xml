@@ -23,6 +23,9 @@
         android:id="@+id/nav_tnc"
         android:title="Terms and Conditions" />
     <item
+        android:id="@+id/nav_change_password"
+        android:title="Change Password" />
+    <item
         android:id="@+id/nav_logout"
         android:title="Logout" />
 

@@ -83,6 +83,7 @@
         <activity
             android:name=".view.activity.AttendanceActivity"
             android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".view.activity.ChangePasswordActivity" />
 
     </application>
 </manifest>

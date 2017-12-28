@@ -93,6 +93,12 @@ class DataFlowService(private val api: ApiService, private val realmCacheService
         return api.getMessageThread(ChatMessageReq(ChatMessageReq.Snippet(userId,senderId))).subscribeOn(Schedulers.io()).observeOn(Schedulers.computation()).onErrorReturn { ChatMessageResp() }
     }
 
+    fun changePassword(snippet: ChangePasswordReq.Snippet): Observable<ChangePasswordResp> {
+
+        return api.changePassword(ChangePasswordReq(snippet)).subscribeOn(Schedulers.io())
+                .observeOn(Schedulers.computation())
+    }
+
     fun postReply(senderId: String,message:String):Observable<CommonIdResp>{
         return api.reply(MessageReplyReq(MessageReplyReq.Snippet(userId,senderId,"","",message,""))).subscribeOn(Schedulers.io()).observeOn(Schedulers.computation()).onErrorReturn { CommonIdResp() }
     }
