@@ -94,7 +94,7 @@ class DataFlowService(private val api: ApiService, private val realmCacheService
     }
 
     fun postReply(senderId: String,message:String):Observable<CommonIdResp>{
-        return api.reply(MessageReplyReq(MessageReplyReq.Snippet(userId,senderId,"","",message,"")))
+        return api.reply(MessageReplyReq(MessageReplyReq.Snippet(userId,senderId,"","",message,""))).subscribeOn(Schedulers.io()).observeOn(Schedulers.computation()).onErrorReturn { CommonIdResp() }
     }
 
     fun changeMessageThreadStatus(senderId: String): Observable<CommonIdResp> {
