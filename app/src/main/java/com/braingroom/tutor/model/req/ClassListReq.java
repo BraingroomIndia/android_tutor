@@ -30,7 +30,7 @@ public class ClassListReq {
 
         @SerializedName("expired")
         private String mExpired;
-        @SerializedName("id")
+        @SerializedName("tutor_id")
         private String mId;
 
         public Snippet(boolean isBatch, boolean isExpired, String id) {

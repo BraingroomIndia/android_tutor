@@ -23,7 +23,7 @@ interface ApiService {
     @POST("apis/getProfile")
     fun getProfile(@Body req: CommonIdReq): Observable<MyProfileResp>
 
-    @POST("apis/getAllClasses/{pageIndex}")
+    @POST("tutorApi/getAllClasses/{pageIndex}")
     fun getAllClasses(@Path("pageIndex") pageIndex: String, @Body req: ClassListReq): Observable<ClassListResp>
 
     @POST("apis/BuyerRegistration")
