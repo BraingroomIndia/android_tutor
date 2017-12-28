@@ -53,6 +53,12 @@
         <activity android:name=".view.activity.NotificationActivity" />
         <activity android:name=".view.activity.PaymentDetailActivity" />
         <activity android:name=".view.activity.MediaActivity" />
+        <activity android:name=".view.activity.MessageThreadActivity" />
+        <activity android:name=".view.activity.ReviewActivity" />
+        <activity
+            android:name=".view.activity.AttendanceActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".view.activity.ChangePasswordActivity" />
 
         <!--FaceBook Login-->
         <meta-data
@@ -78,12 +84,7 @@
                 <data android:scheme="@string/fb_login_protocol_scheme" />
             </intent-filter>
         </activity>
-        <activity android:name=".view.activity.MessageThreadActivity" />
-        <activity android:name=".view.activity.ReviewActivity" />
-        <activity
-            android:name=".view.activity.AttendanceActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".view.activity.ChangePasswordActivity" />
+
 
     </application>
 </manifest>
