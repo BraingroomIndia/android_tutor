@@ -1,11 +1,9 @@
 package com.braingroom.tutor.viewmodel.activity
 
-import android.databinding.ObservableField
+import android.databinding.ObservableBoolean
 import android.util.Log
 import com.braingroom.tutor.R
 import com.braingroom.tutor.model.req.GalleryReq
-import com.braingroom.tutor.model.resp.GalleryResp
-import com.braingroom.tutor.utils.CustomDrawable
 import com.braingroom.tutor.view.adapters.ViewProvider
 import com.braingroom.tutor.viewmodel.ViewModel
 import com.braingroom.tutor.viewmodel.item.*
@@ -29,7 +27,7 @@ class MediaViewModel : ViewModel() {
             }
         }
     }
-    var isVideo = ObservableField<Boolean>(false)
+    var isVideo = ObservableBoolean(false)
     val onVideo: Action by lazy {
         Action {
             if (!isVideo.get()) {
@@ -42,7 +40,7 @@ class MediaViewModel : ViewModel() {
     val onImage: Action by lazy {
         Action {
             if (isVideo.get()) {
-                 isVideo.set(!isVideo.get())
+                isVideo.set(!isVideo.get())
                 item.onNext(RefreshViewModel())
                 makeCall()
             }

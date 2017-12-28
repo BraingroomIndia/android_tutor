@@ -18,14 +18,18 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
-
-        <EditText
+        <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:OnEditorActionListener="@{(p0, p1, p2)->vm.searchAction.onEditorAction(p0, p1, p2)}"
-            android:imeOptions="actionSearch"
-            android:inputType="text"
-            android:text="@={vm.keyword}" />
+            android:hint="Keyword">
+            <android.support.design.widget.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:OnEditorActionListener="@{(p0, p1, p2)->vm.searchAction.onEditorAction(p0, p1, p2)}"
+                android:imeOptions="actionSearch"
+                android:inputType="text"
+                android:text="@={vm.keyword}"/>
+        </android.support.design.widget.TextInputLayout>
 
         <RelativeLayout
             android:layout_width="match_parent"

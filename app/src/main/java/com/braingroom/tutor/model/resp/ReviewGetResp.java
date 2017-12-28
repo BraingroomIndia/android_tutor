@@ -78,6 +78,12 @@ public class ReviewGetResp {
 
         @SerializedName("class_id")
         private String classId;
+        @SerializedName("class_topic")
+        private String classTopic;
+
+        public String getClassTopic() {
+            return classTopic;
+        }
 
         public String getId() {
             return id;

@@ -67,12 +67,12 @@ fun setImageUri(view: ImageView?, imageUrl: String?) {
 
 @BindingAdapter(value = *arrayOf("android:src", "placeholder"), requireAll = true)
 fun setImageUri(view: ImageView?, imageUrl: String?, placeHolder: Int?) {
-    if (!isEmpty(imageUrl)) {
+    if (!imageUrl.isNullOrBlank()) {
         Log.v("setImageUri", imageUrl + "   " + placeHolder)
         if (placeHolder != null)
             view?.let { picasso.load(imageUrl).placeholder(placeHolder).error(placeHolder).fit().centerCrop().into(it) }
         else setImageUri(view, imageUrl)
-    }
+    } else if (placeHolder != null && placeHolder != 0) view?.let { picasso.load(placeHolder).fit().centerCrop().into(it) }
 }
 
 @BindingAdapter("android:src")

@@ -83,11 +83,10 @@ class HomeViewModel : ViewModel() {
         topDrawableList += R.drawable.ic_promot_36dp//8
         textList += "Promote" //8
         bottomDrawableList += R.color.material_lightgreen600//8
-        actionList += Action { navigator?.navigateActivity(NotificationActivity::class.java) } //8
+        actionList += Action {  } //8
 
 
-        for (i in 0..7)
-            item.onNext(HomeItemViewModel(topDrawableList[i], bottomDrawableList[i], textList[i], actionList[i]))
+        (0..7).forEach { i -> item.onNext(HomeItemViewModel(topDrawableList[i], bottomDrawableList[i], textList[i], actionList[i])) }
         item.onNext(NotifyDataSetChanged())
     }
 }

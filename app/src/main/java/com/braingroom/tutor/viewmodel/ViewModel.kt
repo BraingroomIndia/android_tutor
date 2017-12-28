@@ -24,6 +24,8 @@ open class ViewModel {
         CompositeDisposable()
     }
 
+    var pageNumber = 1
+    var paginationInProgress = false
     @Suppress("PropertyName")
     val TAG: String
         get() = this::class.java.simpleName ?: ""
@@ -82,7 +84,11 @@ open class ViewModel {
         CustomDrawable(R.drawable.splash_screen)
     }
 
-    open fun paginate() {}
+    open fun paginate() {
+        if (pageNumber > -1 && !paginationInProgress)
+            callAgain.set(callAgain.get() + 1)
+    }
+
     open fun onResume() {}
     open fun onPause() {}
     open fun onDestroy() {
