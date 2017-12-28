@@ -49,6 +49,11 @@
         <!--My Profile Activity-->
         <activity android:name=".view.activity.MyProfileActivity" />
 
+        <activity android:name=".view.activity.FAQActivity" />
+        <activity android:name=".view.activity.NotificationActivity" />
+        <activity android:name=".view.activity.PaymentDetailActivity" />
+        <activity android:name=".view.activity.MediaActivity" />
+
         <!--FaceBook Login-->
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
@@ -73,16 +78,11 @@
                 <data android:scheme="@string/fb_login_protocol_scheme" />
             </intent-filter>
         </activity>
-        <activity android:name=".view.activity.MessageThreadActivity"/>
+        <activity android:name=".view.activity.MessageThreadActivity" />
         <activity android:name=".view.activity.ReviewActivity" />
         <activity
             android:name=".view.activity.AttendanceActivity"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".view.activity.FAQActivity"/>
-        <activity
-            android:name=".view.activity.NotificationActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".view.activity.PaymentDetailActivity" />
-        <activity android:name=".view.activity.MediaActivity" />
+
     </application>
 </manifest>

@@ -6,12 +6,10 @@ import android.support.v7.widget.RecyclerView
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import com.braingroom.tutor.R
 import com.braingroom.tutor.utils.defaultBinder
 import com.braingroom.tutor.viewmodel.ViewModel
-import com.braingroom.tutor.viewmodel.item.LoadingViewModel
-import com.braingroom.tutor.viewmodel.item.NotifyDataSetChanged
-import com.braingroom.tutor.viewmodel.item.RefreshViewModel
-import com.braingroom.tutor.viewmodel.item.RemoveLoadingViewModel
+import com.braingroom.tutor.viewmodel.item.*
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
@@ -47,8 +45,12 @@ class RecyclerViewAdapterObservable(observableViewModels: ReplaySubject<out View
                             is NotifyDataSetChanged -> {
 
                             }
+                            is LoadingViewModel -> {
+                                Log.v(TAG, "Added Loading items ")
+                                iterator.add(it)
+                            }
                             else -> {
-                                Log.v(TAG, "Added Actual items Named ")
+                                Log.v(TAG, "Added Actual items Named " + it.TAG)
                                 iterator.add(it)
                             }
                         }
@@ -59,6 +61,8 @@ class RecyclerViewAdapterObservable(observableViewModels: ReplaySubject<out View
 
 
     override fun getItemViewType(position: Int): Int {
+        if (latestViewModels[position] is EmptyItemViewModel)
+            return R.layout.item_empty_view
         try {
             return if (latestViewModels.size > position) viewProvider.getView(latestViewModels[position]) else 0
         } catch (e: Exception) {

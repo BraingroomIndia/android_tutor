@@ -86,8 +86,7 @@ class HomeViewModel : ViewModel() {
         actionList += Action {  } //8
 
 
-        for (i in 0..7)
-            item.onNext(HomeItemViewModel(topDrawableList[i], bottomDrawableList[i], textList[i], actionList[i]))
+        (0..7).forEach { i -> item.onNext(HomeItemViewModel(topDrawableList[i], bottomDrawableList[i], textList[i], actionList[i])) }
         item.onNext(NotifyDataSetChanged())
     }
 }

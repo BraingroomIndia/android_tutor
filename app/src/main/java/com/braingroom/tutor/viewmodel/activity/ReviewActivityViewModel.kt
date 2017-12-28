@@ -17,8 +17,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
  * Created by ashketchup on 22/12/17.
  */
 class ReviewActivityViewModel : ViewModel() {
-    var paginationInProgress = false
-    var pageNumber = 1
+
     val view: ViewProvider by lazy {
         object : ViewProvider {
             override fun getView(vm: ViewModel?): Int {

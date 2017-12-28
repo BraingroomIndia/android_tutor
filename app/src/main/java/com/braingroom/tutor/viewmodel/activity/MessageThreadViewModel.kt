@@ -1,17 +1,16 @@
 package com.braingroom.tutor.viewmodel.activity
 
 import android.databinding.ObservableField
+import android.util.Log
 import com.braingroom.tutor.R
 import com.braingroom.tutor.utils.FieldUtils
 import com.braingroom.tutor.view.adapters.ViewProvider
 import com.braingroom.tutor.viewmodel.ViewModel
-import com.braingroom.tutor.viewmodel.item.MessageThreadItemViewModel
-import com.braingroom.tutor.viewmodel.item.NotifyDataSetChanged
-import com.braingroom.tutor.viewmodel.item.RefreshViewModel
+import com.braingroom.tutor.viewmodel.item.*
 import io.reactivex.functions.Action
 
 
-/**
+/*
  * Created by ashketchup on 27/12/17.
  */
 class MessageThreadViewModel(val senderId: String, uiHelper: UiHelper) : ViewModel() {
@@ -29,6 +28,7 @@ class MessageThreadViewModel(val senderId: String, uiHelper: UiHelper) : ViewMod
             override fun getView(vm: ViewModel?): Int {
                 return when (vm) {
                     is MessageThreadItemViewModel -> R.layout.item_message_thread
+                    is LoadingViewModel -> R.layout.item_loading_media
                     else -> 0
                 }
             }
@@ -51,19 +51,24 @@ class MessageThreadViewModel(val senderId: String, uiHelper: UiHelper) : ViewMod
     init {
         apiService.changeMessageThreadStatus(senderId).subscribe()
         FieldUtils.toObservable(callAgain).subscribe {
-            apiService.getMessageThread(senderId).doFinally { uiHelper.scrollToEnd() }.map { resp ->
-                val data = ArrayList<MessageThreadViewModel>()
-                resp.data.mapTo(data) { MessageThreadItemViewModel(it.text, it.userId == this.userId) }
-            }.subscribe { resp ->
-                item.onNext(RefreshViewModel())
-                if (resp.data != null) {
-                    for (x in resp.data) {
-                        item.onNext(MessageThreadItemViewModel(x.text, x.userId == userId))
+            apiService.getMessageThread(senderId).map { resp ->
+                val viewModelList: ArrayList<MessageThreadItemViewModel> = ArrayList()
+                resp.data.mapTo(viewModelList) { MessageThreadItemViewModel(it.text, it.userId == this.userId) }
+            }.doOnSubscribe { disposable ->
+                compositeDisposable.add(disposable)
+                (0..5).forEach { _ -> item.onNext(LoadingViewModel()) }
+                item.onNext(NotifyDataSetChanged())
 
-                    }
-                    item.onNext(NotifyDataSetChanged())
-                }
-            }
+            }.subscribe(
+                    { viewModelList ->
+                        item.onNext(RefreshViewModel())
+                        if (viewModelList.isEmpty())
+                            item.onNext(EmptyItemViewModel("", R.drawable.ic_no_post_64dp, "No Messages"))
+                        else viewModelList.forEach { viewModel -> item.onNext(viewModel) }
+                        item.onNext(NotifyDataSetChanged())
+                    }, { throwable -> Log.e(TAG, throwable.message, throwable) },
+                    { uiHelper.scrollToEnd() }
+            )
         }
     }
 }

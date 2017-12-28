@@ -12,6 +12,7 @@ import com.braingroom.tutor.model.req.SocialLoginReq;
 import com.braingroom.tutor.model.resp.LoginResp;
 import com.braingroom.tutor.utils.CustomDrawable;
 import com.braingroom.tutor.view.activity.LoginActivity.UIHelper;
+import com.braingroom.tutor.view.activity.SignupActivity;
 import com.braingroom.tutor.viewmodel.ViewModel;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -60,6 +61,13 @@ public class LoginViewModel extends ViewModel {
         }
     };
 
+    public final Action onRegisterClicked = new Action() {
+        @Override
+        public void run() throws Exception {
+            if (getNavigator() != null)
+                getNavigator().navigateActivity(SignupActivity.class);
+        }
+    };
 
     public LoginViewModel(UIHelper uiHelper) {
         loginButton = new CustomDrawable(R.drawable.rounded_corner_line, R.color.material_deeporange600);
