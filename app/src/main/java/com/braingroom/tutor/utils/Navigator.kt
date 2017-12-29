@@ -6,6 +6,7 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.support.annotation.AnimatorRes
+import android.support.v4.app.ActivityCompat.startActivityForResult
 
 import android.util.Log
 import com.braingroom.tutor.R
@@ -15,6 +16,7 @@ import com.braingroom.tutor.view.fragment.BaseFragment
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException
 import com.google.android.gms.common.GooglePlayServicesRepairableException
 import com.google.android.gms.location.places.ui.PlaceAutocomplete
+import com.google.android.youtube.player.YouTubeStandalonePlayer
 import com.tbruyelle.rxpermissions2.RxPermissions
 
 /*
@@ -113,8 +115,9 @@ class Navigator(val activity: Activity?) {
 
     }
 
-    fun openStandaloneYoutube(videoId: String) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    fun openStandaloneYoutube(videoId: String, reqCode: Int) {
+        val intent = YouTubeStandalonePlayer.createVideoIntent(activity, "AIzaSyBsaNQgFsk2LbSmXydzNAhBdsQ4YkzAoh0", videoId, 100, true, true)
+        activity?.startActivityForResult(intent, reqCode)
     }
 
     fun openStandaloneVideo(videoUrl: String) {

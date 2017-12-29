@@ -67,10 +67,10 @@ class MediaViewModel : ViewModel() {
                         item.onNext(RemoveLoadingViewModel())
                         for (snippet in resp.data) {
 
-                            item.onNext(TextIconViewModel(snippet.mediaTitle, snippet.mediaPath, object : Action {
+                            item.onNext(TextIconViewModel(snippet.mediaTitle, snippet.mediaThumb, object : Action {
                                 override fun run() {
                                     if (isVideo.get()) {
-
+                                        navigator?.openStandaloneYoutube(snippet.videoId, 12312)
                                     } else {
 
                                     }
