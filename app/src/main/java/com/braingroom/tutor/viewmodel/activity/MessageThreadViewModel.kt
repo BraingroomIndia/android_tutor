@@ -29,7 +29,8 @@ class MessageThreadViewModel(val senderId: String, uiHelper: UiHelper) : ViewMod
                 return when (vm) {
                     is MessageThreadItemViewModel -> R.layout.item_message_thread
                     is LoadingViewModel -> R.layout.item_loading_media
-                    else -> 0
+                    null -> throw NullPointerException()
+                    else -> throw NoSuchFieldError()
                 }
             }
         }

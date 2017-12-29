@@ -85,12 +85,13 @@ class DataFlowService(private val api: ApiService, private val realmCacheService
             resp
         }
     }
-    fun getMessages():Observable<MessageGetResp>{
+
+    fun getMessages(): Observable<MessageGetResp> {
         return api.getMessages(MessagesGetReq(MessagesGetReq.Snippet(userId))).subscribeOn(Schedulers.io()).observeOn(Schedulers.computation()).onErrorReturn { MessageGetResp() }
     }
 
-    fun getMessageThread(senderId:String):Observable<ChatMessageResp>{
-        return api.getMessageThread(ChatMessageReq(ChatMessageReq.Snippet(userId,senderId))).subscribeOn(Schedulers.io()).observeOn(Schedulers.computation()).onErrorReturn { ChatMessageResp() }
+    fun getMessageThread(senderId: String): Observable<ChatMessageResp> {
+        return api.getMessageThread(ChatMessageReq(ChatMessageReq.Snippet(userId, senderId))).subscribeOn(Schedulers.io()).observeOn(Schedulers.computation()).onErrorReturn { ChatMessageResp() }
     }
 
     fun changePassword(snippet: ChangePasswordReq.Snippet): Observable<ChangePasswordResp> {
@@ -99,8 +100,8 @@ class DataFlowService(private val api: ApiService, private val realmCacheService
                 .observeOn(Schedulers.computation())
     }
 
-    fun postReply(senderId: String,message:String):Observable<CommonIdResp>{
-        return api.reply(MessageReplyReq(MessageReplyReq.Snippet(userId,senderId,"","",message,""))).subscribeOn(Schedulers.io()).observeOn(Schedulers.computation()).onErrorReturn { CommonIdResp() }
+    fun postReply(senderId: String, message: String): Observable<CommonIdResp> {
+        return api.reply(MessageReplyReq(MessageReplyReq.Snippet(userId, senderId, "", "", message, ""))).subscribeOn(Schedulers.io()).observeOn(Schedulers.computation()).onErrorReturn { CommonIdResp() }
     }
 
     fun changeMessageThreadStatus(senderId: String): Observable<CommonIdResp> {
@@ -230,6 +231,16 @@ class DataFlowService(private val api: ApiService, private val realmCacheService
         return api.getUnreadNotificationCount(CommonIdReq(CommonIdReq.Snippet(userId))).subscribeOn(Schedulers.io())
                 .observeOn(Schedulers.computation()).map { resp -> resp }
         //TODO Handle error return parts
+    }
+
+    fun getStartOrEndDetails(startOrEndCode: Int, isStartCode: Boolean): Observable<AttendanceDetailResp> {
+        return api.getStartOrEndDetails(AttendanceDetailReq(userId, startOrEndCode, isStartCode)).onErrorReturnItem(AttendanceDetailResp()).subscribeOn(Schedulers.io())
+                .observeOn(Schedulers.computation())
+    }
+
+    fun getStartOrEndDetails(req: AttendanceDetailReq): Observable<AttendanceDetailResp> {
+        return api.getStartOrEndDetails(req).onErrorReturnItem(AttendanceDetailResp()).subscribeOn(Schedulers.io())
+                .observeOn(Schedulers.computation())
     }
 
 

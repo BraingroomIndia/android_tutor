@@ -4,7 +4,7 @@ import com.braingroom.tutor.R
 import com.braingroom.tutor.viewmodel.ViewModel
 import io.reactivex.functions.Action
 
-/**
+/*
  * Created by ashketchup on 7/12/17.
  */
 class NotificationItemViewModel(read: Boolean, val title: String) : ViewModel() {
@@ -18,7 +18,7 @@ class NotificationItemViewModel(read: Boolean, val title: String) : ViewModel() 
 
     val onClick: Action by lazy {
         Action {
-            TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+            TODO("not implemented")
         }
     }
 

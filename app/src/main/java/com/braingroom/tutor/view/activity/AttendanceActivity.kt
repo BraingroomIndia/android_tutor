@@ -37,9 +37,12 @@ import android.view.MotionEvent
 import android.view.ScaleGestureDetector
 import android.view.View
 import android.widget.Toast
+import com.afollestad.materialdialogs.MaterialDialog.SingleButtonCallback
+import com.afollestad.materialdialogs.MaterialDialog
 
 
 import com.braingroom.tutor.R
+import com.braingroom.tutor.model.req.AttendanceDetailReq
 import com.braingroom.tutor.utils.GraphicOverlay
 import com.braingroom.tutor.view.activity.barcodereader.BarcodeGraphic
 import com.braingroom.tutor.view.activity.barcodereader.BarcodeGraphicTracker
@@ -72,6 +75,10 @@ class AttendanceActivity : Activity(), BarcodeGraphicTracker.BarcodeUpdateListen
     // helper objects for detecting taps and pinches.
     private var scaleGestureDetector: ScaleGestureDetector? = null
     private var gestureDetector: GestureDetector? = null
+
+    val gson by lazy {
+        applicationContext.appModule.gson
+    }
 
     override val vm by lazy { ViewModel() }
 
@@ -415,7 +422,16 @@ class AttendanceActivity : Activity(), BarcodeGraphicTracker.BarcodeUpdateListen
     }
 
     override fun onBarcodeDetected(barcode: Barcode) {
-        //do something with barcode data returned
+        if (barcode.displayValue.contains("braingroom"))
+            apiService.getStartOrEndDetails(gson.fromJson(barcode.displayValue, AttendanceDetailReq::class.java)).subscribe(
+                    { resp ->
+                        if (resp.resCode)
+                            messageHelper.showAcceptableInfo(resp.resMsg, "Cancel", SingleButtonCallback { dialog, which -> Log.v(TAG, resp.resMsg) })
+                        else messageHelper.showAcceptableInfo("Ticket Info", resp.data.learnerName + resp.data.classTopic, "Confirm", "Cancel",
+                                SingleButtonCallback { _, _ -> Log.v(TAG, resp.resMsg) }, SingleButtonCallback { _, _ -> Log.v(TAG, resp.resMsg) })
+
+                    })
+
     }
 
     companion object {

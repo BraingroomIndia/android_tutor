@@ -27,7 +27,13 @@ class HomeViewModel : ViewModel() {
     val view: ViewProvider by lazy {
         object : ViewProvider {
             override fun getView(vm: ViewModel?): Int {
-                return R.layout.item_home
+                if (vm == null)
+                    throw NullPointerException()
+                return when (vm) {
+                    is HomeItemViewModel -> R.layout.item_home
+                    else -> throw NoSuchFieldError()
+                }
+
             }
         }
     }
@@ -71,7 +77,7 @@ class HomeViewModel : ViewModel() {
         topDrawableList += R.drawable.ic_calnder_36dp//6
         textList += "Booking Calender" //6
         bottomDrawableList += R.color.material_cyan300  //6
-        actionList += Action {  } //6
+        actionList += Action { } //6
 
 
         topDrawableList += R.drawable.ic_review_36dp//7
@@ -83,7 +89,7 @@ class HomeViewModel : ViewModel() {
         topDrawableList += R.drawable.ic_promot_36dp//8
         textList += "Promote" //8
         bottomDrawableList += R.color.material_lightgreen600//8
-        actionList += Action {  } //8
+        actionList += Action { } //8
 
 
         (0..7).forEach { i -> item.onNext(HomeItemViewModel(topDrawableList[i], bottomDrawableList[i], textList[i], actionList[i])) }

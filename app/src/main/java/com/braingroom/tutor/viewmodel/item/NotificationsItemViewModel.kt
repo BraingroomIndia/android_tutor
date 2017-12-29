@@ -7,7 +7,7 @@ import io.reactivex.functions.Action
 import java.text.SimpleDateFormat
 import java.util.*
 
-/**
+/*
  * Created by ashketchup on 26/12/17.
  */
 class NotificationsItemViewModel(val title: String, val postId: String,
@@ -28,15 +28,4 @@ class NotificationsItemViewModel(val title: String, val postId: String,
     }
 
 
-    private fun getHumanDate(timeStamp: Long): String {
-
-        try {
-            val sdf = SimpleDateFormat("MM/dd/yyyy")
-            val netDate = Date(timeStamp)
-            return sdf.format(netDate)
-        } catch (ex: Exception) {
-            return "xx"
-        }
-
-    }
 }

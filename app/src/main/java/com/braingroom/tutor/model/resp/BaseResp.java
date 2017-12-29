@@ -1,6 +1,8 @@
 package com.braingroom.tutor.model.resp;
 
 
+import android.support.annotation.NonNull;
+
 import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
@@ -29,6 +31,7 @@ public abstract class BaseResp {
     public abstract boolean getResCode();
 
 
+    @NonNull
     public String getResMsg() {
         return getNonNull(resMsg);
     }

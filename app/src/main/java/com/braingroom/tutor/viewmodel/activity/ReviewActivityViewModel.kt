@@ -23,7 +23,8 @@ class ReviewActivityViewModel : ViewModel() {
             override fun getView(vm: ViewModel?): Int {
                 return when (vm) {
                     is ReviewItemViewModel -> R.layout.item_review
-                    else -> 0
+                    null -> throw NullPointerException()
+                    else -> throw NoSuchFieldError()
                 }
             }
         }

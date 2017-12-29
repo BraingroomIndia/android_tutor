@@ -66,16 +66,16 @@ interface ApiService {
     fun getUnreadNotificationCount(@Body req: CommonIdReq): Observable<NotificationCountResp>
 
     @POST("apis/getMessage")
-    fun getMessages(@Body req:MessagesGetReq):Observable<MessageGetResp>
+    fun getMessages(@Body req: MessagesGetReq): Observable<MessageGetResp>
 
     @POST("apis/postMessage")
-    fun reply(@Body req:MessageReplyReq):Observable<CommonIdResp>
+    fun reply(@Body req: MessageReplyReq): Observable<CommonIdResp>
 
     @POST("changePassword")
     fun changePassword(@Body req: ChangePasswordReq): Observable<ChangePasswordResp>
 
     @POST("apis/getChatMessages")
-    fun getMessageThread(@Body req:ChatMessageReq):Observable<ChatMessageResp>
+    fun getMessageThread(@Body req: ChatMessageReq): Observable<ChatMessageResp>
 
     @POST("apis/changeMessageThreadStatus")
     fun changeMessageThreadStatus(@Body req: ChatMessageReq): Observable<CommonIdResp>
@@ -93,5 +93,7 @@ interface ApiService {
     @POST("tutorApi/getPaymentSummary")
     fun getPaymentSummary(@Body req: PaymentSummaryReq): Observable<PaymentSummaryResp>
 
+    @POST("tutorApi/getAttendances")
+    fun getStartOrEndDetails(@Body req:AttendanceDetailReq):Observable<AttendanceDetailResp>
 
 }
