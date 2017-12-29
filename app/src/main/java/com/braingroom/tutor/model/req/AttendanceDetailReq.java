@@ -31,11 +31,10 @@ public class AttendanceDetailReq {
         @SerializedName("start_code")
         private String startCode;
 
-        public Snippet(String tutorId, String startCode, String endCode) {
+        public Snippet(String tutorId, String endCode, String startCode) {
             this.tutorId = tutorId;
-            this.startCode = startCode;
             this.endCode = endCode;
-
+            this.startCode = startCode;
         }
 
         public Snippet(String tutorId, String startOrEndCode, boolean isStartCode) {

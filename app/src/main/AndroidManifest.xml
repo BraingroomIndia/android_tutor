@@ -84,8 +84,7 @@
                 <data android:scheme="@string/fb_login_protocol_scheme" />
             </intent-filter>
         </activity>
-        <activity android:name=".view.activity.BarcodeCaptureActivity" />
-
-
+        <activity android:name=".view.activity.BarcodeCaptureActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
     </application>
 </manifest>

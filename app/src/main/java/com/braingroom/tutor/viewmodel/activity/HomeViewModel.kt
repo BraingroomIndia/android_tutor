@@ -7,6 +7,7 @@ import com.braingroom.tutor.R
 import com.braingroom.tutor.view.activity.*
 import com.braingroom.tutor.view.activity.BarcodeCaptureActivity
 import com.braingroom.tutor.view.adapters.ViewProvider
+import com.braingroom.tutor.view.fragment.AttendanceStatusFragment
 import com.braingroom.tutor.viewmodel.ViewModel
 import com.braingroom.tutor.viewmodel.item.HomeItemViewModel
 import com.braingroom.tutor.viewmodel.item.NotifyDataSetChanged
@@ -78,8 +79,7 @@ class HomeViewModel : ViewModel() {
         topDrawableList += R.drawable.ic_calnder_36dp//6
         textList += "Booking Calender" //6
         bottomDrawableList += R.color.material_cyan300  //6
-        actionList += Action { } //6
-
+        actionList += Action {  } //6
 
         topDrawableList += R.drawable.ic_review_36dp//7
         textList += "Review" //7
