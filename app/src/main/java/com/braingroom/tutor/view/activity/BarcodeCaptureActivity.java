@@ -56,6 +56,7 @@ import com.braingroom.tutor.view.activity.barcodereader.BarcodeGraphicTracker;
 import com.braingroom.tutor.view.activity.barcodereader.BarcodeTrackerFactory;
 import com.braingroom.tutor.view.activity.barcodereader.camera.CameraSource;
 import com.braingroom.tutor.view.activity.barcodereader.camera.CameraSourcePreview;
+import com.braingroom.tutor.view.fragment.AttendanceStatusFragment;
 import com.braingroom.tutor.viewmodel.ViewModel;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
@@ -465,6 +466,10 @@ public final class BarcodeCaptureActivity extends Activity implements BarcodeGra
         public void onScaleEnd(ScaleGestureDetector detector) {
             mCameraSource.doZoom(detector.getScaleFactor());
         }
+    }
+
+    public void enterStartEndCode(View v){
+        getNavigator().openFragment(AttendanceStatusFragment.Companion.newInstance());
     }
 
     @Override

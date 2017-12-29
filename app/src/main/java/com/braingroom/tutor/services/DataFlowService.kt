@@ -233,6 +233,13 @@ class DataFlowService(private val api: ApiService, private val realmCacheService
         //TODO Handle error return parts
     }
 
+    fun updateAttendance(learnerId:String,startOrEndCode: String):Observable<UpdateAttendanceResp>{
+        return api.updateAttendance(UpdateAttendanceReq(UpdateAttendanceReq.Snippet(userId,learnerId,startOrEndCode))).subscribeOn(Schedulers.io())
+                .onErrorReturn { UpdateAttendanceResp() }
+                .observeOn(Schedulers.computation())
+    }
+
+
     fun getStartOrEndDetails(startOrEndCode: String, isStartCode: Boolean): Observable<AttendanceDetailResp> {
         return api.getStartOrEndDetails(AttendanceDetailReq(userId, startOrEndCode, isStartCode)).onErrorReturnItem(AttendanceDetailResp()).subscribeOn(Schedulers.io())
                 .observeOn(Schedulers.computation())
@@ -242,6 +249,4 @@ class DataFlowService(private val api: ApiService, private val realmCacheService
         return api.getStartOrEndDetails(req).onErrorReturnItem(AttendanceDetailResp()).subscribeOn(Schedulers.io())
                 .observeOn(Schedulers.computation())
     }
-
-
 }

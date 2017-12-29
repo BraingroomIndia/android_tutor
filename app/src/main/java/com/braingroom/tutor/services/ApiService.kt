@@ -96,4 +96,7 @@ interface ApiService {
     @POST("tutorApi/getAttendances")
     fun getStartOrEndDetails(@Body req:AttendanceDetailReq):Observable<AttendanceDetailResp>
 
+    @POST("tutorApi/updateAttendance")
+    fun updateAttendance(@Body req:UpdateAttendanceReq):Observable<UpdateAttendanceResp>
+
 }
