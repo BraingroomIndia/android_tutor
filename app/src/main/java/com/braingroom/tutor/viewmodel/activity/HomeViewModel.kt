@@ -5,6 +5,7 @@ import android.support.annotation.ColorRes
 import android.support.annotation.DrawableRes
 import com.braingroom.tutor.R
 import com.braingroom.tutor.view.activity.*
+import com.braingroom.tutor.view.activity.BarcodeCaptureActivity
 import com.braingroom.tutor.view.adapters.ViewProvider
 import com.braingroom.tutor.viewmodel.ViewModel
 import com.braingroom.tutor.viewmodel.item.HomeItemViewModel
@@ -65,7 +66,7 @@ class HomeViewModel : ViewModel() {
         topDrawableList += R.drawable.ic_attendance_36dp//4
         textList += "Attendance" //4
         bottomDrawableList += R.color.material_lightgreen500 //4
-        actionList += Action { navigator?.navigateActivity(AttendanceActivity::class.java) } //4
+        actionList += Action { navigator?.navigateActivity(BarcodeCaptureActivity::class.java) } //4
 
 
         topDrawableList += R.drawable.ic_gallery_36dp//5

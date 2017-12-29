@@ -15,11 +15,11 @@ public class AttendanceDetailReq {
         this.data = data;
     }
 
-    public AttendanceDetailReq(String tutorId, Integer startCode, Integer endCode) {
+    public AttendanceDetailReq(String tutorId, String startCode, String endCode) {
         this.data = new Snippet(tutorId, startCode, endCode);
     }
 
-    public AttendanceDetailReq(String tutorId, Integer startOrEndCode, boolean isStartCode) {
+    public AttendanceDetailReq(String tutorId, String startOrEndCode, boolean isStartCode) {
         this.data = new Snippet(tutorId, startOrEndCode, isStartCode);
     }
 
@@ -27,18 +27,18 @@ public class AttendanceDetailReq {
         @SerializedName("tutor_id")
         private String tutorId;
         @SerializedName("end_code")
-        private Integer endCode;
+        private String endCode;
         @SerializedName("start_code")
-        private Integer startCode;
+        private String startCode;
 
-        public Snippet(String tutorId, Integer startCode, Integer endCode) {
+        public Snippet(String tutorId, String startCode, String endCode) {
             this.tutorId = tutorId;
             this.startCode = startCode;
             this.endCode = endCode;
 
         }
 
-        public Snippet(String tutorId, Integer startOrEndCode, boolean isStartCode) {
+        public Snippet(String tutorId, String startOrEndCode, boolean isStartCode) {
             this.tutorId = tutorId;
             if (isStartCode) {
                 this.startCode = startOrEndCode;

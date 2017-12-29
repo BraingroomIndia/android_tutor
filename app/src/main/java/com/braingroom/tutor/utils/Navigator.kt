@@ -32,10 +32,11 @@ class Navigator(val activity: Activity?) {
         activity?.startActivity(intent)
     }
 
-    fun navigateActivity(destination: Class<out Activity>) {
+    fun navigateActivity(destination: Class<out android.app.Activity>) {
         val intent = Intent(activity, destination)
         activity?.startActivity(intent)
     }
+
 
     fun navigateActivityForResult(destination: Class<out Activity>, bundle: Bundle?, reqCode: Int) {
         val intent = Intent(activity, destination)

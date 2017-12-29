@@ -422,13 +422,14 @@ class AttendanceActivity : Activity(), BarcodeGraphicTracker.BarcodeUpdateListen
     }
 
     override fun onBarcodeDetected(barcode: Barcode) {
+        Log.d(TAG, "onBarcodeDetected")
         if (barcode.displayValue.contains("braingroom"))
             apiService.getStartOrEndDetails(gson.fromJson(barcode.displayValue, AttendanceDetailReq::class.java)).subscribe(
                     { resp ->
                         if (resp.resCode)
                             messageHelper.showAcceptableInfo(resp.resMsg, "Cancel", SingleButtonCallback { dialog, which -> Log.v(TAG, resp.resMsg) })
                         else messageHelper.showAcceptableInfo("Ticket Info", resp.data.learnerName + resp.data.classTopic, "Confirm", "Cancel",
-                                SingleButtonCallback { _, _ -> Log.v(TAG, resp.resMsg) }, SingleButtonCallback { _, _ -> Log.v(TAG, resp.resMsg) })
+                                SingleButtonCallback { dialog, which -> Log.v(TAG, resp.resMsg) }, SingleButtonCallback { dialog, which -> Log.v(TAG, resp.resMsg) })
 
                     })
 

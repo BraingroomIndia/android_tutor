@@ -233,7 +233,7 @@ class DataFlowService(private val api: ApiService, private val realmCacheService
         //TODO Handle error return parts
     }
 
-    fun getStartOrEndDetails(startOrEndCode: Int, isStartCode: Boolean): Observable<AttendanceDetailResp> {
+    fun getStartOrEndDetails(startOrEndCode: String, isStartCode: Boolean): Observable<AttendanceDetailResp> {
         return api.getStartOrEndDetails(AttendanceDetailReq(userId, startOrEndCode, isStartCode)).onErrorReturnItem(AttendanceDetailResp()).subscribeOn(Schedulers.io())
                 .observeOn(Schedulers.computation())
     }
