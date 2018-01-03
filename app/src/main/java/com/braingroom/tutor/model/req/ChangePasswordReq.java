@@ -16,19 +16,23 @@ public class ChangePasswordReq {
         this.data = data;
     }
 
+    public ChangePasswordReq(String tutorId, String oldPassword, String newPassword) {
+        this.data = new Snippet(tutorId, oldPassword, newPassword);
+    }
+
     public static class Snippet {
-        public Snippet(String uuid, String oldPassword, String newPassword) {
-            this.uuid = uuid;
+        public Snippet(String tutorId, String oldPassword, String newPassword) {
+            this.tutor_id = tutorId;
             this.oldPassword = oldPassword;
             this.newPassword = newPassword;
         }
 
-        @SerializedName("uuid")
-        public String uuid;
+        @SerializedName("tutor_id")
+        private String tutor_id;
         @SerializedName("old_password")
-        public String oldPassword;
+        private String oldPassword;
         @SerializedName("new_password")
-        public String newPassword;
+        private String newPassword;
 
     }
 

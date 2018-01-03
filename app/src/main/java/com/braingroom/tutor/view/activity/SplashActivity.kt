@@ -29,17 +29,15 @@ class SplashActivity : AppCompatActivity() {
             CustomApplication.getInstance().userName = userPreferences.getString(name, "")
             CustomApplication.getInstance().userPic = userPreferences.getString(profilePic, "");
             startActivity(Intent(this, HomeActivity::class.java))
+            finish()
         } else startActivityForResult(Intent(this, LoginActivity::class.java), LOG_IN_REQ)
-    }
-
-    override fun onResume() {
-        super.onResume()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode == Activity.RESULT_OK) {
             startActivity(Intent(this, HomeActivity::class.java))
+            finish()
         } else startActivityForResult(Intent(this, LoginActivity::class.java), LOG_IN_REQ)
     }
 }

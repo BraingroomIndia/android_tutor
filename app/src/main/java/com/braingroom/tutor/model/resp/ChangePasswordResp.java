@@ -6,6 +6,7 @@ package com.braingroom.tutor.model.resp;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.util.Collections;
 import java.util.List;
 
 public class ChangePasswordResp extends BaseResp {
@@ -15,24 +16,12 @@ public class ChangePasswordResp extends BaseResp {
         return !data.isEmpty();
     }
 
-    @SerializedName("sync_time")
-    String syncTime;
     @SerializedName("braingroom")
-    List<Snippet> data;
+    private List<Snippet> data;
 
     public static class Snippet {
-        public Snippet(String uuid, String oldPassword, String newPassword) {
-            this.uuid = uuid;
-            this.oldPassword = oldPassword;
-            this.newPassword = newPassword;
-        }
-
-        @SerializedName("uuid")
-        public String uuid;
-        @SerializedName("old_password")
-        public String oldPassword;
-        @SerializedName("new_password")
-        public String newPassword;
+        @SerializedName("user_id")
+        private String userId;
 
     }
 }

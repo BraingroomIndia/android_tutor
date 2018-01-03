@@ -5,8 +5,7 @@ import android.content.Intent
 import android.databinding.ObservableField
 import com.braingroom.tutor.R
 import com.braingroom.tutor.common.CustomApplication
-import com.braingroom.tutor.utils.CustomDrawable
-import com.braingroom.tutor.utils.lodgedIn
+import com.braingroom.tutor.utils.*
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.ReplaySubject
 
@@ -96,6 +95,14 @@ open class ViewModel {
             compositeDisposable.dispose()
         }
         applicationContext.refWatcher?.watch(this, TAG)
+    }
+
+    fun logout() {
+        preferencesEditor.remove(email)
+        preferencesEditor.remove(profilePic)
+        preferencesEditor.remove(mobile)
+        preferencesEditor.remove(lodgedIn)
+        preferencesEditor.remove(name).apply()
     }
 
 

@@ -24,7 +24,8 @@ class NotificationViewModel : ViewModel() {
                 return when (vm) {
                     is NotificationsItemViewModel -> R.layout.item_notification
                     is LoadingViewModel -> R.layout.item_loading_media
-                    else -> 0
+                    null -> throw NullPointerException()
+                    else -> throw NoSuchFieldError()
                 }
             }
         }
@@ -77,8 +78,4 @@ class NotificationViewModel : ViewModel() {
         })
     }
 
-    override fun paginate() {
-        super.paginate()
-        callAgain.set(callAgain.get()!! + 1)
-    }
 }

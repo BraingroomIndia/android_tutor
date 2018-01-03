@@ -5,7 +5,9 @@ import android.support.annotation.ColorRes
 import android.support.annotation.DrawableRes
 import com.braingroom.tutor.R
 import com.braingroom.tutor.view.activity.*
+import com.braingroom.tutor.view.activity.BarcodeCaptureActivity
 import com.braingroom.tutor.view.adapters.ViewProvider
+import com.braingroom.tutor.view.fragment.AttendanceStatusFragment
 import com.braingroom.tutor.viewmodel.ViewModel
 import com.braingroom.tutor.viewmodel.item.HomeItemViewModel
 import com.braingroom.tutor.viewmodel.item.NotifyDataSetChanged
@@ -27,7 +29,13 @@ class HomeViewModel : ViewModel() {
     val view: ViewProvider by lazy {
         object : ViewProvider {
             override fun getView(vm: ViewModel?): Int {
-                return R.layout.item_home
+                if (vm == null)
+                    throw NullPointerException()
+                return when (vm) {
+                    is HomeItemViewModel -> R.layout.item_home
+                    else -> throw NoSuchFieldError()
+                }
+
             }
         }
     }
@@ -59,7 +67,7 @@ class HomeViewModel : ViewModel() {
         topDrawableList += R.drawable.ic_attendance_36dp//4
         textList += "Attendance" //4
         bottomDrawableList += R.color.material_lightgreen500 //4
-        actionList += Action { navigator?.navigateActivity(AttendanceActivity::class.java) } //4
+        actionList += Action { navigator?.navigateActivity(BarcodeCaptureActivity::class.java) } //4
 
 
         topDrawableList += R.drawable.ic_gallery_36dp//5
@@ -73,7 +81,6 @@ class HomeViewModel : ViewModel() {
         bottomDrawableList += R.color.material_cyan300  //6
         actionList += Action {  } //6
 
-
         topDrawableList += R.drawable.ic_review_36dp//7
         textList += "Review" //7
         bottomDrawableList += R.color.material_pink500//7
@@ -83,7 +90,7 @@ class HomeViewModel : ViewModel() {
         topDrawableList += R.drawable.ic_promot_36dp//8
         textList += "Promote" //8
         bottomDrawableList += R.color.material_lightgreen600//8
-        actionList += Action {  } //8
+        actionList += Action { } //8
 
 
         (0..7).forEach { i -> item.onNext(HomeItemViewModel(topDrawableList[i], bottomDrawableList[i], textList[i], actionList[i])) }

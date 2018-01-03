@@ -16,17 +16,17 @@ class MediaViewModel : ViewModel() {
     val viewProvider: ViewProvider  by lazy {
         object : ViewProvider {
             override fun getView(vm: ViewModel?): Int {
-                when (vm) {
-                    is LoadingViewModel -> return R.layout.item_loading_media
-                    is TextIconViewModel -> return R.layout.item_media
-                    else -> {
-                        Log.d("called", "wrongly called")
-                        return 0
-                    }
+                return when (vm) {
+                    is LoadingViewModel -> R.layout.item_loading_media
+                    is TextIconViewModel -> R.layout.item_media
+                    null -> throw NullPointerException()
+                    else -> throw NoSuchFieldError()
                 }
             }
         }
     }
+
+
     var isVideo = ObservableBoolean(false)
     val onVideo: Action by lazy {
         Action {
@@ -67,10 +67,10 @@ class MediaViewModel : ViewModel() {
                         item.onNext(RemoveLoadingViewModel())
                         for (snippet in resp.data) {
 
-                            item.onNext(TextIconViewModel(snippet.mediaTitle, snippet.mediaPath, object : Action {
+                            item.onNext(TextIconViewModel(snippet.mediaTitle, snippet.mediaThumb, object : Action {
                                 override fun run() {
                                     if (isVideo.get()) {
-
+                                        navigator?.openStandaloneYoutube(snippet.videoId, 12312)
                                     } else {
 
                                     }
