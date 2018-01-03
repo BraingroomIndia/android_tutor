@@ -163,7 +163,7 @@ abstract class Activity : AppCompatActivity() {
 
     }
 
-    protected abstract val vm: ViewModel
+    public abstract val vm: ViewModel
 
     protected abstract val layoutId: Int
 }

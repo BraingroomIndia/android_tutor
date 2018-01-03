@@ -138,7 +138,6 @@ class AttendanceActivity : Activity(), BarcodeGraphicTracker.BarcodeUpdateListen
                     RC_HANDLE_CAMERA_PERM)
         }
 
-        findViewById<View>(R.id.topLayout).setOnClickListener(listener)
         Snackbar.make(mGraphicOverlay!!, R.string.permission_camera_rationale,
                 Snackbar.LENGTH_INDEFINITE)
                 .setAction(R.string.ok, listener)

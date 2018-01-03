@@ -33,7 +33,7 @@ public abstract class BaseResp {
 
     @NonNull
     public String getResMsg() {
-        return getNonNull(resMsg);
+        return isEmpty(resMsg) ? "Network error" : resMsg;
     }
 
 }

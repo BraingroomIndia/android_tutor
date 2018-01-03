@@ -71,7 +71,7 @@ interface ApiService {
     @POST("apis/postMessage")
     fun reply(@Body req: MessageReplyReq): Observable<CommonIdResp>
 
-    @POST("changePassword")
+    @POST("apis/changePassword")
     fun changePassword(@Body req: ChangePasswordReq): Observable<ChangePasswordResp>
 
     @POST("apis/getChatMessages")
@@ -94,9 +94,9 @@ interface ApiService {
     fun getPaymentSummary(@Body req: PaymentSummaryReq): Observable<PaymentSummaryResp>
 
     @POST("tutorApi/getAttendances")
-    fun getStartOrEndDetails(@Body req:AttendanceDetailReq):Observable<AttendanceDetailResp>
+    fun getStartOrEndDetails(@Body req: AttendanceDetailReq): Observable<AttendanceDetailResp>
 
     @POST("tutorApi/updateAttendance")
-    fun updateAttendance(@Body req:UpdateAttendanceReq):Observable<UpdateAttendanceResp>
+    fun updateAttendance(@Body req: UpdateAttendanceReq): Observable<UpdateAttendanceResp>
 
 }

@@ -12,6 +12,7 @@ import android.util.Log
 import com.braingroom.tutor.R
 
 import com.braingroom.tutor.view.activity.Activity
+import com.braingroom.tutor.view.activity.LoginActivity
 import com.braingroom.tutor.view.fragment.BaseFragment
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException
 import com.google.android.gms.common.GooglePlayServicesRepairableException
@@ -49,6 +50,19 @@ class Navigator(val activity: Activity?) {
 
     fun navigateActivity(intent: Intent) {
         activity?.startActivity(intent)
+    }
+
+    fun logout() {
+        activity?.let {
+            it.vm.preferencesEditor.remove(email)
+            it.vm.preferencesEditor.remove(profilePic)
+            it.vm.preferencesEditor.remove(mobile)
+            it.vm.preferencesEditor.remove(lodgedIn)
+            it.vm.preferencesEditor.remove(name).apply()
+            navigateActivity(Intent(it, LoginActivity::class.java).
+                    addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK))
+        }
+
     }
 
     fun finishActivity() {

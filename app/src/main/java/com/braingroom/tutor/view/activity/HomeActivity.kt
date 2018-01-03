@@ -47,16 +47,6 @@ class HomeActivity : Activity(), NavigationView.OnNavigationItemSelectedListener
         //  hideItem();
     }
 
-    fun logout() {
-        vm.preferencesEditor.remove(email)
-        vm.preferencesEditor.remove(profilePic)
-        vm.preferencesEditor.remove(mobile)
-        vm.preferencesEditor.remove(lodgedIn)
-        vm.preferencesEditor.remove(name).apply()
-        navigator.navigateActivity(Intent(this, LoginActivity::class.java).
-                addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK))
-
-    }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         if (item.itemId == R.id.nav_notification) {
@@ -65,7 +55,12 @@ class HomeActivity : Activity(), NavigationView.OnNavigationItemSelectedListener
         if (item.itemId == R.id.nav_message)
             navigator.navigateActivity(MessageActivity::class.java)
         if (item.itemId == R.id.nav_logout) {
-            messageHelper.showAcceptableInfo("Log out?", "Are you sure you want to log out of the app", SingleButtonCallback { dialog, which -> logout() })
+            messageHelper.showAcceptableInfo("Log out?", "Are you sure you want to log out of the app", SingleButtonCallback { dialog, which ->
+                vm.logout()
+                navigator.navigateActivity(Intent(this, LoginActivity::class.java).
+                        addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK))
+
+            })
         }
         if (item.itemId == R.id.nav_faq) {
             navigator.navigateActivity(FAQActivity::class.java)

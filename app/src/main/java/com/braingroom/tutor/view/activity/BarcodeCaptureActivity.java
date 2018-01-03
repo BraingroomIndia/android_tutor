@@ -396,7 +396,7 @@ public final class BarcodeCaptureActivity extends Activity implements BarcodeGra
 
     @NotNull
     @Override
-    protected ViewModel getVm() {
+    public ViewModel getVm() {
         if (viewModel == null)
             return new ViewModel();
         else return viewModel;
@@ -468,7 +468,7 @@ public final class BarcodeCaptureActivity extends Activity implements BarcodeGra
         }
     }
 
-    public void enterStartEndCode(View v){
+    public void enterStartEndCode(View v) {
         getNavigator().openFragment(AttendanceStatusFragment.Companion.newInstance());
     }
 

@@ -86,7 +86,8 @@
         </activity>
         <activity
             android:name=".view.activity.BarcodeCaptureActivity"
-            android:label="" />
+            android:label=""
+            android:theme="@style/AppTheme.NoActionBar" />
 
 
     </application>
