@@ -4,6 +4,8 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
+import static com.braingroom.tutor.utils.CommonUtilsKt.getHumanDate;
+
 /**
  * Created by ashketchup on 27/12/17.
  */
@@ -128,7 +130,7 @@ public class MessageGetResp {
         }
 
         public String getModifyDate() {
-            return modifyDate;
+            return getHumanDate(modifyDate);
         }
 
         public void setModifyDate(String modifyDate) {

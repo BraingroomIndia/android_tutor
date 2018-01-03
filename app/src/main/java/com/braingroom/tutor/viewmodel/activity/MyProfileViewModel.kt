@@ -23,7 +23,11 @@ class MyProfileViewModel() : ViewModel() {
     val viewProvider: ViewProvider by lazy {
         object : ViewProvider {
             override fun getView(vm: ViewModel?): Int {
-                return R.layout.item_text_icon_list;
+                return when (vm) {
+                    is ListTextIconViewModel -> R.layout.item_text_icon_list
+                    null -> throw NullPointerException()
+                    else -> throw NoSuchFieldError()
+                }
             }
         }
     }

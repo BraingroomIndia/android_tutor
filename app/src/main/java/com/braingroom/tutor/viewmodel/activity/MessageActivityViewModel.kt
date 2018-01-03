@@ -23,10 +23,12 @@ class MessageActivityViewModel : ViewModel() {
     val viewProvider: ViewProvider by lazy {
         object : ViewProvider {
             override fun getView(vm: ViewModel?): Int {
+
                 return when (vm) {
                     is MessageItemViewModel -> R.layout.item_message
                     is LoadingViewModel -> R.layout.item_loading_media
-                    else -> 0
+                    null -> throw NullPointerException()
+                    else -> throw NoSuchFieldError()
                 }
             }
         }

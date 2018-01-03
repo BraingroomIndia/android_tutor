@@ -29,7 +29,8 @@ class MyClassesViewModel : ViewModel() {
                 return when (vm) {
                     is ClassListItemViewModel -> R.layout.item_class_list
                     is LoadingViewModel -> R.layout.item_loading_class_list
-                    else -> 0
+                    null -> throw NullPointerException()
+                    else -> throw NoSuchFieldError()
                 }
             }
         }
@@ -75,9 +76,7 @@ class MyClassesViewModel : ViewModel() {
                 item.onNext(NotifyDataSetChanged())
                 compositeDisposable.add(disposable)
             }.subscribe({ viewModelList ->
-                if (pageNumber == 1)
-                    item.onNext(RefreshViewModel())
-                else item.onNext(RemoveLoadingViewModel())
+                item.onNext(RemoveLoadingViewModel())
                 if (viewModelList.isEmpty()) {
                     if (pageNumber == 1)
                         item.onNext(EmptyItemViewModel("", R.drawable.ic_no_post_64dp, "No Messages"))
@@ -96,6 +95,7 @@ class MyClassesViewModel : ViewModel() {
     private fun reset() {
         pageNumber = 1
         paginationInProgress = false
+        item.onNext(RefreshViewModel())
         callAgain.set(callAgain.get() + 1)
     }
 }

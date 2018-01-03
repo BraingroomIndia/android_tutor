@@ -1,9 +1,11 @@
 package com.braingroom.tutor.viewmodel.activity
 
+import android.content.Context
 import android.databinding.ObservableBoolean
 import android.databinding.ObservableField
 import android.util.Log
 import android.view.inputmethod.EditorInfo
+import android.view.inputmethod.InputMethodManager
 import android.widget.TextView
 import com.braingroom.tutor.R
 import com.braingroom.tutor.model.resp.PaymentDetailsResp
@@ -38,8 +40,10 @@ class PaymentDetailViewModel() : ViewModel() {
         isNotVisible.set(true)
         TextView.OnEditorActionListener { p0, p1, p2 ->
             if (p1 == EditorInfo.IME_ACTION_SEARCH) {
-                item.onNext(RefreshViewModel())
-                callAgain.set(callAgain.get() + 1)
+                isNotVisible.set(true)
+                isVisible.set(false)
+                reset()
+                (p0.context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager).hideSoftInputFromWindow(p0.windowToken, 0) // hide keyborad
                 return@OnEditorActionListener true;
             }
             false;
@@ -47,29 +51,6 @@ class PaymentDetailViewModel() : ViewModel() {
     }
     val nullify: Action by lazy {
         Action {
-
-            start.subscribe { _ ->
-                apiService.getPaymentDetails(1, "", "", keyword.get()).doOnSubscribe { disposable ->
-                    compositeDisposable.add(disposable)
-                    item.onNext(RefreshViewModel())
-                    for (i in 0..5) item.onNext(LoadingViewModel())
-                    item.onNext(NotifyDataSetChanged())
-                }.map { resp: PaymentDetailsResp ->
-                    val viewModelList: ArrayList<ItemPaymentDetailViewModel> = ArrayList(8)
-                    resp.data.mapTo(viewModelList) { ItemPaymentDetailViewModel(it) }
-                }.subscribe({ viewModelList: List<ItemPaymentDetailViewModel> ->
-                    item.onNext(RemoveLoadingViewModel())
-                    viewModelList.forEach { viewModel ->
-                        item.onNext(viewModel)
-                    }
-                }, { throwable ->
-                    Log.e(TAG, throwable.message, throwable)
-                }, {
-                    item.onNext(NotifyDataSetChanged())
-                }
-                )
-            }
-
             isNotVisible.set(isVisible.get())
             isVisible.set(!isVisible.get())
         }
@@ -100,7 +81,6 @@ class PaymentDetailViewModel() : ViewModel() {
         }
     }
 
-    val start = FieldUtils.toObservable(callAgain).debounce(200, TimeUnit.MILLISECONDS)
 
     init {
 
@@ -113,7 +93,39 @@ class PaymentDetailViewModel() : ViewModel() {
         }, { throwable ->
             Log.e(TAG, throwable.message, throwable)
         })
+
+        FieldUtils.toObservable(callAgain).filter({ _ -> pageNumber > -1 && !paginationInProgress }).subscribe { _ ->
+            apiService.getPaymentDetails(pageNumber, startdate.title.get(), enddate.title.get(), keyword.get()).
+                    doOnSubscribe { disposable ->
+                        compositeDisposable.add(disposable)
+                        for (i in 0..5) item.onNext(LoadingViewModel())
+                        item.onNext(NotifyDataSetChanged())
+                    }.map { resp: PaymentDetailsResp ->
+                val viewModelList: ArrayList<ItemPaymentDetailViewModel> = ArrayList(8)
+                resp.data.mapTo(viewModelList) { ItemPaymentDetailViewModel(it) }
+            }.subscribe(
+                    { viewModelList ->
+                        item.onNext(RemoveLoadingViewModel())
+                        if (viewModelList.isEmpty()) {
+                            if (pageNumber == 1)
+                                item.onNext(EmptyItemViewModel("", R.drawable.ic_no_post_64dp, "No Messages"))
+                            pageNumber = -1
+                        } else {
+                            viewModelList.forEach { viewModel -> item.onNext(viewModel) }
+                            pageNumber++
+                        }
+                        item.onNext(NotifyDataSetChanged())
+                        paginationInProgress = false
+                    }, { throwable -> Log.e(TAG, throwable.message, throwable) }
+            )
+        }
     }
 
+    private fun reset() {
+        pageNumber = 1
+        paginationInProgress = false
+        item.onNext(RefreshViewModel())
+        callAgain.set(callAgain.get() + 1)
+    }
 
 }
