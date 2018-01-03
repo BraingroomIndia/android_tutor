@@ -3,73 +3,102 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <data>
+   <data>
 
         <variable
             name="vm"
             type="com.braingroom.tutor.viewmodel.activity.SignupViewModel" />
-    </data>
-
-    <LinearLayout
+        <import type="android.view.View"/>
+   </data>
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        >
+        <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:onClick="@{null}"
         android:orientation="vertical">
+            <RadioGroup
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:orientation="horizontal">
+                <RadioButton
 
-        <include
-            layout="@layout/item_list_dialog_opener"
+                    android:layout_marginRight="@dimen/margin_med"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="Organization"
+                    android:checked="@={!vm.isIndividual}"
+                    android:layout_gravity="left"/>
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:checked="@={vm.isIndividual}"
+                    android:text="Individual"
+                    android:layout_gravity="right" />
+            </RadioGroup>
+
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            app:vm="@{vm.categoryVm}" />
+            android:layout_height="wrap_content">
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:onClick="@{vm.uploadImage}"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:src="@drawable/class_ph_3"
+                android:id="@+id/circleImageView" />
 
+
+            <include
+                layout="@layout/item_date_dialog_opener"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                app:vm="@{vm.datePicker}"
+                android:visibility="@{(vm.isIndividual.get())?View.VISIBLE:View.GONE}"
+                android:layout_centerVertical="true"
+                android:layout_toEndOf="@+id/circleImageView"
+                android:layout_toRightOf="@+id/circleImageView" />
+        </RelativeLayout>
+            <include
+                layout="@layout/item_list_dialog_opener"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                app:vm="@{vm.categoryVm}" />
+            <include
+                layout="@layout/item_list_dialog_opener"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                app:vm="@{vm.communityVm}" />
+
+            <include
+                android:id="@+id/instituteName"
+                layout="@layout/floating_label_edit_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="@{(!vm.isIndividual.get())?View.VISIBLE:View.GONE}"
+                app:data1="@{vm.instituteName}"/>
         <include
-            layout="@layout/item_list_dialog_opener"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            app:vm="@{vm.categoryVm}" />
+            layout="@layout/floating_label_edit_text"
+            app:data1="@{vm.aboutYou}"
+            />
+            <include
+            layout="@layout/floating_label_edit_text"
+            app:data1="@{vm.expertiseArea}" />
 
-        <include
-            layout="@layout/item_list_dialog_opener"
-            android:layout_width="match_parent"
+        <TextView
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:text="Next"
             android:layout_gravity="center"
-            app:vm="@{vm.communityVm}" />
-
-        <include
-            layout="@layout/item_list_dialog_opener"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            app:vm="@{vm.categoryVm}" />
-
-        <include
-            layout="@layout/item_search_select_fragment_opener"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            app:vm="@{vm.countryVm}" />
-        <include
-            layout="@layout/item_search_select_fragment_opener"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            app:vm="@{vm.stateVm}" />
-
-        <include
-            layout="@layout/item_search_select_fragment_opener"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            app:vm="@{vm.cityVm}" />
-
-        <include
-            layout="@layout/item_search_select_fragment_opener"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            app:vm="@{vm.localityVm}" />
-
-
-    </LinearLayout>
+            android:layout_marginTop="@dimen/margin_med"
+            android:fontFamily="@font/roboto_bold"
+            android:textSize="@dimen/_16sdp"
+            android:textColor="@color/black"
+            android:onClick="@{vm.toThird}"/>
+        </LinearLayout>
+    </ScrollView>
 </layout>

@@ -1,6 +1,7 @@
 package com.braingroom.tutor.utils
 
 import android.Manifest
+import android.app.FragmentManager
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -23,7 +24,7 @@ import com.tbruyelle.rxpermissions2.RxPermissions
 @Suppress("unused", "UNUSED_PARAMETER")
 class Navigator(val activity: Activity?) {
 
-    val TAG = activity?.TAG +"\t"+ this.javaClass.simpleName
+    val TAG = activity?.TAG + "\t" + this.javaClass.simpleName
 
     fun navigateActivity(destination: Class<out Activity>, bundle: Bundle) {
         val intent = Intent(activity, destination)
@@ -67,6 +68,15 @@ class Navigator(val activity: Activity?) {
                 commit()
     }
 
+    fun openFragment(tag: String, fragment: BaseFragment) {
+        activity?.fragmentManager?.
+                beginTransaction()?.
+//                setCustomAnimations(R.animator.bottom_in, R.animator.top_out)?.
+                replace(R.id.fragment_container, fragment)?.
+                addToBackStack(tag)?.
+                commit()
+    }
+
     fun openFragment(fragment: BaseFragment, @AnimatorRes outAnimatorRes: Int, @AnimatorRes inAnimatorRes: Int) {
         activity?.fragmentManager?.
                 beginTransaction()?.
@@ -92,6 +102,14 @@ class Navigator(val activity: Activity?) {
                 replace(fragmentContainer, fragment)?.
                 addToBackStack(null)?.
                 commit()
+    }
+
+    fun popBackStack(title: String) {
+        val count = activity?.fragmentManager?.backStackEntryCount ?: 0
+        if (count > 0) {
+            activity?.fragmentManager?.popBackStack(title, FragmentManager.POP_BACK_STACK_INCLUSIVE)
+        }
+
     }
 
     fun openStandaloneYoutube(videoId: String) {

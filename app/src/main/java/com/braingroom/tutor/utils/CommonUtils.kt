@@ -1,17 +1,16 @@
 package com.braingroom.tutor.utils
 
 import android.content.res.Resources
+import android.databinding.Observable.OnPropertyChangedCallback
+import android.databinding.ObservableField
 import android.text.Html
 import android.text.Spanned
 import android.util.DisplayMetrics
-import java.util.*
-import io.reactivex.Observable;
-import android.databinding.Observable.OnPropertyChangedCallback
-import io.reactivex.ObservableOnSubscribe
-import android.databinding.ObservableField
 import android.util.Log
-import java.net.MalformedURLException
-import java.net.URL
+import io.reactivex.Observable
+import io.reactivex.ObservableOnSubscribe
+import java.util.*
+import java.util.regex.Pattern
 
 
 /*
@@ -22,20 +21,24 @@ import java.net.URL
 
 fun <T> toObservable(field: ObservableField<T>): Observable<T> {
 
-    return Observable.create(ObservableOnSubscribe<T> { e ->
-        e.onNext(field.get())
-        val callback = object : OnPropertyChangedCallback() {
-            override fun onPropertyChanged(observable: android.databinding.Observable, i: Int) {
-                e.onNext(field.get())
-                Log.d("onPropertyChanged", "cancel: " + field.toString())
+
+    when {
+        field.get() == null -> throw NullPointerException()
+        else -> return Observable.create(ObservableOnSubscribe<T> { e ->
+            e.onNext(field.get()!!)
+            val callback = object : OnPropertyChangedCallback() {
+                override fun onPropertyChanged(observable: android.databinding.Observable, i: Int) {
+                    e.onNext(field.get()!!)
+                    Log.v("onPropertyChanged", "cancel: " + field.toString())
+                }
             }
-        }
-        field.addOnPropertyChangedCallback(callback)
-        e.setCancellable {
-            field.removeOnPropertyChangedCallback(callback)
-            Log.d("removeOnProperty", "cancel: " + field.toString())
-        }
-    })
+            field.addOnPropertyChangedCallback(callback)
+            e.setCancellable {
+                field.removeOnPropertyChangedCallback(callback)
+                Log.v("removeOnProperty", "cancel: " + field.toString())
+            }
+        })
+    }
 }
 
 
@@ -83,55 +86,77 @@ fun String?.isValidEmail(): Boolean = !this.isNullOrBlank() && android.util.Patt
 
 // Checks if password is lesser than 8 charachters
 
-fun isValidPassword(target: CharSequence?):Boolean{
-    return if (target== null){
+fun isValidPassword(target: CharSequence?): Boolean {
+    return if (target == null) {
         false
-    }else{
-        target.length>4
+    } else {
+        target.length > 4
     }
 }
 
-fun isValidPhone(target: CharSequence?):Boolean{
-    return if(target==null){
+fun isValidPhone(target: CharSequence?): Boolean {
+    return if (target == null) {
         false
-    }else{
+    } else {
         android.util.Patterns.PHONE.matcher(target).matches()
     }
 }
 
-fun isValidName(target: CharSequence?):Boolean{
-    if(isEmpty(target.toString()))
-        return false
-    else
-    return if(target==null){
-        false
-    }else{
-        !target.contains("[^a-zA-Z]")
+fun toString(map: HashMap<String, Int>): String {
+    var result = ""
+    var list: MutableList<Int> = mutableListOf()
+    var array = map.values.iterator()
+    if (array.hasNext()) {
+        result += array.next()
+        while (array.hasNext()) {
+            result += ","
+            result += array.next()
+        }
+        return result
     }
-}
-fun getThumbnail(url:String):String{
-    return "http://img.youtube.com/vi/"+extractYoutubeId(url)+"/0.jpg"
+    return ""
 }
 
-public fun getVideo(video:String?):String {
-    if (video == null) return "";
-    try {
-        return video.substring(video.lastIndexOf("/") + 1);
-    } catch (iobe:IndexOutOfBoundsException ) {
-        return "";
-    }
+fun isValidName(target: CharSequence?): Boolean {
+    if (isEmpty(target.toString()))
+        return false
+    else
+        return if (target == null) {
+            false
+        } else {
+            !target.contains("[^a-zA-Z]")
+        }
 }
-@Throws(MalformedURLException::class)
-fun extractYoutubeId(url: String): String? {
-    val query = url
-    val param = query.split("/".toRegex()).toTypedArray()
-    var id: String? = null
-    return param[param.lastIndex]
+
+fun getThumbnail(url: String): String {
+    return "http://img.youtube.com/vi/" + extractYoutubeId(url) + "/0.jpg"
 }
+
+
+val youTubeUrlRegEx = "^(https?)?(://)?(www.)?(m.)?((youtube.com)|(youtu.be))/"
+val videoIdRegex = arrayOf("\\?vi?=([^&]*)", "watch\\?.*v=([^&]*)", "(?:embed|vi?)/([^/?]*)", "^([A-Za-z0-9\\-]*)")
+
+fun extractYoutubeId(url: String): String {
+    val youTubeLinkWithoutProtocolAndDomain = youTubeLinkWithoutProtocolAndDomain(url)
+
+    return videoIdRegex
+            .map { Pattern.compile(it) }
+            .map { it.matcher(youTubeLinkWithoutProtocolAndDomain) }
+            .firstOrNull { it.find() }
+            ?.group(1) ?: ""
+}
+
+private fun youTubeLinkWithoutProtocolAndDomain(url: String): String {
+    val compiledPattern = Pattern.compile(youTubeUrlRegEx)
+    val matcher = compiledPattern.matcher(url)
+
+    return if (matcher.find()) {
+        url.replace(matcher.group(), "")
+    } else url
+}
+
 
 fun isEmpty(target: String?): Boolean = target.isNullOrBlank()
 fun isEmpty(target: Any?): Boolean = target == null
-fun getNonNull(target: String?) = target ?: "";
-
-
-
+fun getNonNull(target: String?) = target ?: ""
+fun getNonNull(target: Int?) = target ?: -1

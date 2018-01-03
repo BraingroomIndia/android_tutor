@@ -15,6 +15,10 @@ public class CommonIdReq {
         this.data = data;
     }
 
+    public CommonIdReq(String id) {
+        this.data = new Snippet(id);
+    }
+
     public static class Snippet {
         public String id;
 

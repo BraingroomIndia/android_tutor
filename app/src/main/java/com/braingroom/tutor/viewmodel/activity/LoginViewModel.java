@@ -12,6 +12,7 @@ import com.braingroom.tutor.model.req.SocialLoginReq;
 import com.braingroom.tutor.model.resp.LoginResp;
 import com.braingroom.tutor.utils.CustomDrawable;
 import com.braingroom.tutor.view.activity.LoginActivity.UIHelper;
+import com.braingroom.tutor.view.activity.SignupActivity;
 import com.braingroom.tutor.viewmodel.ViewModel;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -21,7 +22,6 @@ import org.jetbrains.annotations.Nullable;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Action;
-
 
 import static com.braingroom.tutor.utils.CommonUtilsKt.isEmpty;
 import static com.braingroom.tutor.utils.CommonUtilsKt.isValidEmail;
@@ -39,14 +39,14 @@ public class LoginViewModel extends ViewModel {
     public final ObservableField<String> emailId = new ObservableField<>("");
     public final ObservableField<String> password = new ObservableField<>("");
     public final CustomDrawable loginButton;
-    private final int RC_SIGN_IN = 9001;
-    private final UIHelper uiHelper;
     public final Action onLoginClicked = new Action() {
         @Override
         public void run() throws Exception {
             login(emailId.get(), password.get());
         }
     };
+    private final int RC_SIGN_IN = 9001;
+    private final UIHelper uiHelper;
     public final Action onGoogleLoginClicked = new Action() {
         @Override
         public void run() throws Exception {
@@ -61,6 +61,13 @@ public class LoginViewModel extends ViewModel {
         }
     };
 
+    public final Action onRegisterClicked = new Action() {
+        @Override
+        public void run() throws Exception {
+            if (getNavigator() != null)
+                getNavigator().navigateActivity(SignupActivity.class);
+        }
+    };
 
     public LoginViewModel(UIHelper uiHelper) {
         loginButton = new CustomDrawable(R.drawable.rounded_corner_line, R.color.material_deeporange600);
@@ -88,7 +95,7 @@ public class LoginViewModel extends ViewModel {
                 doOnSubscribe(disposable -> getCompositeDisposable().add(disposable)).
                 observeOn(AndroidSchedulers.mainThread()).
                 subscribe(this::handleLoginResponse, throwable -> {
-                    Log.d(getTAG(), throwable.getMessage());
+                    Log.e(getTAG(), throwable.getMessage(), throwable);
                     throwable.printStackTrace();
                 });
     }
@@ -101,7 +108,7 @@ public class LoginViewModel extends ViewModel {
                     doOnSubscribe(disposable -> getCompositeDisposable().add(disposable)).
                     observeOn(AndroidSchedulers.mainThread()).
                     subscribe(this::handleLoginResponse, throwable -> {
-                        Log.d(getTAG(), throwable.getMessage());
+                        Log.e(getTAG(), throwable.getMessage(), throwable);
                         throwable.printStackTrace();
                     });
         }
@@ -132,7 +139,7 @@ public class LoginViewModel extends ViewModel {
             getPreferencesEditor().putString(email, emailId);
             getPreferencesEditor().putString(profilePic, profilePicture);
             getPreferencesEditor().putString(braingroomId, userId);
-            getPreferencesEditor().commit();
+            getPreferencesEditor().apply();
             CustomApplication.getInstance().userEmail = emailId;
             CustomApplication.getInstance().userId = userId;
             CustomApplication.getInstance().userName = userName;

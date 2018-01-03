@@ -3,60 +3,81 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <data>
+   <data>
 
         <variable
             name="vm"
             type="com.braingroom.tutor.viewmodel.item.HomeItemViewModel" />
-    </data>
+   </data>
 
 
     <android.support.v7.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:onClick="@{vm.onClick}"
         app:cardBackgroundColor="#64000000"
         app:cardCornerRadius="4dp"
         app:cardElevation="@dimen/cardview_compat_inset_shadow"
         app:cardUseCompatPadding="true">
 
         <android.support.constraint.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:gravity="center_horizontal">
 
-            <TextView
-                android:id="@+id/text"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:layout_gravity="top"
-                android:drawablePadding="2dp"
-                android:drawableTop='@{vm.drawableTop}'
-                android:gravity="center"
-                android:paddingBottom="3dp"
-                android:paddingTop="10dp"
-                android:text='@{vm.text}'
-                app:layout_constraintBottom_toTopOf="@+id/imageView"
-                app:layout_constraintDimensionRatio="1.5"
+            <android.support.constraint.ConstraintLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:gravity="center_horizontal"
+                android:orientation="vertical"
+                android:padding="@dimen/padding_medium"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintVertical_chainStyle="spread_inside"
-                tools:drawableBottom="@drawable/rounded_corner_line"
-                tools:drawableTop="@drawable/ic_add_class"
-                tools:text="Home" />
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent">
 
-            <ImageView
-                android:id="@+id/imageView"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:layout_marginBottom="4dp"
-                android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp"
-                android:background="@{vm.drawableBottom}"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintDimensionRatio="14.8"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                tools:ignore="ContentDescription" />
+                <ImageView
+                    android:id="@+id/imageView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:contentDescription="@{vm.text}"
+                    android:gravity="center_horizontal"
+                    android:src="@{vm.drawableTop}"
+                    app:layout_constraintBottom_toTopOf="@+id/text"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_chainStyle="spread"
+                    tools:src="@drawable/ic_add_class" />
 
+                <TextView
+                    android:id="@+id/text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_margin="@dimen/padding_small"
+                    android:gravity="center"
+                    android:text='@{vm.text}'
+                    app:layout_constraintBottom_toTopOf="@+id/imageView2"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/imageView"
+                    tools:text="Home" />
+
+                <ImageView
+                    android:id="@+id/imageView2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@{vm.drawableBottom}"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/text" />
+            </android.support.constraint.ConstraintLayout>
         </android.support.constraint.ConstraintLayout>
     </android.support.v7.widget.CardView>
 

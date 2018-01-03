@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:bind="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:bind="http://schemas.android.com/tools">
 
     <data>
 
@@ -22,16 +21,15 @@
             android:clipToPadding="false"
             android:paddingTop="10dp"
             bind:items='@{vm.item}'
-            bind:view='@{vm.view}'
-            tools:listitem="@layout/item_class_list" />
+            bind:paginate="@{vm}"
+            bind:view='@{vm.viewProvider}' />
 
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_above="@id/filter"
             android:src="@drawable/bottom_line_drawable"
-            android:tint="@color/material_grey500"
-            tools:ignore="ContentDescription" />
+            android:tint="@color/material_grey500" />
 
         <LinearLayout
             android:id="@+id/filter"

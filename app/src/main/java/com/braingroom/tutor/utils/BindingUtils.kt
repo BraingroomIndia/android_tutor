@@ -2,21 +2,26 @@
 
 package com.braingroom.tutor.utils
 
-import android.databinding.*
-import android.view.View
-import com.braingroom.tutor.BR
-import com.braingroom.tutor.view.adapters.ViewModelBinder
-import com.braingroom.tutor.viewmodel.ViewModel
-import io.reactivex.functions.Action
+import android.databinding.BindingAdapter
+import android.databinding.BindingConversion
+import android.databinding.ViewDataBinding
 import android.graphics.PorterDuff
 import android.graphics.drawable.Drawable
 import android.os.Build
+import android.support.design.widget.NavigationView
 import android.support.design.widget.TextInputLayout
-import android.text.TextUtils
 import android.util.Log
+import android.view.LayoutInflater
+import android.view.View
 import android.widget.ImageView
-import com.braingroom.tutor.common.CustomApplication
 import android.widget.TextView
+import com.braingroom.tutor.BR
+import com.braingroom.tutor.common.CustomApplication
+import com.braingroom.tutor.databinding.NavHomeHeaderBinding
+import com.braingroom.tutor.view.adapters.ViewModelBinder
+import com.braingroom.tutor.viewmodel.ViewModel
+import com.braingroom.tutor.viewmodel.activity.HomeViewModel
+import io.reactivex.functions.Action
 
 
 /*
@@ -45,7 +50,7 @@ fun toOnClickListener(listener: Action?): View.OnClickListener? {
             try {
                 listener.run()
             } catch (e: Exception) {
-                e.printStackTrace();
+                Log.e("toOnClickListener", e.message, e)
             }
         }
         else -> null
@@ -55,19 +60,19 @@ fun toOnClickListener(listener: Action?): View.OnClickListener? {
 @BindingAdapter("android:src")
 fun setImageUri(view: ImageView?, imageUrl: String?) {
     if (!isEmpty(imageUrl)) {
-        Log.d("setImageUri", imageUrl)
+        Log.v("setImageUri", imageUrl)
         view?.let { picasso.load(imageUrl).into(it) }
     }
 }
 
 @BindingAdapter(value = *arrayOf("android:src", "placeholder"), requireAll = true)
 fun setImageUri(view: ImageView?, imageUrl: String?, placeHolder: Int?) {
-    if (!isEmpty(imageUrl)) {
-        Log.d("setImageUri", imageUrl + "   " + placeHolder)
+    if (!imageUrl.isNullOrBlank()) {
+        Log.v("setImageUri", imageUrl + "   " + placeHolder)
         if (placeHolder != null)
-            view?.let { picasso.load(imageUrl).placeholder(placeHolder).error(placeHolder).into(it) }
+            view?.let { picasso.load(imageUrl).placeholder(placeHolder).error(placeHolder).fit().centerCrop().into(it) }
         else setImageUri(view, imageUrl)
-    }
+    } else if (placeHolder != null && placeHolder != 0) view?.let { picasso.load(placeHolder).fit().centerCrop().into(it) }
 }
 
 @BindingAdapter("android:src")
@@ -75,18 +80,19 @@ fun setImageUri(view: ImageView?, drawable: Drawable?) {
     view?.setImageDrawable(drawable)
 }
 
-@BindingAdapter("android:src")
-fun setImageUri(view: ImageView?, imageUri: String?) {
-    Log.d("Binding Utils", "setImageUrl: " + imageUri)
-    if (!imageUri.isNullOrBlank())
-        view?.let { picasso?.load(imageUri)?.centerInside()?.resize(it.width, it.height)?.into(it) }
+@BindingAdapter("model")
+fun loadHeader(view: NavigationView, model: HomeViewModel?) {
+    val binding = NavHomeHeaderBinding.inflate(LayoutInflater.from(view.context))
+    binding.vm = model
+    binding?.executePendingBindings()
+    view.addHeaderView(binding?.root)
 }
 
 @BindingAdapter(value = *arrayOf("android:src", "placeHolder"), requireAll = true)
 fun setImageUrl(imageView: ImageView?, url: String?, placeHolder: Int) {
-    Log.d("Binding Utils", "setImageUrl: " + url ?: "null")
+    Log.v("Binding Utils", "setImageUrl: " + url ?: "null")
     if (!url.isNullOrBlank())
-        imageView?.let { picasso?.load(url)?.placeholder(placeHolder)?.error(placeHolder)?.centerInside()?.resize(it.width, it.height)?.into(it) }
+        imageView?.let { picasso?.load(url)?.placeholder(placeHolder)?.error(placeHolder)?./*centerInside()?.resize(it.width, it.height)?.*/into(it) }
 }
 
 
@@ -107,6 +113,13 @@ fun setBackground(view: View?, drawable: Drawable?) {
     else
         view?.setBackgroundDrawable(drawable)
 }
+
+/*
+@BindingAdapter("android:OnEditorActionListener")
+fun setOnEditorActionListener(view: TextView?, listener: TextView.OnEditorActionListener) {
+    view?.setOnEditorActionListener(listener)
+}
+*/
 
 @BindingAdapter("android:drawableTint")
 fun setBackground(view: TextView?, color: Int) {

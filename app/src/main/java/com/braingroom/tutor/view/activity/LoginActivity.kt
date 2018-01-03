@@ -5,18 +5,18 @@ import android.os.Bundle
 import android.util.Log
 import com.braingroom.tutor.R
 import com.braingroom.tutor.viewmodel.activity.LoginViewModel
-import com.google.android.gms.common.ConnectionResult
-import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener
-import com.google.android.gms.common.api.GoogleApiClient
-import com.google.android.gms.auth.api.Auth
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions
-import com.facebook.login.widget.LoginButton
+import com.facebook.CallbackManager
+import com.facebook.FacebookCallback
 import com.facebook.FacebookException
 import com.facebook.GraphRequest
-import com.facebook.login.LoginResult
-import com.facebook.FacebookCallback
 import com.facebook.login.LoginManager
-import com.facebook.CallbackManager
+import com.facebook.login.LoginResult
+import com.facebook.login.widget.LoginButton
+import com.google.android.gms.auth.api.Auth
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.android.gms.common.ConnectionResult
+import com.google.android.gms.common.api.GoogleApiClient
+import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener
 
 /*
  * Created by godara on 13/10/17.
@@ -55,7 +55,7 @@ class LoginActivity : Activity(), OnConnectionFailedListener {
                     override fun onSuccess(loginResult: LoginResult) {
                         val accessToken = loginResult.accessToken
                         val request = GraphRequest.newMeRequest(accessToken) { user, graphResponse ->
-                            Log.d(TAG, graphResponse.rawResponse)
+                            Log.v(TAG, graphResponse.rawResponse)
                             val name = user.optString("name");
                             val picture = user.optJSONObject("picture").optJSONObject("data").optString("url");
                             var email = user.optString("email");
@@ -69,11 +69,13 @@ class LoginActivity : Activity(), OnConnectionFailedListener {
                         request.parameters = parameters
                         request.executeAsync()
                     }
+
                     override fun onCancel() {
                         messageHelper.showDismissInfo("Login cancelled by user")
                     }
+
                     override fun onError(exception: FacebookException) {
-                        Log.d(TAG, "onError: " + exception.message)
+                        Log.e(TAG, "onError: " + exception.message, exception)
                         exception.printStackTrace()
                         messageHelper.showDismissInfo("Facebook login error")
                     }

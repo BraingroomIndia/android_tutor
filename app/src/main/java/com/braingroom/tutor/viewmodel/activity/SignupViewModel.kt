@@ -1,26 +1,36 @@
 package com.braingroom.tutor.viewmodel.activity
 
+import android.databinding.ObservableBoolean
+import android.text.TextUtils
 import android.view.View
 import com.braingroom.tutor.R
 import com.braingroom.tutor.model.data.InputTypeEnum
 import com.braingroom.tutor.model.data.ListDialogData
+import com.braingroom.tutor.model.req.SignUpReq
 import com.braingroom.tutor.utils.*
 import com.braingroom.tutor.view.activity.SignupActivity
+import com.braingroom.tutor.view.fragment.DynamicSearchSelectFragment
 import com.braingroom.tutor.view.fragment.FragmentHelper
 import com.braingroom.tutor.viewmodel.ViewModel
+import com.braingroom.tutor.viewmodel.fragment.DynamicSearchSelectListViewModel
 import com.braingroom.tutor.viewmodel.fragment.SearchSelectListViewModel
+import com.braingroom.tutor.viewmodel.item.DatePickerViewModel
 import com.braingroom.tutor.viewmodel.item.ListDialogViewModel
 import io.reactivex.functions.Action
 import com.braingroom.tutor.viewmodel.item.TextIconViewModel
+import io.reactivex.Observable
 import io.reactivex.functions.Consumer
 
 /*
  * Created by ashketchup on 30/11/17.
  */
 class SignupViewModel(val uiHelper: SignupActivity.UiHelper, val fragmentHelper: FragmentHelper) : ViewModel() {
-    val FIRST_FRAGMENT = "firstFragment"
-    val SECOND_FRAGMENT = "secondFragment"
 
+    val snippet: SignUpReq.Snippet= SignUpReq.Snippet()
+    val isIndividual = ObservableBoolean(true)
+    val FIRST_FRAGMENT = "firstfragment"
+    val SECOND_FRAGMENT = "secondFragment"
+    val THIRD_FRAGMENT ="thirdfragment"
     val name by lazy {
         TextIconViewModel("", null, InputTypeEnum.Text, View.VISIBLE, "Name", "Enter Valid Name")
     }
@@ -44,26 +54,52 @@ class SignupViewModel(val uiHelper: SignupActivity.UiHelper, val fragmentHelper:
         CustomDrawable(R.drawable.rounded_corner_line, R.color.materialBlue)
     }
 
+    val instituteName by lazy{
+        TextIconViewModel("",null,InputTypeEnum.Text,View.VISIBLE,"Institute Name","")
+    }
+    val address  by lazy{
+        TextIconViewModel("",null,InputTypeEnum.Text,View.VISIBLE,"Address","")
+    }
+    val aboutYou by lazy{
+        TextIconViewModel("",null,InputTypeEnum.Text,View.VISIBLE,"About You","")
+    }
+
+    val expertiseArea by lazy{
+        TextIconViewModel("",null,InputTypeEnum.Text,View.VISIBLE,"Expertise Area","")
+    }
+
+    val uploadImage by lazy{
+        Action{
+
+        }
+    }
+
+    val datePicker by lazy{
+        DatePickerViewModel(dialogHelper,"DOB","12-12-2012")
+    }
 
     val categoryVm by lazy {
-        ListDialogViewModel("Interest", apiService.getCategories().doOnSubscribe { disposable -> compositeDisposable.add(disposable) }.map { resp ->
+        ListDialogViewModel("Category", apiService.getCategories().doOnSubscribe { disposable -> compositeDisposable.add(disposable) }.map { resp ->
 
             val list: ListDialogData = ListDialogData(LinkedHashMap())
             for (snippet in resp.data)
                 list.getItems().put(snippet.textValue, snippet.id)
             list
 
-        }, HashMap(), true, Consumer { /*TODO*/ }, "", "Done")
+        }, HashMap(), true, Consumer { selectedData ->
+            snippet.setCategoryId(com.braingroom.tutor.utils.toString(selectedData))
+
+        }, "", "Done")
     }
     val communityVm by lazy {
-        ListDialogViewModel("Interest", apiService.getCategories().doOnSubscribe { disposable -> compositeDisposable.add(disposable) }.map { resp ->
-
+        ListDialogViewModel("Community", apiService.getCommunity().doOnSubscribe { disposable -> compositeDisposable.add(disposable) }.map { resp ->
             val list: ListDialogData = ListDialogData(LinkedHashMap())
             for (snippet in resp.data)
                 list.getItems().put(snippet.textValue, snippet.id)
             list
 
-        }, HashMap(), true, Consumer { /*TODO*/ }, "", "Done")
+        }, HashMap(), true, Consumer { selectedData ->
+            snippet.communityId=(com.braingroom.tutor.utils.toString(selectedData))}, "", "Done")
     }
 
     val countryVm by lazy {
@@ -73,6 +109,7 @@ class SignupViewModel(val uiHelper: SignupActivity.UiHelper, val fragmentHelper:
                 list.put(snippet.textValue, snippet.id)
             list
         }, Consumer { selectedData ->
+            snippet.countryId=com.braingroom.tutor.utils.toString(selectedData)
             selectedData.values.forEach { id ->
                 stateVm.refreshDataMap(apiService.getState(id).map { resp ->
                     val list: HashMap<String, Int> = HashMap();
@@ -83,7 +120,8 @@ class SignupViewModel(val uiHelper: SignupActivity.UiHelper, val fragmentHelper:
         }, HashMap(), fragmentHelper)
     }
     val stateVm by lazy {
-        SearchSelectListViewModel(State, "search country", "", false, null, Consumer { selectedData ->
+        SearchSelectListViewModel(State, "search state", "select country first", false, null, Consumer { selectedData ->
+            snippet.stateId= toString(selectedData)
             selectedData.values.forEach { id ->
                 cityVm.refreshDataMap(apiService.getCity(id).map { resp ->
                     val list: HashMap<String, Int> = HashMap();
@@ -94,7 +132,8 @@ class SignupViewModel(val uiHelper: SignupActivity.UiHelper, val fragmentHelper:
         }, HashMap(), fragmentHelper)
     }
     val cityVm by lazy {
-        SearchSelectListViewModel(City, "search country", "", false, null, Consumer { selectedData ->
+        SearchSelectListViewModel(City, "search city", "select state first", false, null, Consumer { selectedData ->
+            snippet.cityId=toString(selectedData)
             selectedData.values.forEach { id ->
                 localityVm.refreshDataMap(apiService.getLocality(id).map { resp ->
                     val list: HashMap<String, Int> = HashMap();
@@ -105,50 +144,93 @@ class SignupViewModel(val uiHelper: SignupActivity.UiHelper, val fragmentHelper:
         }, HashMap(), fragmentHelper)
     }
     val localityVm by lazy {
-        SearchSelectListViewModel(Locality, "search country", "", false, null, Consumer { /*TODO*/ }, HashMap(), fragmentHelper)
-    }
-    val onSignupClicked by lazy {
-        Action {
-            signup()
-        }
+        SearchSelectListViewModel(Locality, "search locality", "select city first", false, null, Consumer { selectedDataMap -> snippet.locality=toString(selectedDataMap) }, HashMap(), fragmentHelper)
     }
 
+    val toSecond by lazy {
+        Action {
+            toSecond()
+        }
+    }
+    val toThird by lazy{
+        Action{
+            toThird()
+        }
+    }
+    val apiSignUp by lazy{
+        Action{
+            signUp()
+        }
+    }
     init {
+        isIndividual.addOnPropertyChangedCallback(object:android.databinding.Observable.OnPropertyChangedCallback(){
+            override fun onPropertyChanged(sender: android.databinding.Observable?, propertyId: Int) {
+                if(isIndividual.get())
+                    aboutYou.hinttext.set("About You")
+                    else
+                    aboutYou.hinttext.set("About Institute")
+            }
+        })
+        isIndividual.set(!isIndividual.get())
         uiHelper.firstFragment()
     }
+    fun signUp(){
+        snippet.address=address.text.get()
+        uiHelper.signUp()
+    }
+
+    fun toThird(){
+        if(datePicker.title.get().equals("DOB")) {
+            snippet.dob = ""
+        }
+        else {
+            snippet.dob=datePicker.title.get()
+        }
+        snippet.instituteName=instituteName.text.get()
+        snippet.description=aboutYou.text.get()
+        snippet.areaOfExpertise=expertiseArea.text.get()
+        uiHelper.thirdFragment()
+        return
+    }
 
 
-    fun signup() {
+    fun toSecond() {
+        snippet.name=name.text.get()
+        snippet.mobileNo = phone.text.get()
+        snippet.email = phone.text.get()
+        snippet.password = phone.text.get()
+        snippet.referalCode = referralCode.text.get()
         uiHelper.secondFragment()
         return
-        if (!(isValidEmail(email.text.get()) && isValidName(name.text.get()) && isValidPhone(phone.text.get()) && isValidName(confirmPassword.text.get())) && isValidPassword(password.text.get())) {
-            if (!isValidEmail(email.text.get())) {
-                email.setError(true)
-            } else {
-                email.setError(false)
-            }
-            if (!isValidName(name.text.get())) {
-                name.setError(true)
-            } else {
-                name.setError(false)
-            }
-            if (!isValidPhone(phone.text.get())) {
-                phone.setError(true)
-            } else {
-                phone.setError(false)
-            }
+        /*   if (!(isValidEmail(email.text.get()) && isValidName(name.text.get()) && isValidPhone(phone.text.get()) && isValidName(confirmPassword.text.get())) && isValidPassword(password.text.get())) {
+               if (!isValidEmail(email.text.get())) {
+                   email.setError(true)
+               } else {
+                   email.setError(false)
+               }
+               if (!isValidName(name.text.get())) {
+                   name.setError(true)
+               } else {
+                   name.setError(false)
+               }
+               if (!isValidPhone(phone.text.get())) {
+                   phone.setError(true)
+               } else {
+                   phone.setError(false)
+               }
 
-            if (!isValidName(confirmPassword.text.get())) {
-                confirmPassword.setError(true)
-            } else {
-                confirmPassword.setError(false)
-            }
-        } else {
-            email.setError(false)
-            phone.setError(false)
-            confirmPassword.setError(false)
-            name.setError(false)
-            password.setError(false)
-        }
+               if (!isValidName(confirmPassword.text.get())) {
+                   confirmPassword.setError(true)
+               } else {
+                   confirmPassword.setError(false)
+               }
+           } else {
+               email.setError(false)
+               phone.setError(false)
+               confirmPassword.setError(false)
+               name.setError(false)
+               password.setError(false)
+           }
+       }*/
     }
 }

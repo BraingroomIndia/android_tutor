@@ -4,7 +4,7 @@
     xmlns:bind="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <data>
+   <data>
 
         <import type="android.view.View" />
 
@@ -12,12 +12,13 @@
             name="vm"
             type="com.braingroom.tutor.viewmodel.fragment.SearchSelectListViewModel" />
 
-    </data>
+   </data>
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@drawable/rounded_corner_line"
+        android:onClick="@{null}"
         android:orientation="vertical"
         android:padding="@dimen/margin_small">
 

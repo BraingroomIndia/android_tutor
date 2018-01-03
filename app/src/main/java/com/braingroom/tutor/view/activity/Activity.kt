@@ -1,18 +1,18 @@
 package com.braingroom.tutor.view.activity
 
-import android.app.Activity
 import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.databinding.DataBindingUtil
 import android.databinding.ViewDataBinding
 import android.os.Bundle
+import android.support.v4.app.FragmentManager
+import android.support.v4.widget.DrawerLayout
 import android.support.v7.app.AppCompatActivity
+import android.support.v7.widget.Toolbar
 import android.util.Log
 import com.braingroom.tutor.common.CustomApplication
 import com.braingroom.tutor.utils.*
-import com.braingroom.tutor.view.adapters.ViewModelBinder
 import com.braingroom.tutor.viewmodel.ViewModel
-
 import java.io.Serializable
 
 /*
@@ -38,7 +38,7 @@ import java.io.Serializable
  * binder provided to the library
  */
 abstract class Activity : AppCompatActivity() {
-    private lateinit var binding: ViewDataBinding
+    protected lateinit var binding: ViewDataBinding
 
 
     private val extras: Bundle? by lazy {
@@ -50,7 +50,7 @@ abstract class Activity : AppCompatActivity() {
 
 
     @Suppress("unused")
-    protected val applicationContext: CustomApplication by lazy {
+    public val applicationContext: CustomApplication by lazy {
         CustomApplication.getInstance()
     }
 
@@ -70,19 +70,19 @@ abstract class Activity : AppCompatActivity() {
 
     @Suppress("unused")
     val messageHelper by lazy {
-        Log.d(TAG, "messageHelper created")
+        Log.v(TAG, "messageHelper created")
         MessageHelper(this)
     }
 
     @Suppress("unused")
     val navigator by lazy {
-        Log.d(TAG, "navigator created")
+        Log.v(TAG, "navigator created")
         Navigator(this)
     }
 
     @Suppress("unused")
     val dialogHelper by lazy {
-        Log.d(TAG, "dialogHelper created")
+        Log.v(TAG, "dialogHelper created")
         DialogHelper(this)
     }
 
@@ -153,6 +153,14 @@ abstract class Activity : AppCompatActivity() {
     private fun clearReferences() {
         if (this == CustomApplication.getInstance().appModule.activity)
             CustomApplication.getInstance().appModule.activity = null
+    }
+
+    fun popBackStack(title: String) {
+        val count = fragmentManager.backStackEntryCount
+        if (count > 0) {
+            fragmentManager.popBackStack(title, FragmentManager.POP_BACK_STACK_INCLUSIVE)
+        }
+
     }
 
     protected abstract val vm: ViewModel

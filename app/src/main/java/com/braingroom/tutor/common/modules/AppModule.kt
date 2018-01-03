@@ -19,11 +19,11 @@ import com.google.gson.GsonBuilder
 import com.squareup.picasso.Picasso
 import okhttp3.Cache
 import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit.SECONDS
-import okhttp3.logging.HttpLoggingInterceptor
 
 
 /*
@@ -38,9 +38,9 @@ class AppModule(private val application: Application) {
         set(value) {
             field = value
             if (value != null)
-                Log.d(value.TAG, "activity set")
+                Log.v(value.TAG, "activity set")
             else
-                Log.d("activity null", "activity value set")
+                Log.v("activity null", "activity value not set")
         }
     private val cacheSize = 10 * 1024 * 1024 // 10 MiB
 
@@ -101,17 +101,17 @@ class AppModule(private val application: Application) {
 
     var navigator: Navigator? = null
         get() {
-            Log.d(activity?.TAG, "fetched navigator")
+            Log.v(activity?.TAG, "fetched navigator")
             return activity?.navigator
         }
     var messageHelper: MessageHelper? = null
         get() {
-            Log.d(activity?.TAG, "fetched messageHelper")
+            Log.v(activity?.TAG, "fetched messageHelper")
             return activity?.messageHelper
         }
     var dialogHelper: DialogHelper? = null
         get() {
-            Log.d(activity?.TAG, "fetched dialogHelper")
+            Log.v(activity?.TAG, "fetched dialogHelper")
             return activity?.dialogHelper
         }
     fun providePicasso(): Picasso {
