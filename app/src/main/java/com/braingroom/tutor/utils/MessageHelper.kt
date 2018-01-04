@@ -13,48 +13,53 @@ import com.braingroom.tutor.view.activity.Activity
 class MessageHelper(val activity: Activity?) {
     var toast: Toast? = null
     var progressDialog: MaterialDialog? = null
-    val TAG = activity?.TAG +"\t"+  this.javaClass.simpleName
+    val TAG = activity?.TAG + "\t" + this.javaClass.simpleName
 
     fun showMessage(message: String) {
         dismissActiveProgress()
         toast?.cancel()
         toast = Toast.makeText(activity, message, Toast.LENGTH_SHORT)
-        toast?.show()
+        activity?.runOnUiThread { toast?.show() }
     }
 
     fun showLoginRequireDialog(message: String) {
-        dismissActiveProgress()
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        activity?.runOnUiThread { dismissActiveProgress() }
     }
 
     fun showDismissInfo(title: String, content: String, buttonText: String) {
         dismissActiveProgress()
         activity?.let {
-            Builder(it)?.
-                    title(title)?.
-                    content(content)?.
-                    positiveText(buttonText)?.
-                    show()
+            it.runOnUiThread {
+                Builder(it)?.
+                        title(title)?.
+                        content(content)?.
+                        positiveText(buttonText)?.
+                        show()
+            }
         }
     }
 
     fun showDismissInfo(content: String, buttonText: String) {
         dismissActiveProgress()
         activity?.let {
-            Builder(it)?.
-                    content(content)?.
-                    positiveText(buttonText)?.
-                    show()
+            it.runOnUiThread {
+                Builder(it)?.
+                        content(content)?.
+                        positiveText(buttonText)?.
+                        show()
+            }
         }
     }
 
     fun showDismissInfo(content: String) {
         dismissActiveProgress()
         activity?.let {
-            Builder(it)?.
-                    content(content)?.
-                    positiveText("Dismiss")?.
-                    show()
+            it.runOnUiThread {
+                Builder(it)?.
+                        content(content)?.
+                        positiveText("Dismiss")?.
+                        show()
+            }
         }
     }
 
@@ -62,10 +67,12 @@ class MessageHelper(val activity: Activity?) {
         dismissActiveProgress()
 
         activity?.let {
-            Builder(it)?.content(content)?.
-                    onPositive(positiveCallback)?.
-                    positiveText(positiveText)?.
-                    title(title)?.show()
+            it.runOnUiThread {
+                Builder(it)?.content(content)?.
+                        onPositive(positiveCallback)?.
+                        positiveText(positiveText)?.
+                        title(title)?.show()
+            }
         }
     }
 
@@ -73,10 +80,12 @@ class MessageHelper(val activity: Activity?) {
         dismissActiveProgress()
 
         activity?.let {
-            Builder(it)?.content(content)?.
-                    onPositive(positiveCallback)?.
-                    positiveText(positiveText)?.
-                    show()
+            it.runOnUiThread {
+                Builder(it)?.content(content)?.
+                        onPositive(positiveCallback)?.
+                        positiveText(positiveText)?.
+                        show()
+            }
         }
     }
 
@@ -84,44 +93,60 @@ class MessageHelper(val activity: Activity?) {
                            positiveCallback: SingleButtonCallback, negativeCallBack: SingleButtonCallback) {
         dismissActiveProgress()
         activity?.let {
-            Builder(it)?.
-                    canceledOnTouchOutside(false)?.
-                    title(title)?.
-                    content(content)?.
-                    positiveText(positiveText)?.
-                    onPositive(positiveCallback)?.
-                    negativeText(negativeText)?.
-                    onNegative(negativeCallBack)?.
-                    show()
+            it.runOnUiThread {
+                Builder(it)?.
+                        canceledOnTouchOutside(false)?.
+                        title(title)?.
+                        content(content)?.
+                        positiveText(positiveText)?.
+                        onPositive(positiveCallback)?.
+                        negativeText(negativeText)?.
+                        onNegative(negativeCallBack)?.
+                        show()
+            }
         }
     }
 
     fun showProgressDialog(title: String, content: String) {
         dismissActiveProgress()
-        progressDialog = activity?.let {
-            Builder(it)?.
-                    title(title)?.
-                    content(content)?.
-                    cancelable(true)?.
-                    canceledOnTouchOutside(true)?.
-                    progress(true, 0)?.
-                    show()
+        activity?.let {
+            it.runOnUiThread {
+                progressDialog = Builder(it)?.
+                        title(title)?.
+                        content(content)?.
+                        cancelable(true)?.
+                        canceledOnTouchOutside(true)?.
+                        progress(true, 0)?.
+                        show()
+            }
         }
+        /*  progressDialog = activity?.let {
+              Builder(it)?.
+                      title(title)?.
+                      content(content)?.
+                      cancelable(true)?.
+                      canceledOnTouchOutside(true)?.
+                      progress(true, 0)?.
+                      show()
+          }*/
     }
 
     fun showProgressDialog(title: String, content: String, cancelAble: Boolean, dismissCallback: SingleButtonCallback) {
-        progressDialog = activity?.let {
-            Builder(it)?.
-                    title(title)?.
-                    content(content)?.
-                    cancelable(true)?.
-                    progress(true, 0)?.
-                    canceledOnTouchOutside(!cancelAble)?.
-                    onNegative(dismissCallback)?.show()
+
+        activity?.let {
+            it.runOnUiThread {
+                progressDialog = Builder(it)?.
+                        title(title)?.
+                        content(content)?.
+                        cancelable(true)?.
+                        progress(true, 0)?.
+                        canceledOnTouchOutside(!cancelAble)?.
+                        onNegative(dismissCallback)?.show()
+            }
         }
     }
 
     fun dismissActiveProgress() {
-        progressDialog?.cancel()
+        activity?.runOnUiThread { progressDialog?.cancel() }
     }
 }

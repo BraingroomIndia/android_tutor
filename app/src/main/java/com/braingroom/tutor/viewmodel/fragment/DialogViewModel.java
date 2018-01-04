@@ -11,13 +11,17 @@ import io.reactivex.functions.Action;
 public class DialogViewModel extends ViewModel {
     public final ObservableField<String> title, selectedItemsText;
     public final Action onOpenerClick;
+    public DialogHelper dialogHelper;
 
     public DialogViewModel(final DialogHelper dialogHelper, String title) {
-        dialogHelper.setViewModel(this);
+        this.dialogHelper = dialogHelper;
+        setViewModel(this);
         this.title = new ObservableField<>(title);
         this.selectedItemsText = new ObservableField<>();
         onOpenerClick = this::show;
-
+    }
+    public void setViewModel(ViewModel viewModel){
+        dialogHelper.setViewModel(viewModel);
     }
 
     public void handleOkClick() {

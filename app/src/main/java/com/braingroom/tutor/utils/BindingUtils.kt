@@ -50,7 +50,7 @@ fun toOnClickListener(listener: Action?): View.OnClickListener? {
             try {
                 listener.run()
             } catch (e: Exception) {
-                e.printStackTrace();
+                Log.e("toOnClickListener", e.message, e)
             }
         }
         else -> null
@@ -67,12 +67,12 @@ fun setImageUri(view: ImageView?, imageUrl: String?) {
 
 @BindingAdapter(value = *arrayOf("android:src", "placeholder"), requireAll = true)
 fun setImageUri(view: ImageView?, imageUrl: String?, placeHolder: Int?) {
-    if (!isEmpty(imageUrl)) {
+    if (!imageUrl.isNullOrBlank()) {
         Log.v("setImageUri", imageUrl + "   " + placeHolder)
         if (placeHolder != null)
-            view?.let { picasso.load(imageUrl).placeholder(placeHolder).error(placeHolder).into(it) }
+            view?.let { picasso.load(imageUrl).placeholder(placeHolder).error(placeHolder).fit().centerCrop().into(it) }
         else setImageUri(view, imageUrl)
-    }
+    } else if (placeHolder != null && placeHolder != 0) view?.let { picasso.load(placeHolder).fit().centerCrop().into(it) }
 }
 
 @BindingAdapter("android:src")
@@ -92,7 +92,7 @@ fun loadHeader(view: NavigationView, model: HomeViewModel?) {
 fun setImageUrl(imageView: ImageView?, url: String?, placeHolder: Int) {
     Log.v("Binding Utils", "setImageUrl: " + url ?: "null")
     if (!url.isNullOrBlank())
-        imageView?.let { picasso?.load(url)?.placeholder(placeHolder)?.error(placeHolder)?.centerInside()?.resize(it.width, it.height)?.into(it) }
+        imageView?.let { picasso?.load(url)?.placeholder(placeHolder)?.error(placeHolder)?./*centerInside()?.resize(it.width, it.height)?.*/into(it) }
 }
 
 
@@ -113,6 +113,13 @@ fun setBackground(view: View?, drawable: Drawable?) {
     else
         view?.setBackgroundDrawable(drawable)
 }
+
+/*
+@BindingAdapter("android:OnEditorActionListener")
+fun setOnEditorActionListener(view: TextView?, listener: TextView.OnEditorActionListener) {
+    view?.setOnEditorActionListener(listener)
+}
+*/
 
 @BindingAdapter("android:drawableTint")
 fun setBackground(view: TextView?, color: Int) {

@@ -70,6 +70,13 @@ public class LoginViewModel extends ViewModel {
         }
     };
 
+    public final Action onRegisterClicked = new Action() {
+        @Override
+        public void run() throws Exception {
+            if (getNavigator() != null)
+                getNavigator().navigateActivity(SignupActivity.class);
+        }
+    };
 
     public LoginViewModel(UIHelper uiHelper) {
         loginButton = new CustomDrawable(R.drawable.rounded_corner_line, R.color.material_deeporange600);

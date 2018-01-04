@@ -5,8 +5,7 @@ import android.content.Intent
 import android.databinding.ObservableField
 import com.braingroom.tutor.R
 import com.braingroom.tutor.common.CustomApplication
-import com.braingroom.tutor.utils.CustomDrawable
-import com.braingroom.tutor.utils.lodgedIn
+import com.braingroom.tutor.utils.*
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.ReplaySubject
 
@@ -24,6 +23,8 @@ open class ViewModel {
         CompositeDisposable()
     }
 
+    var pageNumber = 1
+    var paginationInProgress = false
     @Suppress("PropertyName")
     val TAG: String
         get() = this::class.java.simpleName ?: ""
@@ -82,7 +83,11 @@ open class ViewModel {
         CustomDrawable(R.drawable.splash_screen)
     }
 
-    open fun paginate() {}
+    open fun paginate() {
+        if (pageNumber > -1 && !paginationInProgress)
+            callAgain.set(callAgain.get() + 1)
+    }
+
     open fun onResume() {}
     open fun onPause() {}
     open fun onDestroy() {
@@ -90,6 +95,14 @@ open class ViewModel {
             compositeDisposable.dispose()
         }
         applicationContext.refWatcher?.watch(this, TAG)
+    }
+
+    fun logout() {
+        preferencesEditor.remove(email)
+        preferencesEditor.remove(profilePic)
+        preferencesEditor.remove(mobile)
+        preferencesEditor.remove(lodgedIn)
+        preferencesEditor.remove(name).apply()
     }
 
 

@@ -1,6 +1,7 @@
 package com.braingroom.tutor.utils
 
 import android.widget.DatePicker
+import android.widget.Toast
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.MaterialDialog.Builder
 import com.braingroom.tutor.R
@@ -28,19 +29,55 @@ public class DialogHelper(val activity: Activity?) {
     fun showDatePicker() {
 
         activity?.let {
+            activity.runOnUiThread({
+                dismissActiveProgress()
+                Builder(it)
+                        .title("")
+                        .customView(R.layout.item_date_picker, false)
+                        .positiveText(android.R.string.ok)
+                        .onPositive(MaterialDialog.SingleButtonCallback { dialog, which ->
+                            val datePicker = dialog.customView as DatePicker
+                            val month = datePicker.month + 1
+                            (viewModel as DatePickerViewModel).title.set(datePicker.year.toString() + "-" + month + "-" + datePicker.dayOfMonth)
+                            (viewModel as DatePickerViewModel).handleOkClick()
+                        })
+                        .show()
+            })
+        }
+    }
+    fun emptyAttendance(text: String){
+        activity?.let{
+            activity.runOnUiThread{
+                dismissActiveProgress()
+                Builder(it)
+                        .title("Invalid Code")
+                        .content(text)
+                        .negativeText("Cancel")
+                        .onNegative(MaterialDialog.SingleButtonCallback{ a,b ->
+                            dismissActiveProgress()
+                            })
+                        .show()
+            }
+        }
+    }
+
+    fun showAttendance(text:String,startOrEndCode:String,name:String,className:String,viewModel:ViewModel){
+        activity?.let{
+            activity.runOnUiThread({
             dismissActiveProgress()
             Builder(it)
                     .title("")
-                    .customView(R.layout.item_date_picker, false)
-                    .positiveText(android.R.string.ok)
-                    .onPositive(MaterialDialog.SingleButtonCallback { dialog, which ->
-                        val datePicker = dialog.customView as DatePicker
-                        val month = datePicker.month + 1
-                        (viewModel as DatePickerViewModel).title.set(datePicker.year.toString() + "-" + month + "-" + datePicker.dayOfMonth)
-                        (viewModel as DatePickerViewModel).handleOkClick()
+                    .content(name+"  "+className)
+                    .positiveText("Confirm")
+                    .negativeText("Cancel")
+                    .onPositive(MaterialDialog.SingleButtonCallback { dialog,which ->
+                        Toast.makeText(activity,"Boo",Toast.LENGTH_SHORT).show()
+                        viewModel.apiService.updateAttendance(text,startOrEndCode).subscribe{resp ->
+                            dismissActiveProgress()
+                        }
                     })
                     .show()
-
+            })
         }
     }
 

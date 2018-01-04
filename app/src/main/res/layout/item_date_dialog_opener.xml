@@ -30,7 +30,7 @@
             android:layout_alignParentTop="true"
             android:layout_toLeftOf="@+id/arrow"
             android:gravity="bottom"
-            android:text="@{vm.title}"
+            android:text="@{vm.mytitle}"
             android:textColor="@color/colorTextDark"
             android:textSize="@dimen/text_size_medium"
             android:fontFamily="@font/roboto_bold" />
@@ -39,7 +39,6 @@
             android:layout_width="match_parent"
             android:layout_height="25dp"
             android:layout_below="@+id/title"
-            android:gravity="center"
             android:text="@{vm.title}"
             android:background="@drawable/bottom_line_drawable"
             android:textColor="@color/colorTextGray"

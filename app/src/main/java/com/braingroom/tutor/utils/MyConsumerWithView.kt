@@ -1,10 +1,11 @@
 package com.braingroom.tutor.utils
 
+import android.view.View
 import io.reactivex.annotations.NonNull
 
 /**
  * Created by ashketchup on 1/12/17.
  */
-interface MyConsumerWithView<T,View>{
-    fun accept(@NonNull v1:T,v2:View)
+interface MyConsumerWithView<in T> {
+    fun accept(@NonNull viewModel: T, view: View)
 }

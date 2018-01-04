@@ -1,10 +1,9 @@
 package com.braingroom.tutor.viewmodel.activity
 
+import android.databinding.ObservableBoolean
 import android.util.Log
 import com.braingroom.tutor.R
 import com.braingroom.tutor.model.req.GalleryReq
-import com.braingroom.tutor.model.resp.GalleryResp
-import com.braingroom.tutor.utils.CustomDrawable
 import com.braingroom.tutor.view.adapters.ViewProvider
 import com.braingroom.tutor.viewmodel.ViewModel
 import com.braingroom.tutor.viewmodel.item.*
@@ -17,37 +16,33 @@ class MediaViewModel : ViewModel() {
     val viewProvider: ViewProvider  by lazy {
         object : ViewProvider {
             override fun getView(vm: ViewModel?): Int {
-                when (vm) {
-                    is LoadingViewModel -> return R.layout.item_loading_media
-                    is TextIconViewModel -> return R.layout.item_media
-                    else -> {
-                        Log.d("called", "wrongly called")
-                        return 0
-                    }
+                return when (vm) {
+                    is LoadingViewModel -> R.layout.item_loading_media
+                    is TextIconViewModel -> R.layout.item_media
+                    null -> throw NullPointerException()
+                    else -> throw NoSuchFieldError()
                 }
             }
         }
     }
-    var isVideo = false;
+
+
+    var isVideo = ObservableBoolean(false)
     val onVideo: Action by lazy {
-        object : Action {
-            override fun run() {
-                if (!isVideo) {
-                    isVideo = !isVideo
-                    item.onNext(RefreshViewModel())
-                    makeCall()
-                }
+        Action {
+            if (!isVideo.get()) {
+                isVideo.set(!isVideo.get())
+                item.onNext(RefreshViewModel())
+                makeCall()
             }
         }
     }
     val onImage: Action by lazy {
-        object : Action {
-            override fun run() {
-                if (isVideo) {
-                    isVideo = !isVideo
-                    item.onNext(RefreshViewModel())
-                    makeCall()
-                }
+        Action {
+            if (isVideo.get()) {
+                isVideo.set(!isVideo.get())
+                item.onNext(RefreshViewModel())
+                makeCall()
             }
         }
     }
@@ -57,7 +52,7 @@ class MediaViewModel : ViewModel() {
     }
 
     fun makeCall() {
-        apiService.getGallery(GalleryReq.Snippet("568", isVideo)).doOnSubscribe { disposable ->
+        apiService.getGallery(GalleryReq.Snippet("568", isVideo.get())).doOnSubscribe { disposable ->
             Log.d("called", "called")
             for (i in 0..4) {
                 item.onNext(LoadingViewModel())
@@ -72,10 +67,10 @@ class MediaViewModel : ViewModel() {
                         item.onNext(RemoveLoadingViewModel())
                         for (snippet in resp.data) {
 
-                            item.onNext(TextIconViewModel(snippet.mediaTitle, snippet.mediaPath, object : Action {
+                            item.onNext(TextIconViewModel(snippet.mediaTitle, snippet.mediaThumb, object : Action {
                                 override fun run() {
-                                    if (isVideo) {
-
+                                    if (isVideo.get()) {
+                                        navigator?.openStandaloneYoutube(snippet.videoId, 12312)
                                     } else {
 
                                     }

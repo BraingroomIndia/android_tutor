@@ -1,4 +1,4 @@
-package com.braingroom.tutor.view.activity.barcodereader;
+package com.braingroom.tutor.view.activity;
 
 
 /*
@@ -20,7 +20,7 @@ package com.braingroom.tutor.view.activity.barcodereader;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
-import android.app.Activity;
+
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
@@ -28,6 +28,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
+import android.graphics.drawable.ColorDrawable;
 import android.hardware.Camera;
 import android.os.Build;
 import android.os.Bundle;
@@ -43,10 +44,20 @@ import android.view.View;
 import android.widget.Toast;
 
 
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
+import com.afollestad.materialdialogs.MaterialDialog.SingleButtonCallback;
 import com.braingroom.tutor.R;
+import com.braingroom.tutor.model.req.AttendanceDetailReq;
+import com.braingroom.tutor.model.resp.AttendanceDetailResp;
 import com.braingroom.tutor.utils.GraphicOverlay;
+import com.braingroom.tutor.view.activity.barcodereader.BarcodeGraphic;
+import com.braingroom.tutor.view.activity.barcodereader.BarcodeGraphicTracker;
+import com.braingroom.tutor.view.activity.barcodereader.BarcodeTrackerFactory;
 import com.braingroom.tutor.view.activity.barcodereader.camera.CameraSource;
 import com.braingroom.tutor.view.activity.barcodereader.camera.CameraSourcePreview;
+import com.braingroom.tutor.view.fragment.AttendanceStatusFragment;
+import com.braingroom.tutor.viewmodel.ViewModel;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.common.api.CommonStatusCodes;
@@ -55,15 +66,20 @@ import com.google.android.gms.common.api.CommonStatusCodes;
 import com.google.android.gms.vision.MultiProcessor;
 import com.google.android.gms.vision.barcode.Barcode;
 import com.google.android.gms.vision.barcode.BarcodeDetector;
+import com.google.gson.Gson;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
+
+import io.reactivex.functions.Consumer;
 
 /**
  * Activity for the multi-tracker app.  This app detects barcodes and displays the value with the
  * rear facing camera. During detection overlay graphics are drawn to indicate the position,
  * size, and ID of each barcode.
  */
-public final class BarcodeCaptureActivity extends AppCompatActivity implements BarcodeGraphicTracker.BarcodeUpdateListener {
+public final class BarcodeCaptureActivity extends Activity implements BarcodeGraphicTracker.BarcodeUpdateListener {
     private static final String TAG = "Barcode-reader";
 
     // intent request code to handle updating play services if needed.
@@ -84,6 +100,7 @@ public final class BarcodeCaptureActivity extends AppCompatActivity implements B
     // helper objects for detecting taps and pinches.
     private ScaleGestureDetector scaleGestureDetector;
     private GestureDetector gestureDetector;
+    private final Gson gson = getApplicationContext().getAppModule().getGson();
 
     /**
      * Initializes the UI and creates the detector pipeline.
@@ -91,13 +108,14 @@ public final class BarcodeCaptureActivity extends AppCompatActivity implements B
     @Override
     public void onCreate(Bundle icicle) {
         super.onCreate(icicle);
-        setContentView(R.layout.activity_barcode_capture);
 
         mPreview = findViewById(R.id.preview);
         mGraphicOverlay = findViewById(R.id.graphicOverlay);
-
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.material_black)));
+        }
         // read parameters from the intent used to launch the activity.
-        boolean autoFocus = getIntent().getBooleanExtra(AutoFocus, false);
+        boolean autoFocus = getIntent().getBooleanExtra(AutoFocus, true);
         boolean useFlash = getIntent().getBooleanExtra(UseFlash, false);
 
         // Check for the camera permission before accessing the camera.  If the
@@ -374,6 +392,21 @@ public final class BarcodeCaptureActivity extends AppCompatActivity implements B
         return false;
     }
 
+    private ViewModel viewModel;
+
+    @NotNull
+    @Override
+    public ViewModel getVm() {
+        if (viewModel == null)
+            return new ViewModel();
+        else return viewModel;
+    }
+
+    @Override
+    protected int getLayoutId() {
+        return R.layout.activity_attendance;
+    }
+
     private class CaptureGestureListener extends GestureDetector.SimpleOnGestureListener {
         @Override
         public boolean onSingleTapConfirmed(MotionEvent e) {
@@ -435,8 +468,26 @@ public final class BarcodeCaptureActivity extends AppCompatActivity implements B
         }
     }
 
+    public void enterStartEndCode(View v) {
+        getNavigator().openFragment(AttendanceStatusFragment.Companion.newInstance());
+    }
+
     @Override
     public void onBarcodeDetected(Barcode barcode) {
-        //do something with barcode data returned
+        //Log.d("onBarcodeDetected", barcode.displayValue);
+        Log.d("onBarcodeDetected", gson.toJson(new AttendanceDetailReq(getVm().getUserId(), "123141234", true)));
+        if (barcode.displayValue.contains("braingroom")) {
+            getMessageHelper().showProgressDialog("Wait", "Communicating with server ");
+            getApiService().getStartOrEndDetails(gson.fromJson(barcode.displayValue, AttendanceDetailReq.class)).subscribe(resp -> {
+                if (!resp.getResCode())
+                    getMessageHelper().showAcceptableInfo(resp.getResMsg(), "Cancel", (dialog, which) -> Log.v(TAG, resp.getResMsg()));
+                else
+                    getMessageHelper().showAcceptableInfo("Ticket Info", resp.getData().getLearnerName() + resp.getData().getLearnerName(), "Confirm", "Cancel",
+                            (dialog, which) -> Log.v(TAG, resp.getResMsg()),
+                            (dialog, which) -> Log.v(TAG, resp.getResMsg())
+                    );
+
+            });
+        }
     }
 }

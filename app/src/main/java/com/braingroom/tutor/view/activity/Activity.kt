@@ -50,7 +50,7 @@ abstract class Activity : AppCompatActivity() {
 
 
     @Suppress("unused")
-    protected val applicationContext: CustomApplication by lazy {
+    public val applicationContext: CustomApplication by lazy {
         CustomApplication.getInstance()
     }
 
@@ -93,8 +93,6 @@ abstract class Activity : AppCompatActivity() {
     private val preferencesEditor by lazy {
         CustomApplication.getInstance().appModule.preferencesEditor
     }
-
-
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -165,7 +163,7 @@ abstract class Activity : AppCompatActivity() {
 
     }
 
-    protected abstract val vm: ViewModel
+    public abstract val vm: ViewModel
 
     protected abstract val layoutId: Int
 }

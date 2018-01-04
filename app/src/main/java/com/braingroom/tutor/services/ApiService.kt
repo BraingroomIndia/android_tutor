@@ -22,14 +22,14 @@ interface ApiService {
     @POST("apis/getProfile")
     fun getProfile(@Body req: CommonIdReq): Observable<MyProfileResp>
 
-    @POST("apis/getAllClasses/{pageIndex}")
+    @POST("tutorApi/getAllClasses/{pageIndex}")
     fun getAllClasses(@Path("pageIndex") pageIndex: String, @Body req: ClassListReq): Observable<ClassListResp>
 
     @POST("apis/BuyerRegistration")
     fun signUp(@Body req: SignUpReq): Observable<SignUpResp>
 
-    @POST("getPaymentDetails/{pageIndex}")
-    fun getPaymentDetails(@Path("pageIndex") pageIndex: String, @Body req: CommonIdReq): Observable<PaymentDetailsResp>
+    @POST("tutorApi/getPaymentSummaryByClasses/{pageIndex}")
+    fun getPaymentSummaryByClasses(@Path("pageIndex") pageIndex: String, @Body req: PaymentSummaryReq): Observable<PaymentDetailsResp>
 
     @POST("getInstitions")
     fun getInstitute(@Body req: InstituteReq): Observable<CommonIdResp>
@@ -67,6 +67,20 @@ interface ApiService {
     @Multipart
     @POST("tutorApi/uploadMedia")
     fun uploadImage(@Part file: MultipartBody.Part): Observable<UploadMediaResp>
+    @POST("apis/getMessage")
+    fun getMessages(@Body req: MessagesGetReq): Observable<MessageGetResp>
+
+    @POST("apis/postMessage")
+    fun reply(@Body req: MessageReplyReq): Observable<CommonIdResp>
+
+    @POST("apis/changePassword")
+    fun changePassword(@Body req: ChangePasswordReq): Observable<ChangePasswordResp>
+
+    @POST("apis/getChatMessages")
+    fun getMessageThread(@Body req: ChatMessageReq): Observable<ChatMessageResp>
+
+    @POST("apis/changeMessageThreadStatus")
+    fun changeMessageThreadStatus(@Body req: ChatMessageReq): Observable<CommonIdResp>
 
     @POST("apis/getLocality")
     fun getLocalities(@Body req: LocalityReq): Observable<CommonIdResp>
@@ -76,5 +90,15 @@ interface ApiService {
 
     @POST("apis/getReviews/{pageIndex}")
     fun reviewGet(@Path("pageIndex") pageIndex: String, @Body reviewGetReq: ReviewGetReq): Observable<ReviewGetResp>
+
+
+    @POST("tutorApi/getPaymentSummary")
+    fun getPaymentSummary(@Body req: PaymentSummaryReq): Observable<PaymentSummaryResp>
+
+    @POST("tutorApi/getAttendances")
+    fun getStartOrEndDetails(@Body req: AttendanceDetailReq): Observable<AttendanceDetailResp>
+
+    @POST("tutorApi/updateAttendance")
+    fun updateAttendance(@Body req: UpdateAttendanceReq): Observable<UpdateAttendanceResp>
 
 }

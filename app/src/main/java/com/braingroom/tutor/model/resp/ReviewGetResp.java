@@ -1,5 +1,6 @@
 package com.braingroom.tutor.model.resp;
 
+import com.braingroom.tutor.utils.CommonUtilsKt;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
@@ -8,47 +9,21 @@ import java.util.List;
 /**
  * Created by ashketchup on 8/12/17.
  */
-public class ReviewGetResp {
-    @SerializedName("res_msg")
-    String resMsg;
+public class ReviewGetResp extends BaseResp{
     @SerializedName("braingroom")
     List<Snippet> data = null;
-    @SerializedName("res_code")
-    private Integer resCode;
-
-    public ReviewGetResp(Integer resCode, String resMsg, List<Snippet> data) {
-        this.resCode = resCode;
-        this.resMsg = resMsg;
-        this.data = data;
-    }
 
     public ReviewGetResp() {
         this.data = null;
-        this.resMsg = "";
-    }
-
-    public String getResMsg() {
-        return resMsg;
-    }
-
-    public void setResMsg(String resMsg) {
-        this.resMsg = resMsg;
     }
 
     public List<Snippet> getData() {
         return data;
     }
 
-    public void setData(List<Snippet> data) {
-        this.data = data;
-    }
-
+    @Override
     public boolean getResCode() {
         return data != null && !data.isEmpty() && data.get(0) != null;
-    }
-
-    public void setResCode(Integer resCode) {
-        this.resCode = resCode;
     }
 
     public static class Snippet {
@@ -78,77 +53,52 @@ public class ReviewGetResp {
 
         @SerializedName("class_id")
         private String classId;
+        @SerializedName("class_topic")
+        private String classTopic;
+
+        public String getClassTopic() {
+            return CommonUtilsKt.getNonNull(classTopic);
+        }
 
         public String getId() {
-            return id;
+            return CommonUtilsKt.getNonNull(id);
         }
 
-        public void setId(String id) {
-            this.id = id;
-        }
 
         public String getUserId() {
-            return userId;
-        }
-
-        public void setUserId(String userId) {
-            this.userId = userId;
+            return CommonUtilsKt.getNonNull(userId);
         }
 
         public String getFirstName() {
-            return firstName;
+            return CommonUtilsKt.getNonNull(firstName);
         }
 
-        public void setFirstName(String firstName) {
-            this.firstName = firstName;
-        }
 
         public String getUserTypeId() {
-            return userTypeId;
+            return CommonUtilsKt.getNonNull(userTypeId);
         }
 
-        public void setUserTypeId(String userTypeId) {
-            this.userTypeId = userTypeId;
-        }
 
         public String getTimeStamp() {
-            return timeStamp;
+            return CommonUtilsKt.getNonNull(timeStamp);
         }
 
-        public void setTimeStamp(String timeStamp) {
-            this.timeStamp = timeStamp;
-        }
 
         public String getReviewType() {
-            return reviewType;
-        }
-
-        public void setReviewType(String reviewType) {
-            this.reviewType = reviewType;
+            return CommonUtilsKt.getNonNull(reviewType);
         }
 
         public String getReviewMessage() {
-            return reviewMessage;
-        }
-
-        public void setReviewMessage(String reviewMessage) {
-            this.reviewMessage = reviewMessage;
+            return CommonUtilsKt.getNonNull(reviewMessage);
         }
 
         public Integer getRating() {
-            return rating;
-        }
-
-        public void setRating(Integer rating) {
-            this.rating = rating;
+            return CommonUtilsKt.getNonNull(rating);
         }
 
         public String getClassId() {
-            return classId;
+            return CommonUtilsKt.getNonNull(classId);
         }
 
-        public void setClassId(String classId) {
-            this.classId = classId;
-        }
     }
 }

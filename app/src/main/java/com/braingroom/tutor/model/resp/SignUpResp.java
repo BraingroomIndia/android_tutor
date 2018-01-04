@@ -33,10 +33,6 @@ public class SignUpResp extends BaseResp {
         this.data = data;
     }
 
-    @Override
-    public String getResMsg() {
-        return super.getResMsg();
-    }
 
     public static class Snippet {
 

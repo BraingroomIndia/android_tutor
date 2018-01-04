@@ -23,6 +23,8 @@ import android.webkit.MimeTypeMap
 import com.braingroom.tutor.common.CustomApplication
 import io.reactivex.Observable
 import java.io.File
+import io.reactivex.ObservableOnSubscribe
+import java.text.SimpleDateFormat
 import java.util.*
 import java.util.regex.Pattern
 
@@ -163,6 +165,19 @@ private fun youTubeLinkWithoutProtocolAndDomain(url: String): String {
     return if (matcher.find()) {
         url.replace(matcher.group(), "")
     } else url
+}
+
+fun getHumanDate(timeStamp: String): String {
+
+    try {
+        val time = Integer.valueOf(timeStamp)!!.toLong()
+        val sdf = SimpleDateFormat("MM/dd/yyyy")
+        val netDate = Date(time * 1000)
+        return sdf.format(netDate)
+    } catch (ex: Exception) {
+        return "xx"
+    }
+
 }
 
 

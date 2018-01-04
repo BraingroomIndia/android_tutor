@@ -13,6 +13,7 @@ import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import java.io.File
 import java.util.ArrayList
+import retrofit2.http.Body
 
 
 /*
@@ -46,8 +47,8 @@ class DataFlowService(private val api: ApiService, private val realmCacheService
                 onErrorReturn { ClassListResp() }.map { resp -> resp }
     }
 
-    fun getPaymentDetails(pageNumber: Int): Observable<PaymentDetailsResp> {
-        return api.getPaymentDetails(if (pageNumber > 1) pageNumber.toString() else "", CommonIdReq(userId)).subscribeOn(Schedulers.io()).observeOn(Schedulers.computation()).
+    fun getPaymentDetails(pageNumber: Int, starDate: String, endDate: String, keyword: String): Observable<PaymentDetailsResp> {
+        return api.getPaymentSummaryByClasses(if (pageNumber > 1) pageNumber.toString() else "", PaymentSummaryReq(userId, starDate, endDate, keyword)).subscribeOn(Schedulers.io()).observeOn(Schedulers.computation()).
                 onErrorReturn { PaymentDetailsResp() }
     }
 
@@ -90,6 +91,30 @@ class DataFlowService(private val api: ApiService, private val realmCacheService
         }
     }
 
+    fun getMessages(): Observable<MessageGetResp> {
+        return api.getMessages(MessagesGetReq(MessagesGetReq.Snippet(userId))).subscribeOn(Schedulers.io()).observeOn(Schedulers.computation()).onErrorReturn { MessageGetResp() }
+    }
+
+    fun getMessageThread(senderId: String): Observable<ChatMessageResp> {
+        return api.getMessageThread(ChatMessageReq(ChatMessageReq.Snippet(userId, senderId))).subscribeOn(Schedulers.io()).observeOn(Schedulers.computation()).onErrorReturn { ChatMessageResp() }
+    }
+
+    fun changePassword(snippet: ChangePasswordReq.Snippet): Observable<ChangePasswordResp> {
+
+        return api.changePassword(ChangePasswordReq(snippet)).subscribeOn(Schedulers.io())
+                .observeOn(Schedulers.computation())
+    }
+
+    fun postReply(senderId: String, message: String): Observable<CommonIdResp> {
+        return api.reply(MessageReplyReq(MessageReplyReq.Snippet(userId, senderId, "", "", message, ""))).subscribeOn(Schedulers.io()).observeOn(Schedulers.computation()).onErrorReturn { CommonIdResp() }
+    }
+
+    fun changeMessageThreadStatus(senderId: String): Observable<CommonIdResp> {
+
+        return api.changeMessageThreadStatus(ChatMessageReq(ChatMessageReq.Snippet(userId, senderId))).subscribeOn(Schedulers.io())
+                .observeOn(Schedulers.computation())
+    }
+
     fun getCategories(): Observable<CommonIdResp> {
         return realmCacheService.getCachedCommon("category").
                 defaultIfEmpty(CommonIdResp(null)).
@@ -106,8 +131,8 @@ class DataFlowService(private val api: ApiService, private val realmCacheService
     }
 
     fun getCommunity(): Observable<CommonIdResp> {
-        return    api.getCommunity().subscribeOn(Schedulers.io()).observeOn(Schedulers.computation()).onErrorReturn { CommonIdResp() }.map { resp ->
-           /* realmCacheService.putCachedCommon(resp.data, "community")*/
+        return api.getCommunity().subscribeOn(Schedulers.io()).observeOn(Schedulers.computation()).onErrorReturn { CommonIdResp() }.map { resp ->
+            /* realmCacheService.putCachedCommon(resp.data, "community")*/
             resp
         }.map { resp -> resp }/*realmCacheService.getCachedCommon("community").
                 defaultIfEmpty(CommonIdResp(null)).
@@ -170,9 +195,14 @@ class DataFlowService(private val api: ApiService, private val realmCacheService
     }
 
     fun getReview(pageNumber: Int): Observable<ReviewGetResp> {
-        return api.reviewGet(pageNumber.toString(), ReviewGetReq(ReviewGetReq.Snippet(userId))).subscribeOn(Schedulers.io())
+        return api.reviewGet(pageNumber.toString(), ReviewGetReq(userId)).subscribeOn(Schedulers.io())
                 .observeOn(Schedulers.computation()).onErrorReturnItem(ReviewGetResp())
 
+    }
+
+    fun getPaymentSummary(starDate: String, endDate: String): Observable<PaymentSummaryResp> {
+        return api.getPaymentSummary(PaymentSummaryReq(userId, starDate, endDate)).onErrorReturnItem(PaymentSummaryResp()).subscribeOn(Schedulers.io())
+                .observeOn(Schedulers.computation())
     }
 
 
@@ -231,5 +261,22 @@ class DataFlowService(private val api: ApiService, private val realmCacheService
         return api.uploadImage(prepareFilePart("image", fileType, filePath)
         ).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
+    }
+
+    fun updateAttendance(learnerId: String, startOrEndCode: String): Observable<UpdateAttendanceResp> {
+        return api.updateAttendance(UpdateAttendanceReq(UpdateAttendanceReq.Snippet(userId, learnerId, startOrEndCode))).subscribeOn(Schedulers.io())
+                .onErrorReturn { UpdateAttendanceResp() }
+                .observeOn(Schedulers.computation())
+    }
+
+
+    fun getStartOrEndDetails(startOrEndCode: String, isStartCode: Boolean): Observable<AttendanceDetailResp> {
+        return api.getStartOrEndDetails(AttendanceDetailReq(userId, startOrEndCode, isStartCode)).onErrorReturnItem(AttendanceDetailResp()).subscribeOn(Schedulers.io())
+                .observeOn(Schedulers.computation())
+    }
+
+    fun getStartOrEndDetails(req: AttendanceDetailReq): Observable<AttendanceDetailResp> {
+        return api.getStartOrEndDetails(req).onErrorReturnItem(AttendanceDetailResp()).subscribeOn(Schedulers.io())
+                .observeOn(Schedulers.computation())
     }
 }

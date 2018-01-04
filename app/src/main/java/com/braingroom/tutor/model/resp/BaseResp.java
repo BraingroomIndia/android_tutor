@@ -1,6 +1,8 @@
 package com.braingroom.tutor.model.resp;
 
 
+import android.support.annotation.NonNull;
+
 import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
@@ -17,14 +19,11 @@ public abstract class BaseResp {
     @SerializedName("res_msg")
     private String resMsg;
 
-    public BaseResp() {
-    }
-
-    protected boolean isEmpty(String value) {
+    public boolean isEmpty(String value) {
         return value == null || value.trim().isEmpty();
     }
 
-    protected boolean isEmpty(List<?> value) {
+    public static boolean isEmpty(List<?> value) {
         return value == null || value.isEmpty() || value.get(0) == null;
     }
 
@@ -32,8 +31,9 @@ public abstract class BaseResp {
     public abstract boolean getResCode();
 
 
+    @NonNull
     public String getResMsg() {
-        return getNonNull(resMsg);
+        return isEmpty(resMsg) ? "Network error" : resMsg;
     }
 
 }

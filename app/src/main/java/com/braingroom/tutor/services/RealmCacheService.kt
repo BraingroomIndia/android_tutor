@@ -16,7 +16,7 @@ public class RealmCacheService : CacheService {
         val realm = Realm.getDefaultInstance()
         val x = CommonIdRealmWrapper()
         val item: MutableList<CommonIdResp.Snippet> = mutableListOf()
-        var data: CommonIdRealmWrapper? = realm.where(x.javaClass).equalTo("searchQuery", searchQuery).findFirst() ?: return Observable.just(CommonIdResp(null))
+        val data: CommonIdRealmWrapper? = realm.where(x.javaClass).equalTo("searchQuery", searchQuery).findFirst() ?: return Observable.just(CommonIdResp(null))
         (data?.data?.isNotEmpty()).let {
             data?.data?.mapTo(item) { it.toSnippet() }
             val data1: CommonIdRealmWrapper? = realm.where(x.javaClass).equalTo("searchQuery", searchQuery).findFirst() ?: return Observable.just(CommonIdResp(null))
@@ -28,13 +28,13 @@ public class RealmCacheService : CacheService {
     }
 
 
-    override fun putCachedCommon(countriesList: List<CommonIdResp.Snippet>, searchQuery: String): CommonIdResp {
+    override fun putCachedCommon(commonIdRespList: List<CommonIdResp.Snippet>, searchQuery: String): CommonIdResp {
         val realmList = RealmList<CommonIdSnippetWrapper>()
-        countriesList.mapTo(realmList) { CommonIdSnippetWrapper(it) }
+        commonIdRespList.mapTo(realmList) { CommonIdSnippetWrapper(it) }
         val realm = Realm.getDefaultInstance()
         realm.executeTransaction {
             it.insert(CommonIdRealmWrapper.create(realmList, searchQuery))
         }
-        return CommonIdResp(countriesList)
+        return CommonIdResp(commonIdRespList)
     }
 }

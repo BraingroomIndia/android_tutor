@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import static com.braingroom.tutor.utils.CommonUtilsKt.extractYoutubeId;
 import static com.braingroom.tutor.utils.CommonUtilsKt.getNonNull;
 import static com.braingroom.tutor.utils.CommonUtilsKt.getThumbnail;
 /*
@@ -41,8 +42,12 @@ public class GalleryResp extends BaseResp {
         public boolean isVideo = false;
 
         @NonNull
-        public String getMediaPath() {
+        public String getMediaThumb() {
             return isVideo ? getNonNull(getThumbnail(mediaPath)) : getNonNull(mediaPath);
+        }
+
+        public String getVideoId() {
+            return isVideo ? extractYoutubeId(mediaPath) : "";
         }
     }
 
