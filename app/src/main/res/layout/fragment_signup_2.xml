@@ -1,104 +1,285 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-   <data>
+    <data>
+
+        <import type="android.view.View" />
 
         <variable
             name="vm"
             type="com.braingroom.tutor.viewmodel.activity.SignupViewModel" />
-        <import type="android.view.View"/>
-   </data>
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        >
-        <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:onClick="@{null}"
-        android:orientation="vertical">
-            <RadioGroup
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:orientation="horizontal">
-                <RadioButton
 
-                    android:layout_marginRight="@dimen/margin_med"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:text="Organization"
-                    android:checked="@={!vm.isIndividual}"
-                    android:layout_gravity="left"/>
-                <RadioButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:checked="@={vm.isIndividual}"
-                    android:text="Individual"
-                    android:layout_gravity="right" />
-            </RadioGroup>
+    </data>
 
-        <RelativeLayout
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ScrollView
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
-            <de.hdodenhof.circleimageview.CircleImageView
-                android:onClick="@{vm.uploadImage}"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:src="@drawable/class_ph_3"
-                android:id="@+id/circleImageView" />
 
-
-            <include
-                layout="@layout/item_date_dialog_opener"
-                android:layout_height="wrap_content"
-                android:layout_width="wrap_content"
-                app:vm="@{vm.datePicker}"
-                android:visibility="@{(vm.isIndividual.get())?View.VISIBLE:View.GONE}"
-                android:layout_centerVertical="true"
-                android:layout_toEndOf="@+id/circleImageView"
-                android:layout_toRightOf="@+id/circleImageView" />
-        </RelativeLayout>
-            <include
-                layout="@layout/item_list_dialog_opener"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                app:vm="@{vm.categoryVm}" />
-            <include
-                layout="@layout/item_list_dialog_opener"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                app:vm="@{vm.communityVm}" />
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:padding="10dp">
 
-            <include
-                android:id="@+id/instituteName"
-                layout="@layout/floating_label_edit_text"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:visibility="@{(!vm.isIndividual.get())?View.VISIBLE:View.GONE}"
-                app:data1="@{vm.instituteName}"/>
-        <include
-            layout="@layout/floating_label_edit_text"
-            app:data1="@{vm.aboutYou}"
-            />
-            <include
-            layout="@layout/floating_label_edit_text"
-            app:data1="@{vm.expertiseArea}" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:gravity="center"
+                    android:text="Step 2 of 3"
+                    android:textSize="20dp"
+                    android:textStyle="bold" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Next"
-            android:layout_gravity="center"
-            android:layout_marginTop="@dimen/margin_med"
-            android:fontFamily="@font/roboto_bold"
-            android:textSize="@dimen/_16sdp"
-            android:textColor="@color/black"
-            android:onClick="@{vm.toThird}"/>
-        </LinearLayout>
-    </ScrollView>
+
+                <RadioGroup
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:checkedButton="@+id/radio_individual"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingLeft="10dp">
+
+                    <RadioButton
+                        android:id="@+id/radio_individual"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:checked="@={vm.isIndividual}"
+                        android:text="Individual" />
+
+                    <RadioButton
+                        android:id="@+id/radio_organization"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:checked="@={!vm.isIndividual}"
+                        android:text="Organization"
+                        tools:checked="true" />
+                </RadioGroup>
+
+                <LinearLayout
+                    android:id="@+id/signup_individual_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="100dp"
+                        android:background="@drawable/solid_white_rounded_corner"
+                        android:padding="10dp"
+                        android:visibility="@{vm.isIndividual ? View.VISIBLE : View.GONE}"
+                        tools:visibility="gone">
+
+                        <de.hdodenhof.circleimageview.CircleImageView
+                            android:id="@+id/profile_pic"
+                            android:layout_width="80dp"
+                            android:layout_height="match_parent"
+                            android:layout_alignParentLeft="true"
+                            android:src="@drawable/individual"
+                            tools:src="@drawable/individual" />
+
+                        <TextView
+                            android:layout_width="80dp"
+                            android:layout_height="20dp"
+                            android:layout_alignParentBottom="true"
+                            android:layout_alignParentLeft="true"
+                            android:background="@color/transparentWhite"
+                            android:gravity="center"
+                            android:text="Edit"
+                            android:textColor="@color/darkTextColor" />
+
+                        <TextView
+                            android:id="@+id/date_of_birth"
+                            android:layout_width="match_parent"
+                            android:layout_height="40dp"
+                            android:layout_centerVertical="true"
+                            android:layout_marginLeft="10dp"
+                            android:layout_toRightOf="@+id/profile_pic"
+                            android:background="@drawable/bottom_line_drawable"
+                            android:gravity="center_vertical"
+                            android:onClick="@{vm.datePicker.onClick}"
+                            android:paddingLeft="10dp"
+                            android:text='@={vm.datePicker.title}' />
+
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="100dp"
+                        android:background="@drawable/solid_white_rounded_corner"
+                        android:padding="10dp"
+                        android:visibility="@{vm.isIndividual ? View.GONE : View.VISIBLE}"
+                        tools:visibility="visible">
+
+                        <de.hdodenhof.circleimageview.CircleImageView
+                            android:id="@+id/profile_pic_organization"
+                            android:layout_width="80dp"
+                            android:layout_height="match_parent"
+                            android:layout_alignParentLeft="true"
+                            android:src="@drawable/organization" />
+
+                        <TextView
+                            android:layout_width="80dp"
+                            android:layout_height="20dp"
+                            android:layout_alignParentBottom="true"
+                            android:layout_alignParentLeft="true"
+                            android:background="@color/material_white"
+                            android:gravity="center"
+                            android:text="Edit"
+                            android:textColor="@color/darkTextColor" />
+
+                        <EditText
+                            android:id="@+id/institute_name"
+                            android:layout_width="match_parent"
+                            android:layout_height="40dp"
+                            android:layout_alignParentTop="true"
+                            android:layout_marginLeft="10dp"
+                            android:layout_toRightOf="@+id/profile_pic_organization"
+                            android:background="@drawable/bottom_line_drawable"
+                            android:ems="10"
+                            android:hint="Institute name"
+                            android:paddingLeft="10dp"
+                            android:text="@={vm.instituteName}" />
+
+
+                        <EditText
+                            android:id="@+id/institute_reg_id"
+                            android:layout_width="match_parent"
+                            android:layout_height="40dp"
+                            android:layout_alignParentBottom="true"
+                            android:layout_marginLeft="10dp"
+                            android:layout_toRightOf="@+id/profile_pic_organization"
+                            android:background="@drawable/bottom_line_drawable"
+                            android:ems="10"
+                            android:text="@={vm.instituteId}"
+                            android:hint="Institute official reg. id"
+                            android:paddingLeft="10dp" />
+
+                    </RelativeLayout>
+
+
+                    <include
+                        layout="@layout/item_search_select_fragment_opener"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        app:vm="@{vm.categoryVm}" />
+
+                    <include
+                        layout="@layout/item_search_select_fragment_opener"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        app:vm="@{vm.communityVm}" />
+                    <!-- <include
+                         layout="@layout/item_search_select_fragment_opener"
+                         android:layout_width="match_parent"
+                         android:layout_height="wrap_content"
+                         android:layout_gravity="center"
+                         app:vm="@{vm.genderVm}" />
+ -->
+
+                    <EditText
+                        android:id="@+id/expertise_area"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:ems="10"
+                        android:hint="Expertise area"
+                        android:minHeight="50dp"
+                        android:paddingLeft="10dp"
+                        android:text="@={vm.expertiseArea}" />
+
+                    <EditText
+                        android:id="@+id/full_address"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:ems="10"
+                        android:hint="Full address"
+                        android:minHeight="50dp"
+                        android:paddingLeft="10dp"
+                        android:text="@={vm.address}" />
+
+                    <EditText
+                        android:id="@+id/about_yourself"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:ems="10"
+                        android:hint="About yourself"
+                        android:minHeight="50dp"
+                        android:paddingLeft="10dp"
+                        android:text="@={vm.aboutYou}" />
+                </LinearLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_marginTop="10dp">
+
+                    <TextView
+                        android:id="@+id/back"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:background="@drawable/solid_bg_green_rounded_corner"
+                        android:gravity="center"
+                        android:onClick="@{vm.toFirst}"
+                        android:paddingBottom="5dp"
+                        android:paddingLeft="10dp"
+                        android:paddingRight="10dp"
+                        android:paddingTop="5dp"
+                        android:text="Back"
+                        android:textColor="#ffffff"
+                        android:textSize="20dp" />
+
+                    <TextView
+                        android:id="@+id/skip"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="10dp"
+                        android:layout_toLeftOf="@+id/next"
+                        android:background="@drawable/solid_bg_green_rounded_corner"
+                        android:gravity="center"
+                        android:onClick="@{vm.toThird}"
+                        android:paddingBottom="5dp"
+                        android:paddingLeft="10dp"
+                        android:paddingRight="10dp"
+                        android:paddingTop="5dp"
+                        android:text="Back"
+                        android:textColor="#ffffff"
+                        android:textSize="20dp" />
+
+                    <TextView
+                        android:id="@+id/next"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:background="@drawable/solid_bg_green_rounded_corner"
+                        android:gravity="center"
+                        android:onClick="@{vm.toThird}"
+                        android:paddingBottom="5dp"
+                        android:paddingLeft="10dp"
+                        android:paddingRight="10dp"
+                        android:paddingTop="5dp"
+                        android:text="Next"
+                        android:textColor="#ffffff"
+                        android:textSize="20dp" />
+
+                </RelativeLayout>
+
+
+            </LinearLayout>
+        </ScrollView>
+
+    </android.support.v7.widget.CardView>
+
 </layout>

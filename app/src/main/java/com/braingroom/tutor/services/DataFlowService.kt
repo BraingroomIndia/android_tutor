@@ -8,6 +8,11 @@ import com.braingroom.tutor.model.resp.*
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
+import okhttp3.MediaType
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
+import java.io.File
+import java.util.ArrayList
 
 
 /*
@@ -101,7 +106,10 @@ class DataFlowService(private val api: ApiService, private val realmCacheService
     }
 
     fun getCommunity(): Observable<CommonIdResp> {
-        return realmCacheService.getCachedCommon("community").
+        return    api.getCommunity().subscribeOn(Schedulers.io()).observeOn(Schedulers.computation()).onErrorReturn { CommonIdResp() }.map { resp ->
+           /* realmCacheService.putCachedCommon(resp.data, "community")*/
+            resp
+        }.map { resp -> resp }/*realmCacheService.getCachedCommon("community").
                 defaultIfEmpty(CommonIdResp(null)).
                 flatMap { data ->
                     if (data == null)//TODO Handle this case
@@ -112,7 +120,7 @@ class DataFlowService(private val api: ApiService, private val realmCacheService
                             resp
                         }.map { resp -> resp }
                     return@flatMap realmCacheService.getCachedCommon("community")
-                }
+                }*/
     }
 
     fun getCountry(): Observable<CommonIdResp> {
@@ -201,5 +209,27 @@ class DataFlowService(private val api: ApiService, private val realmCacheService
         return api.getUnreadNotificationCount(CommonIdReq(CommonIdReq.Snippet(userId))).subscribeOn(Schedulers.io())
                 .observeOn(Schedulers.computation()).map { resp -> resp }
         //TODO Handle error return parts
+    }
+
+    fun getGender(): Observable<CommonIdResp> {
+        val data = ArrayList<CommonIdResp.Snippet>(2)
+        data.add(CommonIdResp.Snippet(1, "Male"))
+        data.add(CommonIdResp.Snippet(2, "Female"))
+        return Observable.just(CommonIdResp(data))
+
+    }
+
+    private fun prepareFilePart(partName: String, fileType: String, filePath: String): MultipartBody.Part {
+        val file = File(filePath)
+        return MultipartBody.Part.createFormData(partName, file.name, RequestBody.create(
+                MediaType.parse(fileType),
+                file
+        ))
+    }
+
+    fun uploadImage(filePath: String, fileType: String): Observable<UploadMediaResp> {
+        return api.uploadImage(prepareFilePart("image", fileType, filePath)
+        ).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
     }
 }

@@ -3,10 +3,9 @@ package com.braingroom.tutor.services
 import com.braingroom.tutor.model.req.*
 import com.braingroom.tutor.model.resp.*
 import io.reactivex.Observable
-import retrofit2.http.Body
-import retrofit2.http.GET
-import retrofit2.http.POST
-import retrofit2.http.Path
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
+import retrofit2.http.*
 
 
 /*
@@ -30,7 +29,7 @@ interface ApiService {
     fun signUp(@Body req: SignUpReq): Observable<SignUpResp>
 
     @POST("getPaymentDetails/{pageIndex}")
-    fun getPaymentDetails(@Path("pageIndex") pageIndex: String, @Body req:CommonIdReq):Observable<PaymentDetailsResp>
+    fun getPaymentDetails(@Path("pageIndex") pageIndex: String, @Body req: CommonIdReq): Observable<PaymentDetailsResp>
 
     @POST("getInstitions")
     fun getInstitute(@Body req: InstituteReq): Observable<CommonIdResp>
@@ -47,7 +46,7 @@ interface ApiService {
     @POST("apis/getCategory")
     fun getCategories(): Observable<CommonIdResp>
 
-    @GET("apis/getCategory")
+    @GET("apis/getCommunity")
     fun getCommunity(): Observable<CommonIdResp>
 
     @POST("apis/getCountry")
@@ -65,6 +64,9 @@ interface ApiService {
     @POST("apis/getUnreadNotificationCount")
     fun getUnreadNotificationCount(@Body req: CommonIdReq): Observable<NotificationCountResp>
 
+    @Multipart
+    @POST("tutorApi/uploadMedia")
+    fun uploadImage(@Part file: MultipartBody.Part): Observable<UploadMediaResp>
 
     @POST("apis/getLocality")
     fun getLocalities(@Body req: LocalityReq): Observable<CommonIdResp>

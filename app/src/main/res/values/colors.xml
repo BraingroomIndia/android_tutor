@@ -3,6 +3,9 @@
 
 
     <color name="darkTextColor">#333333</color>
+    <color name="transparentDarkGray">#aaa1a1a1</color>
+    <color name="transparentWhite">#77ffffff</color>
+    <color name="transparentDark">#aa000000</color>
     <color name="lightGray">#c7c7c7</color>
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>

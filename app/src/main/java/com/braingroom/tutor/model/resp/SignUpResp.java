@@ -1,5 +1,7 @@
 package com.braingroom.tutor.model.resp;
 
+import android.support.annotation.NonNull;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -19,11 +21,12 @@ public class SignUpResp extends BaseResp {
 
     @Override
     public boolean getResCode() {
-        return false;
+        return !isEmpty(data);
     }
 
-    public List<Snippet> getData() {
-        return data;
+    @NonNull
+    public Snippet getData() {
+        return isEmpty(data) ? new Snippet() : data.get(0);
     }
 
     public void setData(List<Snippet> data) {

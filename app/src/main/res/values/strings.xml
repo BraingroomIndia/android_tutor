@@ -23,6 +23,26 @@
     <string name="barcode_error">"Error reading barcode: %1$s"</string>
     <string name="navigation_drawer_open">Open Navigation</string>
     <string name="navigation_drawer_close">Close Navigation</string>
+
+    <string-array name="primary_id_type">
+        <item>Select one</item>
+        <item>Aadhar Card</item>
+        <item>Passport</item>
+        <item>Voter ID</item>
+        <item>Pan Card</item>
+        <item>Other central govt. issued ID</item>
+    </string-array>
+    <string-array name="secondary_id_type">
+        <item>Select one</item>
+        <item>Certificates of excellence</item>
+        <item>Awards received</item>
+        <item>Course completion certificates</item>
+        <item>Papers published</item>
+        <item>Distinguished accomplishments</item>
+        <item>Newspaper mentions</item>
+    </string-array>
+
+
     <!--FAQ-->
     <string name="q1">What is Braingroom?</string>
     <string name="q2">What are the benefits of posting classes in Braingroom?</string>

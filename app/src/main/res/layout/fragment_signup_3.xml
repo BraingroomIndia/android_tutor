@@ -1,55 +1,329 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-   <data>
+
+    <data>
+
+
         <variable
             name="vm"
-            type="com.braingroom.tutor.viewmodel.activity.SignupViewModel"/>
-   </data>
-    <LinearLayout
+            type="com.braingroom.tutor.viewmodel.activity.SignupViewModel" />
+
+    </data>
+
+    <android.support.v7.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
-        <include
-            layout="@layout/item_search_select_fragment_opener"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            app:vm="@{vm.countryVm}" />
-        <include
-            layout="@layout/item_search_select_fragment_opener"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            app:vm="@{vm.stateVm}" />
+        android:layout_height="wrap_content">
 
-        <include
-            layout="@layout/item_search_select_fragment_opener"
+        <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            app:vm="@{vm.cityVm}" />
-        <include
-            layout="@layout/item_search_select_fragment_opener"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            app:vm="@{vm.localityVm}" />
+            android:layout_height="wrap_content">
 
-        <include
-            layout="@layout/floating_label_edit_text"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:data1="@{vm.address}"/>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="SignUp"
-            android:layout_gravity="center"
-            android:layout_marginTop="@dimen/margin_med"
-            android:fontFamily="@font/roboto_bold"
-            android:textSize="@dimen/_16sdp"
-            android:textColor="@color/black"
-            android:onClick="@{vm.apiSignUp}"/>
-    </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="10dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:gravity="center"
+                    android:text="Step 3 of 3"
+                    android:textSize="20dp"
+                    android:textStyle="bold" />
+
+                <LinearLayout
+                    android:id="@+id/signup_organization_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/solid_white_rounded_corner"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="40dp"
+                            android:background="@drawable/solid_blue_top_rounded_corner"
+                            android:gravity="center"
+                            android:text="Primary proofs"
+                            android:textColor="@color/white"
+                            android:textSize="20dp" />
+
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="100dp"
+                            android:background="@drawable/bottom_line_drawable"
+                            android:padding="10dp">
+
+                            <de.hdodenhof.circleimageview.CircleImageView
+                                android:id="@+id/primary_id_photo_1"
+                                android:layout_width="80dp"
+                                android:layout_height="match_parent"
+                                android:layout_alignParentLeft="true"
+                                android:layout_alignParentStart="true"
+                                android:src="@drawable/primary_1" />
+
+                            <TextView
+                                android:layout_width="80dp"
+                                android:layout_height="20dp"
+                                android:layout_alignParentBottom="true"
+                                android:layout_alignParentLeft="true"
+                                android:layout_alignParentStart="true"
+                                android:background="@color/transparentWhite"
+                                android:gravity="center"
+                                android:text="Edit"
+                                android:textColor="@color/darkTextColor" />
+
+                            <Spinner
+                                android:id="@+id/primary_id_type_1"
+                                android:layout_width="match_parent"
+                                android:layout_height="40dp"
+                                android:layout_alignParentTop="true"
+                                android:layout_marginLeft="10dp"
+                                android:layout_marginStart="10dp"
+                                android:layout_toEndOf="@+id/primary_id_photo_1"
+                                android:layout_toRightOf="@+id/primary_id_photo_1"
+                                android:entries="@array/primary_id_type" />
+
+
+                            <EditText
+                                android:id="@+id/primary_id_no_1"
+                                android:layout_width="match_parent"
+                                android:layout_height="40dp"
+                                android:layout_alignParentBottom="true"
+                                android:layout_marginLeft="10dp"
+                                android:layout_marginStart="10dp"
+                                android:layout_toEndOf="@+id/primary_id_photo_1"
+                                android:layout_toRightOf="@+id/primary_id_photo_1"
+                                android:ems="10"
+                                android:hint="Id number"
+                                android:paddingEnd="10dp"
+                                android:paddingLeft="10dp"
+                                android:paddingRight="10dp"
+                                android:paddingStart="10dp" />
+
+                        </RelativeLayout>
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="100dp"
+                            android:padding="10dp">
+
+                            <de.hdodenhof.circleimageview.CircleImageView
+                                android:id="@+id/primary_id_photo_2"
+                                android:layout_width="80dp"
+                                android:layout_height="match_parent"
+                                android:layout_alignParentLeft="true"
+                                android:layout_alignParentStart="true"
+                                android:src="@drawable/primary_2" />
+
+                            <TextView
+                                android:layout_width="80dp"
+                                android:layout_height="20dp"
+                                android:layout_alignParentBottom="true"
+                                android:layout_alignParentLeft="true"
+                                android:layout_alignParentStart="true"
+                                android:background="@color/transparentWhite"
+                                android:gravity="center"
+                                android:text="Edit"
+                                android:textColor="@color/darkTextColor" />
+
+                            <Spinner
+                                android:id="@+id/primary_id_type_2"
+                                android:layout_width="match_parent"
+                                android:layout_height="40dp"
+                                android:layout_alignParentTop="true"
+                                android:layout_marginLeft="10dp"
+                                android:layout_marginStart="10dp"
+                                android:layout_toRightOf="@+id/primary_id_photo_2"
+                                android:entries="@array/primary_id_type" />
+
+
+                            <EditText
+                                android:id="@+id/primary_id_no_2"
+                                android:layout_width="match_parent"
+                                android:layout_height="40dp"
+                                android:layout_alignParentBottom="true"
+                                android:layout_marginLeft="10dp"
+                                android:layout_marginStart="10dp"
+                                android:layout_toEndOf="@+id/primary_id_photo_2"
+                                android:layout_toRightOf="@+id/primary_id_photo_2"
+                                android:ems="10"
+                                android:hint="Id number"
+                                android:paddingEnd="10dp"
+                                android:paddingLeft="10dp"
+                                android:paddingRight="10dp"
+                                android:paddingStart="10dp" />
+
+                        </RelativeLayout>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:background="@drawable/solid_white_rounded_corner"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="40dp"
+                            android:background="@drawable/solid_blue_top_rounded_corner"
+                            android:gravity="center"
+                            android:text="Secondary proofs"
+                            android:textColor="@color/white"
+                            android:textSize="20dp" />
+
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="100dp"
+                            android:background="@drawable/bottom_line_drawable"
+                            android:padding="10dp">
+
+                            <de.hdodenhof.circleimageview.CircleImageView
+                                android:id="@+id/secondary_id_photo_1"
+                                android:layout_width="80dp"
+                                android:layout_height="match_parent"
+                                android:layout_alignParentLeft="true"
+                                android:layout_alignParentStart="true"
+                                android:src="@drawable/secondary_1" />
+
+                            <TextView
+                                android:layout_width="80dp"
+                                android:layout_height="20dp"
+                                android:layout_alignParentBottom="true"
+                                android:layout_alignParentLeft="true"
+                                android:layout_alignParentStart="true"
+                                android:background="@color/transparentWhite"
+                                android:gravity="center"
+                                android:text="Edit"
+                                android:textColor="@color/darkTextColor" />
+
+                            <Spinner
+                                android:id="@+id/secondary_id_type_1"
+                                android:layout_width="match_parent"
+                                android:layout_height="40dp"
+                                android:layout_centerVertical="true"
+                                android:layout_marginLeft="10dp"
+                                android:layout_marginStart="10dp"
+                                android:layout_toEndOf="@+id/secondary_id_photo_1"
+                                android:layout_toRightOf="@+id/secondary_id_photo_1"
+                                android:entries="@array/secondary_id_type" />
+
+                        </RelativeLayout>
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="100dp"
+                            android:padding="10dp">
+
+                            <de.hdodenhof.circleimageview.CircleImageView
+                                android:id="@+id/secondary_id_photo_2"
+                                android:layout_width="80dp"
+                                android:layout_height="match_parent"
+                                android:layout_alignParentLeft="true"
+                                android:layout_alignParentStart="true"
+                                android:src="@drawable/secondary_2" />
+
+                            <TextView
+                                android:layout_width="80dp"
+                                android:layout_height="20dp"
+                                android:layout_alignParentBottom="true"
+                                android:layout_alignParentLeft="true"
+                                android:layout_alignParentStart="true"
+                                android:background="@color/transparentWhite"
+                                android:gravity="center"
+                                android:text="Edit"
+                                android:textColor="@color/darkTextColor" />
+
+                            <Spinner
+                                android:id="@+id/secondary_id_type_2"
+                                android:layout_width="match_parent"
+                                android:layout_height="40dp"
+                                android:layout_centerVertical="true"
+                                android:layout_marginLeft="10dp"
+                                android:layout_marginStart="10dp"
+                                android:layout_toEndOf="@+id/secondary_id_photo_2"
+                                android:layout_toRightOf="@+id/secondary_id_photo_2"
+                                android:entries="@array/secondary_id_type" />
+
+                        </RelativeLayout>
+
+                    </LinearLayout>
+
+                    <EditText
+                        android:id="@+id/organization_expertise_area"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:layout_marginTop="10dp"
+                        android:ems="10"
+                        android:hint="Teaching experience in no. of years"
+                        android:inputType="number"
+                        android:paddingEnd="10dp"
+                        android:paddingLeft="10dp"
+                        android:paddingRight="10dp"
+                        android:paddingStart="10dp" />
+
+                    <CheckBox
+                        android:id="@+id/terms"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:text="I agree with terms and conditions" />
+
+                </LinearLayout>
+
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_marginTop="10dp">
+
+                    <TextView
+                        android:id="@+id/back"
+                        android:layout_width="wrap_content"
+                        android:layout_height="40dp"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentStart="true"
+                        android:background="@drawable/solid_bg_green_rounded_corner"
+                        android:gravity="center"
+                        android:paddingLeft="10dp"
+                        android:paddingRight="10dp"
+                        android:text="Back"
+                        android:textColor="#ffffff"
+                        android:textSize="20dp" />
+
+                    <TextView
+                        android:id="@+id/next"
+                        android:layout_width="wrap_content"
+                        android:layout_height="40dp"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentRight="true"
+                        android:background="@drawable/solid_bg_green_rounded_corner"
+                        android:gravity="center"
+                        android:onClick="@{vm.apiSignUp}"
+                        android:paddingLeft="10dp"
+                        android:paddingRight="10dp"
+                        android:text="Next"
+                        android:textColor="#ffffff"
+                        android:textSize="20dp" />
+
+                </RelativeLayout>
+
+
+            </LinearLayout>
+        </ScrollView>
+
+    </android.support.v7.widget.CardView>
+
 </layout>

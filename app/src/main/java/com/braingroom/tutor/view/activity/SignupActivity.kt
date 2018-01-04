@@ -15,10 +15,9 @@ class SignupActivity : Activity() {
 
     val FIRST_FRAGMENT = "firstFragment"
     val SECOND_FRAGMENT = "secondFragment"
-    val THIRD_FRAGMENT= "thirdFragment"
+    val THIRD_FRAGMENT = "thirdFragment"
 
     override val layoutId: Int = R.layout.activity_signup;
-
 
 
     override val vm: SignupViewModel by lazy {
@@ -36,7 +35,7 @@ class SignupActivity : Activity() {
             }
 
             override fun signUp() {
-                Log.d("why","why")
+                Log.d("why", "why")
                 navigator.finishActivity()
             }
         }, object : FragmentHelper {
@@ -58,7 +57,12 @@ class SignupActivity : Activity() {
             State -> vm.stateVm
             City -> vm.cityVm
             Locality -> vm.localityVm
-            else -> vm
+            Category -> vm.categoryVm
+            Community -> vm.communityVm
+            FIRST_FRAGMENT -> vm
+            SECOND_FRAGMENT -> vm
+            THIRD_FRAGMENT -> vm
+            else -> throw NoSuchFieldError()
         }
 
     }

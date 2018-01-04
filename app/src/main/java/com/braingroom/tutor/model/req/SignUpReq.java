@@ -3,16 +3,17 @@ package com.braingroom.tutor.model.req;
 import com.braingroom.tutor.model.resp.BaseResp;
 import com.google.gson.annotations.SerializedName;
 
-import java.io.Serializable;
-import java.util.List;
-
 public class SignUpReq extends BaseResp {
     @SerializedName("braingroom")
     Snippet data;
 
+    public SignUpReq(Snippet data) {
+        this.data = data;
+    }
+
     @Override
     public boolean getResCode() {
-        return data==null;
+        return data == null;
     }
 
     public Snippet getData() {
@@ -69,7 +70,7 @@ public class SignUpReq extends BaseResp {
         }
 
         public void setCategoryId(String categoryId) {
-            this.categoryId = categoryId;
+            this.categoryId = categoryId + "";
         }
 
         public String getVendorTypeId() {
@@ -278,6 +279,10 @@ public class SignUpReq extends BaseResp {
         String password = "";
         @SerializedName("mobile_no")
         String mobileNo = "";
+        @SerializedName("referal_code")
+        String referralCode = "";
+        @SerializedName("gender")
+        String gender;
         @SerializedName("city_id")
         String cityId = "";
         @SerializedName("locality")
@@ -286,7 +291,7 @@ public class SignUpReq extends BaseResp {
         String categoryId = "1";
         @SerializedName("vendor_type_id")
         String vendorTypeId = "2";
-        @SerializedName("first_name")
+        @SerializedName("name")
         String name = "";
         @SerializedName("d_o_b")
         String dob = "";
@@ -314,7 +319,7 @@ public class SignUpReq extends BaseResp {
         String coachingExperience = "";
 
         @SerializedName("country_id")
-        String countryId="";
+        String countryId = "";
 
         public String getCountryId() {
             return countryId;
@@ -360,19 +365,21 @@ public class SignUpReq extends BaseResp {
         @SerializedName("longitude")
         String longitude = "";
         @SerializedName("community_id")
-        String communityId="";
+        String communityId = "";
         @SerializedName("state_id")
-        String stateId="";
+        String stateId = "";
 
-        @SerializedName("referal_code")
-        String referalCode="";
 
-        public String getReferalCode() {
-            return referalCode;
+        public void setGender(String gender) {
+            this.gender = gender + "";
         }
 
-        public void setReferalCode(String referalCode) {
-            this.referalCode = referalCode;
+        public String getReferralCode() {
+            return referralCode;
+        }
+
+        public void setReferralCode(String referralCode) {
+            this.referralCode = referralCode;
         }
 
         public String getStateId() {
