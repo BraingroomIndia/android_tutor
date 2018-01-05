@@ -1,107 +1,148 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
 
-   <data>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
 
         <variable
             name="vm"
             type="com.braingroom.tutor.viewmodel.activity.SignupViewModel" />
-   </data>
 
-    <android.support.constraint.ConstraintLayout
+    </data>
+
+    <android.support.v7.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content">
 
-        <TextView
-            android:id="@+id/heading"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/rounded_corner_line"
-            android:fontFamily="@font/roboto_bold"
-            android:padding="@dimen/padding_small"
-            android:text="@string/step_1"
-            android:textColor="@color/material_black"
-            android:textSize="30sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <include
-            android:id="@+id/name"
-            layout="@layout/floating_label_edit_text"
+        <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:data1="@{vm.name}"
-            app:layout_constraintTop_toBottomOf="@+id/heading" />
+            android:layout_height="wrap_content">
 
-        <include
-            android:id="@+id/phone"
-            layout="@layout/floating_label_edit_text"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:data1="@{vm.phone}"
-            app:layout_constraintEnd_toEndOf="@id/name"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/name" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:padding="10dp">
 
-        <include
-            android:id="@+id/email"
-            layout="@layout/floating_label_edit_text"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:data1="@{vm.email}"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/phone" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:gravity="center"
+                    android:text="Step 1 of 3"
+                    android:textSize="20dp"
+                    android:textStyle="bold" />
 
-        <include
-            android:id="@+id/password"
-            layout="@layout/floating_label_edit_text"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:data1="@{vm.password}"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/email" />
+                <EditText
+                    android:id="@+id/name"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:ems="10"
+                    android:hint="Name"
+                    android:inputType="textPersonName"
+                    android:paddingLeft="10dp"
+                    android:text="@={vm.name}" />
 
-        <include
-            android:id="@+id/confirm_password"
-            layout="@layout/floating_label_edit_text"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:data1="@{vm.confirmPassword}"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/password" />
+                <EditText
+                    android:id="@+id/email"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_marginTop="10dp"
+                    android:ems="10"
+                    android:hint="Email"
+                    android:inputType="textEmailAddress"
+                    android:paddingLeft="10dp"
+                    android:text="@={vm.email}" />
 
-        <include
-            android:id="@+id/referral_code"
-            layout="@layout/floating_label_edit_text"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:data1="@{vm.referralCode}"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/confirm_password" />
+                <EditText
+                    android:id="@+id/password"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:ems="10"
+                    android:hint="Password"
+                    android:inputType="textPassword"
+                    android:paddingLeft="10dp"
+                    android:text="@={vm.password}" />
 
-        <TextView
-            android:id="@+id/next"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/rounded_corner_line"
-            android:fontFamily="@font/roboto_bold"
-            android:onClick="@{vm.toSecond}"
-            android:padding="@dimen/padding_small"
-            android:text="Next"
-            android:textColor="@color/material_black"
-            android:textSize="30sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent" />
+                <EditText
+                    android:id="@+id/confirm_password"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:ems="10"
+                    android:hint="Confirm Password"
+                    android:inputType="textPassword"
+                    android:paddingLeft="10dp"
+                    android:text="@={vm.confirmPassword}" />
 
-    </android.support.constraint.ConstraintLayout>
+                <EditText
+                    android:id="@+id/mobile"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_marginTop="10dp"
+                    android:ems="10"
+                    android:hint="Mobile No."
+                    android:inputType="phone"
+                    android:paddingLeft="10dp"
+                    android:text="@={vm.phone}" />
+
+                <EditText
+                    android:id="@+id/referral_code"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_marginTop="10dp"
+                    android:ems="10"
+                    android:hint="Referral Code"
+                    android:inputType="phone"
+                    android:paddingLeft="10dp"
+                    android:text="@={vm.referralCode}" />
+
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:id="@+id/next"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:layout_marginTop="10dp"
+                        android:background="@drawable/solid_bg_green_rounded_corner"
+                        android:gravity="center"
+                        android:onClick="@{vm.toSecond}"
+                        android:paddingBottom="5dp"
+                        android:paddingLeft="10dp"
+                        android:paddingRight="10dp"
+                        android:paddingTop="5dp"
+                        android:text="Next"
+                        android:textColor="#ffffff"
+                        android:textSize="20dp" />
+
+                    <TextView
+                        android:id="@+id/signUp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginTop="10dp"
+                        android:background="@drawable/solid_bg_green_rounded_corner"
+                        android:gravity="center"
+                        android:onClick="@{vm.apiSignUp}"
+                        android:paddingBottom="5dp"
+                        android:paddingLeft="10dp"
+                        android:paddingRight="10dp"
+                        android:paddingTop="5dp"
+                        android:text="Sign Up"
+                        android:textColor="#ffffff"
+                        android:textSize="20dp" />
+
+
+                </RelativeLayout>
+
+            </LinearLayout>
+        </ScrollView>
+
+    </android.support.v7.widget.CardView>
+
 </layout>

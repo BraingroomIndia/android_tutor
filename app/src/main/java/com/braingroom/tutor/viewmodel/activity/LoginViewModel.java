@@ -11,6 +11,7 @@ import com.braingroom.tutor.model.req.LoginReq;
 import com.braingroom.tutor.model.req.SocialLoginReq;
 import com.braingroom.tutor.model.resp.LoginResp;
 import com.braingroom.tutor.utils.CustomDrawable;
+import com.braingroom.tutor.view.activity.LoginActivity;
 import com.braingroom.tutor.view.activity.LoginActivity.UIHelper;
 import com.braingroom.tutor.view.activity.SignupActivity;
 import com.braingroom.tutor.viewmodel.ViewModel;
@@ -43,6 +44,14 @@ public class LoginViewModel extends ViewModel {
         @Override
         public void run() throws Exception {
             login(emailId.get(), password.get());
+        }
+    };
+
+    public final Action onRegisterCLicked = new Action() {
+        @Override
+        public void run() throws Exception {
+            if (getNavigator() != null)
+                getNavigator().navigateActivity(SignupActivity.class);
         }
     };
     private final int RC_SIGN_IN = 9001;

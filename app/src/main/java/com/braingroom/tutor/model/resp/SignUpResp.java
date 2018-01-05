@@ -21,11 +21,12 @@ public class SignUpResp extends BaseResp {
 
     @Override
     public boolean getResCode() {
-        return false;
+        return !isEmpty(data);
     }
 
-    public List<Snippet> getData() {
-        return data;
+    @NonNull
+    public Snippet getData() {
+        return isEmpty(data) ? new Snippet() : data.get(0);
     }
 
     public void setData(List<Snippet> data) {

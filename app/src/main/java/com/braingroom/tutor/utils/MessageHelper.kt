@@ -17,20 +17,22 @@ class MessageHelper(val activity: Activity?) {
 
     fun showMessage(message: String) {
         dismissActiveProgress()
-        toast?.cancel()
-        toast = Toast.makeText(activity, message, Toast.LENGTH_SHORT)
-        activity?.runOnUiThread { toast?.show() }
+        activity?.runOnUiThread {
+            toast?.cancel()
+            toast = Toast.makeText(activity, message, Toast.LENGTH_SHORT)
+            toast?.show()
+        }
     }
 
     fun showLoginRequireDialog(message: String) {
-        activity?.runOnUiThread { dismissActiveProgress() }
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        dismissActiveProgress()
+        activity?.runOnUiThread { }
     }
 
     fun showDismissInfo(title: String, content: String, buttonText: String) {
         dismissActiveProgress()
-        activity?.runOnUiThread {
-            activity?.let {
+        activity?.let {
+            it.runOnUiThread {
                 Builder(it)?.
                         title(title)?.
                         content(content)?.
@@ -42,8 +44,8 @@ class MessageHelper(val activity: Activity?) {
 
     fun showDismissInfo(content: String, buttonText: String) {
         dismissActiveProgress()
-        activity?.runOnUiThread {
-            activity?.let {
+        activity?.let {
+            it.runOnUiThread {
                 Builder(it)?.
                         content(content)?.
                         positiveText(buttonText)?.
@@ -54,8 +56,8 @@ class MessageHelper(val activity: Activity?) {
 
     fun showDismissInfo(content: String) {
         dismissActiveProgress()
-        activity?.runOnUiThread {
-            activity?.let {
+        activity?.let {
+            it.runOnUiThread {
                 Builder(it)?.
                         content(content)?.
                         positiveText("Dismiss")?.
@@ -67,8 +69,8 @@ class MessageHelper(val activity: Activity?) {
     fun showAcceptableInfo(title: String, content: String, positiveText: String, positiveCallback: SingleButtonCallback) {
         dismissActiveProgress()
 
-        activity?.runOnUiThread {
-            activity?.let {
+        activity?.let {
+            it.runOnUiThread {
                 Builder(it)?.content(content)?.
                         onPositive(positiveCallback)?.
                         positiveText(positiveText)?.
@@ -80,8 +82,8 @@ class MessageHelper(val activity: Activity?) {
     fun showAcceptableInfo(content: String, positiveText: String, positiveCallback: SingleButtonCallback) {
         dismissActiveProgress()
 
-        activity?.runOnUiThread {
-            activity?.let {
+        activity?.let {
+            it.runOnUiThread {
                 Builder(it)?.content(content)?.
                         onPositive(positiveCallback)?.
                         positiveText(positiveText)?.
@@ -93,8 +95,8 @@ class MessageHelper(val activity: Activity?) {
     fun showAcceptableInfo(title: String, content: String, positiveText: String, negativeText: String,
                            positiveCallback: SingleButtonCallback, negativeCallBack: SingleButtonCallback) {
         dismissActiveProgress()
-        activity?.runOnUiThread {
-            activity?.let {
+        activity?.let {
+            it.runOnUiThread {
                 Builder(it)?.
                         canceledOnTouchOutside(false)?.
                         title(title)?.
@@ -110,9 +112,9 @@ class MessageHelper(val activity: Activity?) {
 
     fun showProgressDialog(title: String, content: String) {
         dismissActiveProgress()
-        activity?.runOnUiThread {
-            progressDialog = activity?.let {
-                Builder(it)?.
+        activity?.let {
+            it.runOnUiThread {
+                progressDialog = Builder(it)?.
                         title(title)?.
                         content(content)?.
                         cancelable(true)?.
@@ -134,9 +136,9 @@ class MessageHelper(val activity: Activity?) {
 
     fun showProgressDialog(title: String, content: String, cancelAble: Boolean, dismissCallback: SingleButtonCallback) {
 
-        activity?.runOnUiThread {
-            progressDialog = activity?.let {
-                Builder(it)?.
+        activity?.let {
+            it.runOnUiThread {
+                progressDialog = Builder(it)?.
                         title(title)?.
                         content(content)?.
                         cancelable(true)?.

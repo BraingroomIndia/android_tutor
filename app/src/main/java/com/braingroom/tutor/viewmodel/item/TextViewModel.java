@@ -32,14 +32,6 @@ public class TextViewModel extends ViewModel {
     public final CustomDrawable drawableBottom;
     public final String text;
 
-    public void handleApiResult(MyProfileResp resp) {
-        List<ListTextIconViewModel> dummy = new ArrayList<>();
-        List<TextIconViewModel> dummy2 = new ArrayList<>();
-        dummy.add(new ListTextIconViewModel("Basic Detail", new TextIconViewModel(resp.getData().getName(), R.drawable.ic_clock_20dp)));
-        dummy2.add(new TextIconViewModel(resp.getData().getAddress(), R.drawable.ic_clock_20dp));
-        dummy.add(new ListTextIconViewModel("Academic Details", dummy2));
-    }
-
 
 }
 

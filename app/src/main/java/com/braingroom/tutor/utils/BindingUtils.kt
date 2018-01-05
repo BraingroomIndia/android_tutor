@@ -13,8 +13,6 @@ import android.support.design.widget.TextInputLayout
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
-import android.widget.ImageView
-import android.widget.TextView
 import com.braingroom.tutor.BR
 import com.braingroom.tutor.common.CustomApplication
 import com.braingroom.tutor.databinding.NavHomeHeaderBinding
@@ -22,6 +20,10 @@ import com.braingroom.tutor.view.adapters.ViewModelBinder
 import com.braingroom.tutor.viewmodel.ViewModel
 import com.braingroom.tutor.viewmodel.activity.HomeViewModel
 import io.reactivex.functions.Action
+import android.databinding.InverseBindingListener
+import android.support.v7.widget.AppCompatSpinner
+import android.databinding.InverseBindingAdapter
+import android.widget.*
 
 
 /*
@@ -65,14 +67,24 @@ fun setImageUri(view: ImageView?, imageUrl: String?) {
     }
 }
 
-@BindingAdapter(value = *arrayOf("android:src", "placeholder"), requireAll = true)
+@BindingAdapter(value = *arrayOf("android:src", "placeHolder"), requireAll = true)
 fun setImageUri(view: ImageView?, imageUrl: String?, placeHolder: Int?) {
     if (!imageUrl.isNullOrBlank()) {
         Log.v("setImageUri", imageUrl + "   " + placeHolder)
-        if (placeHolder != null)
+        if (placeHolder != null && placeHolder != 0)
             view?.let { picasso.load(imageUrl).placeholder(placeHolder).error(placeHolder).fit().centerCrop().into(it) }
         else setImageUri(view, imageUrl)
     } else if (placeHolder != null && placeHolder != 0) view?.let { picasso.load(placeHolder).fit().centerCrop().into(it) }
+}
+
+@BindingAdapter(value = *arrayOf("android:src", "placeholder"), requireAll = true)
+fun setImageUri(view: ImageView?, imageUrl: String?, placeHolder: Int) {
+    if (!imageUrl.isNullOrBlank()) {
+        Log.v("setImageUri", imageUrl + "   " + placeHolder)
+        if (placeHolder != 0)
+            view?.let { picasso.load(imageUrl).placeholder(placeHolder).error(placeHolder).fit().centerCrop().into(it) }
+        else setImageUri(view, imageUrl)
+    } else if (placeHolder != 0) view?.let { picasso.load(placeHolder).fit().centerCrop().into(it) }
 }
 
 @BindingAdapter("android:src")
@@ -88,12 +100,12 @@ fun loadHeader(view: NavigationView, model: HomeViewModel?) {
     view.addHeaderView(binding?.root)
 }
 
-@BindingAdapter(value = *arrayOf("android:src", "placeHolder"), requireAll = true)
-fun setImageUrl(imageView: ImageView?, url: String?, placeHolder: Int) {
+/*@BindingAdapter(value = *arrayOf("android:src", "placeHolder"), requireAll = true)
+fun setImageUrl(imageView: ImageView?, url: String?, placeHolder: Int?) {
     Log.v("Binding Utils", "setImageUrl: " + url ?: "null")
     if (!url.isNullOrBlank())
-        imageView?.let { picasso?.load(url)?.placeholder(placeHolder)?.error(placeHolder)?./*centerInside()?.resize(it.width, it.height)?.*/into(it) }
-}
+        imageView?.let { picasso?.load(url)?.placeholder(placeHolder)?.error(placeHolder)?.*//*centerInside()?.resize(it.width, it.height)?.*//*into(it) }
+}*/
 
 
 @BindingAdapter(value = *arrayOf("android:drawableLeft", "android:drawableRight", "android:drawableTop", "android:drawableBottom"), requireAll = false)
@@ -136,6 +148,27 @@ fun setErrorMessage(view: TextInputLayout, errorMessage: String) {
 @BindingAdapter("android:errorErrorEnabled")
 fun setErrorMessage(view: TextInputLayout, errorEnabled: Boolean) {
     view.isErrorEnabled = errorEnabled
+}
+
+@Suppress("UNCHECKED_CAST")
+@BindingAdapter(value = *arrayOf("selectedValue", "selectedValueAttrChanged"), requireAll = false)
+fun bindSpinnerData(pAppCompatSpinner: Spinner, newSelectedValue: String?, newTextAttrChanged: InverseBindingListener) {
+    pAppCompatSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+        override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
+            newTextAttrChanged.onChange()
+        }
+
+        override fun onNothingSelected(parent: AdapterView<*>) {}
+    }
+    if (newSelectedValue != null) {
+        val pos = (pAppCompatSpinner.adapter as ArrayAdapter<String>).getPosition(newSelectedValue)
+        pAppCompatSpinner.setSelection(pos, true)
+    }
+}
+
+@InverseBindingAdapter(attribute = "selectedValue", event = "selectedValueAttrChanged")
+fun getSelectedValue(pAppCompatSpinner: Spinner): String {
+    return pAppCompatSpinner.selectedItem as String
 }
 
 
