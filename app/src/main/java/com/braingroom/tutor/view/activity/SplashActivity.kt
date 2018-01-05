@@ -18,6 +18,7 @@ class SplashActivity : AppCompatActivity() {
     val userPreferences by lazy {
         CustomApplication.getInstance().appModule.userPreferences
     }
+    val cls: Class<out Activity> = HomeActivity::class.java
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,7 +29,7 @@ class SplashActivity : AppCompatActivity() {
             CustomApplication.getInstance().userId = userPreferences.getString(braingroomId, "")
             CustomApplication.getInstance().userName = userPreferences.getString(name, "")
             CustomApplication.getInstance().userPic = userPreferences.getString(profilePic, "");
-            startActivity(Intent(this, HomeActivity::class.java))
+            startActivity(Intent(this, cls))
             finish()
         } else startActivityForResult(Intent(this, LoginActivity::class.java), LOG_IN_REQ)
     }
@@ -36,7 +37,7 @@ class SplashActivity : AppCompatActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode == Activity.RESULT_OK) {
-            startActivity(Intent(this, HomeActivity::class.java))
+            startActivity(Intent(this, cls))
             finish()
         } else startActivityForResult(Intent(this, LoginActivity::class.java), LOG_IN_REQ)
     }

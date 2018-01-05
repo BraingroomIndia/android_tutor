@@ -99,21 +99,46 @@
                     android:text="@={vm.referralCode}" />
 
 
-                <TextView
-                    android:id="@+id/next"
-                    android:onClick="@{vm.toSecond}"
+                <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:background="@drawable/solid_bg_green_rounded_corner"
-                    android:gravity="center"
-                    android:paddingBottom="5dp"
-                    android:paddingLeft="10dp"
-                    android:paddingRight="10dp"
-                    android:paddingTop="5dp"
-                    android:text="Next"
-                    android:textColor="#ffffff"
-                    android:textSize="20dp" />
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:id="@+id/next"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:layout_marginTop="10dp"
+                        android:background="@drawable/solid_bg_green_rounded_corner"
+                        android:gravity="center"
+                        android:onClick="@{vm.toSecond}"
+                        android:paddingBottom="5dp"
+                        android:paddingLeft="10dp"
+                        android:paddingRight="10dp"
+                        android:paddingTop="5dp"
+                        android:text="Next"
+                        android:textColor="#ffffff"
+                        android:textSize="20dp" />
+
+                    <TextView
+                        android:id="@+id/signUp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginTop="10dp"
+                        android:background="@drawable/solid_bg_green_rounded_corner"
+                        android:gravity="center"
+                        android:onClick="@{vm.apiSignUp}"
+                        android:paddingBottom="5dp"
+                        android:paddingLeft="10dp"
+                        android:paddingRight="10dp"
+                        android:paddingTop="5dp"
+                        android:text="Sign Up"
+                        android:textColor="#ffffff"
+                        android:textSize="20dp" />
+
+
+                </RelativeLayout>
 
             </LinearLayout>
         </ScrollView>

@@ -69,7 +69,8 @@
                                 android:layout_height="match_parent"
                                 android:layout_alignParentLeft="true"
                                 android:layout_alignParentStart="true"
-                                android:src="@drawable/primary_1" />
+                                android:src="@{vm.uploadPrimaryImage1.remoteAddress}"
+                                app:placeHolder="@{vm.uploadPrimaryImage1.placeHolder}" />
 
                             <TextView
                                 android:layout_width="80dp"
@@ -79,6 +80,7 @@
                                 android:layout_alignParentStart="true"
                                 android:background="@color/transparentWhite"
                                 android:gravity="center"
+                                android:onClick="@{vm.uploadPrimaryImage1.onUploadClicked}"
                                 android:text="Edit"
                                 android:textColor="@color/darkTextColor" />
 
@@ -91,7 +93,8 @@
                                 android:layout_marginStart="10dp"
                                 android:layout_toEndOf="@+id/primary_id_photo_1"
                                 android:layout_toRightOf="@+id/primary_id_photo_1"
-                                android:entries="@array/primary_id_type" />
+                                android:entries="@array/primary_id_type"
+                                app:selectedValue="@={vm.primaryImageType1}" />
 
 
                             <EditText
@@ -123,7 +126,8 @@
                                 android:layout_height="match_parent"
                                 android:layout_alignParentLeft="true"
                                 android:layout_alignParentStart="true"
-                                android:src="@drawable/primary_2" />
+                                android:src="@{vm.uploadPrimaryImage2.remoteAddress}"
+                                app:placeHolder="@{vm.uploadPrimaryImage2.placeHolder}" />
 
                             <TextView
                                 android:layout_width="80dp"
@@ -133,6 +137,7 @@
                                 android:layout_alignParentStart="true"
                                 android:background="@color/transparentWhite"
                                 android:gravity="center"
+                                android:onClick="@{vm.uploadPrimaryImage2.onUploadClicked}"
                                 android:text="Edit"
                                 android:textColor="@color/darkTextColor" />
 
@@ -144,7 +149,8 @@
                                 android:layout_marginLeft="10dp"
                                 android:layout_marginStart="10dp"
                                 android:layout_toRightOf="@+id/primary_id_photo_2"
-                                android:entries="@array/primary_id_type" />
+                                android:entries="@array/primary_id_type"
+                                app:selectedValue="@={vm.primaryImageType2}" />
 
 
                             <EditText
@@ -196,7 +202,8 @@
                                 android:layout_height="match_parent"
                                 android:layout_alignParentLeft="true"
                                 android:layout_alignParentStart="true"
-                                android:src="@drawable/secondary_1" />
+                                android:src="@{vm.uploadSecondaryImage1.remoteAddress}"
+                                app:placeHolder="@{vm.uploadSecondaryImage1.placeHolder}" />
 
                             <TextView
                                 android:layout_width="80dp"
@@ -206,6 +213,7 @@
                                 android:layout_alignParentStart="true"
                                 android:background="@color/transparentWhite"
                                 android:gravity="center"
+                                android:onClick="@{vm.uploadSecondaryImage1.onUploadClicked}"
                                 android:text="Edit"
                                 android:textColor="@color/darkTextColor" />
 
@@ -218,7 +226,8 @@
                                 android:layout_marginStart="10dp"
                                 android:layout_toEndOf="@+id/secondary_id_photo_1"
                                 android:layout_toRightOf="@+id/secondary_id_photo_1"
-                                android:entries="@array/secondary_id_type" />
+                                android:entries="@array/secondary_id_type"
+                                app:selectedValue="@={vm.secondaryImageType1}" />
 
                         </RelativeLayout>
 
@@ -233,7 +242,8 @@
                                 android:layout_height="match_parent"
                                 android:layout_alignParentLeft="true"
                                 android:layout_alignParentStart="true"
-                                android:src="@drawable/secondary_2" />
+                                android:src="@{vm.uploadSecondaryImage2.remoteAddress}"
+                                app:placeHolder="@{vm.uploadSecondaryImage2.placeHolder}" />
 
                             <TextView
                                 android:layout_width="80dp"
@@ -243,6 +253,7 @@
                                 android:layout_alignParentStart="true"
                                 android:background="@color/transparentWhite"
                                 android:gravity="center"
+                                android:onClick="@{vm.uploadSecondaryImage2.onUploadClicked}"
                                 android:text="Edit"
                                 android:textColor="@color/darkTextColor" />
 
@@ -255,7 +266,8 @@
                                 android:layout_marginStart="10dp"
                                 android:layout_toEndOf="@+id/secondary_id_photo_2"
                                 android:layout_toRightOf="@+id/secondary_id_photo_2"
-                                android:entries="@array/secondary_id_type" />
+                                android:entries="@array/secondary_id_type"
+                                app:selectedValue="@={vm.secondaryImageType2}" />
 
                         </RelativeLayout>
 
@@ -272,14 +284,15 @@
                         android:paddingEnd="10dp"
                         android:paddingLeft="10dp"
                         android:paddingRight="10dp"
-                        android:paddingStart="10dp" />
+                        android:paddingStart="10dp"
+                        android:text="@={vm.experience}" />
 
-                    <CheckBox
+                 <!--   <CheckBox
                         android:id="@+id/terms"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
-                        android:text="I agree with terms and conditions" />
+                        android:text="I agree with terms and conditions" />-->
 
                 </LinearLayout>
 
@@ -297,6 +310,7 @@
                         android:layout_alignParentStart="true"
                         android:background="@drawable/solid_bg_green_rounded_corner"
                         android:gravity="center"
+                        android:onClick="@{vm.toSecond}"
                         android:paddingLeft="10dp"
                         android:paddingRight="10dp"
                         android:text="Back"

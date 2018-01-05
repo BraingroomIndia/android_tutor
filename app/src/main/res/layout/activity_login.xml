@@ -124,6 +124,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="6dp"
             android:background='@{vm.loginButton}'
+            android:backgroundTint="@color/material_brown50"
             android:gravity="center"
             android:onClick="@{vm.onLoginClicked}"
             android:paddingBottom="9dp"

@@ -258,8 +258,8 @@ class DataFlowService(private val api: ApiService, private val realmCacheService
     }
 
     fun uploadImage(filePath: String, fileType: String): Observable<UploadMediaResp> {
-        return api.uploadImage(prepareFilePart("image", fileType, filePath)
-        ).subscribeOn(Schedulers.io())
+        return api.uploadImage(prepareFilePart("file", fileType, filePath)
+                , RequestBody.create(MediaType.parse("text/plain"), "image")).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
     }
 

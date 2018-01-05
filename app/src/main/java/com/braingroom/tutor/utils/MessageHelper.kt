@@ -17,13 +17,16 @@ class MessageHelper(val activity: Activity?) {
 
     fun showMessage(message: String) {
         dismissActiveProgress()
-        toast?.cancel()
-        toast = Toast.makeText(activity, message, Toast.LENGTH_SHORT)
-        activity?.runOnUiThread { toast?.show() }
+        activity?.runOnUiThread {
+            toast?.cancel()
+            toast = Toast.makeText(activity, message, Toast.LENGTH_SHORT)
+            toast?.show()
+        }
     }
 
     fun showLoginRequireDialog(message: String) {
-        activity?.runOnUiThread { dismissActiveProgress() }
+        dismissActiveProgress()
+        activity?.runOnUiThread { }
     }
 
     fun showDismissInfo(title: String, content: String, buttonText: String) {

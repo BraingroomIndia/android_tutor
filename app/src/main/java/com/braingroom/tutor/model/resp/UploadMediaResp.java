@@ -14,6 +14,7 @@ import static com.braingroom.tutor.utils.CommonUtilsKt.getNonNull;
 public class UploadMediaResp extends BaseResp {
 
 
+    @SerializedName("braingroom")
     private List<Snippet> data;
 
     public Snippet getData() {

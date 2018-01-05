@@ -66,7 +66,8 @@ interface ApiService {
 
     @Multipart
     @POST("tutorApi/uploadMedia")
-    fun uploadImage(@Part file: MultipartBody.Part): Observable<UploadMediaResp>
+    fun uploadImage(@Part file: MultipartBody.Part, @Part("media_type") mediaType: RequestBody): Observable<UploadMediaResp>
+
     @POST("apis/getMessage")
     fun getMessages(@Body req: MessagesGetReq): Observable<MessageGetResp>
 

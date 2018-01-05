@@ -24,7 +24,7 @@ class RecyclerViewAdapterObservable(observableViewModels: ReplaySubject<out View
     private val binder: ViewModelBinder = defaultBinder
     private val source: Observable<out ViewModel>?
     private val subscriptions = HashMap<RecyclerView.AdapterDataObserver, Disposable>()
-    public val TAG: String
+    val TAG: String
         get() = this::class.java.simpleName ?: ""
 
     init {
@@ -64,15 +64,15 @@ class RecyclerViewAdapterObservable(observableViewModels: ReplaySubject<out View
         if (latestViewModels[position] is EmptyItemViewModel)
             return R.layout.item_empty_view
         try {
-            return if (latestViewModels.size > position) viewProvider.getView(latestViewModels[position]) else 0
+            return viewProvider.getView(latestViewModels[position])
         } catch (e: Exception) {
-            if (e is NoSuchFieldException)
-                Log.e(TAG, "No layout found corresponding to " + latestViewModels[position].TAG)
-            e.printStackTrace()
-            if (e is NullPointerException)
-                Log.e(TAG, "Null pointer error at position" + position)
+            when (e) {
+                is NoSuchFieldException -> Log.e(TAG, "No layout found corresponding to " + latestViewModels[position].TAG, e)
+                is NullPointerException -> Log.e(TAG, "Null pointer error at position" + position, e)
+                else -> Log.e(TAG, "No Idea", e)
+            }
         }
-        return 0;
+        return 0
     }
 
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): DataBindingViewHolder {

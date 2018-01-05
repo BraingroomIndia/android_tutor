@@ -27,25 +27,28 @@ class ImageUploadViewModel : ViewModel {
     val placeHolder: Int
     val remoteAddress: ObservableField<String>
     val onUploadClicked: Action
+    val requestCode: Int
 
-    constructor(placeHolder: Int, remoteAddress: String) {
+    constructor(placeHolder: Int, remoteAddress: String, requestCode: Int) {
+        this.requestCode = requestCode
         this.placeHolder = placeHolder
         this.remoteAddress = ObservableField(remoteAddress)
         onUploadClicked = Action {
-            navigator?.launchImageChooserActivity(IMAGE_UPLOAD_REQ)
+            navigator?.launchImageChooserActivity(requestCode)
         }
     }
 
-    constructor(remoteAddress: String) {
+    constructor(remoteAddress: String, requestCode: Int) {
+        this.requestCode = requestCode
         this.placeHolder = 0
         this.remoteAddress = ObservableField(remoteAddress)
         onUploadClicked = Action {
-            navigator?.launchImageChooserActivity(IMAGE_UPLOAD_REQ)
+            navigator?.launchImageChooserActivity(requestCode)
         }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if (requestCode == IMAGE_UPLOAD_REQ
+        if (requestCode == this.requestCode
                 && resultCode == RESULT_OK && data != null && data.data != null) {
             val fileUri = data.data
             val filePath = getPath(fileUri!!)
@@ -55,7 +58,14 @@ class ImageUploadViewModel : ViewModel {
                 return
             }
             messageHelper?.showProgressDialog("Wait", "uploading...")
-            apiService.uploadImage(filePath, fileType).subscribe { resp -> Log.d(TAG, resp.data.url) }
+            apiService.uploadImage(filePath, fileType).subscribe { resp ->
+                Log.d(TAG, resp.data.url)
+                messageHelper?.dismissActiveProgress()
+                messageHelper?.showMessage(resp.resMsg)
+                if (resp.resCode)
+                    remoteAddress.set(resp.data.url)
+
+            }
 
         }
     }

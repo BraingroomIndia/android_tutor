@@ -1,8 +1,10 @@
 package com.braingroom.tutor.viewmodel.activity
 
+import android.content.Intent
 import android.databinding.ObservableBoolean
 import android.databinding.ObservableField
 import android.util.Log
+import com.braingroom.tutor.R
 import com.braingroom.tutor.common.CustomApplication
 import com.braingroom.tutor.model.data.ListDialogData
 import com.braingroom.tutor.model.req.SignUpReq
@@ -13,6 +15,7 @@ import com.braingroom.tutor.view.fragment.FragmentHelper
 import com.braingroom.tutor.viewmodel.ViewModel
 import com.braingroom.tutor.viewmodel.fragment.SearchSelectListViewModel
 import com.braingroom.tutor.viewmodel.item.DatePickerViewModel
+import com.braingroom.tutor.viewmodel.item.ImageUploadViewModel
 import com.braingroom.tutor.viewmodel.item.ListDialogViewModel
 import io.reactivex.functions.Action
 import io.reactivex.functions.Consumer
@@ -50,6 +53,9 @@ class SignupViewModel(val uiHelper: SignupActivity.UiHelper, val fragmentHelper:
         ObservableField<String>("")
     }
 
+    val experience by lazy {
+        ObservableField<String>("")
+    }
     val instituteName by lazy {
         ObservableField<String>("")
     }
@@ -67,10 +73,37 @@ class SignupViewModel(val uiHelper: SignupActivity.UiHelper, val fragmentHelper:
         ObservableField<String>("")
     }
 
-    val uploadImage by lazy {
-        Action {
+    val primaryImageType1 by lazy {
+        ObservableField<String>("")
+    }
+    val primaryImageType2 by lazy {
+        ObservableField<String>("")
+    }
+    val secondaryImageType1 by lazy {
+        ObservableField<String>("")
+    }
+    val secondaryImageType2 by lazy {
+        ObservableField<String>("")
+    }
 
-        }
+    val uploadProfilePic by lazy {
+        ImageUploadViewModel(R.drawable.individual, "", 1)
+    }
+    val uploadOrganizationPic by lazy {
+        ImageUploadViewModel(R.drawable.organization, "", 2)
+    }
+
+    val uploadPrimaryImage1 by lazy {
+        ImageUploadViewModel(R.drawable.primary_1, "", 3)
+    }
+    val uploadPrimaryImage2 by lazy {
+        ImageUploadViewModel(R.drawable.primary_2, "", 4)
+    }
+    val uploadSecondaryImage1 by lazy {
+        ImageUploadViewModel(R.drawable.secondary_1, "", 5)
+    }
+    val uploadSecondaryImage2 by lazy {
+        ImageUploadViewModel(R.drawable.secondary_2, "", 6)
     }
 
     val datePicker by lazy {
@@ -84,7 +117,7 @@ class SignupViewModel(val uiHelper: SignupActivity.UiHelper, val fragmentHelper:
             resp.data.forEach { snippet -> list.put(snippet.textValue, snippet.id) }
             list
         }, Consumer { selectedData ->
-            snippet.categoryId = selectedData.getId()
+            snippet.setCategoryId(selectedData.getId())
 
         }, HashMap(), fragmentHelper)
     }
@@ -109,7 +142,7 @@ class SignupViewModel(val uiHelper: SignupActivity.UiHelper, val fragmentHelper:
             resp.data.forEach { snippet -> list.put(snippet.textValue, snippet.id) }
             list
         }, Consumer { selectedData ->
-            snippet.communityId = selectedData.getId()
+            snippet.setCommunityId(selectedData.getId())
 
         }, HashMap(), fragmentHelper)
     }
@@ -120,7 +153,7 @@ class SignupViewModel(val uiHelper: SignupActivity.UiHelper, val fragmentHelper:
             resp.data.forEach { snippet -> list.put(snippet.textValue, snippet.id) }
             list
         }, Consumer { selectedData ->
-            snippet.countryId = selectedData.getId()
+            snippet.setCountryId(selectedData.getId())
             selectedData.values.forEach { id ->
                 stateVm.refreshDataMap(apiService.getState(id).map { resp ->
                     val list: HashMap<String, Int> = HashMap();
@@ -132,7 +165,7 @@ class SignupViewModel(val uiHelper: SignupActivity.UiHelper, val fragmentHelper:
     }
     val stateVm by lazy {
         SearchSelectListViewModel(State, "search state", "select country first", false, null, Consumer { selectedData ->
-            snippet.stateId = selectedData.getId()
+            snippet.setStateId(selectedData.getId())
             selectedData.values.forEach { id ->
                 cityVm.refreshDataMap(apiService.getCity(id).map { resp ->
                     val list: HashMap<String, Int> = HashMap();
@@ -144,7 +177,7 @@ class SignupViewModel(val uiHelper: SignupActivity.UiHelper, val fragmentHelper:
     }
     val cityVm by lazy {
         SearchSelectListViewModel(City, "search city", "select state first", false, null, Consumer { selectedData ->
-            snippet.cityId = selectedData.getId()
+            snippet.setCityId(selectedData.getId())
             selectedData.values.forEach { id ->
                 localityVm.refreshDataMap(apiService.getLocality(id).map { resp ->
                     val list: HashMap<String, Int> = HashMap();
@@ -155,7 +188,7 @@ class SignupViewModel(val uiHelper: SignupActivity.UiHelper, val fragmentHelper:
         }, HashMap(), fragmentHelper)
     }
     val localityVm by lazy {
-        SearchSelectListViewModel(Locality, "search locality", "select city first", false, null, Consumer { selectedDataMap -> snippet.locality = selectedDataMap.getId() }, HashMap(), fragmentHelper)
+        SearchSelectListViewModel(Locality, "search locality", "select city first", false, null, Consumer { selectedDataMap -> snippet.setLocality(selectedDataMap.getId()) }, HashMap(), fragmentHelper)
     }
     val toFirst by lazy {
         Action {
@@ -172,9 +205,15 @@ class SignupViewModel(val uiHelper: SignupActivity.UiHelper, val fragmentHelper:
     val toThird by lazy {
         Action {
             uiHelper.thirdFragment()
-            snippet.areaOfExpertise = expertiseArea.get()
-            snippet.address = address.get()
-            snippet.description = aboutYou.get()
+            snippet.setAreaOfExpertise(expertiseArea.get())
+            snippet.setAddress(address.get())
+            snippet.setDescription(aboutYou.get())
+            snippet.setDob(datePicker.mytitle.get())
+            snippet.setVendorTypeId(isIndividual.get())
+            snippet.setProfileImage(uploadProfilePic.remoteAddress.get())
+            snippet.setLogoImage(uploadOrganizationPic.remoteAddress.get())
+            snippet.setInstituteName(instituteName.get())
+            snippet.setRegistrationId(instituteId.get())
         }
     }
     val apiSignUp by lazy {
@@ -184,6 +223,12 @@ class SignupViewModel(val uiHelper: SignupActivity.UiHelper, val fragmentHelper:
     }
 
     private fun validateFirstFragment(): Boolean {
+        snippet.setName(name.get())
+        snippet.setEmail(email.get())
+        snippet.setPassword(password.get())
+        snippet.setMobileNo(phone.get())
+        snippet.setReferralCode(referralCode.get())
+        return true
         when {
             name.get().isNullOrBlank() -> {
                 messageHelper?.showMessage("Name Can't be blank")
@@ -206,10 +251,11 @@ class SignupViewModel(val uiHelper: SignupActivity.UiHelper, val fragmentHelper:
                 return false
             }
             else -> {
-                snippet.name = name.get()
-                snippet.email = email.get()
-                snippet.password = password.get()
-                snippet.mobileNo = phone.get()
+                snippet.setName(name.get())
+                snippet.setEmail(email.get())
+                snippet.setPassword(password.get())
+                snippet.setMobileNo(phone.get())
+                snippet.setReferralCode(referralCode.get())
                 return true
             }
         }
@@ -234,6 +280,20 @@ class SignupViewModel(val uiHelper: SignupActivity.UiHelper, val fragmentHelper:
 
     fun signUp() {
         if (validateFirstFragment()) {
+            snippet.setPrimaryVerificationId1(primaryImageType1.get())
+            snippet.setPrimaryAttachedImage1(uploadPrimaryImage1.remoteAddress.get())
+
+            snippet.setPrimaryVerificationId1(primaryImageType2.get())
+            snippet.setPrimaryAttachedImage1(uploadPrimaryImage2.remoteAddress.get())
+
+
+            snippet.setSecondaryVerificationId1(secondaryImageType1.get())
+            snippet.setSecondaryAttachedImage1(uploadSecondaryImage1.remoteAddress.get())
+
+            snippet.setSecondaryVerificationId2(secondaryImageType2.get())
+            snippet.setSecondaryAttachedImage2(uploadSecondaryImage2.remoteAddress.get())
+
+            snippet.setCoachingExperience(experience.get())
             apiService.signUp(SignUpReq(snippet)).doOnSubscribe { disposable -> compositeDisposable.add(disposable) }.subscribe(
                     { resp ->
                         if (resp.resCode) {
@@ -322,5 +382,16 @@ class SignupViewModel(val uiHelper: SignupActivity.UiHelper, val fragmentHelper:
         }
 
         return true
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        uploadProfilePic.onActivityResult(requestCode, resultCode, data)
+        uploadOrganizationPic.onActivityResult(requestCode, resultCode, data)
+        uploadPrimaryImage1.onActivityResult(requestCode, resultCode, data)
+        uploadPrimaryImage2.onActivityResult(requestCode, resultCode, data)
+        uploadSecondaryImage1.onActivityResult(requestCode, resultCode, data)
+        uploadSecondaryImage2.onActivityResult(requestCode, resultCode, data)
+
     }
 }
