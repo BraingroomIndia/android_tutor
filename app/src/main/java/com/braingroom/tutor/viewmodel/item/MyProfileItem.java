@@ -3,11 +3,13 @@ package com.braingroom.tutor.viewmodel.item;
 import com.braingroom.tutor.model.resp.MyProfileResp;
 import com.braingroom.tutor.viewmodel.ViewModel;
 
+import org.jetbrains.annotations.NotNull;
+
 /**
  * Created by godara on 05/01/18.
  */
 
-public class MyProfileItem extends ViewModel {
+public class MyProfileItem implements RecyclerViewItem {
     public final String title;
     public final String value;
 
@@ -21,4 +23,9 @@ public class MyProfileItem extends ViewModel {
         this.value = data.getValue();
     }
 
+    @NotNull
+    @Override
+    public String getTAG() {
+        return this.getClass().getSimpleName();
+    }
 }

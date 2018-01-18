@@ -21,7 +21,7 @@ class SignupActivity : Activity() {
 
 
     override val vm: SignupViewModel by lazy {
-        SignupViewModel(object : UiHelper {
+        SignupViewModel(helperFactory,object : UiHelper {
             override fun firstFragment() {
                 navigator.openFragment(SignUpFirstFragment.newInstance(FIRST_FRAGMENT))
             }

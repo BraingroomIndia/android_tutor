@@ -4,6 +4,7 @@ import android.databinding.ObservableField
 import android.text.TextUtils
 import android.util.Log
 import com.braingroom.tutor.R
+import com.braingroom.tutor.common.modules.HelperFactory
 import com.braingroom.tutor.utils.FieldUtils
 import com.braingroom.tutor.utils.MyConsumer
 import com.braingroom.tutor.view.adapters.ViewProvider
@@ -12,6 +13,7 @@ import com.braingroom.tutor.view.fragment.FragmentHelper
 import com.braingroom.tutor.viewmodel.SearchSelectListItemViewModel
 import com.braingroom.tutor.viewmodel.ViewModel
 import com.braingroom.tutor.viewmodel.item.NotifyDataSetChanged
+import com.braingroom.tutor.viewmodel.item.RecyclerViewItem
 import com.braingroom.tutor.viewmodel.item.RefreshViewModel
 import io.reactivex.Observable
 import io.reactivex.annotations.NonNull
@@ -23,7 +25,7 @@ import java.util.*
 import java.util.concurrent.TimeUnit
 
 
-class DynamicSearchSelectListViewModel(val title: String, searchHint: String, dependencyMessage: String, isMultipleSelect: Boolean, private var observableApi: DynamicSearchAPIObservable?, private val saveConsumer: Consumer<HashMap<String, Int>>, private var selectedDataMap: HashMap<String, Int>) : ViewModel() {
+class DynamicSearchSelectListViewModel(helperFactory: HelperFactory,val title: String, searchHint: String, dependencyMessage: String, isMultipleSelect: Boolean, private var observableApi: DynamicSearchAPIObservable?, private val saveConsumer: Consumer<HashMap<String, Int>>, private var selectedDataMap: HashMap<String, Int>) : ViewModel(helperFactory) {
 
     interface DynamicSearchAPIObservable {
         fun getData(keyword: String): Observable<HashMap<String, Int>>?
@@ -38,23 +40,23 @@ class DynamicSearchSelectListViewModel(val title: String, searchHint: String, de
     }
 
     val viewProvider = object : ViewProvider {
-        override fun getView(vm: ViewModel?): Int {
+        override fun getView(vm: RecyclerViewItem?): Int {
             return R.layout.item_search_select_text;
         }
     }
     val onSaveClicked: Action by lazy {
         Action {
             saveConsumer.accept(selectedDataMap)
-            navigator?.popBackStack(title)
+            navigator.removeFragment(title)
 
         }
     }
     val onOpenClicked: Action by lazy {
         Action {
             if (observableApi == null)
-                messageHelper?.showMessage(dependencyMessage)
+                messageHelper.showMessage(dependencyMessage)
             else {
-                navigator?.openFragment(title, DynamicSearchSelectFragment.newInstance(title))
+                navigator.openFragment(title, DynamicSearchSelectFragment.newInstance(title))
                 start.subscribe()
             }
         }

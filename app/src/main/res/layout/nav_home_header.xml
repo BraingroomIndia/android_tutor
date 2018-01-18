@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-   <data>
+    <data>
 
         <import type="com.braingroom.tutor.R" />
 
@@ -13,7 +13,7 @@
             name="vm"
             type="com.braingroom.tutor.viewmodel.activity.HomeViewModel" />
 
-   </data>
+    </data>
 
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
@@ -29,6 +29,7 @@
             android:src="@{vm.userPic}"
             app:civ_border_color="@color/colorTextGray"
             app:civ_border_width="2dp"
+            app:placeHolder="@{vm.userPicPlaceHolder}"
             tools:src="@drawable/ic_profile_circular" />
 
         <TextView

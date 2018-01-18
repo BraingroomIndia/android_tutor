@@ -19,6 +19,7 @@ package com.braingroom.tutor.view.activity.barcodereader;
  */
 
 
+import com.braingroom.tutor.R;
 import com.braingroom.tutor.utils.GraphicOverlay;
 
 import android.graphics.Canvas;
@@ -40,7 +41,8 @@ public class BarcodeGraphic extends GraphicOverlay.Graphic {
     private static final int COLOR_CHOICES[] = {
             Color.BLUE,
             Color.CYAN,
-            Color.GREEN
+            Color.GREEN,
+            Color.TRANSPARENT
     };
 
     private static int mCurrentColorIndex = 0;
@@ -53,7 +55,7 @@ public class BarcodeGraphic extends GraphicOverlay.Graphic {
         super(overlay);
 
         mCurrentColorIndex = (mCurrentColorIndex + 1) % COLOR_CHOICES.length;
-        final int selectedColor = COLOR_CHOICES[mCurrentColorIndex];
+        final int selectedColor = overlay.getContext().getResources().getColor(R.color.transparentWhite);
 
         mRectPaint = new Paint();
         mRectPaint.setColor(selectedColor);

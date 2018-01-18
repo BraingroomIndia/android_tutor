@@ -24,6 +24,7 @@ import android.databinding.InverseBindingListener
 import android.support.v7.widget.AppCompatSpinner
 import android.databinding.InverseBindingAdapter
 import android.widget.*
+import com.braingroom.tutor.viewmodel.item.RecyclerViewItem
 
 
 /*
@@ -32,6 +33,10 @@ import android.widget.*
 public val defaultBinder: ViewModelBinder by lazy {
     Log.d("Default Binder", "created")
     object : ViewModelBinder {
+        override fun bindRecyclerView(viewDataBinding: ViewDataBinding?, viewModel: RecyclerViewItem?) {
+            viewDataBinding?.setVariable(BR.vm, viewModel)
+        }
+
         override fun bind(viewDataBinding: ViewDataBinding?, viewModel: ViewModel?) {
             viewDataBinding?.setVariable(BR.vm, viewModel)
         }
@@ -96,8 +101,8 @@ fun setImageUri(view: ImageView?, drawable: Drawable?) {
 fun loadHeader(view: NavigationView, model: HomeViewModel?) {
     val binding = NavHomeHeaderBinding.inflate(LayoutInflater.from(view.context))
     binding.vm = model
-    binding?.executePendingBindings()
-    view.addHeaderView(binding?.root)
+    binding.executePendingBindings()
+    view.addHeaderView(binding.root)
 }
 
 /*@BindingAdapter(value = *arrayOf("android:src", "placeHolder"), requireAll = true)

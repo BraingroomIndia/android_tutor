@@ -31,6 +31,10 @@ public class SocialLoginReq {
         private final String mLastName;
         @SerializedName("phone")
         private final String mPhone;
+
+        @SerializedName("profile_pic")
+        private final String profilePic;
+
         @SerializedName("referal_code")
         private final String mReferalCode;
         @SerializedName("reg_id")
@@ -40,11 +44,24 @@ public class SocialLoginReq {
         @SerializedName("user_type")
         private final String mUserType;
 
-        public Snippet(String firstName, String lastName, String email, String socialNetworkId) {
+        public String getmEmail() {
+            return mEmail;
+        }
+
+        public String getmFirstName() {
+            return mFirstName;
+        }
+
+        public String getProfilePic() {
+            return profilePic;
+        }
+
+        public Snippet(String firstName, String lastName, String email, String socialNetworkId, String profilePic) {
             this.mEmail = email;
             this.mFirstName = firstName;
             this.mLastName = lastName;
             this.mSocialNetworkId = socialNetworkId;
+            this.profilePic = profilePic;
 
             mAddressLatitude = "";
             mAddressLongitude = "";

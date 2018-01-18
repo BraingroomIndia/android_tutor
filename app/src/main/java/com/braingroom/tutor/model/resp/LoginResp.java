@@ -26,7 +26,7 @@ public class LoginResp extends BaseResp {
 
         @SerializedName("id")
         private String mId;
-        @SerializedName("name")
+        @SerializedName(value = "name", alternate = {"first_name"})
         private String mName;
         @SerializedName("profile_pic")
         private String mProfilePic;
@@ -41,7 +41,7 @@ public class LoginResp extends BaseResp {
         @SerializedName("uuid")
         private String mUuid;
 
-        @SerializedName("email_id")
+        @SerializedName(value = "email_id", alternate = {"email"})
         private String mEmailId;
 
 
@@ -62,6 +62,21 @@ public class LoginResp extends BaseResp {
         @NonNull
         public String getMobile() {
             return getNonNull(mMobile);
+        }
+
+        public void setName(String mName) {
+            if (!isEmpty(mName))
+                this.mName = mName;
+        }
+
+        public void setProfilePic(String mProfilePic) {
+            if (!isEmpty(mProfilePic))
+                this.mProfilePic = mProfilePic;
+        }
+
+        public void setEmailId(String mEmailId) {
+            if (!isEmpty(mEmailId))
+                this.mEmailId = mEmailId;
         }
 
         @NonNull

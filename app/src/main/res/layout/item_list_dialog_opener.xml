@@ -20,35 +20,42 @@
         android:layout_height="wrap_content"
         android:background="@drawable/bottom_line_drawable"
         android:onClick="@{vm.onOpenClick}"
-        android:padding="7dp"
+        android:paddingBottom="@dimen/padding_medium"
+        android:paddingLeft="@dimen/padding_large"
+        android:paddingRight="@dimen/padding_large"
+        android:paddingTop="@dimen/margin_small"
         android:visibility="@{vm.visible}">
 
         <TextView
             android:id="@+id/title"
             android:layout_width="match_parent"
             android:layout_height="25dp"
-            android:layout_alignParentTop="true"
-            android:fontFamily="@font/roboto_medium"
-            android:singleLine="true"
+            android:fontFamily="@font/roboto_regular"
+            android:gravity="bottom"
             android:text="@{vm.title}"
-            android:textColor="@color/material_grey800"
-            android:textSize="20sp"
+            android:textColor="@color/colorTextDark"
+            android:textSize="@dimen/text_size_large"
             tools:text="Title" />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="20dp"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_below="@+id/title"
+            android:layout_below="@id/title"
             android:ellipsize="end"
-            android:fontFamily="@font/roboto_regular"
-            android:paddingBottom="2dp"
-            android:singleLine="true"
+            android:gravity="top"
+            android:lines="1"
             android:text="@{vm.selectedItemsText}"
-            android:textColor="@color/material_grey600"
-            android:textSize="15sp"
-            tools:text="Selected Item" />
+            android:textColor="@color/colorTextGray"
+            android:textSize="@dimen/text_size_medium"
+            tools:text="Selected Items" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:contentDescription="TODO"
+            android:src="@drawable/ic_chevron_right_black_24dp" />
 
     </RelativeLayout>
 </layout>

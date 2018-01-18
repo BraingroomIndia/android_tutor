@@ -6,6 +6,7 @@ import android.databinding.ObservableField
 import android.util.Log
 import com.braingroom.tutor.R
 import com.braingroom.tutor.common.CustomApplication
+import com.braingroom.tutor.common.modules.HelperFactory
 import com.braingroom.tutor.model.data.ListDialogData
 import com.braingroom.tutor.model.req.SignUpReq
 import com.braingroom.tutor.utils.*
@@ -24,7 +25,7 @@ import io.reactivex.functions.Consumer
 /*
  * Created by ashketchup on 30/11/17.
  */
-class SignupViewModel(val uiHelper: SignupActivity.UiHelper, val fragmentHelper: FragmentHelper) : ViewModel() {
+class SignupViewModel(helperFactory: HelperFactory, val uiHelper: SignupActivity.UiHelper, val fragmentHelper: FragmentHelper) : ViewModel(helperFactory) {
 
     val snippet: SignUpReq.Snippet = SignUpReq.Snippet()
     val isIndividual = ObservableBoolean(true)
@@ -87,32 +88,32 @@ class SignupViewModel(val uiHelper: SignupActivity.UiHelper, val fragmentHelper:
     }
 
     val uploadProfilePic by lazy {
-        ImageUploadViewModel(R.drawable.individual, "", 1)
+        ImageUploadViewModel(helperFactory, R.drawable.individual, "", 1)
     }
     val uploadOrganizationPic by lazy {
-        ImageUploadViewModel(R.drawable.organization, "", 2)
+        ImageUploadViewModel(helperFactory, R.drawable.organization, "", 2)
     }
 
     val uploadPrimaryImage1 by lazy {
-        ImageUploadViewModel(R.drawable.primary_1, "", 3)
+        ImageUploadViewModel(helperFactory, R.drawable.primary_1, "", 3)
     }
     val uploadPrimaryImage2 by lazy {
-        ImageUploadViewModel(R.drawable.primary_2, "", 4)
+        ImageUploadViewModel(helperFactory, R.drawable.primary_2, "", 4)
     }
     val uploadSecondaryImage1 by lazy {
-        ImageUploadViewModel(R.drawable.secondary_1, "", 5)
+        ImageUploadViewModel(helperFactory, R.drawable.secondary_1, "", 5)
     }
     val uploadSecondaryImage2 by lazy {
-        ImageUploadViewModel(R.drawable.secondary_2, "", 6)
+        ImageUploadViewModel(helperFactory, R.drawable.secondary_2, "", 6)
     }
 
     val datePicker by lazy {
-        DatePickerViewModel(dialogHelper, "DOB", "12-12-2012")
+        DatePickerViewModel(helperFactory, "DOB", "12-12-2012")
     }
 
 
     val categoryVm by lazy {
-        SearchSelectListViewModel(Category, "select Interest", "", false, apiService.getCategories().doOnSubscribe { disposable -> compositeDisposable.add(disposable) }.map { resp ->
+        SearchSelectListViewModel(helperFactory, Category, "select Interest", "", false, apiService.getCategories().doOnSubscribe { disposable -> compositeDisposable.add(disposable) }.map { resp ->
             val list = HashMap<String, Int>()
             resp.data.forEach { snippet -> list.put(snippet.textValue, snippet.id) }
             list
@@ -123,7 +124,7 @@ class SignupViewModel(val uiHelper: SignupActivity.UiHelper, val fragmentHelper:
     }
 
     val genderVm by lazy {
-        ListDialogViewModel("Gender", apiService.getGender().doOnSubscribe { disposable -> compositeDisposable.add(disposable) }.map { resp ->
+        ListDialogViewModel(helperFactory, "Gender", apiService.getGender().doOnSubscribe { disposable -> compositeDisposable.add(disposable) }.map { resp ->
 
             val list: ListDialogData = ListDialogData(LinkedHashMap())
             for (snippet in resp.data)
@@ -137,7 +138,7 @@ class SignupViewModel(val uiHelper: SignupActivity.UiHelper, val fragmentHelper:
     }
 
     val communityVm by lazy {
-        SearchSelectListViewModel(Community, "Select Community", "", false, apiService.getCommunity().doOnSubscribe { disposable -> compositeDisposable.add(disposable) }.map { resp ->
+        SearchSelectListViewModel(helperFactory, Community, "Select Community", "", false, apiService.getCommunity().doOnSubscribe { disposable -> compositeDisposable.add(disposable) }.map { resp ->
             val list = HashMap<String, Int>()
             resp.data.forEach { snippet -> list.put(snippet.textValue, snippet.id) }
             list
@@ -148,7 +149,7 @@ class SignupViewModel(val uiHelper: SignupActivity.UiHelper, val fragmentHelper:
     }
 
     val countryVm by lazy {
-        SearchSelectListViewModel(Country, "search country", "", false, apiService.getCountry().map { resp ->
+        SearchSelectListViewModel(helperFactory, Country, "search country", "", false, apiService.getCountry().map { resp ->
             val list = HashMap<String, Int>()
             resp.data.forEach { snippet -> list.put(snippet.textValue, snippet.id) }
             list
@@ -164,7 +165,7 @@ class SignupViewModel(val uiHelper: SignupActivity.UiHelper, val fragmentHelper:
         }, HashMap(), fragmentHelper)
     }
     val stateVm by lazy {
-        SearchSelectListViewModel(State, "search state", "select country first", false, null, Consumer { selectedData ->
+        SearchSelectListViewModel(helperFactory, State, "search state", "select country first", false, null, Consumer { selectedData ->
             snippet.setStateId(selectedData.getId())
             selectedData.values.forEach { id ->
                 cityVm.refreshDataMap(apiService.getCity(id).map { resp ->
@@ -176,7 +177,7 @@ class SignupViewModel(val uiHelper: SignupActivity.UiHelper, val fragmentHelper:
         }, HashMap(), fragmentHelper)
     }
     val cityVm by lazy {
-        SearchSelectListViewModel(City, "search city", "select state first", false, null, Consumer { selectedData ->
+        SearchSelectListViewModel(helperFactory, City, "search city", "select state first", false, null, Consumer { selectedData ->
             snippet.setCityId(selectedData.getId())
             selectedData.values.forEach { id ->
                 localityVm.refreshDataMap(apiService.getLocality(id).map { resp ->
@@ -188,7 +189,7 @@ class SignupViewModel(val uiHelper: SignupActivity.UiHelper, val fragmentHelper:
         }, HashMap(), fragmentHelper)
     }
     val localityVm by lazy {
-        SearchSelectListViewModel(Locality, "search locality", "select city first", false, null, Consumer { selectedDataMap -> snippet.setLocality(selectedDataMap.getId()) }, HashMap(), fragmentHelper)
+        SearchSelectListViewModel(helperFactory, Locality, "search locality", "select city first", false, null, Consumer { selectedDataMap -> snippet.setLocality(selectedDataMap.getId()) }, HashMap(), fragmentHelper)
     }
     val toFirst by lazy {
         Action {
@@ -223,31 +224,31 @@ class SignupViewModel(val uiHelper: SignupActivity.UiHelper, val fragmentHelper:
     }
 
     private fun validateFirstFragment(): Boolean {
-        snippet.setName(name.get())
-        snippet.setEmail(email.get())
-        snippet.setPassword(password.get())
-        snippet.setMobileNo(phone.get())
-        snippet.setReferralCode(referralCode.get())
-        return true
+        /* snippet.setName(name.get())
+         snippet.setEmail(email.get())
+         snippet.setPassword(password.get())
+         snippet.setMobileNo(phone.get())
+         snippet.setReferralCode(referralCode.get())
+         return true*/
         when {
             name.get().isNullOrBlank() -> {
-                messageHelper?.showMessage("Name Can't be blank")
+                messageHelper.showMessage("Name Can't be blank")
                 return false
             }
             !email.get().isValidEmail() -> {
-                messageHelper?.showMessage("Email id is not valid")
+                messageHelper.showMessage("Email id is not valid")
                 return false
             }
             password.get().isNullOrBlank() || confirmPassword.get().isNullOrBlank() -> {
-                messageHelper?.showMessage("Password can't be blank")
+                messageHelper.showMessage("Password can't be blank")
                 return false
             }
             confirmPassword.get() != password.get() -> {
-                messageHelper?.showMessage("Password don't match")
+                messageHelper.showMessage("Password don't match")
                 return false
             }
             !phone.get().isValidPhone() -> {
-                messageHelper?.showMessage("Mobile Number is not valid")
+                messageHelper.showMessage("Mobile Number is not valid")
                 return false
             }
             else -> {
@@ -299,10 +300,10 @@ class SignupViewModel(val uiHelper: SignupActivity.UiHelper, val fragmentHelper:
                         if (resp.resCode) {
                             val data = resp.data
                             if (signUpSuccess(name.get(), email.get(), "", data.userId)) {
-                                navigator?.navigateActivity(HomeActivity::class.java)
+                                navigator.navigateActivity(HomeActivity::class.java)
                             }
                         } else {
-                            messageHelper?.showMessage(resp.resMsg)
+                            messageHelper.showMessage(resp.resMsg)
                             uiHelper.firstFragment()
                         }
                     })

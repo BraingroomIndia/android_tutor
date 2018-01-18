@@ -9,7 +9,7 @@ import com.braingroom.tutor.viewmodel.activity.ChangePasswordViewModel
  */
 class ChangePasswordActivity:Activity(){
     override val vm: ViewModel by lazy{
-        ChangePasswordViewModel()
+        ChangePasswordViewModel(helperFactory)
     }
     override val layoutId: Int = R.layout.activity_change_password
 }

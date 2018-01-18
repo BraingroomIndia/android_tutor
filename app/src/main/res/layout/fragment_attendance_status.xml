@@ -1,24 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
+
     <data>
+
         <variable
-           name="vm"
-            type="com.braingroom.tutor.viewmodel.fragment.AttendanceStatusFragmentViewModel"/>
+            name="vm"
+            type="com.braingroom.tutor.viewmodel.fragment.AttendanceStatusFragmentViewModel" />
     </data>
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
+
             <RadioGroup
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
+
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
+
                     <RadioButton
                         android:id="@+id/radioButton"
                         android:layout_width="wrap_content"
@@ -27,8 +34,8 @@
                         android:layout_alignParentStart="true"
                         android:layout_alignParentTop="true"
                         android:layout_marginLeft="50dp"
-                        android:checked="@={!vm.isEndCode}"
                         android:layout_marginStart="50dp"
+                        android:checked="@={!vm.isEndCode}"
                         android:text="Start Code" />
 
                     <RadioButton
@@ -37,36 +44,39 @@
                         android:layout_alignParentTop="true"
                         android:layout_marginLeft="72dp"
                         android:layout_marginStart="72dp"
-                        android:checked="@={vm.isEndCode}"
                         android:layout_toEndOf="@+id/radioButton"
                         android:layout_toRightOf="@+id/radioButton"
+                        android:checked="@={vm.isEndCode}"
                         android:text="End Code" />
                 </RelativeLayout>
             </RadioGroup>
+
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:hint='@{vm.isEndCode?"End Code":"Start Code"}'>
+
                 <android.support.design.widget.TextInputEditText
                     android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
                     android:inputType="number"
-                    android:text="@={vm.startorendcode}"
-                    android:layout_height="wrap_content" />
+                    android:text="@={vm.startorendcode}" />
             </android.support.design.widget.TextInputLayout>
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="GET ATTENDANCE"
-                android:layout_marginTop="@dimen/margin_med"
                 android:layout_gravity="center"
-                android:textSize="@dimen/_13sdp"
-                android:textColor="@color/black"
-                android:padding="6dp"
-                android:onClick="@{vm.onAttendance}"
-                android:ems="9"
-                android:gravity="center"
+                android:layout_marginTop="@dimen/margin_med"
                 android:background="@drawable/solid_white_rounded_corner"
-                android:fontFamily="@font/roboto_regular"/>
+                android:ems="9"
+                android:fontFamily="@font/roboto_regular"
+                android:gravity="center"
+                android:onClick="@{vm.onAttendance}"
+                android:padding="6dp"
+                android:text="GET ATTENDANCE"
+                android:textColor="@color/black"
+                android:textSize="@dimen/_13sdp" />
         </LinearLayout>
     </RelativeLayout>
 </layout>

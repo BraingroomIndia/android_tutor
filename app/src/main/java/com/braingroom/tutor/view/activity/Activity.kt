@@ -11,6 +11,7 @@ import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
 import android.util.Log
 import com.braingroom.tutor.common.CustomApplication
+import com.braingroom.tutor.common.modules.HelperFactory
 import com.braingroom.tutor.utils.*
 import com.braingroom.tutor.viewmodel.ViewModel
 import java.io.Serializable
@@ -50,50 +51,50 @@ abstract class Activity : AppCompatActivity() {
 
 
     @Suppress("unused")
-    public val applicationContext: CustomApplication by lazy {
+    val applicationContext: CustomApplication by lazy {
         CustomApplication.getInstance()
     }
 
     @Suppress("unused")
     var loggedIn: Boolean
-        get() = CustomApplication.getInstance().loggedIn
+        get() = applicationContext.loggedIn
         set(value) {
             preferencesEditor.putBoolean(lodgedIn, value).commit()
-            CustomApplication.getInstance().loggedIn = value
+            applicationContext.loggedIn = value
         }
 
 
     @Suppress("unused")
     val apiService by lazy {
-        CustomApplication.getInstance().appModule.apiService
+        applicationContext.appModule.dataFlowService
     }
 
     @Suppress("unused")
     val messageHelper by lazy {
-        Log.v(TAG, "messageHelper created")
-        MessageHelper(this)
+        helperFactory.messageHelper
     }
 
     @Suppress("unused")
     val navigator by lazy {
-        Log.v(TAG, "navigator created")
-        Navigator(this)
+        helperFactory.navigator
     }
 
     @Suppress("unused")
     val dialogHelper by lazy {
-        Log.v(TAG, "dialogHelper created")
-        DialogHelper(this)
+        helperFactory.dialogHelper
     }
 
     private val userPreferences by lazy {
-        CustomApplication.getInstance().appModule.userPreferences
+        applicationContext.appModule.userPreferences
     }
 
     private val preferencesEditor by lazy {
-        CustomApplication.getInstance().appModule.preferencesEditor
+        applicationContext.appModule.preferencesEditor
     }
 
+    val helperFactory by lazy {
+        HelperFactory(this)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         CustomApplication.getInstance().appModule.activity = this
@@ -135,7 +136,7 @@ abstract class Activity : AppCompatActivity() {
 
     }
 
-    open fun getFragmentViewModel(title: String) = ViewModel()
+    open fun getFragmentViewModel(title: String) = ViewModel(helperFactory)
 
     @Suppress("unused")
     fun getIntentString(key: String) = extras?.getString(key) ?: ""
@@ -163,7 +164,7 @@ abstract class Activity : AppCompatActivity() {
 
     }
 
-    public abstract val vm: ViewModel
+    abstract val vm: ViewModel
 
     protected abstract val layoutId: Int
 }

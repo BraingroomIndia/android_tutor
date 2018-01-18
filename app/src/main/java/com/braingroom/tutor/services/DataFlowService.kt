@@ -34,7 +34,10 @@ class DataFlowService(private val api: ApiService, private val realmCacheService
 
     fun login(data: SocialLoginReq.Snippet): Observable<LoginResp> {
         return api.socialLogin(SocialLoginReq(data)).subscribeOn(Schedulers.io()).observeOn(Schedulers.computation()).
-                onErrorReturn { LoginResp() }.map { resp -> resp }
+                onErrorReturn { LoginResp() }.map { resp ->
+            resp.data.profilePic = data.profilePic
+            resp
+        }
     }
 
     fun getMyProfile(id: String): Observable<MyProfileResp> {
@@ -58,26 +61,18 @@ class DataFlowService(private val api: ApiService, private val realmCacheService
                 .observeOn(AndroidSchedulers.mainThread())
     }
 
-    fun getLearner(keyword: String): Observable<CommonIdResp> {
+    fun getLearner(type: Int?, classId: String?): Observable<CommonIdResp> {
 
-        return api.getUser(UserListReq(UserListReq.Snippet(keyword, 2, "1"))).subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-    }
-
-    fun geTutor(keyword: String): Observable<CommonIdResp> {
-
-        return api.getUser(UserListReq(UserListReq.Snippet(keyword, 1, "1"))).subscribeOn(Schedulers.io())
+        return api.getUser(UserListReq(UserListReq.Snippet(userId, type, classId))).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
     }
 
     fun signUp(signUpReq: SignUpReq): Observable<SignUpResp> {
-
         return api.signUp(signUpReq).subscribeOn(Schedulers.io()).observeOn(Schedulers.computation()).subscribeOn(Schedulers.io())
     }
 
 
     fun getSchools(keyword: String): Observable<CommonIdResp> {//Cache
-
         return api.getSchools(InstituteReq(InstituteReq.Snippet(keyword))).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
     }
@@ -200,6 +195,13 @@ class DataFlowService(private val api: ApiService, private val realmCacheService
 
     }
 
+    fun getClassList(): Observable<CommonIdResp> {
+        return api.getClassList(CommonTutorIdReq(userId)).subscribeOn(Schedulers.io()).observeOn(Schedulers.computation()).onErrorReturn { CommonIdResp() }
+                .map { resp -> resp }
+
+
+    }
+
     fun getPaymentSummary(starDate: String, endDate: String): Observable<PaymentSummaryResp> {
         return api.getPaymentSummary(PaymentSummaryReq(userId, starDate, endDate)).onErrorReturnItem(PaymentSummaryResp()).subscribeOn(Schedulers.io())
                 .observeOn(Schedulers.computation())
@@ -263,8 +265,8 @@ class DataFlowService(private val api: ApiService, private val realmCacheService
                 .observeOn(AndroidSchedulers.mainThread())
     }
 
-    fun updateAttendance(learnerId: String, startOrEndCode: String): Observable<UpdateAttendanceResp> {
-        return api.updateAttendance(UpdateAttendanceReq(UpdateAttendanceReq.Snippet(userId, learnerId, startOrEndCode))).subscribeOn(Schedulers.io())
+    fun updateAttendance(learnerId: String, startOrEndCode: String, isStartCode: Boolean): Observable<UpdateAttendanceResp> {
+        return api.updateAttendance(UpdateAttendanceReq(UpdateAttendanceReq.Snippet(userId, learnerId, startOrEndCode, isStartCode))).subscribeOn(Schedulers.io())
                 .onErrorReturn { UpdateAttendanceResp() }
                 .observeOn(Schedulers.computation())
     }
@@ -275,7 +277,7 @@ class DataFlowService(private val api: ApiService, private val realmCacheService
                 .observeOn(Schedulers.computation())
     }
 
-    fun getStartOrEndDetails(req: AttendanceDetailReq): Observable<AttendanceDetailResp> {
+    fun getStartOrEndDetails(req: AttendanceDetailReq?): Observable<AttendanceDetailResp> {
         return api.getStartOrEndDetails(req).onErrorReturnItem(AttendanceDetailResp()).subscribeOn(Schedulers.io())
                 .observeOn(Schedulers.computation())
     }

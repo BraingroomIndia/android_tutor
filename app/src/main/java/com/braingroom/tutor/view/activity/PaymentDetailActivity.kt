@@ -9,7 +9,7 @@ import com.braingroom.tutor.viewmodel.activity.PaymentDetailViewModel
  */
 class PaymentDetailActivity : Activity() {
     override val vm: ViewModel by lazy {
-        PaymentDetailViewModel();
+        PaymentDetailViewModel(helperFactory);
     }
     override val layoutId: Int by lazy {
         R.layout.activity_payment_detail

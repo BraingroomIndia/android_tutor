@@ -2,6 +2,7 @@ package com.braingroom.tutor.viewmodel.activity
 
 import android.util.Log
 import com.braingroom.tutor.R
+import com.braingroom.tutor.common.modules.HelperFactory
 import com.braingroom.tutor.view.adapters.SpacingDecoration
 import com.braingroom.tutor.view.adapters.ViewProvider
 import com.braingroom.tutor.viewmodel.ViewModel
@@ -16,13 +17,13 @@ import java.util.*
 /*
  * Created by ashketchup on 7/12/17.
  */
-class MessageActivityViewModel : ViewModel() {
+class MessageActivityViewModel(helperFactory: HelperFactory) : ViewModel(helperFactory) {
     val decoration: SpacingDecoration by lazy {
         SpacingDecoration(10, 1)
     }
     val viewProvider: ViewProvider by lazy {
         object : ViewProvider {
-            override fun getView(vm: ViewModel?): Int {
+            override fun getView(vm: RecyclerViewItem?): Int {
 
                 return when (vm) {
                     is MessageItemViewModel -> R.layout.item_message
@@ -37,7 +38,7 @@ class MessageActivityViewModel : ViewModel() {
     init {
         apiService.getMessages().map { resp ->
             val viewModelList: ArrayList<MessageItemViewModel> = ArrayList()
-            resp.data.mapTo(viewModelList) { MessageItemViewModel(it.message.message, it.senderPic, it.senderName, it.message.getModifyDate(), it.senderId) }
+            resp.data.mapTo(viewModelList) { MessageItemViewModel(helperFactory, it.message.message, it.senderPic, it.senderName, it.message.getModifyDate(), it.senderId) }
         }.doOnSubscribe { disposable ->
             compositeDisposable.add(disposable)
             (0..5).forEach { _ -> item.onNext(LoadingViewModel()) }

@@ -4,12 +4,12 @@
     xmlns:bind="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-   <data>
+    <data>
 
         <variable
             name="vm"
             type="com.braingroom.tutor.viewmodel.activity.HomeViewModel" />
-   </data>
+    </data>
 
 
     <!--      <LinearLayout
@@ -34,7 +34,7 @@
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background='@{vm.background}'
+        android:background="@drawable/splash_screen"
         tools:context=".view.activity.HomeActivity"
         tools:showIn="@layout/content_home">
 

@@ -398,7 +398,7 @@ public final class BarcodeCaptureActivity extends Activity implements BarcodeGra
     @Override
     public ViewModel getVm() {
         if (viewModel == null)
-            return new ViewModel();
+            return new ViewModel(getHelperFactory());
         else return viewModel;
     }
 
@@ -480,7 +480,7 @@ public final class BarcodeCaptureActivity extends Activity implements BarcodeGra
             getMessageHelper().showProgressDialog("Wait", "Communicating with server ");
             getApiService().getStartOrEndDetails(gson.fromJson(barcode.displayValue, AttendanceDetailReq.class)).subscribe(resp -> {
                 if (!resp.getResCode())
-                    getMessageHelper().showAcceptableInfo(resp.getResMsg(), "Cancel", (dialog, which) -> Log.v(TAG, resp.getResMsg()));
+                    getMessageHelper().showAcceptableInfo("", resp.getResMsg(), "Cancel", (dialog, which) -> Log.v(TAG, resp.getResMsg()));
                 else
                     getMessageHelper().showAcceptableInfo("Ticket Info", resp.getData().getLearnerName() + resp.getData().getLearnerName(), "Confirm", "Cancel",
                             (dialog, which) -> Log.v(TAG, resp.getResMsg()),

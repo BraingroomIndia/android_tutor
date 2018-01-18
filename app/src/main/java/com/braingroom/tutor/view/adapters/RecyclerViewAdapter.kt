@@ -13,15 +13,16 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.braingroom.tutor.utils.defaultBinder
 import com.braingroom.tutor.viewmodel.ViewModel
+import com.braingroom.tutor.viewmodel.item.RecyclerViewItem
 import java.util.*
 
 
-class RecyclerViewAdapter(viewModelList: List<ViewModel>?, private val viewProvider: ViewProvider) : RecyclerView.Adapter<DataBindingViewHolder>() {
+class RecyclerViewAdapter(viewModelList: List<RecyclerViewItem>?, private val viewProvider: ViewProvider) : RecyclerView.Adapter<DataBindingViewHolder>() {
 
 
     private val binder: ViewModelBinder
 
-    private val viewModelList: List<ViewModel>
+    private val viewModelList: List<RecyclerViewItem>
 
 
     init {
@@ -55,7 +56,7 @@ class RecyclerViewAdapter(viewModelList: List<ViewModel>?, private val viewProvi
             return
         }
         holder.itemViewType
-        binder.bind(holder.viewBinding, viewModelList[position])
+        binder.bindRecyclerView(holder.viewBinding, viewModelList[position])
         holder.viewBinding.executePendingBindings()
     }
 

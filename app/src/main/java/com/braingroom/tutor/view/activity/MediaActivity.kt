@@ -12,7 +12,7 @@ class MediaActivity : Activity() {
 
 
     override val vm: MediaViewModel by lazy {
-        MediaViewModel()
+        MediaViewModel(helperFactory)
     }
 
     override val layoutId: Int = R.layout.activity_media

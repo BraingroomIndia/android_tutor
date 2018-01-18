@@ -8,6 +8,8 @@ import com.braingroom.tutor.view.adapters.EqualSpacingItemDecoration;
 import com.braingroom.tutor.view.adapters.ViewProvider;
 import com.braingroom.tutor.viewmodel.ViewModel;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.Arrays;
 import java.util.List;
 
@@ -18,7 +20,7 @@ import static com.braingroom.tutor.utils.ConstantsKt.VERTICAL;
  * Created by godara on 01/11/17.
  */
 
-public class ListMyProfileItem extends ViewModel {
+public class ListMyProfileItem implements RecyclerViewItem {
     public final String heading;
     public final List<MyProfileItem> items;
     public RecyclerView.ItemDecoration decor = new EqualSpacingItemDecoration((int) convertDpToPixel(11), VERTICAL);
@@ -33,4 +35,9 @@ public class ListMyProfileItem extends ViewModel {
         this.items = items;
     }
 
+    @NotNull
+    @Override
+    public String getTAG() {
+        return this.getClass().getSimpleName();
+    }
 }

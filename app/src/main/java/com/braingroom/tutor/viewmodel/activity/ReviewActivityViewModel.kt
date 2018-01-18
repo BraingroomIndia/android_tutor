@@ -2,6 +2,7 @@ package com.braingroom.tutor.viewmodel.activity
 
 import android.support.v7.widget.RecyclerView
 import com.braingroom.tutor.R
+import com.braingroom.tutor.common.modules.HelperFactory
 import com.braingroom.tutor.utils.FieldUtils
 import com.braingroom.tutor.utils.VERTICAL
 import com.braingroom.tutor.utils.convertDpToPixel
@@ -17,11 +18,11 @@ import java.util.*
 /*
  * Created by ashketchup on 22/12/17.
  */
-class ReviewActivityViewModel : ViewModel() {
+class ReviewActivityViewModel(helperFactory: HelperFactory) : ViewModel(helperFactory) {
 
     val view: ViewProvider by lazy {
         object : ViewProvider {
-            override fun getView(vm: ViewModel?): Int {
+            override fun getView(vm: RecyclerViewItem?): Int {
                 return when (vm) {
                     is ReviewItemViewModel -> R.layout.item_review
                     is LoadingViewModel -> R.layout.item_loading_media

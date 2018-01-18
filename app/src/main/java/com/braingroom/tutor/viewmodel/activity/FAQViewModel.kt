@@ -6,6 +6,7 @@ import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import com.bignerdranch.expandablerecyclerview.ExpandableRecyclerAdapter
 import com.braingroom.tutor.R
+import com.braingroom.tutor.common.modules.HelperFactory
 import com.braingroom.tutor.view.adapters.FAQAdapter
 import com.braingroom.tutor.view.adapters.Question
 import com.braingroom.tutor.viewmodel.ViewModel
@@ -14,7 +15,7 @@ import java.util.*
 /**
  * Created by ashketchup on 12/12/17.
  */
-class FAQViewModel(val context: Context):ViewModel(){
+class FAQViewModel(helperFactory: HelperFactory,val context: Context):ViewModel(helperFactory){
     val q1 = Question(applicationContext.resources.getString(R.string.q1), applicationContext.resources.getString(R.string.a1))
     val q2 = Question(applicationContext.resources.getString(R.string.q2), applicationContext.resources.getString(R.string.a2))
     val q3 = Question(applicationContext.resources.getString(R.string.q3), applicationContext.resources.getString(R.string.a3))

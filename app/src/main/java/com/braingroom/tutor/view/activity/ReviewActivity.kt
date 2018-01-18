@@ -9,7 +9,7 @@ import com.braingroom.tutor.viewmodel.activity.ReviewActivityViewModel
  */
 class ReviewActivity : Activity() {
     override val vm: ViewModel by lazy {
-        ReviewActivityViewModel()
+        ReviewActivityViewModel(helperFactory)
     }
     override val layoutId: Int = R.layout.activity_review
 }

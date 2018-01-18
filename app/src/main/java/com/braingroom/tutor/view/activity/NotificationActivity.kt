@@ -9,7 +9,7 @@ import com.braingroom.tutor.viewmodel.activity.NotificationViewModel
  */
 class NotificationActivity: Activity(){
     override val vm: NotificationViewModel by lazy{
-        NotificationViewModel()
+        NotificationViewModel(helperFactory)
     }
     override val layoutId: Int = R.layout.activity_notification
 }

@@ -13,11 +13,12 @@
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background='@{vm.background}'
+        android:background="@drawable/splash_screen"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        tools:background="@color/colorPrimary">
+
+        tools:background="@drawable/splash_screen">
 
         <TextView
             android:id="@+id/logo"
@@ -123,8 +124,8 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginBottom="6dp"
-            android:background='@{vm.loginButton}'
-            android:backgroundTint="@color/material_brown50"
+            android:background='@drawable/rounded_corner_line_orange'
+            android:drawableTint="@color/material_deeporange600"
             android:gravity="center"
             android:onClick="@{vm.onLoginClicked}"
             android:paddingBottom="9dp"

@@ -18,7 +18,7 @@ class MessageThreadActivity : Activity() {
 
     override val vm: ViewModel by lazy {
 
-        MessageThreadViewModel(getIntentString("senderId"), object : UiHelper {
+        MessageThreadViewModel(helperFactory,getIntentString("senderId"), object : UiHelper {
             override fun scrollToEnd() {
                 runOnUiThread {
                     Log.d(TAG, "scrollToEnd")

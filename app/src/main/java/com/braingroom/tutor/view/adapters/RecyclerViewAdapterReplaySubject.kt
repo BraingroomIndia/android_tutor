@@ -8,10 +8,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.braingroom.tutor.utils.defaultBinder
 import com.braingroom.tutor.viewmodel.ViewModel
-import com.braingroom.tutor.viewmodel.item.LoadingViewModel
-import com.braingroom.tutor.viewmodel.item.NotifyDataSetChanged
-import com.braingroom.tutor.viewmodel.item.RefreshViewModel
-import com.braingroom.tutor.viewmodel.item.RemoveLoadingViewModel
+import com.braingroom.tutor.viewmodel.item.*
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
@@ -23,10 +20,10 @@ import java.util.*
  * Created by godara on 06/11/17.
  */
 
-class RecyclerViewAdapterReplaySubject(replaySubjectViewModel: ReplaySubject<out ViewModel>?, private val viewProvider: ViewProvider) : RecyclerView.Adapter<DataBindingViewHolder>() {
-    private val latestViewModels = ArrayList<ViewModel>(0)
+class RecyclerViewAdapterReplaySubject(replaySubjectViewModel: ReplaySubject<out RecyclerViewItem>?, private val viewProvider: ViewProvider) : RecyclerView.Adapter<DataBindingViewHolder>() {
+    private val latestViewModels = ArrayList<RecyclerViewItem>(0)
     private val binder: ViewModelBinder = defaultBinder
-    private val source: Observable<out ViewModel?>?
+    private val source: Observable<out RecyclerViewItem?>?
     private val subscriptions = HashMap<RecyclerView.AdapterDataObserver, Disposable>()
     private val TAG = this.javaClass.simpleName
 
@@ -59,7 +56,7 @@ class RecyclerViewAdapterReplaySubject(replaySubjectViewModel: ReplaySubject<out
     }
 
     override fun onBindViewHolder(holder: DataBindingViewHolder?, position: Int) {
-        binder.bind(holder?.viewBinding, latestViewModels[position])
+        binder.bindRecyclerView(holder?.viewBinding, latestViewModels[position])
         holder?.viewBinding?.executePendingBindings()
     }
 

@@ -5,7 +5,9 @@ import android.content.Intent
 import android.databinding.ObservableField
 import com.braingroom.tutor.R
 import com.braingroom.tutor.common.CustomApplication
+import com.braingroom.tutor.common.modules.HelperFactory
 import com.braingroom.tutor.utils.*
+import com.braingroom.tutor.viewmodel.item.RecyclerViewItem
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.ReplaySubject
 
@@ -15,9 +17,9 @@ import io.reactivex.subjects.ReplaySubject
  */
 
 @Suppress("UNUSED_PARAMETER")
-open class ViewModel {
+open class ViewModel(val helperFactory: HelperFactory) {
 
-    val item: ReplaySubject<ViewModel> by lazy { ReplaySubject.create<ViewModel>() }
+    val item: ReplaySubject<RecyclerViewItem> by lazy { ReplaySubject.create<RecyclerViewItem>() }
 
     val compositeDisposable: CompositeDisposable by lazy {
         CompositeDisposable()
@@ -33,13 +35,14 @@ open class ViewModel {
         get() = CustomApplication.getInstance()
 
     var userName: String = CustomApplication.getInstance().userName
-        get() = CustomApplication.getInstance().userName
+        get() = applicationContext.userName
     var userEmail = CustomApplication.getInstance().userEmail
-        get() = CustomApplication.getInstance().userEmail
-    var userId = CustomApplication.getInstance().userId
-        get() = CustomApplication.getInstance().userId
-    var userPic = CustomApplication.getInstance().userPic
-        get() = CustomApplication.getInstance().userPic
+        get() = applicationContext.userEmail
+    var userId = applicationContext.userId
+        get() = applicationContext.userId
+    var userPic = applicationContext.userPic
+        get() = applicationContext.userPic
+    val userPicPlaceHolder = R.drawable.avatar_male
 
     var loggedIn: Boolean
         get() = CustomApplication.getInstance().loggedIn
@@ -58,30 +61,27 @@ open class ViewModel {
 
     @Suppress("unused")
     val messageHelper by lazy {
-        CustomApplication.getInstance().appModule.messageHelper
+        helperFactory.messageHelper
     }
 
     @Suppress("unused")
     val navigator by lazy {
-        CustomApplication.getInstance().appModule.navigator
+        helperFactory.navigator
     }
 
     @Suppress("unused")
     val dialogHelper by lazy {
-        CustomApplication.getInstance().appModule.dialogHelper
+        helperFactory.dialogHelper
     }
 
     val userPreferences by lazy {
-        CustomApplication.getInstance().appModule.userPreferences
+        applicationContext.appModule.userPreferences
     }
 
     val preferencesEditor by lazy {
-        CustomApplication.getInstance().appModule.preferencesEditor
+        applicationContext.appModule.preferencesEditor
     }
 
-    val background: CustomDrawable by lazy {
-        CustomDrawable(R.drawable.splash_screen)
-    }
 
     open fun paginate() {
         if (pageNumber > -1 && !paginationInProgress)

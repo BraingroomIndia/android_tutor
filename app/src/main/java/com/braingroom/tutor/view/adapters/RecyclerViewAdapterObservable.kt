@@ -18,17 +18,17 @@ import io.reactivex.subjects.ReplaySubject
 import java.util.*
 
 
-class RecyclerViewAdapterObservable(observableViewModels: ReplaySubject<out ViewModel>?,
+class RecyclerViewAdapterObservable(observableViewModels: ReplaySubject<out RecyclerViewItem>?,
                                     private val viewProvider: ViewProvider) : RecyclerView.Adapter<DataBindingViewHolder>() {
-    private val latestViewModels = ArrayList<ViewModel>(0)
+    private val latestViewModels = ArrayList<RecyclerViewItem>(0)
     private val binder: ViewModelBinder = defaultBinder
-    private val source: Observable<out ViewModel>?
+    private val source: Observable<out RecyclerViewItem>?
     private val subscriptions = HashMap<RecyclerView.AdapterDataObserver, Disposable>()
     val TAG: String
         get() = this::class.java.simpleName ?: ""
 
     init {
-        source = observableViewModels?.repeat()?.observeOn(AndroidSchedulers.mainThread())?.subscribeOn(Schedulers.io())?.
+        source = observableViewModels?.repeat()?.observeOn(Schedulers.computation())?.subscribeOn(Schedulers.io())?.
                 doOnNext { viewModel ->
                     //                    Log.d(TAG, "doOnNext called")
                     viewModel?.let {
@@ -80,12 +80,12 @@ class RecyclerViewAdapterObservable(observableViewModels: ReplaySubject<out View
     }
 
     override fun onBindViewHolder(holder: DataBindingViewHolder?, position: Int) {
-        binder.bind(holder?.viewBinding, latestViewModels[position])
+        binder.bindRecyclerView(holder?.viewBinding, latestViewModels[position])
         holder?.viewBinding?.executePendingBindings()
     }
 
     override fun onViewRecycled(holder: DataBindingViewHolder?) {
-        binder.bind(holder?.viewBinding, null)
+        binder.bindRecyclerView(holder?.viewBinding, null)
         holder?.viewBinding?.executePendingBindings()
     }
 
@@ -95,7 +95,7 @@ class RecyclerViewAdapterObservable(observableViewModels: ReplaySubject<out View
 
     override fun registerAdapterDataObserver(observer: RecyclerView.AdapterDataObserver) {
         source?.let {
-            it.subscribe({ viewModel ->
+            it.observeOn(AndroidSchedulers.mainThread()).subscribe({ viewModel ->
                 viewModel?.let {
                     when (it) {
                         is NotifyDataSetChanged -> {

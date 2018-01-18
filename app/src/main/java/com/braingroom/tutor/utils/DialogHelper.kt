@@ -45,40 +45,25 @@ public class DialogHelper(val activity: Activity?) {
             })
         }
     }
-    fun emptyAttendance(text: String){
-        activity?.let{
-            activity.runOnUiThread{
+
+    fun emptyAttendance(text: String) {
+        activity?.let {
+            activity.runOnUiThread {
                 dismissActiveProgress()
                 Builder(it)
                         .title("Invalid Code")
                         .content(text)
                         .negativeText("Cancel")
-                        .onNegative(MaterialDialog.SingleButtonCallback{ a,b ->
+                        .onNegative(MaterialDialog.SingleButtonCallback { a, b ->
                             dismissActiveProgress()
-                            })
+                        })
                         .show()
             }
         }
     }
 
-    fun showAttendance(text:String,startOrEndCode:String,name:String,className:String,viewModel:ViewModel){
-        activity?.let{
-            activity.runOnUiThread({
-            dismissActiveProgress()
-            Builder(it)
-                    .title("")
-                    .content(name+"  "+className)
-                    .positiveText("Confirm")
-                    .negativeText("Cancel")
-                    .onPositive(MaterialDialog.SingleButtonCallback { dialog,which ->
-                        Toast.makeText(activity,"Boo",Toast.LENGTH_SHORT).show()
-                        viewModel.apiService.updateAttendance(text,startOrEndCode).subscribe{resp ->
-                            dismissActiveProgress()
-                        }
-                    })
-                    .show()
-            })
-        }
+    fun showAttendance(text: String, startOrEndCode: String, name: String, className: String, viewModel: ViewModel) {
+
     }
 
     fun showMultiSelectList(title: String, items: List<String>?, selectedItems: Array<Int>, positiveText: String) {
@@ -104,7 +89,7 @@ public class DialogHelper(val activity: Activity?) {
         dismissActiveProgress()
         when {
             items?.isNotEmpty() == true -> activity?.let {
-                Builder(it).title(title ?: "").items(items).itemsCallbackSingleChoice(if (selectedItems.isNotEmpty()) selectedItems[0] else -1) { materialDialog, view, selectedIdx, charSequence ->
+                Builder(it).title(title).items(items).itemsCallbackSingleChoice(if (selectedItems.isNotEmpty()) selectedItems[0] else -1) { materialDialog, view, selectedIdx, charSequence ->
                     view.visibility
                     when (viewModel) {
                         is ListDialogViewModel -> (viewModel as ListDialogViewModel).setSelectedItem(selectedIdx)

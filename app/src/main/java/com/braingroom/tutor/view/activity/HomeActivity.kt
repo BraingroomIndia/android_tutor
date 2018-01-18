@@ -20,7 +20,7 @@ class HomeActivity : Activity(), NavigationView.OnNavigationItemSelectedListener
 
 
     override val vm: HomeViewModel by lazy {
-        HomeViewModel()
+        HomeViewModel(helperFactory)
     }
     override val layoutId: Int by lazy {
         R.layout.activity_home
@@ -55,7 +55,7 @@ class HomeActivity : Activity(), NavigationView.OnNavigationItemSelectedListener
         if (item.itemId == R.id.nav_message)
             navigator.navigateActivity(MessageActivity::class.java)
         if (item.itemId == R.id.nav_logout) {
-            messageHelper.showAcceptableInfo("Log out?", "Are you sure you want to log out of the app", SingleButtonCallback { dialog, which ->
+            messageHelper.showAcceptableInfo("Log out?", "Are you sure you want to log out of the app", "Confirm", SingleButtonCallback { dialog, which ->
                 vm.logout()
                 navigator.navigateActivity(Intent(this, LoginActivity::class.java).
                         addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK))

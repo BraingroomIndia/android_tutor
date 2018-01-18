@@ -9,7 +9,7 @@ import com.braingroom.tutor.viewmodel.activity.MyProfileViewModel
 class MyProfileActivity : Activity() {
 
 
-    override val vm: MyProfileViewModel by lazy { MyProfileViewModel() }
+    override val vm: MyProfileViewModel by lazy { MyProfileViewModel(helperFactory) }
     override val layoutId: Int
         get() = R.layout.activity_my_profile
 }

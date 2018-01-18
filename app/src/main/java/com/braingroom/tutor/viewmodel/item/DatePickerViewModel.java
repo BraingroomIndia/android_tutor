@@ -2,43 +2,50 @@ package com.braingroom.tutor.viewmodel.item;
 
 import android.databinding.ObservableField;
 
+import com.braingroom.tutor.common.modules.HelperFactory;
 import com.braingroom.tutor.utils.DialogHelper;
+import com.braingroom.tutor.viewmodel.ViewModel;
 import com.braingroom.tutor.viewmodel.fragment.DialogViewModel;
 
 import io.reactivex.functions.Action;
 
 import static com.braingroom.tutor.utils.CommonUtilsKt.isEmpty;
 
-public class DatePickerViewModel extends DialogViewModel {
+public class DatePickerViewModel extends ViewModel {
 
-    private DialogHelper dialogHelper;
     public Action onClick = this::show;
+    public final ObservableField<String> title, selectedItemsText;
+    public final Action onOpenerClick;
 
 
     public ObservableField<String> mytitle = new ObservableField<>("");
 
 
-    public DatePickerViewModel(DialogHelper dialogHelper, String title, String defaultDate) {
-        super(dialogHelper, defaultDate);
+    public DatePickerViewModel(final HelperFactory helperFactory, String title, String defaultDate) {
+        super(helperFactory);
         mytitle.set(title);
-
-        if (!isEmpty(defaultDate))
-            this.dialogHelper = dialogHelper;
+        this.title = new ObservableField<>(title);
+        this.selectedItemsText = new ObservableField<>();
+        onOpenerClick = this::show;
     }
 
-    @Override
+
     public void show() {
-        setViewModel(this);
-        this.dialogHelper.showDatePicker();
+        getDialogHelper().showDatePicker(this);
     }
 
     public void reset() {
         selectedItemsText.set("select filter values");
     }
 
-    @Override
     public void setTitle(String title) {
         this.title.set(title);
     }
 
+    public void handleOkClick() {
+        dismiss();
+    }
+
+    private void dismiss() {
+    }
 }

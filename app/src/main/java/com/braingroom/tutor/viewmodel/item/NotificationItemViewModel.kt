@@ -7,7 +7,9 @@ import io.reactivex.functions.Action
 /*
  * Created by ashketchup on 7/12/17.
  */
-class NotificationItemViewModel(read: Boolean, val title: String) : ViewModel() {
+class NotificationItemViewModel(read: Boolean, val title: String) : RecyclerViewItem {
+    override val TAG: String
+        get() = this::class.java.simpleName
     val color: Int by lazy {
         if (read)
             R.color.materialBlueGray

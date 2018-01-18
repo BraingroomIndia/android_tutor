@@ -9,7 +9,7 @@ import com.braingroom.tutor.viewmodel.activity.MessageActivityViewModel
  */
 class MessageActivity:Activity(){
     override val vm by lazy{
-        MessageActivityViewModel()
+        MessageActivityViewModel(helperFactory)
     }
     override val layoutId: Int = R.layout.activity_message
 }

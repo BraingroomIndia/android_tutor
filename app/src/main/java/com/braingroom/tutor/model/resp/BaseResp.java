@@ -19,7 +19,7 @@ public abstract class BaseResp {
     @SerializedName("res_msg")
     private String resMsg;
 
-    public boolean isEmpty(String value) {
+    public static boolean isEmpty(String value) {
         return value == null || value.trim().isEmpty();
     }
 

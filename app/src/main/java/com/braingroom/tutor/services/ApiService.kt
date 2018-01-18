@@ -34,7 +34,7 @@ interface ApiService {
     @POST("getInstitions")
     fun getInstitute(@Body req: InstituteReq): Observable<CommonIdResp>
 
-    @POST("apis/getUsers")
+    @POST("tutorApi/getUserListByTutor")
     fun getUser(@Body req: UserListReq): Observable<CommonIdResp>
 
     @POST("apis/getSchools")
@@ -97,9 +97,12 @@ interface ApiService {
     fun getPaymentSummary(@Body req: PaymentSummaryReq): Observable<PaymentSummaryResp>
 
     @POST("tutorApi/getAttendances")
-    fun getStartOrEndDetails(@Body req: AttendanceDetailReq): Observable<AttendanceDetailResp>
+    fun getStartOrEndDetails(@Body req: AttendanceDetailReq?): Observable<AttendanceDetailResp>
 
     @POST("tutorApi/updateAttendance")
     fun updateAttendance(@Body req: UpdateAttendanceReq): Observable<UpdateAttendanceResp>
+
+    @POST("tutorApi/getClassListByTutor")
+    fun getClassList(@Body req: CommonTutorIdReq): Observable<CommonIdResp>
 
 }

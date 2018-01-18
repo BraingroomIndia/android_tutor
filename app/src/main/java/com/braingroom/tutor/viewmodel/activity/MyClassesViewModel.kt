@@ -3,6 +3,7 @@ package com.braingroom.tutor.viewmodel.activity
 import android.util.Log
 
 import com.braingroom.tutor.R
+import com.braingroom.tutor.common.modules.HelperFactory
 import com.braingroom.tutor.model.data.ListDialogData
 import com.braingroom.tutor.model.req.ClassListReq.Snippet
 import com.braingroom.tutor.model.resp.ClassListResp
@@ -19,13 +20,13 @@ import com.braingroom.tutor.viewmodel.item.*
 import io.reactivex.functions.Consumer
 
 
-class MyClassesViewModel : ViewModel() {
+class MyClassesViewModel(helperFactory: HelperFactory) : ViewModel(helperFactory) {
     val classType: ListDialogViewModel
     val classStatus: ListDialogViewModel
     val snippet = Snippet(true, true, userId)
     val viewProvider: ViewProvider by lazy {
         object : ViewProvider {
-            override fun getView(vm: ViewModel?): Int {
+            override fun getView(vm: RecyclerViewItem?): Int {
                 return when (vm) {
                     is ClassListItemViewModel -> R.layout.item_class_list
                     is LoadingViewModel -> R.layout.item_loading_class_list
@@ -45,7 +46,7 @@ class MyClassesViewModel : ViewModel() {
         classStatusData.put("Expired", 1)
         classStatusData.put("Ongoing", 0)
 
-        classType = ListDialogViewModel("Class Type", Observable.just(ListDialogData(classTypeData)), HashMap(), false, Consumer { selectedItems ->
+        classType = ListDialogViewModel(helperFactory, "Class Type", Observable.just(ListDialogData(classTypeData)), HashMap(), false, Consumer { selectedItems ->
             if (selectedItems.values.iterator().hasNext()) {
                 snippet.setBatch(selectedItems.values.iterator().next())
                 reset()
@@ -53,7 +54,7 @@ class MyClassesViewModel : ViewModel() {
             }
         }, "", null)
 
-        classStatus = ListDialogViewModel("Class Status", Observable.just(ListDialogData(classStatusData)), HashMap(), false, Consumer { selectedItems ->
+        classStatus = ListDialogViewModel(helperFactory, "Class Status", Observable.just(ListDialogData(classStatusData)), HashMap(), false, Consumer { selectedItems ->
             if (selectedItems.values.iterator().hasNext()) {
                 snippet.setExpired(selectedItems.values.iterator().next())
                 reset()

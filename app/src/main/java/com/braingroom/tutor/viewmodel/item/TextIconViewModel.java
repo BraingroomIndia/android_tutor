@@ -13,13 +13,15 @@ import com.braingroom.tutor.model.data.InputTypeEnum;
 import com.braingroom.tutor.utils.CustomDrawable;
 import com.braingroom.tutor.viewmodel.ViewModel;
 
+import org.jetbrains.annotations.NotNull;
+
 import io.reactivex.functions.Action;
 
 /*
  * Created by godara on 01/11/17.
  */
 
-public class TextIconViewModel extends ViewModel {
+public class TextIconViewModel implements RecyclerViewItem {
 
     public final ObservableField<String> text = new ObservableField<>("");
     public final CustomDrawable image;
@@ -94,5 +96,11 @@ public class TextIconViewModel extends ViewModel {
         } else {
             this.hinttext.set(errorMessage);
         }
+    }
+
+    @NotNull
+    @Override
+    public String getTAG() {
+        return this.getClass().getSimpleName();
     }
 }

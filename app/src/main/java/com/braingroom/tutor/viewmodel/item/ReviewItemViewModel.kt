@@ -6,17 +6,9 @@ import com.braingroom.tutor.viewmodel.ViewModel
  * Created by ashketchup on 22/12/17.
  */
 
-class ReviewItemViewModel() : ViewModel() {
-    var review: String = ""
-    var rating: Int = 0
-    var name: String = ""
-    var title: String = ""
+class ReviewItemViewModel(val review: String, val rating: Int, val name: String, val title: String) : RecyclerViewItem {
 
-    constructor(review: String, rating: Int, name: String, title: String) : this() {
-        this.review = review
-        this.rating = rating
-        this.name = name
-        this.title = title
 
-    }
+    override val TAG: String
+        get() = this::class.java.simpleName
 }

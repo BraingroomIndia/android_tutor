@@ -19,6 +19,10 @@ public class AttendanceDetailReq {
         this.data = new Snippet(tutorId, startCode, endCode);
     }
 
+    public Snippet getData() {
+        return data;
+    }
+
     public AttendanceDetailReq(String tutorId, String startOrEndCode, boolean isStartCode) {
         this.data = new Snippet(tutorId, startOrEndCode, isStartCode);
     }
@@ -31,11 +35,24 @@ public class AttendanceDetailReq {
         @SerializedName("start_code")
         private String startCode;
 
+        public String getTutorId() {
+            return tutorId;
+        }
+
+        public String getStartOrEndCode() {
+            return startCode + endCode;
+        }
+
+        public boolean getIsStartCode() {
+            return startCode == null || startCode.isEmpty() || startCode.trim().isEmpty();
+        }
+
         public Snippet(String tutorId, String endCode, String startCode) {
             this.tutorId = tutorId;
             this.endCode = endCode;
             this.startCode = startCode;
         }
+
 
         public Snippet(String tutorId, String startOrEndCode, boolean isStartCode) {
             this.tutorId = tutorId;

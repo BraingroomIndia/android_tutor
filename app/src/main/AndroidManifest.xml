@@ -88,6 +88,8 @@
             android:name=".view.activity.BarcodeCaptureActivity"
             android:label=""
             android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".view.activity.ManualAttendanceActivity" />
+        <activity android:name=".view.activity.BroadcastMessageActivity" />
 
 
     </application>

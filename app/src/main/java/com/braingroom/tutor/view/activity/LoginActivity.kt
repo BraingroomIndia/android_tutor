@@ -63,6 +63,7 @@ class LoginActivity : Activity(), OnConnectionFailedListener {
                             if (email.isNullOrBlank())
                                 email = "bgdemovendor2@gmail.com"
                             vm.socialLogin(name, email, picture, socialId)
+                            LoginManager.getInstance().logOut()
                         }
                         val parameters = Bundle()
                         parameters.putString("fields", "id,name,email,picture")
@@ -71,13 +72,14 @@ class LoginActivity : Activity(), OnConnectionFailedListener {
                     }
 
                     override fun onCancel() {
-                        messageHelper.showDismissInfo("Login cancelled by user")
+                        messageHelper.showMessage("Login cancelled by user")
+                        LoginManager.getInstance().logOut()
                     }
 
                     override fun onError(exception: FacebookException) {
-                        Log.e(TAG, "onError: " + exception.message, exception)
-                        exception.printStackTrace()
-                        messageHelper.showDismissInfo("Facebook login error")
+                        Log.e(TAG, "Fb Login onError: " + exception.message, exception)
+                        messageHelper.showMessage("Facebook login error")
+                        LoginManager.getInstance().logOut()
                     }
                 })
     }
@@ -87,7 +89,7 @@ class LoginActivity : Activity(), OnConnectionFailedListener {
     }
 
     override val vm: LoginViewModel by lazy {
-        LoginViewModel(object : UIHelper {
+        LoginViewModel(helperFactory,object : UIHelper {
             override fun fbLogin() {
                 mFbLogin.performClick()
             }
@@ -101,6 +103,8 @@ class LoginActivity : Activity(), OnConnectionFailedListener {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         callbackManager.onActivityResult(requestCode, resultCode, data);
+        if (mGoogleApiClient.isConnected)
+            mGoogleApiClient.clearDefaultAccountAndReconnect()
     }
 
     override val layoutId: Int = R.layout.activity_login

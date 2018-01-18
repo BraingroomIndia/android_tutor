@@ -4,6 +4,7 @@ import android.databinding.ObservableField
 import android.text.TextUtils
 import android.util.Log
 import com.braingroom.tutor.R
+import com.braingroom.tutor.common.modules.HelperFactory
 import com.braingroom.tutor.utils.FieldUtils
 import com.braingroom.tutor.utils.MyConsumer
 import com.braingroom.tutor.view.adapters.ViewProvider
@@ -12,6 +13,7 @@ import com.braingroom.tutor.view.fragment.SearchSelectListFragment
 import com.braingroom.tutor.viewmodel.SearchSelectListItemViewModel
 import com.braingroom.tutor.viewmodel.ViewModel
 import com.braingroom.tutor.viewmodel.item.NotifyDataSetChanged
+import com.braingroom.tutor.viewmodel.item.RecyclerViewItem
 import com.braingroom.tutor.viewmodel.item.RefreshViewModel
 import io.reactivex.Observable
 import io.reactivex.annotations.NonNull
@@ -25,7 +27,7 @@ import java.util.concurrent.TimeUnit
 /*
  * Created by ashketchup on 6/12/17.
  */
-class SearchSelectListViewModel(val title: String, val searchHint: String, val dependencyMessage: String, isMultipleSelect: Boolean, private var observableApi: Observable<HashMap<String, Int>>?, private val saveConsumer: Consumer<HashMap<String, Int>>, private var selectedDataMap: HashMap<String, Int>, private val fragmentHelper: FragmentHelper) : ViewModel() {
+class SearchSelectListViewModel(helperFactory: HelperFactory, val title: String, val searchHint: String, val dependencyMessage: String, isMultipleSelect: Boolean, private var observableApi: Observable<HashMap<String, Int>>?, private val saveConsumer: Consumer<HashMap<String, Int>>, private var selectedDataMap: HashMap<String, Int>, private val fragmentHelper: FragmentHelper) : ViewModel(helperFactory) {
 
 
     val onClearClicked = Action {
@@ -36,34 +38,34 @@ class SearchSelectListViewModel(val title: String, val searchHint: String, val d
     }
 
     val viewProvider = object : ViewProvider {
-        override fun getView(vm: ViewModel?): Int {
+        override fun getView(vm: RecyclerViewItem?): Int {
             return R.layout.item_search_select_text;
         }
     }
     val onSaveClicked: Action by lazy {
         Action {
             saveConsumer.accept(selectedDataMap)
-            navigator?.popBackStack(title)
+            navigator.removeFragment(title)
         }
     }
     val onOpenClicked: Action by lazy {
         Action {
             if (observableApi == null)
-                messageHelper?.showMessage(dependencyMessage)
+                messageHelper.showMessage(dependencyMessage)
             else {
-                messageHelper?.showProgressDialog("Wait", "Loading")
+                messageHelper.showProgressDialog("Wait", "Loading")
                 observableApi?.subscribeOn(Schedulers.computation())?.doFinally({ start.subscribe() })?.subscribe({ map ->
                     if (map.isEmpty()) {
-                        messageHelper?.showMessage("Not available")
+                        messageHelper.showMessage("Not available")
                     } else {
 
                         dataMap.putAll(map)
                         searchQuery.set("")
-                        navigator?.openFragment(title, SearchSelectListFragment.newInstance(title))
+                        navigator.openFragment(title, SearchSelectListFragment.newInstance(title))
                     }
-                    messageHelper?.dismissActiveProgress()
+                    messageHelper.dismissActiveProgress()
                 }, { throwable ->
-                    messageHelper?.dismissActiveProgress()
+                    messageHelper.dismissActiveProgress()
                     Log.e("Search select List VM", "accept: " + throwable.message)
                 })
 
@@ -117,7 +119,7 @@ class SearchSelectListViewModel(val title: String, val searchHint: String, val d
     fun refreshDataMap(dataSource: Observable<HashMap<String, Int>>?) {
 
         when (dataSource) {
-            null -> messageHelper?.showMessage(dependencyMessage)
+            null -> messageHelper.showMessage(dependencyMessage)
             else -> {
                 dataMap.clear()
                 selectedDataMap.clear()

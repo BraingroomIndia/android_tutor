@@ -8,6 +8,7 @@ import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.TextView
 import com.braingroom.tutor.R
+import com.braingroom.tutor.common.modules.HelperFactory
 import com.braingroom.tutor.model.resp.PaymentDetailsResp
 import com.braingroom.tutor.utils.FieldUtils
 import com.braingroom.tutor.view.adapters.ViewProvider
@@ -22,7 +23,7 @@ import java.util.concurrent.TimeUnit
 /*
  * Created by ashketchup on 19/12/17.
  */
-class PaymentDetailViewModel() : ViewModel() {
+class PaymentDetailViewModel(helperFactory: HelperFactory) : ViewModel(helperFactory) {
     /*Dummy comment */
     val total: ObservableField<String> by lazy { ObservableField("") }
     val pending: ObservableField<String> by lazy { ObservableField("") }
@@ -59,19 +60,19 @@ class PaymentDetailViewModel() : ViewModel() {
 
     val startdate: DatePickerViewModel by lazy {
         if (dialogHelper != null)
-            DatePickerViewModel(dialogHelper!!, "Start", "12-12-2017")
+            DatePickerViewModel(helperFactory, "Start", "12-12-2017")
         else
             throw NullPointerException()
     }
     val enddate: DatePickerViewModel by lazy {
         if (dialogHelper != null)
-            DatePickerViewModel(dialogHelper!!, "End", "12-12-2017")
+            DatePickerViewModel(helperFactory, "End", "12-12-2017")
         else
             throw NullPointerException()
     }
     val view: ViewProvider by lazy {
         object : ViewProvider {
-            override fun getView(vm: ViewModel?): Int {
+            override fun getView(vm: RecyclerViewItem?): Int {
                 return when (vm) {
                     is ItemPaymentDetailViewModel -> R.layout.item_payment_details
                     is LoadingViewModel -> R.layout.item_loading_class_list

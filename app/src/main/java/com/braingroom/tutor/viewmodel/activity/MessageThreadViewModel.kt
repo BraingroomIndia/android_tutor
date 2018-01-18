@@ -3,6 +3,7 @@ package com.braingroom.tutor.viewmodel.activity
 import android.databinding.ObservableField
 import android.util.Log
 import com.braingroom.tutor.R
+import com.braingroom.tutor.common.modules.HelperFactory
 import com.braingroom.tutor.utils.FieldUtils
 import com.braingroom.tutor.view.adapters.ViewProvider
 import com.braingroom.tutor.viewmodel.ViewModel
@@ -13,7 +14,7 @@ import io.reactivex.functions.Action
 /*
  * Created by ashketchup on 27/12/17.
  */
-class MessageThreadViewModel(val senderId: String, uiHelper: UiHelper) : ViewModel() {
+class MessageThreadViewModel(helperFactory: HelperFactory,val senderId: String, uiHelper: UiHelper) : ViewModel(helperFactory) {
 
 
     interface UiHelper {
@@ -25,7 +26,7 @@ class MessageThreadViewModel(val senderId: String, uiHelper: UiHelper) : ViewMod
 
     val view: ViewProvider by lazy {
         object : ViewProvider {
-            override fun getView(vm: ViewModel?): Int {
+            override fun getView(vm: RecyclerViewItem?): Int {
                 return when (vm) {
                     is MessageThreadItemViewModel -> R.layout.item_message_thread
                     is LoadingViewModel -> R.layout.item_loading_media
