@@ -30,32 +30,35 @@
         <!--Sign Up Activity-->
         <activity
             android:name=".view.activity.SignupActivity"
-            android:label="@string/app_name"
-            android:theme="@style/SplashTheme" />
+            android:label="@string/app_name" />
         <!--Login Activity-->
         <activity
             android:name=".view.activity.LoginActivity"
-            android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:label="@string/app_name" />
         <!--Message Activity-->
         <activity
             android:name=".view.activity.MessageActivity"
-            android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <!--Notification Activity-->
-        <activity
-            android:name=".view.activity.NotificationActivity"
-            android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:label="@string/app_name" />
         <!--DashBoard-->
         <activity
             android:name=".view.activity.HomeActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".view.activity.MyClassesActivity"></activity>
+        <activity android:name=".view.activity.MyClassesActivity" />
 
         <!--My Profile Activity-->
         <activity android:name=".view.activity.MyProfileActivity" />
+
+        <activity android:name=".view.activity.FAQActivity" />
+        <activity android:name=".view.activity.NotificationActivity" />
+        <activity android:name=".view.activity.PaymentDetailActivity" />
+        <activity android:name=".view.activity.MediaActivity" />
+        <activity android:name=".view.activity.MessageThreadActivity" />
+        <activity android:name=".view.activity.ReviewActivity" />
+        <activity
+            android:name=".view.activity.AttendanceActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".view.activity.ChangePasswordActivity" />
 
         <!--FaceBook Login-->
         <meta-data
@@ -82,7 +85,12 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".view.activity.barcodereader.BarcodeCaptureActivity"
+            android:name=".view.activity.BarcodeCaptureActivity"
+            android:label=""
             android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".view.activity.ManualAttendanceActivity" />
+        <activity android:name=".view.activity.BroadcastMessageActivity" />
+
+
     </application>
 </manifest>

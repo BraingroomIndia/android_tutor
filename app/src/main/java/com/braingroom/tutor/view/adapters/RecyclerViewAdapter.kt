@@ -4,28 +4,25 @@ package com.braingroom.tutor.view.adapters
  * Created by godara on 12/10/17.
  */
 
+
 import android.databinding.DataBindingUtil
 import android.databinding.ViewDataBinding
 import android.support.v7.widget.RecyclerView
-
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
-
-
-import com.braingroom.tutor.viewmodel.ViewModel
-
-import java.util.ArrayList
-
 import com.braingroom.tutor.utils.defaultBinder
+import com.braingroom.tutor.viewmodel.ViewModel
+import com.braingroom.tutor.viewmodel.item.RecyclerViewItem
+import java.util.*
 
 
-class RecyclerViewAdapter(viewModelList: List<ViewModel>?, private val viewProvider: ViewProvider) : RecyclerView.Adapter<DataBindingViewHolder>() {
+class RecyclerViewAdapter(viewModelList: List<RecyclerViewItem>?, private val viewProvider: ViewProvider) : RecyclerView.Adapter<DataBindingViewHolder>() {
 
 
     private val binder: ViewModelBinder
 
-    private val viewModelList: List<ViewModel>
+    private val viewModelList: List<RecyclerViewItem>
 
 
     init {
@@ -39,10 +36,10 @@ class RecyclerViewAdapter(viewModelList: List<ViewModel>?, private val viewProvi
             return if (viewModelList.size > position) viewProvider.getView(viewModelList[position]) else 0
         } catch (e: Exception) {
             if (e is NoSuchFieldException)
-                Log.d("RecyclerViewAdapter", "No layout found corresponding to " + viewModelList[position].TAG)
+                Log.e("RecyclerViewAdapter", "No layout found corresponding to " + viewModelList[position].TAG)
             e.printStackTrace()
             if (e is NullPointerException)
-                Log.d("RecyclerViewAdapter", "Null pointer error at position" + position)
+                Log.e("RecyclerViewAdapter", "Null pointer error at position" + position)
         }
 
         return 0
@@ -59,7 +56,7 @@ class RecyclerViewAdapter(viewModelList: List<ViewModel>?, private val viewProvi
             return
         }
         holder.itemViewType
-        binder.bind(holder.viewBinding, viewModelList[position])
+        binder.bindRecyclerView(holder.viewBinding, viewModelList[position])
         holder.viewBinding.executePendingBindings()
     }
 

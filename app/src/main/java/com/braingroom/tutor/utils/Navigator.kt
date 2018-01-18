@@ -1,19 +1,23 @@
 package com.braingroom.tutor.utils
 
 import android.Manifest
+import android.app.FragmentManager
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.support.annotation.AnimatorRes
+import android.support.v4.app.ActivityCompat.startActivityForResult
 
 import android.util.Log
 import com.braingroom.tutor.R
 
 import com.braingroom.tutor.view.activity.Activity
+import com.braingroom.tutor.view.activity.LoginActivity
 import com.braingroom.tutor.view.fragment.BaseFragment
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException
 import com.google.android.gms.common.GooglePlayServicesRepairableException
 import com.google.android.gms.location.places.ui.PlaceAutocomplete
+import com.google.android.youtube.player.YouTubeStandalonePlayer
 import com.tbruyelle.rxpermissions2.RxPermissions
 
 /*
@@ -23,7 +27,7 @@ import com.tbruyelle.rxpermissions2.RxPermissions
 @Suppress("unused", "UNUSED_PARAMETER")
 class Navigator(val activity: Activity?) {
 
-    val TAG = activity?.TAG +"\t"+ this.javaClass.simpleName
+    val TAG = activity?.TAG + "\t" + this.javaClass.simpleName
 
     fun navigateActivity(destination: Class<out Activity>, bundle: Bundle) {
         val intent = Intent(activity, destination)
@@ -31,10 +35,11 @@ class Navigator(val activity: Activity?) {
         activity?.startActivity(intent)
     }
 
-    fun navigateActivity(destination: Class<out Activity>) {
+    fun navigateActivity(destination: Class<out android.app.Activity>) {
         val intent = Intent(activity, destination)
         activity?.startActivity(intent)
     }
+
 
     fun navigateActivityForResult(destination: Class<out Activity>, bundle: Bundle?, reqCode: Int) {
         val intent = Intent(activity, destination)
@@ -45,6 +50,19 @@ class Navigator(val activity: Activity?) {
 
     fun navigateActivity(intent: Intent) {
         activity?.startActivity(intent)
+    }
+
+    fun logout() {
+        activity?.let {
+            it.vm.preferencesEditor.remove(email)
+            it.vm.preferencesEditor.remove(profilePic)
+            it.vm.preferencesEditor.remove(mobile)
+            it.vm.preferencesEditor.remove(lodgedIn)
+            it.vm.preferencesEditor.remove(name).apply()
+            navigateActivity(Intent(it, LoginActivity::class.java).
+                    addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK))
+        }
+
     }
 
     fun finishActivity() {
@@ -64,6 +82,15 @@ class Navigator(val activity: Activity?) {
 //                setCustomAnimations(R.animator.bottom_in, R.animator.top_out)?.
                 replace(R.id.fragment_container, fragment)?.
                 addToBackStack(null)?.
+                commit()
+    }
+
+    fun openFragment(tag: String, fragment: BaseFragment) {
+        activity?.fragmentManager?.
+                beginTransaction()?.
+//                setCustomAnimations(R.animator.bottom_in, R.animator.top_out)?.
+                replace(R.id.fragment_container, fragment)?.
+                addToBackStack(tag)?.
                 commit()
     }
 
@@ -94,8 +121,17 @@ class Navigator(val activity: Activity?) {
                 commit()
     }
 
-    fun openStandaloneYoutube(videoId: String) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    fun popBackStack(title: String) {
+        val count = activity?.fragmentManager?.backStackEntryCount ?: 0
+        if (count > 0) {
+            activity?.fragmentManager?.popBackStack(title, FragmentManager.POP_BACK_STACK_INCLUSIVE)
+        }
+
+    }
+
+    fun openStandaloneYoutube(videoId: String, reqCode: Int) {
+        val intent = YouTubeStandalonePlayer.createVideoIntent(activity, "AIzaSyBsaNQgFsk2LbSmXydzNAhBdsQ4YkzAoh0", videoId, 100, true, true)
+        activity?.startActivityForResult(intent, reqCode)
     }
 
     fun openStandaloneVideo(videoUrl: String) {

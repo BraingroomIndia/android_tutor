@@ -4,6 +4,7 @@ package com.braingroom.tutor.model.resp;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
+import java.util.Collections;
 import java.util.List;
 
 import com.google.gson.annotations.SerializedName;
@@ -25,7 +26,7 @@ public class LoginResp extends BaseResp {
 
         @SerializedName("id")
         private String mId;
-        @SerializedName("name")
+        @SerializedName(value = "name", alternate = {"first_name"})
         private String mName;
         @SerializedName("profile_pic")
         private String mProfilePic;
@@ -39,6 +40,9 @@ public class LoginResp extends BaseResp {
         private String mReferralCode;
         @SerializedName("uuid")
         private String mUuid;
+
+        @SerializedName(value = "email_id", alternate = {"email"})
+        private String mEmailId;
 
 
         @NonNull
@@ -60,9 +64,29 @@ public class LoginResp extends BaseResp {
             return getNonNull(mMobile);
         }
 
+        public void setName(String mName) {
+            if (!isEmpty(mName))
+                this.mName = mName;
+        }
+
+        public void setProfilePic(String mProfilePic) {
+            if (!isEmpty(mProfilePic))
+                this.mProfilePic = mProfilePic;
+        }
+
+        public void setEmailId(String mEmailId) {
+            if (!isEmpty(mEmailId))
+                this.mEmailId = mEmailId;
+        }
+
         @NonNull
         public String getName() {
             return getNonNull(mName);
+        }
+
+        @NonNull
+        public String getEmailId() {
+            return getNonNull(mEmailId);
         }
 
         @NonNull
@@ -83,9 +107,9 @@ public class LoginResp extends BaseResp {
 
     }
 
-    @Nullable
+    @NonNull
     public Snippet getData() {
-        return isEmpty(data) ? null : data.get(0);
+        return isEmpty(data) ? new Snippet() : data.get(0);
     }
 
 

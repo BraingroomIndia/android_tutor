@@ -1,14 +1,10 @@
 package com.braingroom.tutor.view.activity
 
+import android.util.Log
 import com.braingroom.tutor.R
-import com.braingroom.tutor.utils.City
-import com.braingroom.tutor.utils.Country
-import com.braingroom.tutor.utils.Locality
-import com.braingroom.tutor.utils.State
-import com.braingroom.tutor.view.fragment.FragmentHelper
-import com.braingroom.tutor.view.fragment.SearchSelectListFragment
-import com.braingroom.tutor.view.fragment.SignUpFirstFragment
-import com.braingroom.tutor.view.fragment.SignUpSecondFragment
+import com.braingroom.tutor.model.req.SignUpReq
+import com.braingroom.tutor.utils.*
+import com.braingroom.tutor.view.fragment.*
 import com.braingroom.tutor.viewmodel.ViewModel
 import com.braingroom.tutor.viewmodel.activity.SignupViewModel
 
@@ -19,11 +15,13 @@ class SignupActivity : Activity() {
 
     val FIRST_FRAGMENT = "firstFragment"
     val SECOND_FRAGMENT = "secondFragment"
+    val THIRD_FRAGMENT = "thirdFragment"
 
     override val layoutId: Int = R.layout.activity_signup;
 
+
     override val vm: SignupViewModel by lazy {
-        SignupViewModel(object : UiHelper {
+        SignupViewModel(helperFactory,object : UiHelper {
             override fun firstFragment() {
                 navigator.openFragment(SignUpFirstFragment.newInstance(FIRST_FRAGMENT))
             }
@@ -33,14 +31,20 @@ class SignupActivity : Activity() {
             }
 
             override fun thirdFragment() {
-                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+                navigator.openFragment(SignUpThirdFragment.newInstance(THIRD_FRAGMENT))
+            }
+
+            override fun signUp() {
+                Log.d("why", "why")
+                navigator.finishActivity()
             }
         }, object : FragmentHelper {
             override fun show(tag: String) {
-                navigator.openFragment(SearchSelectListFragment.newInstance(tag))
+                navigator.openFragment(tag, SearchSelectListFragment.newInstance(tag))
             }
 
             override fun remove(tag: String) {
+                popBackStack(tag)
             }
         })
     }
@@ -53,9 +57,13 @@ class SignupActivity : Activity() {
             State -> vm.stateVm
             City -> vm.cityVm
             Locality -> vm.localityVm
-            else -> vm
+            Category -> vm.categoryVm
+            Community -> vm.communityVm
+            FIRST_FRAGMENT -> vm
+            SECOND_FRAGMENT -> vm
+            THIRD_FRAGMENT -> vm
+            else -> throw NoSuchFieldError()
         }
-
 
     }
 
@@ -63,5 +71,6 @@ class SignupActivity : Activity() {
         fun firstFragment()
         fun secondFragment()
         fun thirdFragment()
+        fun signUp()
     }
 }

@@ -5,11 +5,14 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import com.braingroom.tutor.utils.MyConsumer;
+import com.braingroom.tutor.viewmodel.item.RecyclerViewItem;
+
+import org.jetbrains.annotations.NotNull;
 
 import io.reactivex.functions.Consumer;
 import io.reactivex.subjects.PublishSubject;
 
-public class SearchSelectListItemViewModel extends ViewModel {
+public class SearchSelectListItemViewModel implements RecyclerViewItem {
 
     @NonNull
     public final String name;
@@ -39,4 +42,9 @@ public class SearchSelectListItemViewModel extends ViewModel {
     }
 
 
+    @NotNull
+    @Override
+    public String getTAG() {
+        return this.getClass().getSimpleName();
+    }
 }

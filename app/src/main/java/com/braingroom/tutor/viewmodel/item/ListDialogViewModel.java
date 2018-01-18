@@ -1,3 +1,4 @@
+/*
 package com.braingroom.tutor.viewmodel.item;
 
 import android.databinding.ObservableBoolean;
@@ -18,9 +19,11 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
 
+*/
 /*
  * Created by godara on 13/10/17.
- */
+ *//*
+
 
 public class ListDialogViewModel extends ViewModel {
 
@@ -172,3 +175,4 @@ public class ListDialogViewModel extends ViewModel {
         dismiss();
     }
 }
+*/

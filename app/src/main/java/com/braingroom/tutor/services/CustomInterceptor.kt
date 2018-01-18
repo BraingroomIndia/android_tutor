@@ -1,16 +1,13 @@
 package com.braingroom.tutor.services
 
+
 import android.util.Log
-
-
+import okhttp3.Interceptor
+import okhttp3.Response
 import java.io.IOException
 import java.net.ConnectException
 import java.net.SocketTimeoutException
 import java.net.UnknownHostException
-
-
-import okhttp3.Interceptor
-import okhttp3.Response
 
 
 /*
@@ -24,21 +21,21 @@ class CustomInterceptor : Interceptor {
     override fun intercept(chain: Interceptor.Chain): Response {
         val original = chain.request()
         val requestBuilder = original.newBuilder()
-                .addHeader("X-App-Type", "BGUSR01")
+                .addHeader("X-App-Type", "BGTUT01")
         val request = requestBuilder.build()
         val response: Response
         try {
             response = chain.proceed(request)
         } catch (e: ConnectException) {
-            Log.d(TAG, "intercept: ConnectException " + e.localizedMessage)
+            Log.e(TAG, e.message + e)
             /* TutorApplication.getInstance().getInternetStatusBus().onNext(false);*/
             throw e
         } catch (e: SocketTimeoutException) {
-            Log.d(TAG, "intercept: SocketTimeoutException " + e.localizedMessage)
+            Log.e(TAG, e.message + e)
             /* TutorApplication.getInstance().getInternetStatusBus().onNext(false);*/
             throw e
         } catch (e: UnknownHostException) {
-            Log.d(TAG, "intercept: SocketTimeoutException " + e.localizedMessage)
+            Log.e(TAG, e.message + e)
             /*TutorApplication.getInstance().getInternetStatusBus().onNext(false);*/
             throw e
         }

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
@@ -10,25 +11,21 @@
 
     </data>
 
-    <LinearLayout
+
+    <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@{vm.isSelected ? @drawable/solid_material_blue_rounded_corner : @drawable/solid_white_rounded_corner_no_stroke}"
+        android:ellipsize="end"
+        android:fontFamily="@font/roboto_bold"
+        android:gravity="center_vertical"
+        android:lines="1"
         android:onClick="@{() -> vm.onClicked.accept(vm)}"
-        android:orientation="horizontal"
-        android:padding="@dimen/padding_small">
+        android:padding="@dimen/padding_small"
+        android:text="@{vm.name}"
+        android:textColor="@{vm.isSelected ? @color/white : @color/colorTextDark}"
+        android:textSize="@dimen/text_size_medium"
+        tools:background="@drawable/solid_material_blue_rounded_corner"
+        tools:text="Hello" />
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="30dp"
-            android:ellipsize="end"
-            android:gravity="center_vertical"
-            android:lines="1"
-            android:paddingLeft="@dimen/padding_small"
-            android:text="@{vm.name}"
-            android:textColor="@{vm.isSelected ? @color/white : @color/colorTextDark}"
-            android:textSize="@dimen/text_size_medium"
-            android:fontFamily="@font/roboto"
-            />
-    </LinearLayout>
 </layout>

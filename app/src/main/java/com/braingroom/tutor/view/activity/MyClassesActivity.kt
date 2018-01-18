@@ -11,7 +11,7 @@ class MyClassesActivity : Activity() {
 
 
     override val vm: MyClassesViewModel by lazy {
-        MyClassesViewModel()
+        MyClassesViewModel(helperFactory)
     }
     override val layoutId: Int = R.layout.activity_my_classes
 }

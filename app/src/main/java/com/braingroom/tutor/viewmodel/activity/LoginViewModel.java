@@ -7,11 +7,14 @@ import android.util.Log;
 
 import com.braingroom.tutor.R;
 import com.braingroom.tutor.common.CustomApplication;
+import com.braingroom.tutor.common.modules.HelperFactory;
 import com.braingroom.tutor.model.req.LoginReq;
 import com.braingroom.tutor.model.req.SocialLoginReq;
 import com.braingroom.tutor.model.resp.LoginResp;
 import com.braingroom.tutor.utils.CustomDrawable;
+import com.braingroom.tutor.view.activity.LoginActivity;
 import com.braingroom.tutor.view.activity.LoginActivity.UIHelper;
+import com.braingroom.tutor.view.activity.SignupActivity;
 import com.braingroom.tutor.viewmodel.ViewModel;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -22,9 +25,9 @@ import org.jetbrains.annotations.Nullable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Action;
 
-
 import static com.braingroom.tutor.utils.CommonUtilsKt.isEmpty;
 import static com.braingroom.tutor.utils.CommonUtilsKt.isValidEmail;
+import static com.braingroom.tutor.utils.CommonUtilsKt.isValidPassword;
 import static com.braingroom.tutor.utils.ConstantsKt.braingroomId;
 import static com.braingroom.tutor.utils.ConstantsKt.email;
 import static com.braingroom.tutor.utils.ConstantsKt.lodgedIn;
@@ -39,14 +42,22 @@ public class LoginViewModel extends ViewModel {
     public final ObservableField<String> emailId = new ObservableField<>("");
     public final ObservableField<String> password = new ObservableField<>("");
     public final CustomDrawable loginButton;
-    private final int RC_SIGN_IN = 9001;
-    private final UIHelper uiHelper;
     public final Action onLoginClicked = new Action() {
         @Override
         public void run() throws Exception {
             login(emailId.get(), password.get());
         }
     };
+
+    public final Action onRegisterCLicked = new Action() {
+        @Override
+        public void run() throws Exception {
+            if (getNavigator() != null)
+                getNavigator().navigateActivity(SignupActivity.class);
+        }
+    };
+    private final int RC_SIGN_IN = 9001;
+    private final UIHelper uiHelper;
     public final Action onGoogleLoginClicked = new Action() {
         @Override
         public void run() throws Exception {
@@ -61,8 +72,15 @@ public class LoginViewModel extends ViewModel {
         }
     };
 
+    public final Action onRegisterClicked = new Action() {
+        @Override
+        public void run() throws Exception {
+                getNavigator().navigateActivity(SignupActivity.class);
+        }
+    };
 
-    public LoginViewModel(UIHelper uiHelper) {
+    public LoginViewModel(HelperFactory helperFactory, UIHelper uiHelper) {
+        super(helperFactory);
         loginButton = new CustomDrawable(R.drawable.rounded_corner_line, R.color.material_deeporange600);
         this.uiHelper = uiHelper;
 
@@ -84,27 +102,32 @@ public class LoginViewModel extends ViewModel {
 
 
     public void socialLogin(@NonNull String name, @NonNull String emailId, @NonNull String profilePicture, @NonNull String socialId) {
-        getApiService().login(new SocialLoginReq.Snippet(name, "", emailId, socialId)).
+        getApiService().login(new SocialLoginReq.Snippet(name, "", emailId, socialId, profilePicture)).
                 doOnSubscribe(disposable -> getCompositeDisposable().add(disposable)).
                 observeOn(AndroidSchedulers.mainThread()).
                 subscribe(this::handleLoginResponse, throwable -> {
-                    Log.d(getTAG(), throwable.getMessage());
+                    Log.e(getTAG(), throwable.getMessage(), throwable);
                     throwable.printStackTrace();
                 });
     }
 
     public void login(String emailId, String password) {
-        if (isValidEmail(emailId) && !isEmpty(password)) {
-            if (getMessageHelper() != null)
-                getMessageHelper().showProgressDialog("Logging in", "Sit back while we connect you...");
-            getApiService().login(new LoginReq.Snippet(emailId, password)).
-                    doOnSubscribe(disposable -> getCompositeDisposable().add(disposable)).
-                    observeOn(AndroidSchedulers.mainThread()).
-                    subscribe(this::handleLoginResponse, throwable -> {
-                        Log.d(getTAG(), throwable.getMessage());
-                        throwable.printStackTrace();
-                    });
+        if (!isValidEmail(emailId)) {
+            getMessageHelper().showMessage("Email id is not valid");
+            return;
         }
+        if (isEmpty(password)) {
+            getMessageHelper().showMessage("Password can't be empty");
+            return;
+        }
+        getMessageHelper().showProgressDialog("Logging in", "Sit back while we connect you...");
+        getApiService().login(new LoginReq.Snippet(emailId, password)).
+                doOnSubscribe(disposable -> getCompositeDisposable().add(disposable)).
+                observeOn(AndroidSchedulers.mainThread()).
+                subscribe(this::handleLoginResponse, throwable -> {
+                    Log.e(getTAG(), throwable.getMessage(), throwable);
+                    throwable.printStackTrace();
+                });
 
     }
 
@@ -112,13 +135,10 @@ public class LoginViewModel extends ViewModel {
     private void handleLoginResponse(LoginResp resp) {
         if (resp.getResCode()) {
             LoginResp.Snippet data = resp.getData();
-            if (getMessageHelper() != null)
-                getMessageHelper().dismissActiveProgress();
-            if (getNavigator() != null)
-                getNavigator().finishActivity(new Intent(), loginSuccess(data.getName(), data.getEmailId(), data.getProfilePic(), data.getUserId()));
+            getMessageHelper().dismissActiveProgress();
+            getNavigator().finishActivity(null, loginSuccess(data.getName(), data.getEmailId(), data.getProfilePic(), data.getUserId()));
         } else {
-            if (getMessageHelper() != null)
-                getMessageHelper().showDismissInfo(resp.getResMsg());
+            getMessageHelper().showMessage(resp.getResMsg());
         }
 
     }
@@ -132,7 +152,7 @@ public class LoginViewModel extends ViewModel {
             getPreferencesEditor().putString(email, emailId);
             getPreferencesEditor().putString(profilePic, profilePicture);
             getPreferencesEditor().putString(braingroomId, userId);
-            getPreferencesEditor().commit();
+            getPreferencesEditor().apply();
             CustomApplication.getInstance().userEmail = emailId;
             CustomApplication.getInstance().userId = userId;
             CustomApplication.getInstance().userName = userName;

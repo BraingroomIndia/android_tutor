@@ -3,12 +3,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <data>
+   <data>
 
         <variable
             name="vm"
             type="com.braingroom.tutor.viewmodel.item.ClassListItemViewModel" />
-    </data>
+   </data>
 
     <android.support.v7.widget.CardView
         android:layout_width="match_parent"

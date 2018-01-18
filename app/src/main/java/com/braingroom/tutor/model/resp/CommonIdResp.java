@@ -26,16 +26,17 @@ public class CommonIdResp extends BaseResp {
     public CommonIdResp(List<Snippet> data) {
         this.data = data;
     }
-    public CommonIdResp(){
+
+    public CommonIdResp() {
 
     }
 
-    public static class Snippet{
+    public static class Snippet {
 
         @SerializedName("id")
         int id;
 
-        @SerializedName(value = "name", alternate = {"college_name", "activity_name", "school_name", "ngo_name", "segment_name", "city_name", "first_name", "version", "geo", "community_name","category_name"})
+        @SerializedName(value = "name", alternate = {"college_name", "activity_name", "school_name", "ngo_name", "segment_name", "city_name", "first_name", "version", "geo", "community_name", "category_name", "class_topic"})
         private String textValue;
 
         @SerializedName(value = "category_image", alternate = {"community_banner"})
@@ -46,6 +47,13 @@ public class CommonIdResp extends BaseResp {
             this.textValue = "";
             this.imageUrl = "";
         }
+
+        public Snippet(int id, String name) {
+            this.id = id;
+            this.textValue = name;
+            this.imageUrl = "";
+        }
+
 
         public void setId(int id) {
             this.id = id;

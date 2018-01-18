@@ -6,6 +6,8 @@ import com.braingroom.tutor.model.resp.MyProfileResp;
 import com.braingroom.tutor.utils.CustomDrawable;
 import com.braingroom.tutor.viewmodel.ViewModel;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,7 +16,7 @@ import java.util.List;
  * Created by godara on 11/10/17.
  */
 
-public class TextViewModel extends ViewModel {
+public class TextViewModel implements RecyclerViewItem {
 
 
     public TextViewModel(String text, String imageUrlLeft, String imageUrlRight, String imageUrlTop, String imageUrlBottom) {
@@ -32,14 +34,10 @@ public class TextViewModel extends ViewModel {
     public final CustomDrawable drawableBottom;
     public final String text;
 
-    public void handleApiResult(MyProfileResp resp) {
-        List<ListTextIconViewModel> dummy = new ArrayList<>();
-        List<TextIconViewModel> dummy2 = new ArrayList<>();
-        dummy.add(new ListTextIconViewModel("Basic Detail", new TextIconViewModel(resp.getData().getName(), R.drawable.ic_clock_20dp)));
-        dummy2.add(new TextIconViewModel(resp.getData().getAddress(), R.drawable.ic_clock_20dp));
-        dummy.add(new ListTextIconViewModel("Academic Details", dummy2));
+    @NotNull
+    @Override
+    public String getTAG() {
+        return this.getClass().getSimpleName();
     }
-
-
 }
 

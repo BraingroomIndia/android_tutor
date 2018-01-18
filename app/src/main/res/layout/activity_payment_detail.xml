@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:bind="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="vm"
+            type="com.braingroom.tutor.viewmodel.activity.PaymentDetailViewModel" />
+
+        <import type="android.view.View" />
+
+        <import type="android.widget.TextView.OnEditorActionListener" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Keyword">
+            <android.support.design.widget.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:OnEditorActionListener="@{(p0, p1, p2)->vm.searchAction.onEditorAction(p0, p1, p2)}"
+                android:imeOptions="actionSearch"
+                android:inputType="text"
+                android:text="@={vm.keyword}"/>
+        </android.support.design.widget.TextInputLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <include
+                    layout="@layout/item_date_dialog_opener"
+                    bind:vm="@{vm.startdate}" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentTop="true">
+
+                <include
+                    layout="@layout/item_date_dialog_opener"
+                    bind:vm="@{vm.enddate}" />
+            </RelativeLayout>
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="@{vm.isVisible}">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_med"
+
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/margin_neg"
+                    android:layout_marginRight="@dimen/margin_neg"
+                    android:layout_weight="1"
+                    android:background="@color/colorAccent"
+                    android:fontFamily="@font/roboto_regular"
+                    android:gravity="center"
+                    android:text="Total Tickets Sold"
+                    android:textColor="@color/black"
+                    android:textSize="15sp" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/margin_neg"
+                    android:layout_marginRight="@dimen/margin_neg"
+                    android:layout_weight="1"
+                    android:background="@color/colorAccent"
+                    android:fontFamily="@font/roboto_regular"
+                    android:gravity="center"
+                    android:text="Transferred Amount"
+                    android:textColor="@color/black"
+                    android:textSize="15sp" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/margin_neg"
+                    android:layout_marginRight="@dimen/margin_neg"
+                    android:layout_weight="1"
+                    android:background="@color/colorAccent"
+                    android:fontFamily="@font/roboto_regular"
+                    android:gravity="center"
+                    android:text="Pending Amount"
+                    android:textColor="@color/black"
+                    android:textSize="15sp" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="@dimen/margin_neg"
+                    android:layout_marginRight="@dimen/margin_neg"
+                    android:layout_weight="1"
+                    android:background="@color/colorAccent"
+                    android:fontFamily="@font/roboto_regular"
+                    android:gravity="center"
+                    android:text="Total"
+                    android:textColor="@color/black"
+                    android:textSize="15sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/margin_neg"
+                    android:layout_marginRight="@dimen/margin_neg"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/roboto_regular"
+                    android:gravity="center"
+                    android:text="@{vm.tickets}"
+                    android:textColor="@color/black"
+                    android:textSize="15sp" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/margin_neg"
+
+                    android:layout_marginRight="@dimen/margin_neg"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/roboto_regular"
+                    android:gravity="center"
+                    android:text="@{vm.transferred}"
+                    android:textColor="@color/black"
+                    android:textSize="15sp" />
+
+                <TextView
+
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+
+                    android:layout_marginLeft="@dimen/margin_neg"
+                    android:layout_marginRight="@dimen/margin_neg"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/roboto_regular"
+                    android:gravity="center"
+                    android:text="@{vm.pending}"
+                    android:textColor="@color/black"
+                    android:textSize="15sp" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="@dimen/margin_neg"
+                    android:layout_marginRight="@dimen/margin_neg"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/roboto_regular"
+                    android:gravity="center"
+                    android:text="@{vm.total}"
+                    android:textColor="@color/black"
+                    android:textSize="15sp" />
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="@dimen/margin_large"
+                android:background="@drawable/rounded_corner_line"
+                android:backgroundTint="@color/materialBlueGray"
+                android:ems="8"
+                android:fontFamily="@font/roboto_bold"
+                android:gravity="center"
+                android:onClick="@{vm.nullify}"
+                android:text="Click to get Details"
+                android:textColor="@color/black"
+                android:textSize="@dimen/_13sdp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="@{!vm.isVisible}">
+
+            <android.support.v7.widget.RecyclerView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                bind:items="@{vm.item}"
+                bind:view="@{vm.view}"></android.support.v7.widget.RecyclerView>
+        </LinearLayout>
+    </LinearLayout>
+</layout>

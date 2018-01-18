@@ -21,9 +21,59 @@
     <string name="barcode_success">Barcode read successfully</string>
     <string name="barcode_failure">No barcode captured</string>
     <string name="barcode_error">"Error reading barcode: %1$s"</string>
+    <string name="navigation_drawer_open">Open Navigation</string>
+    <string name="navigation_drawer_close">Close Navigation</string>
+
+    <string-array name="primary_id_type">
+        <item>Select one</item>
+        <item>Aadhar Card</item>
+        <item>Passport</item>
+        <item>Voter ID</item>
+        <item>Pan Card</item>
+        <item>Other central govt. issued ID</item>
+    </string-array>
+    <string-array name="secondary_id_type">
+        <item>Select one</item>
+        <item>Certificates of excellence</item>
+        <item>Awards received</item>
+        <item>Course completion certificates</item>
+        <item>Papers published</item>
+        <item>Distinguished accomplishments</item>
+        <item>Newspaper mentions</item>
+    </string-array>
+
+
+    <!--FAQ-->
+    <string name="q1">What is Braingroom?</string>
+    <string name="q2">What are the benefits of posting classes in Braingroom?</string>
+    <string name="q3">Why do I need to register in BrainGroom?</string>
+    <string name="q4">Is there any fee for registration?</string>
+    <string name="q5">What is \'Identity verified vendor\' and \'Credential verified vendor\' in BrainGroom?</string>
+    <string name="q6">What is the advantage of being a verified vendor?</string>
+    <string name="q7">How to post a class/workshop/activity in BrainGroom?</string>
+    <string name="q8">How many classes can I post in BrainGroom for free?</string>
+    <string name="q9">Can I remove/edit my class/workshop/activity details after posting in BrainGroom?</string>
+    <string name="q10">How to get my classes in \'Featured Classes List\' in home page and category page?</string>
+    <string name="q11">What is \'Catalogue\' in BrainGroom? And How to list my class/workshop/activity in catalogue?</string>
+    <string name="q12">How do I get notified if anyone books my class?</string>
+
+    <string name="a1">It is an online marketplace for educational, recreational and wellness classes with defined target segment, quantifiable outcomes and specified time duration. Braingroom Portal and app helps users find and book all types of education and lifestyle classes in and around them in few clicks. Class listing is completely free in braingroom.com. We also provide free marketing and promotions for every client.</string>
+    <string name="a2">Posting your classes/workshops/activities in BrainGroom helps your visibility in and around the city. We provide free publicity through all the social medias and also a free video and photo shoot to promote your classes/workshops/activities.</string>
+    <string name="a3">You will have the access to post your own classes/workshops/activities for free in BrainGroom. You will also be able to book your favourite classes/workshops/activities sessions.</string>
+    <string name="a4">No. Registering in BrainGroom is free.</string>
+    <string name="a5">Identity verified vendor will have an identity verified logo in the respective profile. To become an Identity verified vendor, upload any two of the identity proof (Aadhar card, Licence, Passport, academy registration certificate (only for academy) &amp; PAN card) in your profile and send the attested copy of your Identity proof to BrainGroom office.
+Credential verified vendor will have a credential verified logo in the respective profile. To become a Credential verified vendor, upload any one of your credential proof (Certification of Teacher, Experience Certificate &amp; any certificate related to the professional experience)</string>
+    <string name="a6">Verified logo in the class/workshop/activity provider\'s profile will be given first preference in the class listing page for any users.</string>
+    <string name="a7">To post a class/workshop/activity, you should be registered in BrainGroom. If you are a registered member, log in to your profile and click on \'Post a Class\' in your dashboard and post the respective class. Once BrainGroom admin verify your class, it will be posted in the portal/app.</string>
+    <string name="a8">You can post unlimited number classes in BrainGroom for free.</string>
+    <string name="a9">No, once you have posted the class, you cannot edit/delete the class/workshop/activity details till the validity of the class/workshop/activity gets over. If you want to edit/delete your class/workshop/activity, you can contact BrainGroom help desk and inform.</string>
+    <string name="a10">Select \'Promote your Class\' and choose your required days to promote your classes. Payments for home page &amp; category page featured listings will be different and will change from time to time based on demand. Vendors should check the details thoroughly before booking.</string>
+    <string name="a11">BrainGroom Catalogue is the B2B feature which helps Schools, Colleges, Corporate, Clubs, Residential Communities and Parties to organize an event (workshops/classes/activities) at their location within few clicks. To list your class/workshop/activity, click on \'Add to Catalogue\' in your Dashboard and select the respective class/activity/workshop to be added. After Admin verification, it will get posted in the Catalogue list.</string>
+    <string name="a12">For mobile application users, a push notification will be sent if there is any booking. Web users will get a notification in their respective BrainGroom dashboard for booking details.</string>
+
     <!--Keys-->
-    <string name="facebook_app_id" translatable="false">275714292949781</string>
-    <string name="fb_login_protocol_scheme" translatable="false">fb275714292949781</string>
+    <string name="facebook_app_id" translatable="false">1949694208609258</string>
+    <string name="fb_login_protocol_scheme" translatable="false">fb1949694208609258</string>
     <string name="enter_start_end_code">Enter Start/End Code</string>
     <string name="scan_qr_code">Scan Qr Code</string>
     <string name="sign_up">Sign Up</string>

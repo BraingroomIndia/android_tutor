@@ -25,7 +25,8 @@
     <dimen name="margin_med">10dp</dimen>
     <dimen name="margin_large">20dp</dimen>
 
-    <dimen name="margin_small_neg">-5dp</dimen>
+    <dimen name="margin_small_neg">5dp</dimen>
+    <dimen name="margin_neg">1dp</dimen>
 
     <!-- dimen -->
 

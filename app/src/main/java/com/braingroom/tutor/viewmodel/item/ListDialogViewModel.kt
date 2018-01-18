@@ -3,6 +3,7 @@ package com.braingroom.tutor.viewmodel.item
 import android.databinding.ObservableBoolean
 import android.databinding.ObservableField
 import android.util.Log
+import com.braingroom.tutor.common.modules.HelperFactory
 
 import com.braingroom.tutor.model.data.ListDialogData
 import com.braingroom.tutor.viewmodel.ViewModel
@@ -19,10 +20,10 @@ import io.reactivex.functions.Consumer
  * Created by godara on 13/10/17.
  */
 
-class ListDialogViewModel(val title: String?, sourceObservable: Observable<ListDialogData>?,
+class ListDialogViewModel(helperFactory: HelperFactory, val title: String, sourceObservable: Observable<ListDialogData>?,
                           private var selectedItemsMap: HashMap<String, Int>, private val isMultiSelect: Boolean,
                           private val resultConsumer: Consumer<HashMap<String, Int>>?, private val dependencyMessage: String?,
-                          private val positiveText: String?) : ViewModel() {
+                          private val positiveText: String?) : ViewModel(helperFactory) {
 
     private var dialogData: ListDialogData? = null
     val editable = ObservableBoolean(true)
@@ -58,17 +59,17 @@ class ListDialogViewModel(val title: String?, sourceObservable: Observable<ListD
             return
         }
         source = sourceObservable.observeOn(AndroidSchedulers.mainThread()).doOnNext { items ->
-            messageHelper?.dismissActiveProgress()
+            messageHelper.dismissActiveProgress()
             dialogData = items
             if (dialogData?.getItems()?.isEmpty() == false) {
                 if (isMultiSelect)
-                    dialogHelper?.showMultiSelectList(title ?: "", ArrayList(dialogData?.getItems()?.keys), selectedIndex, positiveText ?: "Done")
-                dialogHelper?.showSingleSelectList(title ?: "", ArrayList(dialogData?.getItems()?.keys), selectedIndex, positiveText ?: "Done")
+                    dialogHelper.showMultiSelectList(this, title, ArrayList(dialogData?.getItems()?.keys), selectedIndex, positiveText ?: "Done")
+                dialogHelper.showSingleSelectList(this, title, ArrayList(dialogData?.getItems()?.keys), selectedIndex, positiveText ?: "Done")
 
             }
         }.doOnSubscribe { disposable -> compositeDisposable.add(disposable) }.
                 doOnError { throwable ->
-                    Log.d("ListDialogViewModel", "onError in source observable", throwable.cause)
+                    Log.e(TAG, throwable.message, throwable)
                     throwable.printStackTrace()
                 }.share()
 
@@ -79,12 +80,12 @@ class ListDialogViewModel(val title: String?, sourceObservable: Observable<ListD
         when {
             !editable.get() -> return
             source == null -> {
-                dependencyMessage?.let { messageHelper?.showMessage(it) }
+                dependencyMessage?.let { messageHelper.showMessage(it) }
                 return
             }
 
             else -> {
-                dialogHelper?.viewModel = this
+
                 source?.subscribe()
             }
         }
@@ -113,7 +114,7 @@ class ListDialogViewModel(val title: String?, sourceObservable: Observable<ListD
 
     fun setSelectedItems(idxs: Array<Int>?) {
 
-        messageHelper?.dismissActiveProgress()
+        messageHelper.dismissActiveProgress()
         dialogData?.let {
             val itemList = ArrayList(it.getItems().keys)
             if (idxs == null || idxs[0] == -1)
@@ -135,7 +136,7 @@ class ListDialogViewModel(val title: String?, sourceObservable: Observable<ListD
 
     fun setSelectedItem(idx: Int?) {
 
-        messageHelper?.dismissActiveProgress()
+        messageHelper.dismissActiveProgress()
         dialogData?.let {
             val itemList = ArrayList(it.getItems().keys)
             if (idx == null || idx == -1)
@@ -159,7 +160,7 @@ class ListDialogViewModel(val title: String?, sourceObservable: Observable<ListD
 
     private fun dismiss() {
         when {
-            !compositeDisposable.isDisposed -> compositeDisposable.dispose()
+        // !compositeDisposable.isDisposed -> compositeDisposable.dispose()
         }
     }
 }

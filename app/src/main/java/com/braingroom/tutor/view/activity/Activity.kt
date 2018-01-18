@@ -1,18 +1,19 @@
 package com.braingroom.tutor.view.activity
 
-import android.app.Activity
 import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.databinding.DataBindingUtil
 import android.databinding.ViewDataBinding
 import android.os.Bundle
+import android.support.v4.app.FragmentManager
+import android.support.v4.widget.DrawerLayout
 import android.support.v7.app.AppCompatActivity
+import android.support.v7.widget.Toolbar
 import android.util.Log
 import com.braingroom.tutor.common.CustomApplication
+import com.braingroom.tutor.common.modules.HelperFactory
 import com.braingroom.tutor.utils.*
-import com.braingroom.tutor.view.adapters.ViewModelBinder
 import com.braingroom.tutor.viewmodel.ViewModel
-
 import java.io.Serializable
 
 /*
@@ -38,7 +39,7 @@ import java.io.Serializable
  * binder provided to the library
  */
 abstract class Activity : AppCompatActivity() {
-    private lateinit var binding: ViewDataBinding
+    protected lateinit var binding: ViewDataBinding
 
 
     private val extras: Bundle? by lazy {
@@ -50,50 +51,50 @@ abstract class Activity : AppCompatActivity() {
 
 
     @Suppress("unused")
-    protected val applicationContext: CustomApplication by lazy {
+    val applicationContext: CustomApplication by lazy {
         CustomApplication.getInstance()
     }
 
     @Suppress("unused")
     var loggedIn: Boolean
-        get() = CustomApplication.getInstance().loggedIn
+        get() = applicationContext.loggedIn
         set(value) {
             preferencesEditor.putBoolean(lodgedIn, value).commit()
-            CustomApplication.getInstance().loggedIn = value
+            applicationContext.loggedIn = value
         }
 
 
     @Suppress("unused")
     val apiService by lazy {
-        CustomApplication.getInstance().appModule.apiService
+        applicationContext.appModule.dataFlowService
     }
 
     @Suppress("unused")
     val messageHelper by lazy {
-        Log.d(TAG, "messageHelper created")
-        MessageHelper(this)
+        helperFactory.messageHelper
     }
 
     @Suppress("unused")
     val navigator by lazy {
-        Log.d(TAG, "navigator created")
-        Navigator(this)
+        helperFactory.navigator
     }
 
     @Suppress("unused")
     val dialogHelper by lazy {
-        Log.d(TAG, "dialogHelper created")
-        DialogHelper(this)
+        helperFactory.dialogHelper
     }
 
     private val userPreferences by lazy {
-        CustomApplication.getInstance().appModule.userPreferences
+        applicationContext.appModule.userPreferences
     }
 
     private val preferencesEditor by lazy {
-        CustomApplication.getInstance().appModule.preferencesEditor
+        applicationContext.appModule.preferencesEditor
     }
 
+    val helperFactory by lazy {
+        HelperFactory(this)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         CustomApplication.getInstance().appModule.activity = this
@@ -135,7 +136,7 @@ abstract class Activity : AppCompatActivity() {
 
     }
 
-    open fun getFragmentViewModel(title: String) = ViewModel()
+    open fun getFragmentViewModel(title: String) = ViewModel(helperFactory)
 
     @Suppress("unused")
     fun getIntentString(key: String) = extras?.getString(key) ?: ""
@@ -155,7 +156,15 @@ abstract class Activity : AppCompatActivity() {
             CustomApplication.getInstance().appModule.activity = null
     }
 
-    protected abstract val vm: ViewModel
+    fun popBackStack(title: String) {
+        val count = fragmentManager.backStackEntryCount
+        if (count > 0) {
+            fragmentManager.popBackStack(title, FragmentManager.POP_BACK_STACK_INCLUSIVE)
+        }
+
+    }
+
+    abstract val vm: ViewModel
 
     protected abstract val layoutId: Int
 }

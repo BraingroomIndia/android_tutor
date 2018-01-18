@@ -2,14 +2,13 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:bind="http://schemas.android.com/apk/res-auto"
-    xmlns:card_view="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
         <variable
             name="vm"
-            type="com.braingroom.tutor.viewmodel.item.ListTextIconViewModel" />
+            type="com.braingroom.tutor.viewmodel.item.ListMyProfileItem" />
     </data>
 
     <android.support.v7.widget.CardView
@@ -37,12 +36,13 @@
 
             <android.support.v7.widget.RecyclerView
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
+                android:nestedScrollingEnabled="false"
                 bind:decor="@{vm.decor}"
                 bind:items='@{vm.items}'
                 bind:view='@{vm.viewProvider}'
-                tools:paddingLeft="10dp"
-                tools:listitem="@layout/item_text_icon_horizontal" />
+                tools:listitem="@layout/item_text_icon_horizontal"
+                tools:paddingLeft="10dp" />
         </LinearLayout>
 
     </android.support.v7.widget.CardView>

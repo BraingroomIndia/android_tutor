@@ -8,5 +8,5 @@ import io.reactivex.Observable
  */
 public interface CacheService{
     fun getCachedCommon(searchQuery:String): Observable<CommonIdResp>
-    fun putCachedCommon(countriesList:List<CommonIdResp.Snippet>, searchQuery: String):CommonIdResp
+    fun putCachedCommon(commonIdRespList:List<CommonIdResp.Snippet>, searchQuery: String):CommonIdResp
 }

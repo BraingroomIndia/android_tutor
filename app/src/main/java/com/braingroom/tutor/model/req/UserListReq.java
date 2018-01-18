@@ -1,63 +1,74 @@
 package com.braingroom.tutor.model.req;
 
 
+import com.braingroom.tutor.utils.ConstantsKt;
 import com.google.gson.annotations.SerializedName;
 
 public class UserListReq {
 
     @SerializedName("braingroom")
-    public Snippet data;
-
-    public Snippet getData() {
-        return data;
-    }
-
-    public void setData(Snippet data) {
-        this.data = data;
-    }
+    private final Snippet data;
 
     public UserListReq(Snippet data) {
         this.data = data;
     }
 
+    public UserListReq(String tutorId) {
+        this.data = new Snippet(tutorId);
+    }
+
+    public UserListReq(String tutorId, Integer type) {
+        this.data = new Snippet(tutorId, type);
+    }
+
+    public UserListReq(String tutorId, Integer type, String classId) {
+        this.data = new Snippet(tutorId, type, classId);
+    }
+
     public static class Snippet {
 
-        @SerializedName("search_user")
-        public String searchUser;
+        @SerializedName("tutor_id")
+        private final String tutorId;
 
-        @SerializedName("user_type")
-        public Integer userType;
+        @SerializedName("type")
+        private final String type;
 
-        @SerializedName("with_post")
-        public String withPost;
+        @SerializedName("class_id")
+        private final String classId;
 
-        public String getWithPost() {
-            return withPost;
+
+        public Snippet(String tutorId, Integer type, String classId) {
+            this.tutorId = tutorId;
+            if (type == null)
+                this.type = null;
+            else if (type == 1)
+                this.type = "past";
+            else if (type == 2)
+                this.type = "current";
+            else if (type == 3)
+                this.type = "upcoming";
+            else this.type = null;
+            this.classId = classId;
         }
 
-        public void setWithPost(String withPost) {
-            this.withPost = withPost;
+        public Snippet(String tutorId, Integer type) {
+            this.tutorId = tutorId;
+            if (type == null)
+                this.type = null;
+            else if (type == ConstantsKt.pastId)
+                this.type = ConstantsKt.pastValue;
+            else if (type == ConstantsKt.currentId)
+                this.type = ConstantsKt.currentValue;
+            else if (type == ConstantsKt.upComingId)
+                this.type = ConstantsKt.upComingValue;
+            else this.type = null;
+            this.classId = null;
         }
 
-        public Integer getUserType() {
-
-            return userType;
-        }
-
-        public String getSearchUser() {
-
-            return searchUser;
-        }
-        public void setSearchUser(String searchUser) {
-
-            this.searchUser = searchUser;
-        }
-
-
-        public Snippet(String searchUser, Integer userType, String withPost) {
-            this.searchUser = searchUser;
-            this.userType = userType;
-            this.withPost = withPost;
+        public Snippet(String tutorId) {
+            this.tutorId = tutorId;
+            this.type = null;
+            this.classId = null;
         }
 
 

@@ -7,8 +7,6 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
-import io.realm.RealmObject;
-
 import static com.braingroom.tutor.utils.CommonUtilsKt.getNonNull;
 
 /*
@@ -21,13 +19,11 @@ public abstract class BaseResp {
     @SerializedName("res_msg")
     private String resMsg;
 
-
-
-    protected boolean isEmpty(String value) {
+    public static boolean isEmpty(String value) {
         return value == null || value.trim().isEmpty();
     }
 
-    protected boolean isEmpty(List<?> value) {
+    public static boolean isEmpty(List<?> value) {
         return value == null || value.isEmpty() || value.get(0) == null;
     }
 
@@ -35,8 +31,9 @@ public abstract class BaseResp {
     public abstract boolean getResCode();
 
 
+    @NonNull
     public String getResMsg() {
-        return getNonNull(resMsg);
+        return isEmpty(resMsg) ? "Network error" : resMsg;
     }
 
 }
