@@ -72,8 +72,8 @@ Credential verified vendor will have a credential verified logo in the respectiv
     <string name="a12">For mobile application users, a push notification will be sent if there is any booking. Web users will get a notification in their respective BrainGroom dashboard for booking details.</string>
 
     <!--Keys-->
-    <string name="facebook_app_id" translatable="false">275714292949781</string>
-    <string name="fb_login_protocol_scheme" translatable="false">fb275714292949781</string>
+    <string name="facebook_app_id" translatable="false">1949694208609258</string>
+    <string name="fb_login_protocol_scheme" translatable="false">fb1949694208609258</string>
     <string name="enter_start_end_code">Enter Start/End Code</string>
     <string name="scan_qr_code">Scan Qr Code</string>
     <string name="sign_up">Sign Up</string>

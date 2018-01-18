@@ -10,7 +10,7 @@ import com.braingroom.tutor.viewmodel.ViewModel
 import com.braingroom.tutor.viewmodel.item.*
 import io.reactivex.functions.Action
 
-/**
+/*
  * Created by ashketchup on 6/12/17.
  */
 class MediaViewModel(helperFactory: HelperFactory) : ViewModel(helperFactory) {

@@ -115,7 +115,7 @@
             android:layout_height="wrap_content"
             android:contentDescription="@string/facebook_login"
             android:onClick="@{vm.onFbLoginClicked}"
-            android:src="@drawable/ic_google_plus_36dp"
+            android:src="@drawable/ic_fb_36dp"
             app:layout_constraintEnd_toEndOf="@id/forget_password"
             app:layout_constraintTop_toTopOf="@id/imageView2" />
 
