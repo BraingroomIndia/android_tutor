@@ -263,12 +263,12 @@ class HelperFactory(val activity: Activity) {
                                 .title("")
                                 .customView(R.layout.item_date_picker, false)
                                 .positiveText(android.R.string.ok)
-                                .onPositive { dialog, which ->
+                                .onPositive(MaterialDialog.SingleButtonCallback { dialog, which ->
                                     val datePicker = dialog.customView as DatePicker
                                     val month = datePicker.month + 1
                                     (viewModel).title.set(datePicker.year.toString() + "-" + month + "-" + datePicker.dayOfMonth)
                                     (viewModel).handleOkClick()
-                                }
+                                })
                                 .show()
                     })
                 }

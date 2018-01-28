@@ -3,12 +3,17 @@ package com.braingroom.tutor.model.req;
 import com.braingroom.tutor.model.resp.BaseResp;
 import com.google.gson.annotations.SerializedName;
 
-public class SignUpReq {
+public class SignUpReq extends BaseResp {
     @SerializedName("braingroom")
     Snippet data;
 
     public SignUpReq(Snippet data) {
         this.data = data;
+    }
+
+    @Override
+    public boolean getResCode() {
+        return data == null;
     }
 
     public Snippet getData() {
@@ -73,6 +78,9 @@ public class SignUpReq {
         public void setCategoryId(String categoryId) {
             this.categoryId = categoryId + "";
         }
+
+
+
 
 
         public void setDob(String dob) {
@@ -181,9 +189,6 @@ public class SignUpReq {
         public void setLongitude(String longitude) {
             this.longitude = longitude;
         }
-
-        @SerializedName("user_type_id")
-        private String userType = "1";
 
         @SerializedName("email")
         String email = "";

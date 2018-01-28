@@ -97,10 +97,11 @@ abstract class Activity : AppCompatActivity() {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-
+        CustomApplication.getInstance().appModule.activity = this
         super.onCreate(savedInstanceState)
         requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
         CustomApplication.getInstance().refWatcher?.watch(this)
+        CustomApplication.getInstance().appModule.activity = this
         binding = DataBindingUtil.setContentView(this, layoutId)
         defaultBinder.bind(binding, vm)
 
@@ -110,16 +111,17 @@ abstract class Activity : AppCompatActivity() {
     override fun onPause() {
         super.onPause()
         vm.onPause()
+        clearReferences()
     }
 
     override fun onResume() {
-
+        CustomApplication.getInstance().appModule.activity = this
         super.onResume()
         vm.onResume()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-
+        CustomApplication.getInstance().appModule.activity = this
         super.onActivityResult(requestCode, resultCode, data)
         vm.onActivityResult(requestCode, resultCode, data)
     }
@@ -129,7 +131,7 @@ abstract class Activity : AppCompatActivity() {
         vm.onDestroy()
         defaultBinder.bind(binding, null)
         binding.executePendingBindings()
-
+        clearReferences()
         super.onDestroy()
 
     }
@@ -148,6 +150,11 @@ abstract class Activity : AppCompatActivity() {
 
     @Suppress("unused")
     fun getIntentSerializable(key: String): Serializable? = extras?.getSerializable(key)
+
+    private fun clearReferences() {
+        if (this == CustomApplication.getInstance().appModule.activity)
+            CustomApplication.getInstance().appModule.activity = null
+    }
 
     fun popBackStack(title: String) {
         val count = fragmentManager.backStackEntryCount

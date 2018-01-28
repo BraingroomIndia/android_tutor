@@ -23,14 +23,8 @@ import io.reactivex.functions.Action
 import android.databinding.InverseBindingListener
 import android.support.v7.widget.AppCompatSpinner
 import android.databinding.InverseBindingAdapter
-import android.databinding.adapters.ImageViewBindingAdapter
-import android.support.annotation.DrawableRes
 import android.widget.*
 import com.braingroom.tutor.viewmodel.item.RecyclerViewItem
-import android.support.annotation.ColorRes
-import android.support.v4.content.ContextCompat
-import android.support.v4.graphics.drawable.DrawableCompat
-import android.support.v4.graphics.drawable.DrawableCompat.setTint
 
 
 /*
@@ -88,6 +82,20 @@ fun setImageUri(view: ImageView?, imageUrl: String?, placeHolder: Int?) {
     } else if (placeHolder != null && placeHolder != 0) view?.let { picasso.load(placeHolder).fit().centerCrop().into(it) }
 }
 
+@BindingAdapter(value = *arrayOf("android:src", "placeholder"), requireAll = true)
+fun setImageUri(view: ImageView?, imageUrl: String?, placeHolder: Int) {
+    if (!imageUrl.isNullOrBlank()) {
+        Log.v("setImageUri", imageUrl + "   " + placeHolder)
+        if (placeHolder != 0)
+            view?.let { picasso.load(imageUrl).placeholder(placeHolder).error(placeHolder).fit().centerCrop().into(it) }
+        else setImageUri(view, imageUrl)
+    } else if (placeHolder != 0) view?.let { picasso.load(placeHolder).fit().centerCrop().into(it) }
+}
+
+@BindingAdapter("android:src")
+fun setImageUri(view: ImageView?, drawable: Drawable?) {
+    view?.setImageDrawable(drawable)
+}
 
 @BindingAdapter("model")
 fun loadHeader(view: NavigationView, model: HomeViewModel?) {
@@ -137,21 +145,15 @@ fun setBackground(view: TextView?, color: Int) {
     }
 }
 
-@BindingAdapter("errorText")
-fun setErrorMessage(view: EditText, errorMessage: String?) {
-    when (errorMessage.isNullOrBlank()) {
-        true -> view.error = null
-        else -> view.error = errorMessage
-    }
-}
-@BindingAdapter("errorText")
-fun setErrorMessage(view: TextInputLayout, errorMessage: String?) {
-    when (errorMessage.isNullOrBlank()) {
-        true -> view.error = null
-        else -> view.error = errorMessage
-    }
+@BindingAdapter("android:errorText")
+fun setErrorMessage(view: TextInputLayout, errorMessage: String) {
+    view.error = errorMessage
 }
 
+@BindingAdapter("android:errorErrorEnabled")
+fun setErrorMessage(view: TextInputLayout, errorEnabled: Boolean) {
+    view.isErrorEnabled = errorEnabled
+}
 
 @Suppress("UNCHECKED_CAST")
 @BindingAdapter(value = *arrayOf("selectedValue", "selectedValueAttrChanged"), requireAll = false)
@@ -174,14 +176,4 @@ fun getSelectedValue(pAppCompatSpinner: Spinner): String {
     return pAppCompatSpinner.selectedItem as String
 }
 
-@BindingAdapter("android:src")
-fun setImageResource(imageView: ImageView, resource: Int) {
-    imageView.setImageResource(resource)
-}
-
-@BindingAdapter("colorTint")
-fun setColorTint(view: ImageView, @ColorRes color: Int) {
-    if (color != 0)
-        setTint(view.drawable, ContextCompat.getColor(CustomApplication.getInstance(), color))
-}
 

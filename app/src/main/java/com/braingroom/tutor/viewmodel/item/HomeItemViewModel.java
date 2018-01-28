@@ -21,16 +21,14 @@ import io.reactivex.functions.Action;
  */
 
 public class HomeItemViewModel implements RecyclerViewItem {
-    public final int drawableTop;
-    public final int drawableBottom;
-    public final int bottomColor;
+    public final CustomDrawable drawableTop;
+    public final CustomDrawable drawableBottom;
     public final String text;
     public final Action onClick;
 
     public HomeItemViewModel(@DrawableRes int drawableTop, @ColorRes int color, @NonNull String text, Action onClick) {
-        this.drawableTop = drawableTop;
-        this.drawableBottom = R.drawable.rounded_corner_line;
-        this.bottomColor=color;
+        this.drawableTop = new CustomDrawable(drawableTop);
+        this.drawableBottom = new CustomDrawable(R.drawable.rounded_corner_line, (Integer) color);
         this.text = text;
         this.onClick = onClick;
     }

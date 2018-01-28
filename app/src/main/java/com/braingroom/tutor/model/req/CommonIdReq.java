@@ -1,6 +1,5 @@
 package com.braingroom.tutor.model.req;
 
-import com.braingroom.tutor.common.CustomApplication;
 import com.google.gson.annotations.SerializedName;
 
 /*
@@ -22,8 +21,6 @@ public class CommonIdReq {
 
     public static class Snippet {
         public String id;
-        @SerializedName("user_id")
-        public final String userId = CustomApplication.getInstance().userId;
 
         public Snippet(String id) {
             this.id = id;

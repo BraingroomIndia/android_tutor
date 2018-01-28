@@ -2,24 +2,18 @@ package com.braingroom.tutor.model.resp;
 
 import com.google.gson.annotations.SerializedName;
 
-import java.util.Collections;
 import java.util.List;
 
 /**
  * Created by ashketchup on 27/12/17.
  */
 
-public class ChatMessageResp extends BaseResp {
+public class ChatMessageResp {
     @SerializedName("braingroom")
     List<Snippet> data;
 
     public List<Snippet> getData() {
-        return getResCode() ? data : Collections.singletonList(new Snippet());
-    }
-
-    @Override
-    public boolean getResCode() {
-        return !isEmpty(data);
+        return data;
     }
 
     public static class Snippet {

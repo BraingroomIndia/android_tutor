@@ -21,15 +21,11 @@ public class ClassListReq {
         private String mBatch;
 
         public void setBatch(int batch) {
-            if (batch == 1)
-                this.mBatch = batch + "";
-            else this.mBatch = 0 + "";
+            this.mBatch = batch + "";
         }
 
         public void setExpired(int expired) {
-            if (expired == 1)
-                this.mExpired = expired + "";
-            else this.mExpired = 0 + "";
+            this.mExpired = expired + "";
         }
 
         @SerializedName("expired")
@@ -42,13 +38,6 @@ public class ClassListReq {
             this.mExpired = (isExpired ? 1 : 0) + "";
             this.mId = id;
         }
-
-        public Snippet(String id) {
-            this.mBatch = "";
-            this.mExpired = "";
-            this.mId = id;
-        }
-
 
     }
 

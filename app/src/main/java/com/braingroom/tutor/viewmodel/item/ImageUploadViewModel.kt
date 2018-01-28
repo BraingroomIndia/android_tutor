@@ -53,12 +53,12 @@ class ImageUploadViewModel : ViewModel {
                 return
             }
             messageHelper.showProgressDialog("Wait", "uploading...")
-            apiService.uploadImage(filePath, fileType).subscribe {
-                Log.d(TAG, it.data.url)
+            apiService.uploadImage(filePath, fileType).subscribe { resp ->
+                Log.d(TAG, resp.data.url)
                 messageHelper.dismissActiveProgress()
-                messageHelper.showMessage(it.resMsg)
-                if (it.resCode)
-                    remoteAddress.set(it.data.url)
+                messageHelper.showMessage(resp.resMsg)
+                if (resp.resCode)
+                    remoteAddress.set(resp.data.url)
 
             }
 

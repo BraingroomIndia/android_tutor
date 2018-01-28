@@ -22,9 +22,8 @@ import java.util.*
  */
 class HomeViewModel(helperFactory: HelperFactory) : ViewModel(helperFactory) {
 
-    val onProfilePicClick: Action by lazy {
+    val onClick: Action by lazy {
         Action {
-            navigator.navigateActivity(MyProfileActivity::class.java)
         }
     }
     val spanCount = 2
@@ -70,7 +69,7 @@ class HomeViewModel(helperFactory: HelperFactory) : ViewModel(helperFactory) {
         topDrawableList += R.drawable.ic_attendance_36dp//4
         textList += "Attendance" //4
         bottomDrawableList += R.color.material_lightgreen500 //4
-        actionList += Action { navigator.navigateActivity(ManualAttendanceActivity::class.java) } //4
+        actionList += Action { navigator.navigateActivity(AttendanceActivity::class.java) } //4
 
 
         topDrawableList += R.drawable.ic_gallery_36dp//5
@@ -96,7 +95,7 @@ class HomeViewModel(helperFactory: HelperFactory) : ViewModel(helperFactory) {
         actionList += Action { navigator.navigateActivity(BroadcastMessageActivity::class.java) } //8
 
 
-        (0..7).forEach { item.onNext(HomeItemViewModel(topDrawableList[it], bottomDrawableList[it], textList[it], actionList[it])) }
+        (0..7).forEach { i -> item.onNext(HomeItemViewModel(topDrawableList[i], bottomDrawableList[i], textList[i], actionList[i])) }
         item.onNext(NotifyDataSetChanged())
     }
 }

@@ -3,16 +3,12 @@ package com.braingroom.tutor.viewmodel
 
 import android.content.Intent
 import android.databinding.ObservableField
-import android.util.Log
 import com.braingroom.tutor.R
 import com.braingroom.tutor.common.CustomApplication
 import com.braingroom.tutor.common.modules.HelperFactory
 import com.braingroom.tutor.utils.*
-import com.braingroom.tutor.viewmodel.item.LoadingViewModel
-import com.braingroom.tutor.viewmodel.item.NotifyDataSetChanged
 import com.braingroom.tutor.viewmodel.item.RecyclerViewItem
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.disposables.Disposable
 import io.reactivex.subjects.ReplaySubject
 
 
@@ -23,7 +19,7 @@ import io.reactivex.subjects.ReplaySubject
 @Suppress("UNUSED_PARAMETER")
 open class ViewModel(val helperFactory: HelperFactory) {
 
-    open val item: ReplaySubject<RecyclerViewItem> by lazy { ReplaySubject.create<RecyclerViewItem>() }
+    val item: ReplaySubject<RecyclerViewItem> by lazy { ReplaySubject.create<RecyclerViewItem>() }
 
     val compositeDisposable: CompositeDisposable by lazy {
         CompositeDisposable()
@@ -109,17 +105,6 @@ open class ViewModel(val helperFactory: HelperFactory) {
         preferencesEditor.remove(name).apply()
     }
 
-    internal fun handleError(throwable: Throwable) {
-        Log.e(TAG, throwable.message, throwable)
-
-    }
-
-
-    internal fun addLoadingItems(disposable: Disposable) {
-        (0..5).forEach { item.onNext(LoadingViewModel()) }
-        item.onNext(NotifyDataSetChanged())
-        compositeDisposable.add(disposable)
-    }
 
     open fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {}
 

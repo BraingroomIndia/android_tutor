@@ -4,7 +4,6 @@ import android.databinding.ObservableField
 import android.util.Log
 import com.braingroom.tutor.common.modules.HelperFactory
 import com.braingroom.tutor.model.data.ListDialogData
-import com.braingroom.tutor.model.resp.CommonIdResp
 import com.braingroom.tutor.utils.*
 import com.braingroom.tutor.view.fragment.FragmentHelper
 import com.braingroom.tutor.viewmodel.ViewModel
@@ -48,40 +47,42 @@ class BroadcastMessageViewModel(helperFactory: HelperFactory, val fragmentHelper
 
     }
 
-    val learnerTypeData: LinkedHashMap<Int, String> by lazy {
-        val temp = LinkedHashMap<Int, String>()
-        temp.put(pastId, pastValue)
-        temp.put(currentId, currentValue)
-        temp.put(upComingId, upComingValue)
-        temp.put(4, "All")
+    val learnerTypeData: LinkedHashMap<String, Int> by lazy {
+        val temp = LinkedHashMap<String, Int>()
+        temp.put(pastValue, pastId)
+        temp.put(currentValue, currentId)
+        temp.put(upComingValue, upComingId)
+        temp.put("All", -1)
+        Log.d(TAG, "HIesjkdfkasdj")
         temp
     }
     val learnerType by lazy {
         ListDialogViewModel(helperFactory, "Learner Type", Observable.just(ListDialogData(learnerTypeData)), HashMap(), false,
                 Consumer { selectedData ->
-                    selectedData.keys.forEach { type = it }
+                    selectedData.values.forEach { value -> type = value }
                     userList.refreshDataMap(getUserList())
                 }
                 , "", "Okay")
     }
     val classList by lazy {
-        SearchSelectListViewModel(helperFactory, classListTitle, "search by class name", "", true, apiService.getClassList().map(this::respToHashMap), Consumer { selectedData ->
+        SearchSelectListViewModel(helperFactory, classListTitle, "search by class name", "", true, apiService.getClassList().map { resp ->
+            val list = HashMap<String, Int>()
+            resp.data.forEach { snippet -> list.put(snippet.textValue, snippet.id) }
+            list
+        }, Consumer { selectedData ->
             classId = selectedData.getId()
             userList.refreshDataMap(getUserList())
-        }, HashMap())
+        }, HashMap(), fragmentHelper)
     }
     val userList by lazy {
         SearchSelectListViewModel(helperFactory, userListTitle, "search by learner's name", "", true, getUserList(), Consumer { selectedData ->
             senderId = selectedData.getId()
-        }, HashMap())
+        }, HashMap(), fragmentHelper)
     }
 
-    private fun getUserList() = apiService.getLearner(type, classId).map(this::respToHashMap)
-
-    private fun respToHashMap(resp: CommonIdResp): HashMap<Int, String> {
-        val list: HashMap<Int, String> = HashMap()
-        resp.data.forEach { snippet -> list.put(snippet.id, snippet.textValue) }
-        return list
+    private fun getUserList() = apiService.getLearner(type, classId).map { resp ->
+        val list = HashMap<String, Int>()
+        resp.data.forEach { snippet -> list.put(snippet.textValue, snippet.id) }
+        list
     }
 }
-

@@ -1,19 +1,24 @@
 package com.braingroom.tutor.view.fragment
 
+import android.os.Bundle
+import com.braingroom.tutor.R
+import com.braingroom.tutor.utils.FRAGMENT_TITLE
+import com.braingroom.tutor.viewmodel.ViewModel
+
 /**
- * Created by godara on 23/01/18.
+ * Created by ashketchup on 21/12/17.
  */
-class SignUpThirdFragment : BaseFragment() {
+class SignUpThirdFragment :BaseFragment(){
     companion object {
-        fun newInstance(title: String): SignUpThirdFragment {
+        fun newInstance(title:String):SignUpThirdFragment{
             val bundle = Bundle()
             bundle.putString(FRAGMENT_TITLE, title)
             val fragment = SignUpThirdFragment()
             fragment.arguments = bundle
             return fragment
+
         }
     }
-
     override val vm: ViewModel by lazy {
         activity.getFragmentViewModel(getStringArguments(FRAGMENT_TITLE))
     }

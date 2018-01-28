@@ -34,6 +34,14 @@ import java.util.concurrent.TimeUnit.SECONDS
 @Suppress("unused", "MemberVisibilityCanPrivate")
 class AppModule(private val application: Application) {
 
+    var activity: Activity? = null
+        set(value) {
+            field = value
+            if (value != null)
+                Log.v(value.TAG, "activity set")
+            else
+                Log.v("activity null", "activity value not set")
+        }
     private val cacheSize = 10 * 1024 * 1024 // 10 MiB
 
     val gson: Gson by lazy {
@@ -82,7 +90,7 @@ class AppModule(private val application: Application) {
         RealmCacheService()
     }
     val dataFlowService: DataFlowService by lazy {
-        DataFlowService(apiService, realmCacheService)
+        DataFlowService(apiService,realmCacheService)
     }
     val userPreferences: SharedPreferences by lazy {
         PreferenceManager.getDefaultSharedPreferences(application)
@@ -91,11 +99,25 @@ class AppModule(private val application: Application) {
         userPreferences.edit();
     }
 
-
+    var navigator: Navigator? = null
+        get() {
+            Log.v(activity?.TAG, "fetched navigator")
+            return activity?.navigator
+        }
+    var messageHelper: MessageHelper? = null
+        get() {
+            Log.v(activity?.TAG, "fetched messageHelper")
+            return activity?.messageHelper
+        }
+    var dialogHelper: DialogHelper? = null
+        get() {
+            Log.v(activity?.TAG, "fetched dialogHelper")
+            return activity?.dialogHelper
+        }
     fun providePicasso(): Picasso {
         val picasso = Picasso.with(application)
-        picasso.setIndicatorsEnabled(true)
-        picasso.isLoggingEnabled = true
+        picasso.setIndicatorsEnabled(false)
+        picasso.isLoggingEnabled = false
         return picasso
     }
 }

@@ -12,26 +12,11 @@ import static com.braingroom.tutor.utils.CommonUtilsKt.getNonNull;
  * Created by godara on 29/12/17.
  */
 
-public class AttendanceDetailResp {
-
-
-    @SerializedName("res_code")
-    private int resCode;
-    @SerializedName("res_msg")
-    private String resMsg;
-
-    public AttendanceDetailResp setRequestType(Boolean isStartCode) {
-        if (isStartCode != null)
-            this.requestType = isStartCode ? 1 : 2;
-        return this;
-    }
-
-    private int requestType = 0; /// 1 Start code // 2 End code
-
+public class AttendanceDetailResp extends BaseResp {
+    @Override
     public boolean getResCode() {
-        return !isEmpty(data) && (requestType == 1 ? getData().startStatus == 0 : requestType == 2 && getData().endStatus == 0);
+        return !isEmpty(data);
     }
-
 
     @SerializedName("braingroom")
     private List<Snippet> data;
@@ -49,13 +34,6 @@ public class AttendanceDetailResp {
         private String classTopic;
         @SerializedName("ticket_id")
         private String ticketId;
-        @SerializedName("start_status")
-        private int startStatus;
-        @SerializedName("end_status")
-        private int endStatus;
-        @SerializedName("message")
-        private String message;
-
 
         @NonNull
         public String getLearnerId() {
@@ -68,11 +46,6 @@ public class AttendanceDetailResp {
         }
 
         @NonNull
-        public String getMessage() {
-            return getNonNull(message);
-        }
-
-        @NonNull
         public String getClassTopic() {
             return getNonNull(classTopic);
         }
@@ -81,19 +54,5 @@ public class AttendanceDetailResp {
         public String getTicketId() {
             return getNonNull(ticketId);
         }
-    }
-
-    @NonNull
-
-    public String getResMsg() {
-        return isEmpty(getData().getMessage()) ? "Network Error" : getData().getMessage();
-    }
-
-    public static boolean isEmpty(String value) {
-        return value == null || value.trim().isEmpty();
-    }
-
-    public static boolean isEmpty(List<?> value) {
-        return value == null || value.isEmpty() || value.get(0) == null;
     }
 }

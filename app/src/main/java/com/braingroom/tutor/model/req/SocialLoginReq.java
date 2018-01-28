@@ -69,7 +69,7 @@ public class SocialLoginReq {
             mPhone = "";
             mReferalCode = "";
             mRegId = "";
-            mUserType = "1";
+            mUserType = "";
         }
     }
 

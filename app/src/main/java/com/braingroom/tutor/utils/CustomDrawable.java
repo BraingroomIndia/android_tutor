@@ -8,14 +8,11 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.ShapeDrawable;
-import android.nfc.Tag;
 import android.os.Build;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
-import android.util.Log;
 
 import com.braingroom.tutor.R;
 import com.braingroom.tutor.common.CustomApplication;
@@ -60,12 +57,11 @@ public class CustomDrawable extends ObservableField<Drawable> implements Target 
 
     public CustomDrawable(@DrawableRes int resource, @NonNull Integer color) {
         super();
-
-        this.color = ContextCompat.getColor(CustomApplication.getInstance(), color);
-        if (this.color == null)
-            Log.d("Hi", "Hello color is null  ");
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
+            this.color = CustomApplication.getInstance().getColor(color);
+        else this.color = CustomApplication.getInstance().getResources().getColor(color);
         if (CustomApplication.getInstance() != null && CustomApplication.getInstance().getAppModule() != null) {
-            CustomApplication.getInstance().getAppModule().getPicasso().load(resource).into(this);
+            CustomApplication.getInstance().getAppModule().getPicasso().load(resource).error(resource).placeholder(resource).into(this);
         }
     }
 
@@ -86,7 +82,7 @@ public class CustomDrawable extends ObservableField<Drawable> implements Target 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
             this.color = CustomApplication.getInstance().getColor(color);
         else this.color = CustomApplication.getInstance().getResources().getColor(color);
-        if (CustomApplication.getInstance() != null && CustomApplication.getInstance().getAppModule() != null) {
+        if (CustomApplication.getInstance() != null && CustomApplication.getInstance().getAppModule() != null){
             if (!TextUtils.isEmpty(imageUrl)) {
                 CustomApplication.getInstance().getAppModule().getPicasso().load(imageUrl).placeholder(placeHolder).error(placeHolder).into(this);
             } else {

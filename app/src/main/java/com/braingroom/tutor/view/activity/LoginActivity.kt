@@ -2,9 +2,7 @@ package com.braingroom.tutor.view.activity
 
 import android.content.Intent
 import android.os.Bundle
-import android.text.InputType
 import android.util.Log
-import com.afollestad.materialdialogs.MaterialDialog
 import com.braingroom.tutor.R
 import com.braingroom.tutor.viewmodel.activity.LoginViewModel
 import com.facebook.CallbackManager
@@ -19,7 +17,6 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.api.GoogleApiClient
 import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener
-import java.util.*
 
 /*
  * Created by godara on 13/10/17.
@@ -29,9 +26,6 @@ class LoginActivity : Activity(), OnConnectionFailedListener {
     interface UIHelper {
         fun fbLogin()
         fun googleLogin()
-        fun showForgotPassDialog()
-
-
     }
 
     private lateinit var mFbLogin: LoginButton
@@ -40,9 +34,6 @@ class LoginActivity : Activity(), OnConnectionFailedListener {
         CallbackManager.Factory.create()
     }
 
-    val fbLoginManger by lazy {
-        LoginManager.getInstance()
-    }
     private val RC_SIGN_IN = 9001
     private val googleSignInOptions: GoogleSignInOptions by lazy {
         GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -59,8 +50,7 @@ class LoginActivity : Activity(), OnConnectionFailedListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mFbLogin = findViewById(R.id.fb_login_button)
-        mFbLogin.setReadPermissions("public_profile email");
-        fbLoginManger.registerCallback(callbackManager,
+        LoginManager.getInstance().registerCallback(callbackManager,
                 object : FacebookCallback<LoginResult> {
                     override fun onSuccess(loginResult: LoginResult) {
                         val accessToken = loginResult.accessToken
@@ -68,8 +58,10 @@ class LoginActivity : Activity(), OnConnectionFailedListener {
                             Log.v(TAG, graphResponse.rawResponse)
                             val name = user.optString("name");
                             val picture = user.optJSONObject("picture").optJSONObject("data").optString("url");
-                            val email = user.optString("email");
+                            var email = user.optString("email");
                             val socialId = user.optString("id");
+                            if (email.isNullOrBlank())
+                                email = "bgdemovendor2@gmail.com"
                             vm.socialLogin(name, email, picture, socialId)
                             LoginManager.getInstance().logOut()
                         }
@@ -97,21 +89,7 @@ class LoginActivity : Activity(), OnConnectionFailedListener {
     }
 
     override val vm: LoginViewModel by lazy {
-        LoginViewModel(helperFactory, object : UIHelper {
-            override fun showForgotPassDialog() {
-                MaterialDialog.Builder(this@LoginActivity)
-                        .title("Password recovery")
-                        .content("Please enter your email")
-                        .inputType(InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS)
-                        .inputRange(4, 50)
-                        .positiveText("SUBMIT")
-                        .input("Email", "", false) { dialog, input ->
-                            messageHelper.showProgressDialog("Resetting Password", "Sending Email...")
-                            apiService.forgetPassword(input.toString()).subscribe { messageHelper.showMessage(it) }
-
-                        }.show();
-            }
-
+        LoginViewModel(helperFactory,object : UIHelper {
             override fun fbLogin() {
                 mFbLogin.performClick()
             }
@@ -130,6 +108,4 @@ class LoginActivity : Activity(), OnConnectionFailedListener {
     }
 
     override val layoutId: Int = R.layout.activity_login
-
-
 }

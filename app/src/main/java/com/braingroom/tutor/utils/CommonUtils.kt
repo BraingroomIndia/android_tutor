@@ -119,9 +119,9 @@ fun isValidPhone(target: CharSequence?): Boolean {
     }
 }
 
-fun HashMap<Int, String>.getId(): String {
+fun HashMap<String, Int>.getId(): String {
     var result = ""
-    val array = this.keys.iterator()
+    val array = this.values.iterator()
     if (array.hasNext()) {
         result += array.next()
         while (array.hasNext()) {
@@ -143,7 +143,6 @@ fun isValidName(target: CharSequence?): Boolean {
 fun getThumbnail(url: String): String {
     return "http://img.youtube.com/vi/" + extractYoutubeId(url) + "/0.jpg"
 }
-
 
 
 val youTubeUrlRegEx = "^(https?)?(://)?(www.)?(m.)?((youtube.com)|(youtu.be))/"
@@ -186,7 +185,6 @@ fun isEmpty(target: String?): Boolean = target.isNullOrBlank()
 fun isEmpty(target: Any?): Boolean = target == null
 fun getNonNull(target: String?) = target ?: ""
 fun getNonNull(target: Int?) = target ?: -1
-fun getNonNull(target: Float?) = target ?: -1
 
 @SuppressLint("NewApi")
 fun getPath(uri: Uri): String? {

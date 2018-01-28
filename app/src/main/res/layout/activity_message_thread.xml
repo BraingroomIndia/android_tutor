@@ -49,7 +49,8 @@
                 android:layout_alignParentRight="true"
                 android:onClick="@{vm.onSendClicked}"
                 android:padding="@dimen/margin_small"
-                android:src="@drawable/ic_send_black_24dp" />
+
+                android:tint="@color/fbLikeDark" />
         </RelativeLayout>
     </RelativeLayout>
 

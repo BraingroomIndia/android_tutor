@@ -101,28 +101,34 @@ public class CustomApplication extends Application implements ActivityLifecycleC
 
     @Override
     public void onActivityCreated(Activity activity, Bundle bundle) {
-
+        if (activity instanceof com.braingroom.tutor.view.activity.Activity) {
+            appModule.setActivity((com.braingroom.tutor.view.activity.Activity) activity);
+        }
     }
 
     @Override
     public void onActivityStarted(Activity activity) {
-
+        if (activity instanceof com.braingroom.tutor.view.activity.Activity) {
+            appModule.setActivity((com.braingroom.tutor.view.activity.Activity) activity);
+        }
     }
 
     @Override
     public void onActivityResumed(Activity activity) {
-
+        if (activity instanceof com.braingroom.tutor.view.activity.Activity) {
+            appModule.setActivity((com.braingroom.tutor.view.activity.Activity) activity);
+        }
     }
 
     @Override
     public void onActivityPaused(Activity activity) {
-
+        clearActivityReferences(activity);
 
     }
 
     @Override
     public void onActivityStopped(Activity activity) {
-
+        clearActivityReferences(activity);
 
     }
 
@@ -132,11 +138,12 @@ public class CustomApplication extends Application implements ActivityLifecycleC
 
     @Override
     public void onActivityDestroyed(Activity activity) {
-
+        clearActivityReferences(activity);
 
     }
 
     private void clearActivityReferences(Activity activity) {
-
+        if (activity == CustomApplication.getInstance().appModule.getActivity())
+            CustomApplication.getInstance().appModule.setActivity(null);
     }
 }

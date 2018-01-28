@@ -8,7 +8,7 @@ import com.braingroom.tutor.view.activity.LoginActivity
 import com.braingroom.tutor.viewmodel.ViewModel
 import io.reactivex.functions.Action
 
-/*
+/**
  * Created by ashketchup on 28/12/17.
  */
 class ChangePasswordViewModel(helperFactory: HelperFactory) : ViewModel(helperFactory) {

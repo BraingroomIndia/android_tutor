@@ -27,7 +27,7 @@ import java.util.concurrent.TimeUnit
 /*
  * Created by ashketchup on 6/12/17.
  */
-class SearchSelectListViewModel(helperFactory: HelperFactory, val title: String, val searchHint: String, val dependencyMessage: String, isMultipleSelect: Boolean, private var observableApi: Observable<HashMap<Int, String>>?, private val saveConsumer: Consumer<HashMap<Int, String>>, private var selectedDataMap: HashMap<Int, String>) : ViewModel(helperFactory) {
+class SearchSelectListViewModel(helperFactory: HelperFactory, val title: String, val searchHint: String, val dependencyMessage: String, isMultipleSelect: Boolean, private var observableApi: Observable<HashMap<String, Int>>?, private val saveConsumer: Consumer<HashMap<String, Int>>, private var selectedDataMap: HashMap<String, Int>, private val fragmentHelper: FragmentHelper) : ViewModel(helperFactory) {
 
 
     val onClearClicked = Action {
@@ -81,20 +81,21 @@ class SearchSelectListViewModel(helperFactory: HelperFactory, val title: String,
                 subscribeOn(Schedulers.computation()).
                 map { keyword: String ->
                     item.onNext(RefreshViewModel())
-                    dataMap
-                            .filter { it.value.contains(keyword, true) }
+                    dataMap.keys
+                            .filter { it.contains(keyword, true) }
                             .forEach {
-                                item.onNext(SearchSelectListItemViewModel(it.value, it.key, selectedDataMap.containsKey(it.key),
+                                Log.v(TAG, it)
+                                item.onNext(SearchSelectListItemViewModel(it, dataMap[it], selectedDataMap.containsKey(it),
                                         isMultipleSelect, object : MyConsumer<SearchSelectListItemViewModel> {
                                     override fun accept(@NonNull var1: SearchSelectListItemViewModel) {
                                         if (var1.isSelected.get())
-                                            selectedDataMap.remove(var1.id)
+                                            selectedDataMap.remove(var1.name)
                                         else {
                                             if (!isMultipleSelect)
                                                 selectedDataMap.clear()
-                                            selectedDataMap.put(var1.id, var1.name)
+                                            selectedDataMap.put(var1.name, var1.id)
                                         }
-                                        selectedItemsText.set(TextUtils.join(" , ", selectedDataMap.values))
+                                        selectedItemsText.set(TextUtils.join(" , ", selectedDataMap.keys))
                                         selectedItems.onNext(var1)
 
                                     }
@@ -106,16 +107,16 @@ class SearchSelectListViewModel(helperFactory: HelperFactory, val title: String,
 
     val searchQuery = ObservableField("")
 
-    val dataMap: TreeMap<Int, String> = TreeMap()
+    val dataMap: TreeMap<String, Int> = TreeMap()
     val selectedItems: PublishSubject<SearchSelectListItemViewModel> by lazy { PublishSubject.create<SearchSelectListItemViewModel>() }
 
 
     init {
-        selectedItemsText.set((if (selectedDataMap.isEmpty()) "select items" else TextUtils.join(" , ", selectedDataMap.values)))
+        selectedItemsText.set((if (TextUtils.join(" , ", selectedDataMap.keys).isNullOrBlank()) "select items" else TextUtils.join(" , ", selectedDataMap.keys)))
     }
 
 
-    fun refreshDataMap(dataSource: Observable<HashMap<Int, String>>?) {
+    fun refreshDataMap(dataSource: Observable<HashMap<String, Int>>?) {
 
         when (dataSource) {
             null -> messageHelper.showMessage(dependencyMessage)

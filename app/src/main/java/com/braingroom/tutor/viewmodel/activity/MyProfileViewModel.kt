@@ -1,8 +1,10 @@
 package com.braingroom.tutor.viewmodel.activity
 
+import android.databinding.ObservableField
 import com.braingroom.tutor.R
 import com.braingroom.tutor.common.modules.HelperFactory
 import com.braingroom.tutor.model.resp.MyProfileResp
+import com.braingroom.tutor.model.resp.MyProfileResp.Snippet
 import com.braingroom.tutor.utils.VERTICAL
 import com.braingroom.tutor.utils.convertDpToPixel
 import com.braingroom.tutor.view.adapters.*
@@ -33,28 +35,30 @@ class MyProfileViewModel(helperFactory: HelperFactory) : ViewModel(helperFactory
     }
 
     init {
-        apiService.getMyProfile(userId).observeOn(AndroidSchedulers.mainThread()).doOnSubscribe { compositeDisposable.add(it) }.map(this::mapRespToViewModel).subscribe(this::handleApiResp, this::handleError)
+        apiService.getMyProfile(userId).observeOn(AndroidSchedulers.mainThread()).doFinally { item.onNext(NotifyDataSetChanged()) }.subscribe { resp -> if (resp.resCode) handleApiResult(resp) }
     }
 
-    private fun mapRespToViewModel(resp: MyProfileResp): List<RecyclerViewItem>
-            = listOf(getSection1(resp), getSection2(resp), getSection3(resp))
+    private fun handleApiResult(resp: MyProfileResp) {
+        item.onNext(getSection1(resp))
+        item.onNext(getSection2(resp))
+        item.onNext(getSection3(resp))
 
-    private fun handleApiResp(viewModelList: List<RecyclerViewItem>) {
-        viewModelList.forEach { item.onNext(it) }
-        item.onNext(NotifyDataSetChanged())
     }
 
 
     private fun getSection1(resp: MyProfileResp): ListMyProfileItem {
-        return ListMyProfileItem("Section 1", resp.section1.map { MyProfileItem(it) })
+        val myProfileItemList = ArrayList<MyProfileItem>(4)
+        return ListMyProfileItem("Section 1", resp.section1.mapTo(myProfileItemList) { MyProfileItem(it) })
     }
 
     private fun getSection2(resp: MyProfileResp): ListMyProfileItem {
-        return ListMyProfileItem("Section 2", resp.section2.map { MyProfileItem(it) })
+        val myProfileItemList = ArrayList<MyProfileItem>(4)
+        return ListMyProfileItem("Section 2", resp.section2.mapTo(myProfileItemList) { MyProfileItem(it) })
     }
 
     private fun getSection3(resp: MyProfileResp): ListMyProfileItem {
-        return ListMyProfileItem("Section 3", resp.section3.map { MyProfileItem(it) })
+        val myProfileItemList = ArrayList<MyProfileItem>(4)
+        return ListMyProfileItem("Section 3", resp.section3.mapTo(myProfileItemList) { MyProfileItem(it) })
     }
 
 
