@@ -2,6 +2,7 @@ package com.braingroom.tutor.model.resp;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.util.Collections;
 import java.util.List;
 
 import static com.braingroom.tutor.utils.CommonUtilsKt.getHumanDate;
@@ -10,16 +11,21 @@ import static com.braingroom.tutor.utils.CommonUtilsKt.getHumanDate;
  * Created by ashketchup on 27/12/17.
  */
 
-public class MessageGetResp {
+public class MessageGetResp extends BaseResp {
     @SerializedName("braingroom")
     List<Snippet> data;
 
     public List<Snippet> getData() {
-        return data;
+        return !isEmpty(data) ? data : Collections.singletonList(new Snippet());
     }
 
     public void setData(List<Snippet> data) {
         this.data = data;
+    }
+
+    @Override
+    public boolean getResCode() {
+        return !isEmpty(data);
     }
 
     public static class Snippet {

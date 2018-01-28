@@ -47,7 +47,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/padding_medium"
-                android:background="@drawable/solid_white_all_rounded_corner_ios"
+                android:background="@drawable/solid_white_bottom_rounded_corner_ios"
                 android:gravity="top"
                 android:hint="\tMessage"
                 android:minHeight="150dp"
@@ -58,7 +58,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:layout_margin="@dimen/padding_small"
-                android:background='@drawable/rounded_corner_line_orange'
+                android:background='@drawable/solid_bg_green_rounded_corner'
                 android:gravity="center_horizontal"
                 android:onClick="@{vm.onSendClicked}"
                 android:padding="@dimen/padding_small"

@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
@@ -33,15 +34,20 @@
                     android:textSize="20dp"
                     android:textStyle="bold" />
 
+
                 <EditText
                     android:id="@+id/name"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
+                    android:layout_marginTop="10dp"
                     android:ems="10"
                     android:hint="Name"
-                    android:inputType="textPersonName"
+                    android:imeOptions="actionNext"
+                    android:inputType="date"
                     android:paddingLeft="10dp"
-                    android:text="@={vm.name}" />
+                    android:text="@={vm.name}"
+                    app:errorText="@{vm.nameError}" />
+
 
                 <EditText
                     android:id="@+id/email"
@@ -50,9 +56,11 @@
                     android:layout_marginTop="10dp"
                     android:ems="10"
                     android:hint="Email"
+                    android:imeOptions="actionNext"
                     android:inputType="textEmailAddress"
                     android:paddingLeft="10dp"
-                    android:text="@={vm.email}" />
+                    android:text="@={vm.email}"
+                    app:errorText="@{vm.emailError}" />
 
                 <EditText
                     android:id="@+id/password"
@@ -61,9 +69,11 @@
                     android:layout_marginTop="10dp"
                     android:ems="10"
                     android:hint="Password"
+                    android:imeOptions="actionNext"
                     android:inputType="textPassword"
                     android:paddingLeft="10dp"
-                    android:text="@={vm.password}" />
+                    android:text="@={vm.password}"
+                    app:errorText="@{vm.passwordError}" />
 
                 <EditText
                     android:id="@+id/confirm_password"
@@ -72,9 +82,11 @@
                     android:layout_marginTop="10dp"
                     android:ems="10"
                     android:hint="Confirm Password"
+                    android:imeOptions="actionNext"
                     android:inputType="textPassword"
                     android:paddingLeft="10dp"
-                    android:text="@={vm.confirmPassword}" />
+                    android:text="@={vm.confirmPassword}"
+                    app:errorText="@{vm.confirmPasswordError}" />
 
                 <EditText
                     android:id="@+id/mobile"
@@ -84,8 +96,10 @@
                     android:ems="10"
                     android:hint="Mobile No."
                     android:inputType="phone"
+                    android:maxLength="10"
                     android:paddingLeft="10dp"
-                    android:text="@={vm.phone}" />
+                    android:text="@={vm.phone}"
+                    app:errorText="@{vm.phoneError}" />
 
                 <EditText
                     android:id="@+id/referral_code"
@@ -94,7 +108,8 @@
                     android:layout_marginTop="10dp"
                     android:ems="10"
                     android:hint="Referral Code"
-                    android:inputType="phone"
+                    android:imeOptions="actionDone"
+                    android:inputType="textCapWords"
                     android:paddingLeft="10dp"
                     android:text="@={vm.referralCode}" />
 

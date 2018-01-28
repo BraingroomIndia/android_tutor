@@ -41,12 +41,12 @@ public class UserListReq {
             this.tutorId = tutorId;
             if (type == null)
                 this.type = null;
-            else if (type == 1)
-                this.type = "past";
-            else if (type == 2)
-                this.type = "current";
-            else if (type == 3)
-                this.type = "upcoming";
+            else if (type == ConstantsKt.pastId)
+                this.type = ConstantsKt.pastValue;
+            else if (type == ConstantsKt.currentId)
+                this.type = ConstantsKt.currentValue;
+            else if (type == ConstantsKt.upComingId)
+                this.type = ConstantsKt.upComingValue;
             else this.type = null;
             this.classId = classId;
         }

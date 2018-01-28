@@ -12,6 +12,19 @@ public class LoginReq {
         this.data = data;
     }
 
+    public LoginReq(String email) {
+        this.data = new Snippet(email);
+    }
+
+    public LoginReq(String email, String password) {
+        this.data = new Snippet(email, password);
+    }
+
+    public LoginReq(String email, String password, String socialNetworkId) {
+        this.data = new Snippet(email, password, socialNetworkId);
+    }
+
+
     public static class Snippet {
 
         @SerializedName("email")
@@ -26,6 +39,8 @@ public class LoginReq {
         private String mRegId;
         @SerializedName("social_network_id")
         private String mSocialNetworkId;
+        @SerializedName("user_type")
+        private final String mUserType = "1";
 
         public Snippet(String email, String password) {
             this.mEmail = email;
@@ -34,6 +49,17 @@ public class LoginReq {
             this.mLongitude = "";
             this.mRegId = "";
             this.mSocialNetworkId = "";
+        }
+
+        //Forget Password
+        public Snippet(String email) {
+
+            this.mEmail = email;
+            this.mPassword = null;
+            this.mLatitude = null;
+            this.mLongitude = null;
+            this.mRegId = null;
+            this.mSocialNetworkId = null;
         }
 
         public Snippet(String email, String password, String socialNetworkId) {

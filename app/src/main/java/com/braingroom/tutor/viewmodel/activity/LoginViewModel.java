@@ -22,6 +22,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 
 import org.jetbrains.annotations.Nullable;
 
+import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Action;
 
@@ -40,7 +41,9 @@ import static com.braingroom.tutor.utils.ConstantsKt.profilePic;
 
 public class LoginViewModel extends ViewModel {
     public final ObservableField<String> emailId = new ObservableField<>("");
+    public final ObservableField<String> emailError = new ObservableField<>("");
     public final ObservableField<String> password = new ObservableField<>("");
+    public final ObservableField<String> passwordError = new ObservableField<>("");
     public final CustomDrawable loginButton;
     public final Action onLoginClicked = new Action() {
         @Override
@@ -52,10 +55,17 @@ public class LoginViewModel extends ViewModel {
     public final Action onRegisterCLicked = new Action() {
         @Override
         public void run() throws Exception {
-            if (getNavigator() != null)
-                getNavigator().navigateActivity(SignupActivity.class);
+            getNavigator().navigateActivity(SignupActivity.class);
         }
     };
+    public final Action onForgetPassword = new Action() {
+
+        @Override
+        public void run() throws Exception {
+            uiHelper.showForgotPassDialog();
+        }
+    };
+
     private final int RC_SIGN_IN = 9001;
     private final UIHelper uiHelper;
     public final Action onGoogleLoginClicked = new Action() {
@@ -72,12 +82,6 @@ public class LoginViewModel extends ViewModel {
         }
     };
 
-    public final Action onRegisterClicked = new Action() {
-        @Override
-        public void run() throws Exception {
-                getNavigator().navigateActivity(SignupActivity.class);
-        }
-    };
 
     public LoginViewModel(HelperFactory helperFactory, UIHelper uiHelper) {
         super(helperFactory);
@@ -112,22 +116,29 @@ public class LoginViewModel extends ViewModel {
     }
 
     public void login(String emailId, String password) {
-        if (!isValidEmail(emailId)) {
-            getMessageHelper().showMessage("Email id is not valid");
-            return;
+        boolean isValid = true;
+        if (emailId.trim().isEmpty()) {
+            isValid = false;
+            emailError.set("");
+            emailError.set("Please enter an email id");
+        } else if (!isValidEmail(emailId)) {
+            isValid = false;
+            emailError.set("");
+            emailError.set("Please enter valid email id ");
         }
+
         if (isEmpty(password)) {
-            getMessageHelper().showMessage("Password can't be empty");
-            return;
+            isValid = false;
+            passwordError.set("");
+            passwordError.set("Please enter a password");
         }
+        if (!isValid)
+            return;
         getMessageHelper().showProgressDialog("Logging in", "Sit back while we connect you...");
         getApiService().login(new LoginReq.Snippet(emailId, password)).
                 doOnSubscribe(disposable -> getCompositeDisposable().add(disposable)).
                 observeOn(AndroidSchedulers.mainThread()).
-                subscribe(this::handleLoginResponse, throwable -> {
-                    Log.e(getTAG(), throwable.getMessage(), throwable);
-                    throwable.printStackTrace();
-                });
+                subscribe(this::handleLoginResponse, this::handleError);
 
     }
 
@@ -141,6 +152,11 @@ public class LoginViewModel extends ViewModel {
             getMessageHelper().showMessage(resp.getResMsg());
         }
 
+    }
+
+    private void handleError(Throwable throwable) {
+        Log.e(getTAG(), throwable.getMessage(), throwable);
+        throwable.printStackTrace();
     }
 
     private boolean loginSuccess(@NonNull String userName, @NonNull String emailId,

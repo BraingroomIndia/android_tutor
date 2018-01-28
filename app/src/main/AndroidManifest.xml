@@ -90,6 +90,7 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".view.activity.ManualAttendanceActivity" />
         <activity android:name=".view.activity.BroadcastMessageActivity" />
+        <activity android:name=".view.activity.ClassDetailActivity" />
 
 
     </application>

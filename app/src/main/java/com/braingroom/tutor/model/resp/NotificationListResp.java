@@ -2,6 +2,7 @@ package com.braingroom.tutor.model.resp;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.util.Collections;
 import java.util.List;
 
 
@@ -19,12 +20,12 @@ public class NotificationListResp extends BaseResp {
     }
 
     public List<Snippet> getData() {
-        return data;
+        return getResCode() ? data : Collections.singletonList(new Snippet());
     }
 
     @Override
     public boolean getResCode() {
-        return data == null;
+        return !isEmpty(data);
     }
 
     public static class Snippet {
@@ -44,6 +45,13 @@ public class NotificationListResp extends BaseResp {
             this.status = status;
         }
 
+        public Snippet() {
+            this.notificationId = null;
+            this.postId = null;
+            this.description = null;
+            this.status = null;
+        }
+
         public String getNotificationId() {
             return notificationId;
         }
@@ -56,8 +64,8 @@ public class NotificationListResp extends BaseResp {
             return description;
         }
 
-        public String getStatus() {
-            return status;
+        public boolean getStatus() {
+            return "1".equalsIgnoreCase(status);
         }
 
     }

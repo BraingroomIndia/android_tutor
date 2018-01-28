@@ -17,11 +17,12 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
         <TextView
             android:id="@+id/title"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="start"
             android:layout_marginLeft="@dimen/padding_small"
@@ -29,18 +30,20 @@
             android:layout_weight="1"
             android:fontFamily="@font/roboto_regular"
             android:text="@{vm.title}"
-            android:textSize="16sp"
+            android:textColor="@color/darkTextColor"
             android:textStyle="bold"
             tools:text="Title" />
 
         <TextView
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="end"
+            android:layout_marginLeft="@dimen/padding_small"
+            android:layout_marginStart="@dimen/padding_small"
             android:layout_weight="1"
-            android:fontFamily="@font/roboto_bold_italic"
+            android:fontFamily="@font/roboto"
             android:text="@{vm.value}"
-            android:textSize="16sp"
+            android:textColor="@color/darkTextColor"
             tools:text="Fun Recreation,Informative  Motivational,Health  Fitness,Kids  Teens" />
 
     </LinearLayout>

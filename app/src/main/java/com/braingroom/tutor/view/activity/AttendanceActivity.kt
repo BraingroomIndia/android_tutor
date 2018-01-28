@@ -1,5 +1,6 @@
 package com.braingroom.tutor.view.activity
 
+import android.os.Bundle
 import android.util.Log
 import android.util.SparseArray
 import android.view.View
@@ -15,6 +16,12 @@ import info.androidhive.barcode.BarcodeReader
 
 
 class AttendanceActivity : Activity(), BarcodeReader.BarcodeReaderListener {
+    var barcodeReader: BarcodeReader? = null
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        barcodeReader = supportFragmentManager.findFragmentById(R.id.barcode_scanner) as BarcodeReader
+
+    }
 
     private val gson = applicationContext.appModule?.gson
     private var scanInProgress = false
@@ -31,21 +38,24 @@ class AttendanceActivity : Activity(), BarcodeReader.BarcodeReaderListener {
     }
 
     override fun onScanned(barcode: Barcode?) {
+
         if (barcode == null || scanInProgress)
             return
+
         val req = gson!!.fromJson(barcode.displayValue, AttendanceDetailReq::class.java)
         Log.d("onBarcodeDetected", gson.toJson(AttendanceDetailReq(vm.userId, "123141234", true)));
-        if (barcode.displayValue.contains("braingroom") == true && !scanInProgress) {
+        if (barcode.displayValue.contains("braingroom") && !scanInProgress) {
+            barcodeReader?.playBeep()
             scanInProgress = true
             messageHelper.showProgressDialog("Wait", "Communicating with server ");
             apiService.getStartOrEndDetails(req).subscribe({ resp ->
                 messageHelper.dismissActiveProgress()
                 if (!resp.resCode)
-                    messageHelper.showDismissInfo("",resp.resMsg, "Cancel")
+                    messageHelper.showDismissInfo("", resp.resMsg, "Cancel")
                 else
-                    messageHelper.showAcceptableInfo("Ticket Info", resp.getData().getLearnerName() + resp.getData().getLearnerName(), "Confirm", "Cancel", SingleButtonCallback { dialog, which ->
+                    messageHelper.showAcceptableInfo("Ticket Info", resp.data.learnerName + resp.data.learnerName, "Confirm", "Cancel", SingleButtonCallback { dialog, which ->
                         apiService.updateAttendance(resp.data.learnerId, req.data.startOrEndCode, req.data.isStartCode).subscribe({ resp ->
-                            messageHelper.showDismissInfo("",resp.resMsg,"Dismiss")
+                            messageHelper.showDismissInfo("", resp.resMsg, "Dismiss")
                         })
                     }, SingleButtonCallback { dialog, which ->
                         scanInProgress = false

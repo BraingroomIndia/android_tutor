@@ -1,6 +1,7 @@
 package com.braingroom.tutor.services
 
 
+import android.util.Log
 import com.braingroom.tutor.common.CustomApplication
 import com.braingroom.tutor.model.req.*
 import com.braingroom.tutor.model.req.CommonIdReq
@@ -29,15 +30,26 @@ class DataFlowService(private val api: ApiService, private val realmCacheService
 
     fun login(data: LoginReq.Snippet): Observable<LoginResp> {
         return api.login(LoginReq(data)).subscribeOn(Schedulers.io()).observeOn(Schedulers.computation()).
-                onErrorReturn { LoginResp() }.map { resp -> resp }
+                onErrorReturn { LoginResp() }
+                .map { resp ->
+                    if (resp.resCode) {
+                        resp.data.emailId = data.email
+                        Log.e("data", "Hello" + resp.data.emailId + "\t" + data.email)
+                    }
+                    resp
+                }
     }
 
     fun login(data: SocialLoginReq.Snippet): Observable<LoginResp> {
         return api.socialLogin(SocialLoginReq(data)).subscribeOn(Schedulers.io()).observeOn(Schedulers.computation()).
-                onErrorReturn { LoginResp() }.map { resp ->
-            resp.data.profilePic = data.profilePic
-            resp
+                onErrorReturn { LoginResp() }.map {
+            it.data.profilePic = data.profilePic
+            it
         }
+    }
+
+    fun forgetPassword(email: String): Observable<String> {
+        return api.forgotPassword(LoginReq(email)).subscribeOn(Schedulers.io()).map { it.resMsg }.observeOn(AndroidSchedulers.mainThread())
     }
 
     fun getMyProfile(id: String): Observable<MyProfileResp> {
@@ -48,6 +60,10 @@ class DataFlowService(private val api: ApiService, private val realmCacheService
     fun getAllClasses(snippet: ClassListReq.Snippet, pageNumber: Int): Observable<ClassListResp?> {
         return api.getAllClasses(if (pageNumber > 1) pageNumber.toString() else "", ClassListReq(snippet)).subscribeOn(Schedulers.io()).observeOn(Schedulers.computation()).
                 onErrorReturn { ClassListResp() }.map { resp -> resp }
+    }
+
+    fun getClassDetail(classId: String): Observable<ClassDetailResp> {
+        return api.getClassDetail(CommonIdReq(classId)).subscribeOn(Schedulers.io()).observeOn(Schedulers.computation())
     }
 
     fun getPaymentDetails(pageNumber: Int, starDate: String, endDate: String, keyword: String): Observable<PaymentDetailsResp> {
@@ -77,12 +93,11 @@ class DataFlowService(private val api: ApiService, private val realmCacheService
                 .observeOn(AndroidSchedulers.mainThread())
     }
 
-    fun getGallery(snippet: GalleryReq.Snippet): Observable<GalleryResp> {
-        return api.getGallery(GalleryReq(snippet)).subscribeOn(Schedulers.io()).observeOn(Schedulers.computation()).onErrorReturn { GalleryResp() }.map { resp -> resp }.map { resp ->
-            for (res in resp.data) {
-                res.isVideo = snippet.isVideo
-            }
-            resp
+    fun getGallery(req: GalleryReq): Observable<GalleryResp> {
+        return api.getGallery(req).subscribeOn(Schedulers.io()).observeOn(Schedulers.computation()).onErrorReturn { GalleryResp() }.map { resp -> resp }.map {
+            if (it.resCode)
+                it.data.forEach { it.isVideo = req.data.isVideo }
+            it
         }
     }
 
@@ -191,7 +206,10 @@ class DataFlowService(private val api: ApiService, private val realmCacheService
 
     fun getReview(pageNumber: Int): Observable<ReviewGetResp> {
         return api.reviewGet(pageNumber.toString(), ReviewGetReq(userId)).subscribeOn(Schedulers.io())
-                .observeOn(Schedulers.computation()).onErrorReturnItem(ReviewGetResp())
+                .observeOn(Schedulers.computation()).map { resp ->
+            if (resp.resCode) resp.data.forEach { if (it.classTopic.isNullOrBlank()) it.classTopic = "Vendor Review" }
+            resp
+        }.onErrorReturnItem(ReviewGetResp())
 
     }
 
@@ -274,11 +292,11 @@ class DataFlowService(private val api: ApiService, private val realmCacheService
 
     fun getStartOrEndDetails(startOrEndCode: String, isStartCode: Boolean): Observable<AttendanceDetailResp> {
         return api.getStartOrEndDetails(AttendanceDetailReq(userId, startOrEndCode, isStartCode)).onErrorReturnItem(AttendanceDetailResp()).subscribeOn(Schedulers.io())
-                .observeOn(Schedulers.computation())
+                .observeOn(Schedulers.computation()).map { it.setRequestType(isStartCode) }
     }
 
     fun getStartOrEndDetails(req: AttendanceDetailReq?): Observable<AttendanceDetailResp> {
         return api.getStartOrEndDetails(req).onErrorReturnItem(AttendanceDetailResp()).subscribeOn(Schedulers.io())
-                .observeOn(Schedulers.computation())
+                .observeOn(Schedulers.computation()).map { it.setRequestType(req?.data?.isStartCode) }
     }
 }

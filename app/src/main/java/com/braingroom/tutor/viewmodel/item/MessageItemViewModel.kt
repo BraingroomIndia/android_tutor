@@ -9,15 +9,9 @@ import io.reactivex.functions.Action
 /**
  * Created by ashketchup on 7/12/17.
  */
-class MessageItemViewModel(helperFactory: HelperFactory, val text: String, val senderImage: String, val senderName: String, val sentDate: String, val senderId: String) : RecyclerViewItem, ViewModel(helperFactory) {
-    val onClicked: Action by lazy {
-        object : Action {
-            override fun run() {
-                val bundle: Bundle = Bundle()
-                bundle.putString("senderId", senderId)
-                navigator.navigateActivity(MessageThreadActivity::class.java, bundle)
-            }
-        }
-    }
+class MessageItemViewModel(val text: String, val senderImage: String, val senderName: String, val sentDate: String, val onClicked: Action) : RecyclerViewItem {
+    override val TAG: String
+        get() = this::class.java.simpleName
+
 
 }

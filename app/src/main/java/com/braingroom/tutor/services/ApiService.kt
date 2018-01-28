@@ -19,11 +19,18 @@ interface ApiService {
     @POST("apis/socialLogin")
     fun socialLogin(@Body req: SocialLoginReq): Observable<LoginResp>
 
+    @POST("apis/forgotPassword")
+    fun forgotPassword(@Body req: LoginReq): Observable<LoginResp>
+
+
     @POST("apis/getProfile")
     fun getProfile(@Body req: CommonIdReq): Observable<MyProfileResp>
 
     @POST("tutorApi/getAllClasses/{pageIndex}")
     fun getAllClasses(@Path("pageIndex") pageIndex: String, @Body req: ClassListReq): Observable<ClassListResp>
+
+    @POST("apis/viewClassDetail")
+    fun getClassDetail(@Body req:CommonIdReq) :Observable<ClassDetailResp>
 
     @POST("apis/BuyerRegistration")
     fun signUp(@Body req: SignUpReq): Observable<SignUpResp>
@@ -45,6 +52,7 @@ interface ApiService {
 
     @POST("apis/getCategory")
     fun getCategories(): Observable<CommonIdResp>
+
 
     @GET("apis/getCommunity")
     fun getCommunity(): Observable<CommonIdResp>

@@ -37,7 +37,7 @@ class PaymentDetailViewModel(helperFactory: HelperFactory) : ViewModel(helperFac
         ObservableBoolean(false)
     }
 
-    val searchAction: TextView.OnEditorActionListener by lazy {
+    val searchAction by lazy {
         isNotVisible.set(true)
         TextView.OnEditorActionListener { p0, p1, p2 ->
             if (p1 == EditorInfo.IME_ACTION_SEARCH) {
@@ -59,16 +59,14 @@ class PaymentDetailViewModel(helperFactory: HelperFactory) : ViewModel(helperFac
 
 
     val startdate: DatePickerViewModel by lazy {
-        if (dialogHelper != null)
-            DatePickerViewModel(helperFactory, "Start", "12-12-2017")
-        else
-            throw NullPointerException()
+
+        DatePickerViewModel(helperFactory, "Start", "12-12-2017")
+
     }
     val enddate: DatePickerViewModel by lazy {
-        if (dialogHelper != null)
-            DatePickerViewModel(helperFactory, "End", "12-12-2017")
-        else
-            throw NullPointerException()
+
+        DatePickerViewModel(helperFactory, "End", "12-12-2017")
+
     }
     val view: ViewProvider by lazy {
         object : ViewProvider {
