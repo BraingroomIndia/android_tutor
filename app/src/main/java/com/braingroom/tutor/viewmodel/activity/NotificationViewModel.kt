@@ -1,14 +1,19 @@
 package com.braingroom.tutor.viewmodel.activity
 
+import android.os.Bundle
 import android.util.Log
 import com.braingroom.tutor.R
 import com.braingroom.tutor.common.modules.HelperFactory
+import com.braingroom.tutor.model.resp.MessageGetResp
+import com.braingroom.tutor.model.resp.NotificationListResp
 import com.braingroom.tutor.utils.FieldUtils
+import com.braingroom.tutor.view.activity.MessageThreadActivity
 import com.braingroom.tutor.view.adapters.SpacingDecoration
 import com.braingroom.tutor.view.adapters.ViewProvider
 import com.braingroom.tutor.viewmodel.ViewModel
 import com.braingroom.tutor.viewmodel.item.*
 import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.Disposable
 
 /*
  * Created by ashketchup on 7/12/17.
@@ -34,49 +39,33 @@ class NotificationViewModel(helperFactory: HelperFactory) : ViewModel(helperFact
 
     init {
         apiService.changeNotificationStatus("").observeOn(AndroidSchedulers.mainThread()).subscribe()
-        FieldUtils.toObservable(callAgain).filter({ _ -> pageNumber > -1 && !paginationInProgress }).subscribe({
+        FieldUtils.toObservable(callAgain).filter { pageNumber > -1 && !paginationInProgress }.subscribe({
             paginationInProgress = true
-            apiService.getNotifications(pageNumber).observeOn(AndroidSchedulers.mainThread()).map { resp ->
-                val viewModelList: ArrayList<NotificationsItemViewModel> = ArrayList()
-                resp.data.mapTo(viewModelList) {
-                    NotificationsItemViewModel(helperFactory,it.getDescription(), it.getPostId(),
-                            "", "1" == it.getStatus())
-                }
-            }.doOnSubscribe { disposable ->
-                compositeDisposable.add(disposable)
-                (0..5).forEach { _ -> item.onNext(LoadingViewModel()) }
-                item.onNext(NotifyDataSetChanged())
-
-            }.subscribe(
-                    { viewModelList ->
-                        item.onNext(RemoveLoadingViewModel())
-                        if (viewModelList.isEmpty()) {
-                            if (pageNumber == 1)
-                                item.onNext(EmptyItemViewModel("", R.drawable.ic_no_post_64dp, "No Messages"))
-                            pageNumber = -1
-                        } else {
-                            viewModelList.forEach { viewModel -> item.onNext(viewModel) }
-                            pageNumber++
-                        }
-                        item.onNext(NotifyDataSetChanged())
-                        paginationInProgress = false
-                    }, { throwable -> Log.e(TAG, throwable.message, throwable) }
-            )/*.subscribe { t ->
-                t.data.forEach { elem ->
-                    item.onNext(NotificationsItemViewModel(elem.getDescription(), elem.getPostId(),
-                            "", "1" == elem.getStatus()))
-                    item.onNext(NotifyDataSetChanged())
-                }
-
-                if (t == null || t.data == null || t.data.isEmpty()) {
-
-                    item.onNext(NotificationsItemViewModel("No more Notifications", "", ""
-                            ,
-                            false))
-                    item.onNext(NotifyDataSetChanged())
-                } else pageNumber++
-            }*/
+            apiService.getNotifications(pageNumber).observeOn(AndroidSchedulers.mainThread()).map(this::respToViewModelList).doOnSubscribe(this::addLoadingItems).
+                    subscribe(this::addActualItems, this::handleError)
         })
     }
 
+    private fun respToViewModelList(resp: NotificationListResp): List<RecyclerViewItem> = when {
+        resp.resCode -> {
+            pageNumber++
+            resp.data.map { NotificationsItemViewModel(helperFactory, it) }
+        }
+        pageNumber == 1 -> {
+            pageNumber = -1
+            resp.data.map { EmptyItemViewModel("", R.drawable.ic_no_post_64dp, "No Notification") }
+        }
+        else -> {
+            pageNumber = -1
+            ArrayList()
+        }
+    }
+
+
+    private fun addActualItems(viewModelList: List<RecyclerViewItem>) {
+        item.onNext(RemoveLoadingViewModel())
+        viewModelList.forEach { item.onNext(it) }
+        item.onNext(NotifyDataSetChanged())
+        paginationInProgress = false
+    }
 }

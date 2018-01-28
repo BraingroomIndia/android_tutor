@@ -5,10 +5,14 @@ import android.util.Log
 import com.braingroom.tutor.R
 import com.braingroom.tutor.common.modules.HelperFactory
 import com.braingroom.tutor.model.req.GalleryReq
+import com.braingroom.tutor.model.resp.GalleryResp
 import com.braingroom.tutor.view.adapters.ViewProvider
 import com.braingroom.tutor.viewmodel.ViewModel
 import com.braingroom.tutor.viewmodel.item.*
+import io.reactivex.disposables.Disposable
 import io.reactivex.functions.Action
+import io.reactivex.functions.Function
+import io.reactivex.subjects.ReplaySubject
 
 /*
  * Created by ashketchup on 6/12/17.
@@ -53,35 +57,42 @@ class MediaViewModel(helperFactory: HelperFactory) : ViewModel(helperFactory) {
     }
 
     fun makeCall() {
-        apiService.getGallery(GalleryReq.Snippet("568", isVideo.get())).doOnSubscribe { disposable ->
-            Log.d("called", "called")
-            item.onNext(RefreshViewModel())
-            for (i in 0..4) {
-                item.onNext(LoadingViewModel())
-            }
-            item.onNext(NotifyDataSetChanged())
-            compositeDisposable.add(disposable)
-        }.doOnComplete {
-            item.onNext(NotifyDataSetChanged())
-        }.subscribe(
-                { resp ->
-                    if (resp.resCode) {
-                        item.onNext(RefreshViewModel())
-                        for (snippet in resp.data) {
-
-                            item.onNext(TextIconViewModel(snippet.mediaTitle, snippet.mediaThumb, Action {
-                                if (isVideo.get()) {
-                                    navigator.openStandaloneYoutube(snippet.videoId, 12312)
-                                } else {
-
-                                }
-                            }))
-                        }
-                        item.onNext(NotifyDataSetChanged())
-                    }
-                }, { e ->
-            Log.e("Error", e.message)
-            e.printStackTrace()
-        })
+        apiService.getGallery(GalleryReq(userId, isVideo.get())).doOnSubscribe(this::addLoadingItems).
+                map(this::respToViewModelList).
+                subscribe(this::addActualItems, this::handleError)
     }
+
+    private fun respToViewModelList(resp: GalleryResp): List<RecyclerViewItem> = when {
+        resp.resCode -> {
+            pageNumber++
+            resp.data.map {
+                TextIconViewModel(it.mediaTitle, it.mediaThumb, Action {
+                    if (it.isVideo) {
+                        navigator.openStandaloneYoutube(it.videoId, 12312)
+                    } else {
+
+                    }
+                })
+            }
+        }
+        pageNumber == 1 -> {
+            pageNumber = -1
+            resp.data.map { EmptyItemViewModel("", R.drawable.ic_no_post_64dp, "No Media") }
+        }
+        else -> {
+            pageNumber = -1
+            ArrayList()
+        }
+    }
+
+
+    private fun addActualItems(viewModelList: List<RecyclerViewItem>) {
+        item.onNext(RefreshViewModel())
+        item.onNext(NotifyDataSetChanged())
+        viewModelList.forEach { item.onNext(it) }
+        item.onNext(NotifyDataSetChanged())
+        paginationInProgress = false
+    }
+
+
 }

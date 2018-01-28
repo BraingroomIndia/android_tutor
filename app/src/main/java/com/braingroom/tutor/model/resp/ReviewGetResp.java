@@ -1,15 +1,18 @@
 package com.braingroom.tutor.model.resp;
 
+import android.support.annotation.NonNull;
+
 import com.braingroom.tutor.utils.CommonUtilsKt;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.Collections;
 import java.util.List;
 
 
 /**
  * Created by ashketchup on 8/12/17.
  */
-public class ReviewGetResp extends BaseResp{
+public class ReviewGetResp extends BaseResp {
     @SerializedName("braingroom")
     List<Snippet> data = null;
 
@@ -17,13 +20,14 @@ public class ReviewGetResp extends BaseResp{
         this.data = null;
     }
 
+    @NonNull
     public List<Snippet> getData() {
-        return data;
+        return isEmpty(data) ? Collections.singletonList(new Snippet()) : data;
     }
 
     @Override
     public boolean getResCode() {
-        return data != null && !data.isEmpty() && data.get(0) != null;
+        return !isEmpty(data);
     }
 
     public static class Snippet {
@@ -58,6 +62,10 @@ public class ReviewGetResp extends BaseResp{
 
         public String getClassTopic() {
             return CommonUtilsKt.getNonNull(classTopic);
+        }
+
+        public void setClassTopic(String classTopic) {
+            classTopic = CommonUtilsKt.getNonNull(classTopic);
         }
 
         public String getId() {

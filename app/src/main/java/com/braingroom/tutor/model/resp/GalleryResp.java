@@ -17,7 +17,6 @@ import static com.braingroom.tutor.utils.CommonUtilsKt.getThumbnail;
 
 public class GalleryResp extends BaseResp {
 
-    public boolean isVideo;
     @SerializedName("braingroom")
     private List<Snippet> data;
 

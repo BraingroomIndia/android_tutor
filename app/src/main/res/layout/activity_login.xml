@@ -55,6 +55,7 @@
             android:text='@={vm.emailId}'
             android:textColor="@android:color/white"
             android:textColorHint="@color/hint_color_light"
+            app:errorText="@{vm.emailError}"
             app:layout_constraintBottom_toTopOf="@+id/password"
             app:layout_constraintDimensionRatio="6.62"
             app:layout_constraintEnd_toEndOf="parent"
@@ -75,6 +76,7 @@
             android:text='@={vm.password}'
             android:textColor="@android:color/white"
             android:textColorHint="@color/hint_color_light"
+            app:errorText="@{vm.passwordError}"
             app:layout_constraintBottom_toTopOf="@+id/forget_password"
             app:layout_constraintDimensionRatio="6.62"
             app:layout_constraintEnd_toEndOf="parent"
@@ -87,6 +89,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="15dp"
+            android:onClick="@{vm.onForgetPassword}"
             android:text="@string/forgot_password"
             android:textColor="@android:color/white"
             android:textSize="16sp"

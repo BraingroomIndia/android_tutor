@@ -3,6 +3,7 @@ package com.braingroom.tutor.viewmodel.item
 import android.graphics.Color
 import android.os.Bundle
 import com.braingroom.tutor.common.modules.HelperFactory
+import com.braingroom.tutor.model.resp.NotificationListResp
 import com.braingroom.tutor.viewmodel.ViewModel
 import io.reactivex.functions.Action
 import java.text.SimpleDateFormat
@@ -13,7 +14,7 @@ import java.util.*
  */
 class NotificationsItemViewModel(helperFactory: HelperFactory, val title: String, val postId: String,
                                  val classId: String,
-                                 val readStatus: Boolean) : ViewModel(helperFactory),RecyclerViewItem {
+                                 val readStatus: Boolean) : ViewModel(helperFactory), RecyclerViewItem {
     val onClick: Action by lazy {
         Action {
             val data = Bundle()
@@ -28,5 +29,6 @@ class NotificationsItemViewModel(helperFactory: HelperFactory, val title: String
             Color.WHITE
     }
 
+    constructor(helperFactory: HelperFactory, snippet: NotificationListResp.Snippet) : this(helperFactory, snippet.getDescription(), snippet.getPostId(), "", snippet.getStatus())
 
 }

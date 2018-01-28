@@ -28,34 +28,34 @@ class RecyclerViewAdapterObservable(observableViewModels: ReplaySubject<out Recy
         get() = this::class.java.simpleName ?: ""
 
     init {
-        source = observableViewModels?.repeat()?.observeOn(Schedulers.computation())?.subscribeOn(Schedulers.io())?.
-                doOnNext { viewModel ->
-                    //                    Log.d(TAG, "doOnNext called")
-                    viewModel?.let {
-                        val iterator = latestViewModels.listIterator(latestViewModels.size)
-                        when (it) {
-                            is RemoveLoadingViewModel -> {
-                                Log.v(TAG, "Removing Loading Items")
-                                while (iterator.hasPrevious() && iterator.previous() is LoadingViewModel) iterator.remove()
-                            }
-                            is RefreshViewModel -> {
-                                Log.v(TAG, "Removing All Items")
-                                latestViewModels.clear()
-                            }
-                            is NotifyDataSetChanged -> {
-
-                            }
-                            is LoadingViewModel -> {
-                                Log.v(TAG, "Added Loading items ")
-                                iterator.add(it)
-                            }
-                            else -> {
-                                Log.v(TAG, "Added Actual items Named " + it.TAG)
-                                iterator.add(it)
-                            }
+        source = observableViewModels?.repeat()?.observeOn(AndroidSchedulers.mainThread())?.subscribeOn(Schedulers.io())?.
+                doOnNext {
+                    //                    Log.d(TAG, "doOnNext called") it?.let {
+                    val iterator = latestViewModels.listIterator(latestViewModels.size)
+                    when (it) {
+                        is RemoveLoadingViewModel -> {
+                            Log.v(TAG, "Removing Loading Items")
+                            while (iterator.hasPrevious() && iterator.previous() is LoadingViewModel) iterator.remove()
                         }
+                        is RefreshViewModel -> {
+                            Log.v(TAG, "Removing All Items")
+                            latestViewModels.clear()
+                        }
+                        is NotifyDataSetChanged -> {
+                            notifyDataSetChanged()
 
+                        }
+                        is LoadingViewModel -> {
+                            Log.v(TAG, "Added Loading items ")
+                            iterator.add(it)
+                        }
+                        else -> {
+                            Log.v(TAG, "Added Actual items Named " + it.TAG)
+                            iterator.add(it)
+                        }
                     }
+
+
                 }?.doOnSubscribe { Log.v(TAG, "Subscribed") }?.share()
     }
 
@@ -95,22 +95,7 @@ class RecyclerViewAdapterObservable(observableViewModels: ReplaySubject<out Recy
 
     override fun registerAdapterDataObserver(observer: RecyclerView.AdapterDataObserver) {
         source?.let {
-            it.observeOn(AndroidSchedulers.mainThread()).subscribe({ viewModel ->
-                viewModel?.let {
-                    when (it) {
-                        is NotifyDataSetChanged -> {
-                            if (!latestViewModels.isEmpty()) {
-                                notifyDataSetChanged()
-                                Log.v(TAG, "Updating UI")
-                            } else {
-                                Log.v(TAG, "No items to Update UI")
-                            }
-                        }
-                        else -> {
-                        }
-                    }
-                }
-            })?.let { subscriptions.put(observer, it) }
+            it.observeOn(AndroidSchedulers.mainThread()).subscribe()?.let { subscriptions.put(observer, it) }
         }
         super.registerAdapterDataObserver(observer)
     }

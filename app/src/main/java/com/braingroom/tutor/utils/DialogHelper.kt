@@ -1,7 +1,6 @@
 package com.braingroom.tutor.utils
 
 import android.widget.DatePicker
-import android.widget.Toast
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.MaterialDialog.Builder
 import com.braingroom.tutor.R
@@ -85,24 +84,13 @@ public class DialogHelper(val activity: Activity?) {
         }
     }
 
-    fun showSingleSelectList(title: String, items: List<String>?, selectedItems: Array<Int>, positiveText: String) {
+    fun showSingleSelectList(title: String, items: List<String>?, selectedItems: Array<Int>, positiveText: String, callbackSingleChoice: MaterialDialog.ListCallbackSingleChoice, onPositive: MaterialDialog.SingleButtonCallback) {
         dismissActiveProgress()
         when {
             items?.isNotEmpty() == true -> activity?.let {
-                Builder(it).title(title).items(items).itemsCallbackSingleChoice(if (selectedItems.isNotEmpty()) selectedItems[0] else -1) { materialDialog, view, selectedIdx, charSequence ->
-                    view.visibility
-                    when (viewModel) {
-                        is ListDialogViewModel -> (viewModel as ListDialogViewModel).setSelectedItem(selectedIdx)
-                    }
-                    true
-                }.positiveText(positiveText).onPositive { dialog, which ->
-                    dialog.cancel()
-                    when (viewModel) {
-                        is ListDialogViewModel -> (viewModel as ListDialogViewModel).handleOkClick()
-                    }
-                }.canceledOnTouchOutside(false).show()
+                Builder(it).title(title).items(items).itemsCallbackSingleChoice(if (selectedItems.isNotEmpty()) selectedItems[0] else -1, callbackSingleChoice).positiveText(positiveText).onPositive(onPositive)
+                //To change body of created functions use File | Settings | File Templates.
             }
-        //To change body of created functions use File | Settings | File Templates.
         }
     }
 

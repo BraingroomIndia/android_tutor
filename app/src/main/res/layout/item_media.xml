@@ -21,7 +21,7 @@
             android:minHeight="@dimen/_20sdp"
             android:minWidth="@dimen/_20sdp"
             android:src="@{vm.imagePath}"
-            app:placeholder="@{vm.placeHolder}" />
+            app:placeHolder="@{vm.placeHolder}" />
 
         <TextView
             android:layout_width="match_parent"
