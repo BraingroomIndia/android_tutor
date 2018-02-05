@@ -111,7 +111,8 @@
                                 android:paddingEnd="10dp"
                                 android:paddingLeft="10dp"
                                 android:paddingRight="10dp"
-                                android:paddingStart="10dp" />
+                                android:paddingStart="10dp"
+                                android:text="@={vm.primaryVerificationNo1}" />
 
                         </RelativeLayout>
 
@@ -167,7 +168,8 @@
                                 android:paddingEnd="10dp"
                                 android:paddingLeft="10dp"
                                 android:paddingRight="10dp"
-                                android:paddingStart="10dp" />
+                                android:paddingStart="10dp"
+                                android:text="@={vm.primaryVerificationNo2}" />
 
                         </RelativeLayout>
 

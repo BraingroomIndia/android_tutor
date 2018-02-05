@@ -37,6 +37,15 @@ abstract class BaseFragment : Fragment() {
         }
     }
 
+
+    @Suppress("OverridingDeprecatedMember")
+    override fun onAttach(activity: android.app.Activity) {
+        super.onAttach(activity)
+        if (activity is Activity) {
+            this.activity = activity
+        }
+    }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = DataBindingUtil.inflate(inflater, layoutId, container, false)
         defaultBinder.bind(binding, vm)

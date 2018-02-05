@@ -2,6 +2,8 @@ package com.braingroom.tutor.model.req;
 
 import com.google.gson.annotations.SerializedName;
 
+import static com.braingroom.tutor.utils.CommonUtilsKt.isEmpty;
+
 /**
  * Created by godara on 29/12/17.
  */
@@ -44,7 +46,7 @@ public class AttendanceDetailReq {
         }
 
         public boolean getIsStartCode() {
-            return startCode == null || startCode.isEmpty() || startCode.trim().isEmpty();
+            return !isEmpty(startCode);
         }
 
         public Snippet(String tutorId, String endCode, String startCode) {

@@ -14,6 +14,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.ReplaySubject
+import timber.log.Timber
 import java.util.*
 
 /*
@@ -75,7 +76,7 @@ class RecyclerViewAdapterReplaySubject(replaySubjectViewModel: ReplaySubject<out
                 if (viewModel is NotifyDataSetChanged && !latestViewModels.isEmpty())
                     notifyDataSetChanged()
             }, { throwable ->
-                Log.e(TAG, throwable.localizedMessage, throwable)
+                Timber.tag(TAG).e(throwable, throwable.localizedMessage)
             }))
         }
         super.registerAdapterDataObserver(observer)

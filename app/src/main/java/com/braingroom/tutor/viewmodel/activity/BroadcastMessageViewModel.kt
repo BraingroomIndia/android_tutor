@@ -13,6 +13,7 @@ import com.braingroom.tutor.viewmodel.item.ListDialogViewModel
 import io.reactivex.Observable
 import io.reactivex.functions.Action
 import io.reactivex.functions.Consumer
+import timber.log.Timber
 
 /*
  * Created by godara on 08/01/18.
@@ -37,10 +38,11 @@ class BroadcastMessageViewModel(helperFactory: HelperFactory, val fragmentHelper
             else {
                 apiService.postReply(senderId!!, message.get()).subscribe(
                         { resp ->
+                            message.set("")
                             messageHelper.showDismissInfo("", resp.resMsg, "Dismiss")
                         },
                         { throwable ->
-                            Log.e(TAG, throwable.message, throwable)
+                            Timber.tag(TAG).e(throwable, throwable.message)
                         }
                 )
             }
@@ -65,7 +67,7 @@ class BroadcastMessageViewModel(helperFactory: HelperFactory, val fragmentHelper
                 , "", "Okay")
     }
     val classList by lazy {
-        SearchSelectListViewModel(helperFactory, classListTitle, "search by class name", "", true, apiService.getClassList().map(this::respToHashMap), Consumer { selectedData ->
+        SearchSelectListViewModel(helperFactory, classListTitle, "search by class name", "", false, apiService.getClassList().map(this::respToHashMap), Consumer { selectedData ->
             classId = selectedData.getId()
             userList.refreshDataMap(getUserList())
         }, HashMap())
@@ -80,7 +82,8 @@ class BroadcastMessageViewModel(helperFactory: HelperFactory, val fragmentHelper
 
     private fun respToHashMap(resp: CommonIdResp): HashMap<Int, String> {
         val list: HashMap<Int, String> = HashMap()
-        resp.data.forEach { snippet -> list.put(snippet.id, snippet.textValue) }
+        if (resp.resCode)
+            resp.data.forEach { snippet -> list.put(snippet.id, snippet.textValue) }
         return list
     }
 }

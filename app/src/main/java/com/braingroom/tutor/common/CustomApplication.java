@@ -4,11 +4,13 @@ import android.app.Activity;
 import android.app.Application;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.support.multidex.MultiDexApplication;
 import android.util.Log;
 import android.widget.TextView;
 
 import com.braingroom.tutor.BuildConfig;
 import com.braingroom.tutor.common.modules.AppModule;
+import com.braingroom.tutor.utils.TimberLogImplementation;
 import com.facebook.stetho.Stetho;
 
 import android.app.Application.ActivityLifecycleCallbacks;
@@ -18,7 +20,11 @@ import com.squareup.leakcanary.RefWatcher;
 
 import java.util.HashMap;
 
-import io.realm.Realm;
+import com.crashlytics.android.Crashlytics;
+
+import io.fabric.sdk.android.Fabric;
+import timber.log.Timber;
+
 
 import static com.braingroom.tutor.utils.ConstantsKt.FONT_REGULAR;
 import static com.braingroom.tutor.utils.ConstantsKt.FONT_BOLD;
@@ -27,7 +33,7 @@ import static com.braingroom.tutor.utils.ConstantsKt.FONT_BOLD;
  * Created by godara on 06/10/17.
  */
 
-public class CustomApplication extends Application implements ActivityLifecycleCallbacks {
+public class CustomApplication extends MultiDexApplication implements ActivityLifecycleCallbacks {
     private static CustomApplication sInstance;
     private String TAG = CustomApplication.class.getSimpleName();
     public boolean loggedIn = false;
@@ -38,18 +44,22 @@ public class CustomApplication extends Application implements ActivityLifecycleC
     public String userEmail = "";
     public String userId = "";
     public String userPic = "";
+    public static String GEO_TAG = "";
 
     @Override
     public void onCreate() {
         super.onCreate();
         appModule = new AppModule(this);
         sInstance = this;
-        Realm.init(this);
         if (BuildConfig.DEBUG)
             Stetho.initializeWithDefaults(this);
         if (!BuildConfig.DEBUG || !LeakCanary.isInAnalyzerProcess(this)) {
             LeakCanary.install(this);
+            Fabric.with(this, new Crashlytics());
+
         }
+        TimberLogImplementation.init();
+        appModule.getDataFlowService().getGeoDetail();
 
     }
 
@@ -80,7 +90,7 @@ public class CustomApplication extends Application implements ActivityLifecycleC
         if (fontCache.get(key) == null) {
             fontCache.put(key, Typeface.createFromAsset(getApplicationContext().getAssets(), "font/" + name));
         } else {
-            Log.d(TAG, "putFontCache: Already in cache");
+            Timber.tag(TAG).d("putFontCache: Already in cache");
         }
     }
 

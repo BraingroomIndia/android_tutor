@@ -27,13 +27,17 @@ import java.util.concurrent.TimeUnit
 /*
  * Created by ashketchup on 6/12/17.
  */
-class SearchSelectListViewModel(helperFactory: HelperFactory, val title: String, val searchHint: String, val dependencyMessage: String, isMultipleSelect: Boolean, private var observableApi: Observable<HashMap<Int, String>>?, private val saveConsumer: Consumer<HashMap<Int, String>>, private var selectedDataMap: HashMap<Int, String>) : ViewModel(helperFactory) {
+class SearchSelectListViewModel(helperFactory: HelperFactory, val title: String, val searchHint: String, val dependencyMessage: String, val isMultipleSelect: Boolean, private var observableApi: Observable<HashMap<Int, String>>?, private val saveConsumer: Consumer<HashMap<Int, String>>, private var selectedDataMap: HashMap<Int, String>) : ViewModel(helperFactory) {
 
+    val selectAllorClearAll by lazy {
+        PublishSubject.create<Boolean>()
+    }
 
     val onClearClicked = Action {
         selectedDataMap.clear()
         searchQuery.set("")
         selectedItemsText.set("select items")
+        selectAllorClearAll.onNext(false)
         saveConsumer.accept(selectedDataMap)
     }
 
@@ -83,23 +87,7 @@ class SearchSelectListViewModel(helperFactory: HelperFactory, val title: String,
                     item.onNext(RefreshViewModel())
                     dataMap
                             .filter { it.value.contains(keyword, true) }
-                            .forEach {
-                                item.onNext(SearchSelectListItemViewModel(it.value, it.key, selectedDataMap.containsKey(it.key),
-                                        isMultipleSelect, object : MyConsumer<SearchSelectListItemViewModel> {
-                                    override fun accept(@NonNull var1: SearchSelectListItemViewModel) {
-                                        if (var1.isSelected.get())
-                                            selectedDataMap.remove(var1.id)
-                                        else {
-                                            if (!isMultipleSelect)
-                                                selectedDataMap.clear()
-                                            selectedDataMap.put(var1.id, var1.name)
-                                        }
-                                        selectedItemsText.set(TextUtils.join(" , ", selectedDataMap.values))
-                                        selectedItems.onNext(var1)
-
-                                    }
-                                }, selectedItems))
-                            }
+                            .forEach(this::hashMapToViewModel)
                     item.onNext(NotifyDataSetChanged())
                 }
     }
@@ -121,10 +109,38 @@ class SearchSelectListViewModel(helperFactory: HelperFactory, val title: String,
             null -> messageHelper.showMessage(dependencyMessage)
             else -> {
                 dataMap.clear()
-                selectedDataMap.clear()
+                onClearClicked.run()
                 observableApi = dataSource
             }
         }
+    }
+
+    private fun hashMapToViewModel(entry: Map.Entry<Int, String>) {
+        val value = entry.value
+        val key = entry.key
+        item.onNext(SearchSelectListItemViewModel(value, key, selectedDataMap.containsKey(key),
+                isMultipleSelect, object : MyConsumer<SearchSelectListItemViewModel> {
+            override fun accept(@NonNull var1: SearchSelectListItemViewModel) {
+                val isSelected = var1.isSelected.get()
+                //Removing selected item
+                if (isSelected) {
+                    selectedDataMap.remove(var1.id)
+                }
+                //Adding new selected item
+                else {
+                    //If not multiSelect remove all selected items
+                    if (!isMultipleSelect)
+                        onClearClicked.run()
+                    selectedDataMap.put(var1.id, var1.name)
+                }
+                selectedItemsText.set(TextUtils.join(" , ", selectedDataMap.values))
+
+                //Changing selected icon
+                var1.isSelected.set(!isSelected)
+
+            }
+        }, selectAllorClearAll))
+
     }
 
 }

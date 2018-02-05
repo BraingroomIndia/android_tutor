@@ -1,3 +1,17 @@
+buildscript {
+    repositories {
+        maven { url 'https://maven.fabric.io/public' }
+    }
+
+    dependencies {
+        // These docs use an open ended version so that our plugin
+        // can be updated quickly in response to Android tooling updates
+
+        // We recommend changing it to the latest version from our changelog:
+        // https://docs.fabric.io/android/changelog.html#fabric-gradle-plugin
+        classpath 'io.fabric.tools:gradle:1.+'
+    }
+}
 apply plugin: 'com.android.application'
 
 apply plugin: 'kotlin-android'
@@ -6,8 +20,11 @@ apply plugin: 'kotlin-android-extensions'
 
 apply plugin: 'kotlin-kapt'
 
-apply plugin: 'realm-android'
+apply plugin: 'io.fabric'
 
+repositories {
+    maven { url 'https://maven.fabric.io/public' }
+}
 android {
     compileSdkVersion 27
     buildToolsVersion "27.0.2"
@@ -20,11 +37,21 @@ android {
         multiDexEnabled true
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
+    signingConfigs {
+
+        release {
+            storeFile file(RELEASE_STORE_FILE)
+            storePassword RELEASE_STORE_PASSWORD
+            keyAlias RELEASE_KEY_ALIAS
+            keyPassword RELEASE_KEY_PASSWORD
+        }
+    }
     buildTypes {
         release {
             minifyEnabled true
             shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
         }
         debug {
             minifyEnabled false
@@ -48,11 +75,12 @@ android {
 
 dependencies {
 
+    implementation('com.crashlytics.sdk.android:crashlytics:2.8.0@aar') {
+        transitive = true;
+    }
     implementation('com.bignerdranch.android:expandablerecyclerview:3.0.0-RC1') {
         exclude group: 'com.android.support', module: 'support-v4'
     }
-
-
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jre8:$kotlin_version"
 
     //      Kotlin
@@ -64,6 +92,7 @@ dependencies {
     implementation "com.android.support:design:$supportLibraryVersion"
     implementation "com.android.support:cardview-v7:$supportLibraryVersion"
     implementation "com.android.support:recyclerview-v7:$supportLibraryVersion"
+    implementation "com.android.support:customtabs:$supportLibraryVersion"
     implementation 'com.android.support.constraint:constraint-layout:1.0.2'
     implementation 'com.android.support:multidex:1.0.2'
 
@@ -87,7 +116,6 @@ dependencies {
     implementation "com.facebook.stetho:stetho-okhttp3$stethoVersion"
 
     //  Facebook login
-
     implementation('com.facebook.android:facebook-login:[4,5)') {
 
         exclude group: 'com.android.support'
@@ -95,9 +123,7 @@ dependencies {
     }
 
     //  Dagger
-
     implementation "com.google.dagger:dagger$daggerVersion"
-
     kapt "com.google.dagger:dagger-compiler$daggerVersion"
 
     //    compileOnly 'org.glassfish:javax.annotation:10.0-b28'
@@ -121,9 +147,11 @@ dependencies {
 
     //      Picasso
     implementation 'com.squareup.picasso:picasso:2.5.2'
+
     /*implementation 'com.github.bumptech.glide:glide:4.3.1'
-    kapt 'com.github.bumptech.glide:compiler:4.3.1'
-*/
+            kapt 'com.github.bumptech.glide:compiler:4.3.1'
+        */
+
     //      Third Party
     implementation 'com.bignerdranch.android:simple-item-decoration:1.0.0'
     implementation 'info.androidhive:barcode-reader:1.1.5'
@@ -133,8 +161,10 @@ dependencies {
     implementation('com.patloew.rxlocation:rxlocation:1.0.3') {
         exclude group: 'com.google.gms', module: 'play-services-location'
     }
+    implementation 'com.jakewharton.timber:timber:4.5.1'
     debugImplementation 'com.squareup.leakcanary:leakcanary-android:1.5.4'
     releaseImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.5.4'
+    implementation "info.androidhive:barcode-reader:1.1.5"
 
     //
 
@@ -157,4 +187,6 @@ configurations.all {
             }
         }
     }
+
+    apply plugin: 'com.google.gms.google-services'
 }

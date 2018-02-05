@@ -1,9 +1,13 @@
 package com.braingroom.tutor.model.resp;
 
+import android.support.annotation.NonNull;
+
 import com.google.gson.annotations.SerializedName;
 
-import java.util.Collections;
+import java.util.ArrayList;
 import java.util.List;
+
+import static com.braingroom.tutor.utils.CommonUtilsKt.getNonNull;
 
 
 public class NotificationListResp extends BaseResp {
@@ -20,7 +24,7 @@ public class NotificationListResp extends BaseResp {
     }
 
     public List<Snippet> getData() {
-        return getResCode() ? data : Collections.singletonList(new Snippet());
+        return getResCode() ? data : new ArrayList<>();
     }
 
     @Override
@@ -30,39 +34,43 @@ public class NotificationListResp extends BaseResp {
 
     public static class Snippet {
         @SerializedName("notification_id")
-        public String notificationId;
-        @SerializedName("post_id")
-        public String postId;
+        private String notificationId;
+        @SerializedName("class_id")
+        private String classId;
         @SerializedName("description")
-        public String description;
+        private String description;
         @SerializedName("status")
-        public String status;
+        private String status;
 
-        public Snippet(String notificationId, String postId, String description, String status) {
+        public Snippet(String notificationId, String classId, String description, String status) {
             this.notificationId = notificationId;
-            this.postId = postId;
+            this.classId = classId;
             this.description = description;
             this.status = status;
         }
 
         public Snippet() {
             this.notificationId = null;
-            this.postId = null;
+            this.classId = null;
             this.description = null;
             this.status = null;
         }
 
+        @NonNull
         public String getNotificationId() {
-            return notificationId;
+            return getNonNull(notificationId);
         }
 
-        public String getPostId() {
-            return postId;
+        @NonNull
+        public String getClassId() {
+            return getNonNull(classId);
         }
 
+        @NonNull
         public String getDescription() {
-            return description;
+            return getNonNull(description);
         }
+
 
         public boolean getStatus() {
             return "1".equalsIgnoreCase(status);

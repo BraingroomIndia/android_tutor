@@ -1,5 +1,3 @@
-package com.braingroom.tutor.view.activity.barcodereader.camera;
-
 /*
  * Copyright (C) The Android Open Source Project
  *
@@ -15,13 +13,12 @@ package com.braingroom.tutor.view.activity.barcodereader.camera;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
+package com.braingroom.tutor.view.activity.barcodereader.camera;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.content.Context;
-import android.content.pm.PackageManager;
 import android.graphics.ImageFormat;
 import android.graphics.SurfaceTexture;
 import android.hardware.Camera;
@@ -31,7 +28,6 @@ import android.os.SystemClock;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresPermission;
 import android.support.annotation.StringDef;
-import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 import android.view.Surface;
 import android.view.SurfaceHolder;
@@ -51,6 +47,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import timber.log.Timber;
 
 // Note: This requires Google Play Services 8.1 or higher, due to using indirect byte buffers for
 // storing images.
@@ -74,8 +72,7 @@ import java.util.Map;
  * <li>android.permissions.CAMERA</li>
  * </ul>
  */
-
-@SuppressWarnings({"deprecation", "unused", "WeakerAccess", "FieldCanBeLocal"})
+@SuppressWarnings("deprecation")
 public class CameraSource {
     @SuppressLint("InlinedApi")
     public static final int CAMERA_FACING_BACK = CameraInfo.CAMERA_FACING_BACK;
@@ -339,22 +336,11 @@ public class CameraSource {
      *
      * @throws IOException if the camera's preview texture or display could not be initialized
      */
-
-    @SuppressLint("ObsoleteSdkInt")
+    @SuppressLint("MissingPermission")
     @RequiresPermission(Manifest.permission.CAMERA)
     public CameraSource start() throws IOException {
         synchronized (mCameraLock) {
             if (mCamera != null) {
-                if (ActivityCompat.checkSelfPermission(this.mContext, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-                    // TODO: Consider calling
-                    //    ActivityCompat#requestPermissions
-                    // here to request the missing permissions, and then overriding
-                    //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                    //                                          int[] grantResults)
-                    // to handle the case where the user grants the permission. See the documentation
-                    // for ActivityCompat#requestPermissions for more details.
-                    throw new IOException();
-                }
                 return this;
             }
 
@@ -385,20 +371,11 @@ public class CameraSource {
      * @param surfaceHolder the surface holder to use for the preview frames
      * @throws IOException if the supplied surface holder could not be used as the preview display
      */
+    @SuppressLint("MissingPermission")
     @RequiresPermission(Manifest.permission.CAMERA)
     public CameraSource start(SurfaceHolder surfaceHolder) throws IOException {
         synchronized (mCameraLock) {
             if (mCamera != null) {
-                if (ActivityCompat.checkSelfPermission(this.mContext, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-                    // TODO: Consider calling
-                    //    ActivityCompat#requestPermissions
-                    // here to request the missing permissions, and then overriding
-                    //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                    //                                          int[] grantResults)
-                    // to handle the case where the user grants the permission. See the documentation
-                    // for ActivityCompat#requestPermissions for more details.
-                    throw new IOException();
-                }
                 return this;
             }
 
@@ -422,7 +399,6 @@ public class CameraSource {
      * Call {@link #release()} instead to completely shut down this camera source and release the
      * resources of the underlying detector.
      */
-    @SuppressLint("ObsoleteSdkInt")
     public void stop() {
         synchronized (mCameraLock) {
             mFrameProcessor.setActive(false);
@@ -433,7 +409,7 @@ public class CameraSource {
                     // quickly after stop).
                     mProcessingThread.join();
                 } catch (InterruptedException e) {
-                    Log.d(TAG, "Frame processing thread interrupted on release.");
+                    Timber.tag(TAG).d("Frame processing thread interrupted on release.");
                 }
                 mProcessingThread = null;
             }
@@ -457,7 +433,7 @@ public class CameraSource {
                         mCamera.setPreviewDisplay(null);
                     }
                 } catch (Exception e) {
-                    Log.e(TAG, "Failed to clear camera preview: " + e);
+                    Timber.tag(TAG).e(e, "Failed to clear camera preview: ");
                 }
                 mCamera.release();
                 mCamera = null;
@@ -670,7 +646,6 @@ public class CameraSource {
      * @param cb the callback to run
      * @return {@code true} if the operation is supported (i.e. from Jelly Bean), {@code false} otherwise
      */
-    @SuppressLint("ObsoleteSdkInt")
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     public boolean setAutoFocusMoveCallback(@Nullable AutoFocusMoveCallback cb) {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN) {
@@ -1014,9 +989,7 @@ public class CameraSource {
         WindowManager windowManager =
                 (WindowManager) mContext.getSystemService(Context.WINDOW_SERVICE);
         int degrees = 0;
-        int rotation = 0;
-        if (windowManager != null)
-            rotation = windowManager.getDefaultDisplay().getRotation();
+        int rotation = windowManager.getDefaultDisplay().getRotation();
         switch (rotation) {
             case Surface.ROTATION_0:
                 degrees = 0;
@@ -1031,7 +1004,7 @@ public class CameraSource {
                 degrees = 270;
                 break;
             default:
-                Log.e(TAG, "Bad rotation value: " + rotation);
+                Timber.tag(TAG).e("Bad rotation value: " + rotation);
         }
 
         CameraInfo cameraInfo = new CameraInfo();
@@ -1202,7 +1175,7 @@ public class CameraSource {
                             // don't have it yet.
                             mLock.wait();
                         } catch (InterruptedException e) {
-                            Log.d(TAG, "Frame processing loop terminated.", e);
+                            Timber.tag(TAG).d("Frame processing loop terminated.", e);
                             return;
                         }
                     }
@@ -1237,7 +1210,7 @@ public class CameraSource {
                 try {
                     mDetector.receiveFrame(outputFrame);
                 } catch (Throwable t) {
-                    Log.e(TAG, "Exception thrown from receiver.", t);
+                    Timber.tag(TAG).e(t, "Exception thrown from receiver.");
                 } finally {
                     mCamera.addCallbackBuffer(data.array());
                 }

@@ -27,8 +27,9 @@ public class MyProfileResp extends BaseResp {
     @Expose(serialize = false, deserialize = false)
     private List<Data> section3;
 
+    @NonNull
     public Snippet getData() {
-        if (data != null && data.get(0) != null)
+        if (getResCode())
             return data.get(0);
         else return new Snippet();
     }
@@ -62,8 +63,14 @@ public class MyProfileResp extends BaseResp {
         @SerializedName("country_id")
         private String countryId;
 
+        @SerializedName("country_name")
+        private String country;
+
         @SerializedName("state_id")
         private String stateId;
+
+        @SerializedName("state_name")
+        private String state;
 
         @SerializedName("city_id")
         private String cityId;
@@ -277,13 +284,6 @@ public class MyProfileResp extends BaseResp {
             return getNonNull(name);
         }
 
-     /*   public String getImage() {
-            return getNonNull(profileImage);
-        }
-
-        public String getEmailId() {
-            return getNonNull(email);
-        }*/
 
         public String getAddress() {
             return getNonNull(address);
@@ -308,6 +308,14 @@ public class MyProfileResp extends BaseResp {
             }
             return achievementList;
         }
+
+        public String getCountry() {
+            return getNonNull(country);
+        }
+
+        public String getState() {
+            return getNonNull(state);
+        }
     }
 
 
@@ -320,8 +328,8 @@ public class MyProfileResp extends BaseResp {
             section1.add(new Data("Contact No:", getData().getContactNo()));
             section1.add(new Data("Total Followers:", getData().getFollowerCnt() + ""));
             section1.add(new Data("Total Following:", getData().getFollowingCnt() + ""));
-            section1.add(new Data("Country:", getData().getCountryId()));
-            section1.add(new Data("State:", getData().getStateId()));
+            section1.add(new Data("Country:", getData().getCountry()));
+            section1.add(new Data("State:", getData().getState()));
             section1.add(new Data("City:", getData().getCity()));
             section1.add(new Data("Locality:", getData().getLocality()));
             section1.add(new Data("Interest :", getData().getCategoryName()));
@@ -329,6 +337,7 @@ public class MyProfileResp extends BaseResp {
         return section1;
     }
 
+    @NonNull
     public List<Data> getSection2() {
         if (section2 == null) {
             section2 = new ArrayList<>();
@@ -342,12 +351,13 @@ public class MyProfileResp extends BaseResp {
         return section2;
     }
 
+    @NonNull
     public List<Data> getSection3() {
         if (section3 == null) {
             section3 = new ArrayList<>();
             section3.add(new Data("Teaching Experience:", getData().getTeachingExperience()));
             section3.add(new Data("Gender:",
-                    ("1".equals(getData().getGender())) ? "Male" : (("1".equals(getData().getGender())) ? "Female" : "N/A")
+                    ("1".equals(getData().getGender())) ? "Male" : (("2".equals(getData().getGender())) ? "Female" : "N/A")
             ));
             section3.add(new Data("Primary Verification 1:", getData().getIdentityPrimaryVerification1()));
             section3.add(new Data("Primary Verification 2:", getData().getIdentityPrimaryVerification2()));

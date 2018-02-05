@@ -9,7 +9,6 @@ import com.braingroom.tutor.viewmodel.item.RecyclerViewItem;
 
 import org.jetbrains.annotations.NotNull;
 
-import io.reactivex.functions.Consumer;
 import io.reactivex.subjects.PublishSubject;
 
 public class SearchSelectListItemViewModel implements RecyclerViewItem {
@@ -25,7 +24,7 @@ public class SearchSelectListItemViewModel implements RecyclerViewItem {
     public final ObservableBoolean isSelected = new ObservableBoolean();
 
     public SearchSelectListItemViewModel(@NonNull final String name, @Nullable final Integer id, boolean selected, boolean isMultiSelect, MyConsumer<SearchSelectListItemViewModel> clickConsumer,
-                                         @NonNull PublishSubject<SearchSelectListItemViewModel> publishSubject) {
+                                         @NonNull PublishSubject<Boolean> selectClearOrAll) {
         this.name = name;
         if (id == null)
             this.id = -1;
@@ -33,12 +32,7 @@ public class SearchSelectListItemViewModel implements RecyclerViewItem {
             this.id = id;
         this.onClicked = clickConsumer;
         this.isSelected.set(selected);
-        publishSubject.subscribe((SearchSelectListItemViewModel itemViewModel) -> {
-            if (SearchSelectListItemViewModel.this == itemViewModel)
-                isSelected.set(!isSelected.get());
-            else if (!isMultiSelect)
-                isSelected.set(false);
-        });
+        selectClearOrAll.subscribe(isSelected::set);
     }
 
 

@@ -1,32 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+    android:id="@+id/topLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:keepScreenOn="true">
 
-    <data>
 
-        <import type="com.braingroom.tutor.R" />
 
-        <import type="android.view.View" />
-
-        <variable
-            name="vm"
-            type="com.braingroom.tutor.viewmodel.ViewModel" />
-
-    </data>
-
-    <FrameLayout
+    <com.braingroom.tutor.view.activity.barcodereader.camera.CameraSourcePreview
+        android:id="@+id/preview"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-
-        <fragment
-            android:id="@+id/barcode_scanner"
-            android:name="info.androidhive.barcode.BarcodeReader"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:auto_focus="true"
-            app:use_flash="false" />
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_below="@id/header"
+        android:visibility="visible">
 
         <info.androidhive.barcode.ScannerOverlay
             android:layout_width="match_parent"
@@ -37,65 +26,53 @@
             app:line_width="4"
             app:square_height="200"
             app:square_width="200" />
-
-<!--
-        <LinearLayout
+        <com.braingroom.tutor.view.activity.barcodereader.camera.GraphicOverlay
+            android:id="@+id/graphicOverlay"
             android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </com.braingroom.tutor.view.activity.barcodereader.camera.CameraSourcePreview>
+
+
+    <LinearLayout
+        android:id="@+id/header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_gravity="top"
+        android:background="@color/material_black"
+        android:orientation="vertical">
+
+
+        <TextView
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-
-            android:onClick="enterStartEndCode"
-            android:orientation="vertical"
-            android:paddingBottom="@dimen/padding_large">
-
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/material_black"
-                android:padding="@dimen/padding_medium"
-                android:text="Pay Using"
-                android:textColor="@color/material_white"
-                android:textSize="17sp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/textView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/material_black"
-                android:fontFamily="@font/roboto_light"
-                android:gravity="center_horizontal"
-                android:onClick="enterStartEndCode"
-                android:paddingTop="@dimen/padding_large"
-                android:text="@string/enter_start_end_code"
-                android:textColor="@color/material_white"
-                android:textSize="20sp" />
+            android:layout_gravity="center_horizontal"
+            android:fontFamily="@font/roboto"
+            android:onClick="enterStartCodeOrEndCode"
+            android:text="Enter start code or end code"
+            android:textColor="@color/common_google_signin_btn_text_dark"
+            android:textSize="17sp"
+            android:textStyle="bold" />
 
 
-            <ImageView
-                android:id="@+id/imageView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/material_black"
-                android:padding="10dp"
-                android:src="@drawable/ic_google_plus_36dp"
-                android:tint="@color/material_white"
-                tools:ignore="ContentDescription" />
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:hint="Start / End code"
+            android:onClick="enterStartCodeOrEndCode"
+            android:textColorHint="@color/material_grey200" />
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="@dimen/padding_medium"
+            android:background="@drawable/circle"
+            android:gravity="center"
+            android:text="OR"
+            android:textColor="@color/material_grey700" />
+    </LinearLayout>
 
-            <TextView
-                android:id="@+id/textView1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_margin="10dp"
-                android:fontFamily="@font/roboto_bold"
-                android:text="@string/scan_qr_code"
-                android:textColor="@color/material_white"
-                android:textSize="20sp" />
-        </LinearLayout>
--->
-
-
-    </FrameLayout>
-</layout>
+</RelativeLayout>

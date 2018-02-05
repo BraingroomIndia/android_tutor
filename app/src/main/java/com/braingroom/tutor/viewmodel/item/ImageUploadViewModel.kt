@@ -54,7 +54,6 @@ class ImageUploadViewModel : ViewModel {
             }
             messageHelper.showProgressDialog("Wait", "uploading...")
             apiService.uploadImage(filePath, fileType).subscribe {
-                Log.d(TAG, it.data.url)
                 messageHelper.dismissActiveProgress()
                 messageHelper.showMessage(it.resMsg)
                 if (it.resCode)

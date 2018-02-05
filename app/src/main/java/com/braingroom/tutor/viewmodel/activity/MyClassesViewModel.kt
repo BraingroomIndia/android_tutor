@@ -12,9 +12,6 @@ import com.braingroom.tutor.model.resp.ClassListResp
 import com.braingroom.tutor.view.adapters.ViewProvider
 import com.braingroom.tutor.viewmodel.ViewModel
 
-import java.util.HashMap
-import java.util.LinkedHashMap
-
 import io.reactivex.Observable
 
 import com.braingroom.tutor.utils.toObservable
@@ -22,7 +19,9 @@ import com.braingroom.tutor.view.activity.ClassDetailActivity
 import com.braingroom.tutor.viewmodel.item.*
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
+import io.reactivex.functions.Action
 import io.reactivex.functions.Consumer
+import java.util.*
 
 
 class MyClassesViewModel(helperFactory: HelperFactory) : ViewModel(helperFactory) {
@@ -51,6 +50,7 @@ class MyClassesViewModel(helperFactory: HelperFactory) : ViewModel(helperFactory
         val classTypeData = LinkedHashMap<Int, String>()
         classTypeData.put(1, "Batch")
         classTypeData.put(2, "Flexible")
+
 
         val classStatusData = LinkedHashMap<Int, String>()
         classStatusData.put(1, "Expired")
@@ -85,11 +85,27 @@ class MyClassesViewModel(helperFactory: HelperFactory) : ViewModel(helperFactory
     private fun respToViewModelList(resp: ClassListResp): List<RecyclerViewItem> = when {
         resp.resCode -> {
             pageNumber++
-            resp.data.map { ClassListItemViewModel(it, this::navigateToClassDetail) }
+            resp.data.map {
+                ClassListItemViewModel(it, Action {
+                    apiService.getClassDetail(it.classId.toString()).doOnSubscribe {
+                        compositeDisposable.add(it)
+                        messageHelper.showProgressDialog("Wait", "Loading")
+                    }.doOnError(this::handleError).doOnError { messageHelper.dismissActiveProgress() }.observeOn(AndroidSchedulers.mainThread()).
+                            subscribe {
+                                if (it.resCode) {
+                                    messageHelper.dismissActiveProgress()
+                                    val data = Bundle()
+                                    data.putSerializable("classData", it.data)
+                                    navigator.navigateActivity(ClassDetailActivity::class.java, data)
+                                } else messageHelper.showMessage(it.resMsg)
+                            }
+
+                })
+            }
         }
         pageNumber == 1 -> {
             pageNumber = -1
-            resp.data.map { EmptyItemViewModel("", R.drawable.ic_no_post_64dp, "No Classes") }
+            Collections.singletonList(EmptyItemViewModel("", R.drawable.ic_no_post_64dp, "No Classes"))
         }
         else -> {
             pageNumber = -1

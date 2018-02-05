@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
 
@@ -10,9 +11,9 @@
     </data>
 
     <TextView
+        app:background="@{vm.color}"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@{vm.color}"
         android:drawableBottom="@drawable/bottom_line_drawable"
         android:onClick="@{vm.onClick}"
         android:paddingBottom="@dimen/margin_med"

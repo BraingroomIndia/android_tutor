@@ -1,7 +1,3 @@
-package com.braingroom.tutor.utils;
-
-
-
 /*
  * Copyright (C) The Android Open Source Project
  *
@@ -17,12 +13,21 @@ package com.braingroom.tutor.utils;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package com.braingroom.tutor.view.activity.barcodereader.camera;
 
-
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.Paint;
+import android.graphics.Point;
+import android.graphics.RectF;
 import android.util.AttributeSet;
+import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.FrameLayout;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 
 import com.google.android.gms.vision.CameraSource;
 
@@ -49,7 +54,6 @@ import java.util.Vector;
  * from the preview's coordinate system to the view coordinate system.</li>
  * </ol>
  */
-@SuppressWarnings("ALL")
 public class GraphicOverlay<T extends GraphicOverlay.Graphic> extends View {
     private final Object mLock = new Object();
     private int mPreviewWidth;
@@ -57,6 +61,7 @@ public class GraphicOverlay<T extends GraphicOverlay.Graphic> extends View {
     private int mPreviewHeight;
     private float mHeightScaleFactor = 1.0f;
     private int mFacing = CameraSource.CAMERA_FACING_BACK;
+    protected int screenHeight;
     private Set<T> mGraphics = new HashSet<>();
 
     /**
@@ -214,5 +219,12 @@ public class GraphicOverlay<T extends GraphicOverlay.Graphic> extends View {
                 graphic.draw(canvas);
             }
         }
+    }
+
+    private int getScreenHeight(Activity activity) {
+        Point size = new Point();
+        activity.getWindowManager().getDefaultDisplay().getSize(size);
+        return size.y;
+
     }
 }

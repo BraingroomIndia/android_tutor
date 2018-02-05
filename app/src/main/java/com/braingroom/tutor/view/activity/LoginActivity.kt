@@ -19,6 +19,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.api.GoogleApiClient
 import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener
+import timber.log.Timber
 import java.util.*
 
 /*
@@ -65,7 +66,7 @@ class LoginActivity : Activity(), OnConnectionFailedListener {
                     override fun onSuccess(loginResult: LoginResult) {
                         val accessToken = loginResult.accessToken
                         val request = GraphRequest.newMeRequest(accessToken) { user, graphResponse ->
-                            Log.v(TAG, graphResponse.rawResponse)
+                            Timber.tag(TAG).v(graphResponse.rawResponse)
                             val name = user.optString("name");
                             val picture = user.optJSONObject("picture").optJSONObject("data").optString("url");
                             val email = user.optString("email");
@@ -85,7 +86,7 @@ class LoginActivity : Activity(), OnConnectionFailedListener {
                     }
 
                     override fun onError(exception: FacebookException) {
-                        Log.e(TAG, "Fb Login onError: " + exception.message, exception)
+                        Timber.tag(TAG).e(exception, "Fb Login onError: " + exception.message)
                         messageHelper.showMessage("Facebook login error")
                         LoginManager.getInstance().logOut()
                     }

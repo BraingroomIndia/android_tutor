@@ -32,8 +32,7 @@ public abstract class BaseResp {
 
 
     @NonNull
-    public String getResMsg() {
-        return isEmpty(resMsg) ? "Network error" : resMsg;
+    public String getResMsg() {return isEmpty(resMsg) ? "Network error" : resMsg;
     }
 
 }

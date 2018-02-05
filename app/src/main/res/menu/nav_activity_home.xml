@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <item
-        android:id="@+id/nav_faq"
-        android:title="FAQ" />
 
+    <item
+        android:id="@+id/nav_profile"
+        android:title="Profile" />
     <item
         android:id="@+id/nav_notification"
         android:title="Notifications" />
@@ -13,18 +13,21 @@
         android:id="@+id/nav_message"
         android:title="Message" />
 
-    <item
-        android:id="@+id/nav_contact"
-        android:title="Contact Us" />
-    <item
-        android:id="@+id/inbox"
-        android:title="Inbox"/>
-    <item
+    <!--    <item
+            android:id="@+id/nav_contact"
+            android:title="Contact Us" />-->
+    <!--    <item
+            android:id="@+id/inbox"
+            android:title="Inbox"/>-->
+<!--    <item
         android:id="@+id/nav_tnc"
-        android:title="Terms and Conditions" />
+        android:title="Terms and Conditions" />-->
     <item
         android:id="@+id/nav_change_password"
         android:title="Change Password" />
+    <item
+        android:id="@+id/nav_faq"
+        android:title="FAQ" />
     <item
         android:id="@+id/nav_logout"
         android:title="Logout" />

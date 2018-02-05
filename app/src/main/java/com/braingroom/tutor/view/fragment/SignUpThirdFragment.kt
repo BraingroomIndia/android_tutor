@@ -1,5 +1,12 @@
 package com.braingroom.tutor.view.fragment
 
+import android.os.Bundle
+import com.braingroom.tutor.R
+import com.braingroom.tutor.utils.FRAGMENT_TITLE
+import com.braingroom.tutor.view.activity.SignupActivity
+import com.braingroom.tutor.viewmodel.ViewModel
+import com.braingroom.tutor.viewmodel.activity.SignupViewModel
+
 /**
  * Created by godara on 23/01/18.
  */

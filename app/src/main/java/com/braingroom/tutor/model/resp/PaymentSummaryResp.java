@@ -6,8 +6,6 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
-import static java.util.Collections.singletonList;
-
 /*
  * Created by godara on 27/12/17.
  */
@@ -64,7 +62,7 @@ public class PaymentSummaryResp extends BaseResp {
 
         @NonNull
         public String getTotalAmount() {
-            return totalAmount+"";
+            return totalAmount + "";
         }
 
 

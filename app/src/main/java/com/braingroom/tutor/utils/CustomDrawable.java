@@ -41,9 +41,7 @@ public class CustomDrawable extends ObservableField<Drawable> implements Target 
 
     public CustomDrawable(@Nullable String imageUrl, @NonNull Integer color) {
         super();
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
-            this.color = CustomApplication.getInstance().getColor(color);
-        else this.color = CustomApplication.getInstance().getResources().getColor(color);
+        this.color = ContextCompat.getColor(CustomApplication.getInstance(), color);
         if (!TextUtils.isEmpty(imageUrl) && CustomApplication.getInstance() != null && CustomApplication.getInstance().getAppModule() != null) {
             CustomApplication.getInstance().getAppModule().getPicasso().load(imageUrl).into(this);
         }
@@ -62,8 +60,6 @@ public class CustomDrawable extends ObservableField<Drawable> implements Target 
         super();
 
         this.color = ContextCompat.getColor(CustomApplication.getInstance(), color);
-        if (this.color == null)
-            Log.d("Hi", "Hello color is null  ");
         if (CustomApplication.getInstance() != null && CustomApplication.getInstance().getAppModule() != null) {
             CustomApplication.getInstance().getAppModule().getPicasso().load(resource).into(this);
         }
@@ -83,9 +79,9 @@ public class CustomDrawable extends ObservableField<Drawable> implements Target 
 
     public CustomDrawable(@Nullable String imageUrl, @DrawableRes int placeHolder, @NonNull Integer color) {
         super();
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
-            this.color = CustomApplication.getInstance().getColor(color);
-        else this.color = CustomApplication.getInstance().getResources().getColor(color);
+
+        this.color = ContextCompat.getColor(CustomApplication.getInstance(), color);
+
         if (CustomApplication.getInstance() != null && CustomApplication.getInstance().getAppModule() != null) {
             if (!TextUtils.isEmpty(imageUrl)) {
                 CustomApplication.getInstance().getAppModule().getPicasso().load(imageUrl).placeholder(placeHolder).error(placeHolder).into(this);

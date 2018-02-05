@@ -52,7 +52,7 @@ public class GalleryResp extends BaseResp {
 
     @NonNull
     public List<Snippet> getData() {
-        return isEmpty(data) ? Collections.singletonList(new Snippet()) : data;
+        return isEmpty(data) ? new ArrayList<>() : data;
     }
 
     @NonNull

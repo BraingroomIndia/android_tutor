@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-   <data>
+    <data>
 
         <import type="com.braingroom.tutor.R" />
 
@@ -13,7 +13,7 @@
             name="vm"
             type="com.braingroom.tutor.viewmodel.activity.HomeViewModel" />
 
-   </data>
+    </data>
 
 
     <android.support.v4.widget.DrawerLayout
@@ -27,6 +27,7 @@
             layout="@layout/content_home"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_marginTop="@dimen/padding_medium"
             app:vm="@{vm}" />
 
         <android.support.design.widget.NavigationView
@@ -35,7 +36,7 @@
             android:layout_height="match_parent"
             android:layout_gravity="start"
             android:fitsSystemWindows="true"
-            app:menu="@menu/home"
+            app:menu="@menu/nav_activity_home"
             app:model="@{vm}" />
     </android.support.v4.widget.DrawerLayout>
 

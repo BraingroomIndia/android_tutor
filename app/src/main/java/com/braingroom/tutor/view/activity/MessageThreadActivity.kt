@@ -21,7 +21,6 @@ class MessageThreadActivity : Activity() {
         MessageThreadViewModel(helperFactory,getIntentString("senderId"), object : UiHelper {
             override fun scrollToEnd() {
                 runOnUiThread {
-                    Log.d(TAG, "scrollToEnd")
                     Runnable { recyclerView?.let { it.scrollToPosition(it.adapter.itemCount - 2) } }
 //                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
                 }

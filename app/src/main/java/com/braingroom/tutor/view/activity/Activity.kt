@@ -1,5 +1,6 @@
 package com.braingroom.tutor.view.activity
 
+import android.app.Activity
 import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.databinding.DataBindingUtil
@@ -10,6 +11,8 @@ import android.support.v4.widget.DrawerLayout
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
 import android.util.Log
+import android.view.MenuItem
+import com.braingroom.tutor.R
 import com.braingroom.tutor.common.CustomApplication
 import com.braingroom.tutor.common.modules.HelperFactory
 import com.braingroom.tutor.utils.*
@@ -96,6 +99,8 @@ abstract class Activity : AppCompatActivity() {
         HelperFactory(this)
     }
 
+    open val backButtonEnalebd = true
+
     override fun onCreate(savedInstanceState: Bundle?) {
 
         super.onCreate(savedInstanceState)
@@ -103,6 +108,9 @@ abstract class Activity : AppCompatActivity() {
         CustomApplication.getInstance().refWatcher?.watch(this)
         binding = DataBindingUtil.setContentView(this, layoutId)
         defaultBinder.bind(binding, vm)
+
+        supportActionBar?.setHomeButtonEnabled(true)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
     }
 
@@ -131,6 +139,15 @@ abstract class Activity : AppCompatActivity() {
         binding.executePendingBindings()
 
         super.onDestroy()
+
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        return if (item?.itemId == android.R.id.home && backButtonEnalebd) {
+            finish()
+            true
+        } else super.onOptionsItemSelected(item)
+
 
     }
 

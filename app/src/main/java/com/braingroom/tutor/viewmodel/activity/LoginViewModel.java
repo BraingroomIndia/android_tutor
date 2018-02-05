@@ -25,6 +25,7 @@ import org.jetbrains.annotations.Nullable;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Action;
+import timber.log.Timber;
 
 import static com.braingroom.tutor.utils.CommonUtilsKt.isEmpty;
 import static com.braingroom.tutor.utils.CommonUtilsKt.isValidEmail;
@@ -110,7 +111,7 @@ public class LoginViewModel extends ViewModel {
                 doOnSubscribe(disposable -> getCompositeDisposable().add(disposable)).
                 observeOn(AndroidSchedulers.mainThread()).
                 subscribe(this::handleLoginResponse, throwable -> {
-                    Log.e(getTAG(), throwable.getMessage(), throwable);
+                    Timber.tag(getTAG()).e(throwable, throwable.getMessage());
                     throwable.printStackTrace();
                 });
     }
@@ -155,7 +156,7 @@ public class LoginViewModel extends ViewModel {
     }
 
     private void handleError(Throwable throwable) {
-        Log.e(getTAG(), throwable.getMessage(), throwable);
+        Timber.tag(getTAG()).e(throwable, throwable.getMessage());
         throwable.printStackTrace();
     }
 

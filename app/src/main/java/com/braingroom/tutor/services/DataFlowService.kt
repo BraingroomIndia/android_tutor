@@ -6,6 +6,7 @@ import com.braingroom.tutor.common.CustomApplication
 import com.braingroom.tutor.model.req.*
 import com.braingroom.tutor.model.req.CommonIdReq
 import com.braingroom.tutor.model.resp.*
+import com.braingroom.tutor.utils.GEO_TAG
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -22,11 +23,21 @@ import retrofit2.http.Body
  */
 
 @Suppress("unused")
-class DataFlowService(private val api: ApiService, private val realmCacheService: RealmCacheService) {
+class DataFlowService(private val api: ApiService) {
 
     var userId: String = CustomApplication.getInstance().userId
         get() = CustomApplication.getInstance().userId
 
+    fun getGeoDetail() {
+        api.getGeoDetail().map({
+            if (it.resCode)
+                it.data[0].textValue
+            else
+                ""
+        }).onErrorReturn { "" }.subscribeOn(Schedulers.io()).subscribe {
+            CustomApplication.GEO_TAG = it
+        }
+    }
 
     fun login(data: LoginReq.Snippet): Observable<LoginResp> {
         return api.login(LoginReq(data)).subscribeOn(Schedulers.io()).observeOn(Schedulers.computation()).
@@ -34,7 +45,6 @@ class DataFlowService(private val api: ApiService, private val realmCacheService
                 .map { resp ->
                     if (resp.resCode) {
                         resp.data.emailId = data.email
-                        Log.e("data", "Hello" + resp.data.emailId + "\t" + data.email)
                     }
                     resp
                 }
@@ -71,11 +81,11 @@ class DataFlowService(private val api: ApiService, private val realmCacheService
                 onErrorReturn { PaymentDetailsResp() }
     }
 
-    fun getInstitute(keyword: String): Observable<CommonIdResp> {//Cache
+  /*  fun getInstitute(keyword: String): Observable<CommonIdResp> {//Cache
 
         return api.getInstitute(InstituteReq(InstituteReq.Snippet(keyword))).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-    }
+    }*/
 
     fun getLearner(type: Int?, classId: String?): Observable<CommonIdResp> {
 
@@ -126,82 +136,46 @@ class DataFlowService(private val api: ApiService, private val realmCacheService
     }
 
     fun getCategories(): Observable<CommonIdResp> {
-        return realmCacheService.getCachedCommon("category").
-                defaultIfEmpty(CommonIdResp(null)).
-                flatMap { data ->
-                    if (data == null)//TODO Handle this case
-                        return@flatMap realmCacheService.getCachedCommon("category")
-                    if (data.data.size == 1)
-                        return@flatMap api.getCategories().subscribeOn(Schedulers.io()).observeOn(Schedulers.computation()).onErrorReturn { CommonIdResp() }.map { resp ->
-                            realmCacheService.putCachedCommon(resp.data, "category")
-                            resp
-                        }.map { resp -> resp }
-                    return@flatMap realmCacheService.getCachedCommon("category")
-                }
+        return api.getCategories().subscribeOn(Schedulers.io()).observeOn(Schedulers.computation()).onErrorReturn { CommonIdResp() }.map { resp ->
+            resp
+        }
+
     }
+
 
     fun getCommunity(): Observable<CommonIdResp> {
         return api.getCommunity().subscribeOn(Schedulers.io()).observeOn(Schedulers.computation()).onErrorReturn { CommonIdResp() }.map { resp ->
-            /* realmCacheService.putCachedCommon(resp.data, "community")*/
+
             resp
-        }.map { resp -> resp }/*realmCacheService.getCachedCommon("community").
-                defaultIfEmpty(CommonIdResp(null)).
-                flatMap { data ->
-                    if (data == null)//TODO Handle this case
-                        return@flatMap realmCacheService.getCachedCommon("community")
-                    if (data.data.size == 1)
-                        api.getCommunity().subscribeOn(Schedulers.io()).observeOn(Schedulers.computation()).onErrorReturn { CommonIdResp() }.map { resp ->
-                            realmCacheService.putCachedCommon(resp.data, "community")
-                            resp
-                        }.map { resp -> resp }
-                    return@flatMap realmCacheService.getCachedCommon("community")
-                }*/
+        }.map { resp -> resp }
     }
 
     fun getCountry(): Observable<CommonIdResp> {
 
-        return realmCacheService.getCachedCommon("country").
-                defaultIfEmpty(CommonIdResp(null)).
-                flatMap { data ->
-                    if (data == null)//TODO Handle this case
-                        return@flatMap realmCacheService.getCachedCommon("country")
-                    if (data.data.size == 1)
-                        return@flatMap api.getCountry().subscribeOn(Schedulers.io()).observeOn(Schedulers.computation()).onErrorReturn { CommonIdResp() }.map { resp ->
-                            realmCacheService.putCachedCommon(resp.data, "country")
-                            resp
-                        }.map { resp -> resp }
-                    return@flatMap realmCacheService.getCachedCommon("country")
-                }
+        return api.getCountry().subscribeOn(Schedulers.io()).observeOn(Schedulers.computation()).onErrorReturn { CommonIdResp() }.map { resp ->
+
+            resp
+        }
+
+
     }
 
     fun getState(countryId: Int): Observable<CommonIdResp> {
-        return realmCacheService.getCachedCommon("state" + countryId).
-                defaultIfEmpty(CommonIdResp(null)).
-                flatMap { data ->
-                    if (data == null)//TODO Handle this case
-                        return@flatMap realmCacheService.getCachedCommon("state" + countryId)
-                    if (data.data.size == 1)
-                        return@flatMap api.getState(StateReq(countryId)).subscribeOn(Schedulers.io()).observeOn(Schedulers.computation()).onErrorReturn { CommonIdResp() }.map { resp ->
-                            realmCacheService.putCachedCommon(resp.data, "state" + countryId)
-                            resp
-                        }.map { resp -> resp }
-                    return@flatMap realmCacheService.getCachedCommon("state" + countryId)
-                }
+        return api.getState(StateReq(countryId)).subscribeOn(Schedulers.io()).observeOn(Schedulers.computation()).onErrorReturn { CommonIdResp() }.map { resp ->
+
+            resp
+        }.map { resp -> resp }
+
     }
 
-    fun getCity(stateId: Int): Observable<CommonIdResp> {
-        return realmCacheService.getCachedCommon("city" + stateId).
-                defaultIfEmpty(CommonIdResp(null)).
-                flatMap { data ->
-                    if (data == null)//TODO Handle this case
-                        return@flatMap realmCacheService.getCachedCommon("city" + stateId)
-                    if (data.data.size == 1)
-                        return@flatMap api.getCity(CityReq(stateId)).subscribeOn(Schedulers.io()).observeOn(Schedulers.computation()).onErrorReturn { CommonIdResp() }.map { resp ->
-                            realmCacheService.putCachedCommon(resp.data, "city" + stateId)
-                            resp
-                        }.map { resp -> resp }
-                    return@flatMap realmCacheService.getCachedCommon("city" + stateId)
-                }
+
+    fun getCity(stateId: String): Observable<CommonIdResp> {
+        return api.getCity(CityReq(stateId)).subscribeOn(Schedulers.io()).observeOn(Schedulers.computation()).onErrorReturn { CommonIdResp() }.map { resp ->
+
+            resp
+        }
+
+
     }
 
     fun getReview(pageNumber: Int): Observable<ReviewGetResp> {
@@ -226,19 +200,12 @@ class DataFlowService(private val api: ApiService, private val realmCacheService
     }
 
 
-    fun getLocality(cityId: Int): Observable<CommonIdResp> {
-        return realmCacheService.getCachedCommon("locality" + cityId).
-                defaultIfEmpty(CommonIdResp(null)).
-                flatMap { data ->
-                    if (data == null)//TODO Handle this case
-                        return@flatMap realmCacheService.getCachedCommon("locality" + cityId)
-                    if (data.data.size == 1)
-                        return@flatMap api.getLocalities(LocalityReq(cityId)).subscribeOn(Schedulers.io()).observeOn(Schedulers.computation()).onErrorReturn { CommonIdResp() }.map { resp ->
-                            realmCacheService.putCachedCommon(resp.data, "locality" + cityId)
-                            resp
-                        }.map { resp -> resp }
-                    return@flatMap realmCacheService.getCachedCommon("locality" + cityId)
-                }
+    fun getLocality(cityId: String): Observable<CommonIdResp> {
+        return api.getLocalities(LocalityReq(cityId)).subscribeOn(Schedulers.io()).observeOn(Schedulers.computation()).onErrorReturn { CommonIdResp() }.map { resp ->
+
+            resp
+        }.map { resp -> resp }
+
     }
 
     fun getNotifications(pageIndex: Int): Observable<NotificationListResp> {
@@ -255,11 +222,12 @@ class DataFlowService(private val api: ApiService, private val realmCacheService
                 .observeOn(Schedulers.computation())
     }
 
-    fun getUnreadNotificationCount(): Observable<NotificationCountResp> {
+    fun getUnreadNotificationCount(): Observable<Int> {
         return api.getUnreadNotificationCount(CommonIdReq(CommonIdReq.Snippet(userId))).subscribeOn(Schedulers.io())
-                .observeOn(Schedulers.computation()).map { resp -> resp }
-        //TODO Handle error return parts
+                .observeOn(Schedulers.computation()).map { it.data.count }.onErrorReturnItem(0)
     }
+    //TODO Handle error return parts
+
 
     fun getGender(): Observable<CommonIdResp> {
         val data = ArrayList<CommonIdResp.Snippet>(2)
@@ -283,9 +251,9 @@ class DataFlowService(private val api: ApiService, private val realmCacheService
                 .observeOn(AndroidSchedulers.mainThread())
     }
 
-    fun updateAttendance(learnerId: String, startOrEndCode: String, isStartCode: Boolean): Observable<UpdateAttendanceResp> {
+    fun updateAttendance(learnerId: String, startOrEndCode: String, isStartCode: Boolean): Observable<AttendanceDetailResp> {
         return api.updateAttendance(UpdateAttendanceReq(UpdateAttendanceReq.Snippet(userId, learnerId, startOrEndCode, isStartCode))).subscribeOn(Schedulers.io())
-                .onErrorReturn { UpdateAttendanceResp() }
+                .onErrorReturn { AttendanceDetailResp() }
                 .observeOn(Schedulers.computation())
     }
 
@@ -295,8 +263,20 @@ class DataFlowService(private val api: ApiService, private val realmCacheService
                 .observeOn(Schedulers.computation()).map { it.setRequestType(isStartCode) }
     }
 
-    fun getStartOrEndDetails(req: AttendanceDetailReq?): Observable<AttendanceDetailResp> {
+    fun getStartOrEndDetails(req: AttendanceDetailReq): Observable<AttendanceDetailResp> {
         return api.getStartOrEndDetails(req).onErrorReturnItem(AttendanceDetailResp()).subscribeOn(Schedulers.io())
-                .observeOn(Schedulers.computation()).map { it.setRequestType(req?.data?.isStartCode) }
+                .observeOn(Schedulers.computation()).map { it.setRequestType(req.data?.isStartCode) }
+    }
+
+    fun registerFCMToken(fcmToken: String) {
+        if (GEO_TAG.isBlank())
+            api.getGeoDetail().map { it.data[0]?.textValue ?: "" }.onErrorReturn { "" }.subscribeOn(Schedulers.io()).
+                    subscribe({
+                        GEO_TAG = it
+                        api.registerUserDevice(RegisterFCMToken(fcmToken, userId)).subscribeOn(Schedulers.io()).subscribe()
+                    })
+        else
+            api.registerUserDevice(RegisterFCMToken(fcmToken, userId)).onErrorReturn { "" }.subscribeOn(Schedulers.io()).subscribe()
+
     }
 }

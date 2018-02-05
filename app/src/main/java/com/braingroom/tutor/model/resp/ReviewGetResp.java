@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 import com.braingroom.tutor.utils.CommonUtilsKt;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -22,7 +23,7 @@ public class ReviewGetResp extends BaseResp {
 
     @NonNull
     public List<Snippet> getData() {
-        return isEmpty(data) ? Collections.singletonList(new Snippet()) : data;
+        return isEmpty(data) ? new ArrayList<>() : data;
     }
 
     @Override

@@ -3,23 +3,20 @@ package com.braingroom.tutor.viewmodel.activity
 import android.content.Intent
 import android.databinding.ObservableBoolean
 import android.databinding.ObservableField
-import android.util.Log
-import android.util.TypedValue
+import com.afollestad.materialdialogs.MaterialDialog
 import com.braingroom.tutor.R
 import com.braingroom.tutor.common.CustomApplication
 import com.braingroom.tutor.common.modules.HelperFactory
-import com.braingroom.tutor.model.data.ListDialogData
 import com.braingroom.tutor.model.req.SignUpReq
 import com.braingroom.tutor.model.resp.CommonIdResp
 import com.braingroom.tutor.utils.*
-import com.braingroom.tutor.view.activity.HomeActivity
 import com.braingroom.tutor.view.activity.SignupActivity
+import com.braingroom.tutor.view.activity.SplashActivity
 import com.braingroom.tutor.view.fragment.FragmentHelper
 import com.braingroom.tutor.viewmodel.ViewModel
 import com.braingroom.tutor.viewmodel.fragment.SearchSelectListViewModel
 import com.braingroom.tutor.viewmodel.item.DatePickerViewModel
 import com.braingroom.tutor.viewmodel.item.ImageUploadViewModel
-import com.braingroom.tutor.viewmodel.item.ListDialogViewModel
 import io.reactivex.functions.Action
 import io.reactivex.functions.Consumer
 
@@ -98,6 +95,12 @@ class SignupViewModel(helperFactory: HelperFactory, val uiHelper: SignupActivity
     val primaryImageType1 by lazy {
         ObservableField<String>("")
     }
+    val primaryVerificationNo1 by lazy {
+        ObservableField<String>("")
+    }
+    val primaryVerificationNo2 by lazy {
+        ObservableField<String>("")
+    }
     val primaryImageType2 by lazy {
         ObservableField<String>("")
     }
@@ -142,7 +145,8 @@ class SignupViewModel(helperFactory: HelperFactory, val uiHelper: SignupActivity
     val categoryVm by lazy {
         SearchSelectListViewModel(helperFactory, Category, "select Interest", "", true, apiService.getCategories().doOnSubscribe { disposable -> compositeDisposable.add(disposable) }.map { resp ->
             val list = HashMap<Int, String>()
-            resp.data.forEach { snippet -> list.put(snippet.id, snippet.textValue) }
+            if (resp.resCode)
+                resp.data.forEach { snippet -> list.put(snippet.id, snippet.textValue) }
             list
         }, Consumer { selectedData ->
             snippet.setCategoryId(selectedData.getId())
@@ -150,18 +154,6 @@ class SignupViewModel(helperFactory: HelperFactory, val uiHelper: SignupActivity
         }, HashMap())
     }
 
-    val genderVm by lazy {
-        ListDialogViewModel(helperFactory, "Gender", apiService.getGender().doOnSubscribe { disposable -> compositeDisposable.add(disposable) }.map { resp ->
-
-            val list: ListDialogData = ListDialogData(LinkedHashMap())
-            resp.data.forEach { snippet -> list.getItems().put(snippet.id, snippet.textValue) }
-            list
-
-        }, HashMap(), true, Consumer { selectedData ->
-            snippet.setGender(selectedData.getId())
-
-        }, "", "Done")
-    }
 
     val communityVm by lazy {
         SearchSelectListViewModel(helperFactory, Community, "Select Community", "", true, apiService.getCommunity().doOnSubscribe { disposable -> compositeDisposable.add(disposable) }.map(this::respToHashMap), Consumer { selectedData ->
@@ -184,30 +176,22 @@ class SignupViewModel(helperFactory: HelperFactory, val uiHelper: SignupActivity
     }
     val stateVm by lazy {
         SearchSelectListViewModel(helperFactory, State, "search state", "select country first", false, null, Consumer { selectedData ->
-            snippet.setStateId(selectedData.getId())
-            selectedData.keys.forEach { id ->
-                cityVm.refreshDataMap(apiService.getCity(id).map { resp ->
-                    val list: HashMap<Int, String> = HashMap();
-                    resp.data.forEach { snippet -> list.put(snippet.id, snippet.textValue) }
-                    list
-                })
-            }
+            val selectedId = selectedData.getId()
+            snippet.setStateId(selectedId)
+            cityVm.refreshDataMap(apiService.getCity(selectedId).map(this::respToHashMap))
+
         }, HashMap())
     }
     val cityVm by lazy {
         SearchSelectListViewModel(helperFactory, City, "search city", "select state first", false, null, Consumer { selectedData ->
-            snippet.setCityId(selectedData.getId())
-            selectedData.keys.forEach { id ->
-                localityVm.refreshDataMap(apiService.getLocality(id).map { resp ->
-                    val list: HashMap<Int, String> = HashMap();
-                    resp.data.forEach { snippet -> list.put(snippet.id, snippet.textValue) }
-                    list
-                })
-            }
+            val selectedId = selectedData.getId()
+            snippet.setCityId(selectedId)
+            localityVm.refreshDataMap(apiService.getLocality(selectedId).map(this::respToHashMap))
+
         }, HashMap())
     }
     val localityVm by lazy {
-        SearchSelectListViewModel(helperFactory, Locality, "search locality", "select city first", false, null, Consumer { selectedDataMap -> snippet.setLocality(selectedDataMap.getId()) }, HashMap())
+        SearchSelectListViewModel(helperFactory, Locality, "search locality", "select city first", false, null, Consumer { selectedDataMap -> snippet.setLocalityId(selectedDataMap.getId()) }, HashMap())
     }
     val toFirst by lazy {
         Action {
@@ -227,7 +211,7 @@ class SignupViewModel(helperFactory: HelperFactory, val uiHelper: SignupActivity
             snippet.setAreaOfExpertise(expertiseArea.get())
             snippet.setAddress(address.get())
             snippet.setDescription(aboutYou.get())
-            snippet.setDob(datePicker.mytitle.get())
+            snippet.setDob(datePicker.title.get())
             snippet.setVendorTypeId(isIndividual.get())
             snippet.setProfileImage(uploadProfilePic.remoteAddress.get())
             snippet.setLogoImage(uploadOrganizationPic.remoteAddress.get())
@@ -237,6 +221,7 @@ class SignupViewModel(helperFactory: HelperFactory, val uiHelper: SignupActivity
     }
     val toFourth by lazy {
         Action {
+            snippet.setGender(isMale.get())
             uiHelper.toForth()
         }
     }
@@ -259,27 +244,29 @@ class SignupViewModel(helperFactory: HelperFactory, val uiHelper: SignupActivity
             nameError.set("")
             nameError.set("Please Enter a valid name")
             valid = false
+        } else {
+            nameError.set("")
         }
         if (!email.get().isValidEmail()) {
             emailError.set("")
             emailError.set("Please Enter a valid email")
             valid = false
-        }
+        } else emailError.set("")
         if (password.get().isNullOrBlank()) {
             passwordError.set("")
             passwordError.set("Please enter a valid password")
             valid = false
-        }
+        } else passwordError.set("")
         if (confirmPassword.get().isNullOrBlank() || confirmPassword.get() != password.get()) {
             confirmPasswordError.set("")
             confirmPasswordError.set("Confirm password and password doesn't match")
             valid = false
-        }
+        } else confirmPasswordError.set("")
         if (!phone.get().isValidPhone()) {
             phoneError.set("")
             phoneError.set("Please enter a valid mobile number")
             valid = false
-        }
+        } else phoneError.set("")
         if (valid) {
             snippet.setName(name.get())
             snippet.setEmail(email.get())
@@ -294,40 +281,45 @@ class SignupViewModel(helperFactory: HelperFactory, val uiHelper: SignupActivity
 
 
     init {
-        Log.d(TAG, "hello")
         uiHelper.firstFragment()
 
     }
 
     fun signUp() {
         if (validateFirstFragment()) {
-            snippet.setPrimaryVerificationId1(primaryImageType1.get())
-            snippet.setPrimaryAttachedImage1(uploadPrimaryImage1.remoteAddress.get())
+            messageHelper.showAcceptableInfo("Term & Condition", "By signing up you are agreeing to Braingroom Terms & Condition  ", "Accept", MaterialDialog.SingleButtonCallback { dialog, which ->
+                snippet.setPrimaryVerificationId1(primaryImageType1.get())
+                snippet.setPrimaryAttachedImage1(uploadPrimaryImage1.remoteAddress.get())
+                snippet.setPrimaryVerificationId1(primaryVerificationNo1.get())
 
-            snippet.setPrimaryVerificationId1(primaryImageType2.get())
-            snippet.setPrimaryAttachedImage1(uploadPrimaryImage2.remoteAddress.get())
+                snippet.setPrimaryVerificationId2(primaryImageType2.get())
+                snippet.setPrimaryAttachedImage2(uploadPrimaryImage2.remoteAddress.get())
+                snippet.setPrimaryVerificationNo2(primaryVerificationNo2.get())
 
 
-            snippet.setSecondaryVerificationId1(secondaryImageType1.get())
-            snippet.setSecondaryAttachedImage1(uploadSecondaryImage1.remoteAddress.get())
+                snippet.setSecondaryVerificationId1(secondaryImageType1.get())
+                snippet.setSecondaryAttachedImage1(uploadSecondaryImage1.remoteAddress.get())
 
-            snippet.setSecondaryVerificationId2(secondaryImageType2.get())
-            snippet.setSecondaryAttachedImage2(uploadSecondaryImage2.remoteAddress.get())
+                snippet.setSecondaryVerificationId2(secondaryImageType2.get())
+                snippet.setSecondaryAttachedImage2(uploadSecondaryImage2.remoteAddress.get())
 
-            snippet.setCoachingExperience(experience.get())
-            apiService.signUp(SignUpReq(snippet)).doOnSubscribe { disposable -> compositeDisposable.add(disposable) }.subscribe(
-                    { resp ->
-                        if (resp.resCode) {
-                            val data = resp.data
-                            if (signUpSuccess(name.get(), email.get(), "", data.userId)) {
-                                navigator.navigateActivity(HomeActivity::class.java)
+                snippet.setCoachingExperience(experience.get())
+                apiService.signUp(SignUpReq(snippet)).doOnSubscribe { disposable -> compositeDisposable.add(disposable) }.subscribe(
+                        { resp ->
+                            if (resp.resCode) {
+                                messageHelper.showAcceptableInfo("Info", resp.resMsg, "Okay", MaterialDialog.SingleButtonCallback { dialog, which ->
+                                    navigator.navigateActivity(SplashActivity::class.java)
+                                })
+
+
+                            } else {
+                                messageHelper.showMessage(resp.resMsg)
+                                uiHelper.firstFragment()
                             }
-                        } else {
-                            messageHelper.showMessage(resp.resMsg)
-                            uiHelper.firstFragment()
-                        }
-                    })
+                        })
+            })
         }
+
     }
 
 
@@ -366,7 +358,8 @@ class SignupViewModel(helperFactory: HelperFactory, val uiHelper: SignupActivity
 
     private fun respToHashMap(resp: CommonIdResp): HashMap<Int, String> {
         val list: HashMap<Int, String> = HashMap()
-        resp.data.forEach { snippet -> list.put(snippet.id, snippet.textValue) }
+        if (resp.resCode)
+            resp.data.forEach { snippet -> list.put(snippet.id, snippet.textValue) }
         return list
     }
 }

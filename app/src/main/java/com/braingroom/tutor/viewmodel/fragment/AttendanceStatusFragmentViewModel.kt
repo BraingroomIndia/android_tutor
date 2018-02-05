@@ -12,7 +12,7 @@ import com.braingroom.tutor.viewmodel.ViewModel
 import io.reactivex.functions.Action
 
 @Suppress("UNUSED_ANONYMOUS_PARAMETER")
-/**
+/*
  * Created by ashketchup on 28/12/17.
  */
 class AttendanceStatusFragmentViewModel(helperFactory: HelperFactory) : ViewModel(helperFactory) {
@@ -20,18 +20,25 @@ class AttendanceStatusFragmentViewModel(helperFactory: HelperFactory) : ViewMode
     val startorendcode = ObservableField("")
     val onAttendance: Action by lazy {
         Action {
-            messageHelper.showProgressDialog("Wait", "Communicating with server ");
+            if (startorendcode.get().isNullOrBlank()) {
+                messageHelper.showMessage("Please enter the code")
+                return@Action
+            }
+            messageHelper.showProgressDialog("Wait", "Communicating with server ")
             apiService.getStartOrEndDetails(AttendanceDetailReq(userId, startorendcode.get(), !isEndCode.get())).subscribe({ resp ->
                 messageHelper.dismissActiveProgress()
-                if (!resp.resCode)
-                    messageHelper.showMessage(resp.resMsg)
-                else
-                    messageHelper.showAcceptableInfo("Ticket Info", "Name: " + resp.data.learnerName + "\n Class Topic" + resp.data.classTopic, "Confirm", "Cancel", SingleButtonCallback { dialog: MaterialDialog, which: DialogAction ->
-                        apiService.updateAttendance(resp.data.learnerId, startorendcode.get(), !isEndCode.get()).subscribe({ resp ->
-                            messageHelper.showMessage(resp.resMsg)
+                if (resp.resCode)
+                    if (!resp.codeStatus)
+                        messageHelper.showDismissInfo("Ticket Info", "Name: " + resp.data.learnerName + "\n Class Name: " + resp.data.classTopic + "\nStatus: " + resp.resMsg, "Dismiss")
+                    else
+                        messageHelper.showAcceptableInfo("Ticket Info", "Name: " + resp.data.learnerName + "\n Class Name: " + resp.data.classTopic + "\nStatus: " + resp.resMsg, "Confirm", "Cancel", SingleButtonCallback { dialog: MaterialDialog, which: DialogAction ->
+                            apiService.updateAttendance(resp.data.learnerId, startorendcode.get(), !isEndCode.get()).subscribe({ resp ->
+                                messageHelper.showMessage(resp.resMsg)
+                            })
+                        }, SingleButtonCallback { dialog, which ->
                         })
-                    }, SingleButtonCallback { dialog, which ->
-                    })
+                else
+                    messageHelper.showMessage(resp.resMsg)
             })
         }
     }

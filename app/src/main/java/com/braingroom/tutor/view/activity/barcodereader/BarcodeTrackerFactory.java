@@ -20,7 +20,8 @@ package com.braingroom.tutor.view.activity.barcodereader;
 
 import android.content.Context;
 
-import com.braingroom.tutor.utils.GraphicOverlay;
+
+import com.braingroom.tutor.view.activity.barcodereader.camera.GraphicOverlay;
 import com.google.android.gms.vision.MultiProcessor;
 import com.google.android.gms.vision.Tracker;
 import com.google.android.gms.vision.barcode.Barcode;

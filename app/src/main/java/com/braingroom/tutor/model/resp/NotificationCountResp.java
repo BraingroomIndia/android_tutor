@@ -1,5 +1,8 @@
 package com.braingroom.tutor.model.resp;
 
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+
 import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
@@ -15,11 +18,12 @@ public class NotificationCountResp extends BaseResp {
 
     @Override
     public boolean getResCode() {
-        return data != null;
+        return !isEmpty(data);
     }
 
-    public List<Snippet> getData() {
-        return data;
+    @NonNull
+    public Snippet getData() {
+        return isEmpty(data) ? new Snippet() : data.get(0);
     }
 
     public void setData(List<Snippet> data) {

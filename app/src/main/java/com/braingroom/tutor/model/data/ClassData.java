@@ -3,9 +3,11 @@ package com.braingroom.tutor.model.data;
 import android.support.annotation.NonNull;
 
 
+import com.google.android.gms.maps.model.LatLng;
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -107,13 +109,14 @@ public class ClassData implements Serializable {
     }
 
     public int getClassPrice() {
-        if (getIsCoupleClass() != 1)
-            if (PRICE_TYPE_PER_PERSON.equalsIgnoreCase(priceType))
+        if (getIsCoupleClass() != 1 && !getClassLevelDetail().isEmpty())
+            if (PRICE_TYPE_PER_PERSON.equalsIgnoreCase(getPriceType()))
                 return getClassLevelDetail().get(0).getPrice();
             else
                 return getClassLevelDetail().get(0).getGroup().get(1).getPrice();
-        else
+        else if (!getClassLevelDetail().isEmpty() && !getClassLevelDetail().get(0).getGroup().isEmpty())
             return getClassLevelDetail().get(0).getGroup().get(0).getPrice();
+        else return 0;
 
     }
 
@@ -183,11 +186,11 @@ public class ClassData implements Serializable {
     }
 
     public List<VendorClassLevelDetail> getClassLevelDetail() {
-        return isEmpty(vendorClassLevelDetailList) ? Collections.singletonList(new VendorClassLevelDetail()) : vendorClassLevelDetailList;
+        return isEmpty(vendorClassLevelDetailList) ? new ArrayList<>() : vendorClassLevelDetailList;
     }
 
     public List<Location> getClassLocationList() {
-        return isEmpty(classLocationList) ? Collections.singletonList(new Location()) : classLocationList;
+        return isEmpty(classLocationList) ? new ArrayList<>() : classLocationList;
     }
 
     public boolean getIsMapVisible() {
@@ -206,10 +209,10 @@ public class ClassData implements Serializable {
         private String locationArea;
 
         @SerializedName("latitude")
-        private float latitude;
+        private String latitude;
 
         @SerializedName("longitude")
-        private float longitude;
+        private String longitude;
 
         @NonNull
         public String getLocalityId() {
@@ -228,12 +231,27 @@ public class ClassData implements Serializable {
 
 
         public float getLatitude() {
-            return latitude;
+            return stringToFloat(latitude);
         }
 
         public float getLongitude() {
-            return longitude;
+            return stringToFloat(longitude);
         }
+
+        public LatLng getLatLng() {
+            return new LatLng(getLatitude(), getLongitude());
+        }
+
+        private float stringToFloat(String s) {
+            float value = 0;
+            try {
+                value = Float.parseFloat(s);
+            } catch (Exception ignored) {
+
+            }
+            return value;
+        }
+
     }
 
     private class VendorClassLevelDetail implements Serializable {
@@ -275,7 +293,7 @@ public class ClassData implements Serializable {
         }
 
         public List<Group> getGroup() {
-            return isEmpty(group) ? Collections.singletonList(new Group()) : group;
+            return isEmpty(group) ? new ArrayList<>() : group;
         }
     }
 

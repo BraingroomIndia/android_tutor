@@ -5,14 +5,12 @@ import android.support.annotation.NonNull;
 import com.braingroom.tutor.model.resp.CommonIdResp;
 import com.google.gson.annotations.SerializedName;
 
-import io.realm.RealmObject;
 
 import static com.braingroom.tutor.utils.CommonUtilsKt.getNonNull;
 
 
-
-public class CommonIdSnippetWrapper extends RealmObject{
-    int id;
+public class CommonIdSnippetWrapper/* extends RealmObject*/ {
+   /* int id;
 
 
     private String textValue;
@@ -49,5 +47,5 @@ public class CommonIdSnippetWrapper extends RealmObject{
     public int getId() {
         return id;
     }
-
+*/
 }

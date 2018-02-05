@@ -20,74 +20,75 @@
         app:cardElevation="@dimen/cardview_compat_inset_shadow"
         app:cardUseCompatPadding="true">
 
-      <!--  <android.support.constraint.ConstraintLayout
+        <!--  <android.support.constraint.ConstraintLayout
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:layout_gravity="center_horizontal"
+              android:gravity="center_horizontal"
+              android:paddingBottom="@dimen/padding_small"
+              android:paddingTop="@dimen/padding_small">-->
+
+        <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:gravity="center_horizontal"
-            android:paddingBottom="@dimen/padding_small"
-            android:paddingTop="@dimen/padding_small">-->
+            android:orientation="vertical"
+            android:padding="@dimen/padding_medium"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent">
 
-            <android.support.constraint.ConstraintLayout
+            <ImageView
+                android:id="@+id/imageView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
+                android:contentDescription="@{vm.text}"
                 android:gravity="center_horizontal"
-                android:orientation="vertical"
-                android:padding="@dimen/padding_medium"
+                android:src="@{vm.drawableTop}"
+                app:layout_constraintBottom_toTopOf="@+id/text"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toStartOf="parent">
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_chainStyle="spread"
+                tools:src="@drawable/ic_add_class" />
 
-                <ImageView
-                    android:id="@+id/imageView"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:contentDescription="@{vm.text}"
-                    android:gravity="center_horizontal"
-                    android:src="@{vm.drawableTop}"
-                    app:layout_constraintBottom_toTopOf="@+id/text"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.5"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_chainStyle="spread"
-                    tools:src="@drawable/ic_add_class" />
+            <TextView
+                android:id="@+id/text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_margin="@dimen/padding_small"
+                android:gravity="center"
+                android:text='@{vm.text}'
+                android:textColor="@color/material_white"
+                app:layout_constraintBottom_toTopOf="@+id/imageView2"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/imageView"
+                tools:text="Home" />
 
-                <TextView
-                    android:id="@+id/text"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_margin="@dimen/padding_small"
-                    android:gravity="center"
-                    android:text='@{vm.text}'
-                    app:layout_constraintBottom_toTopOf="@+id/imageView2"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.5"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/imageView"
-                    tools:text="Home" />
-
-                <ImageView
-                    android:id="@+id/imageView2"
-                    android:layout_width="match_parent"
-                    android:layout_height="10dp"
-                    android:gravity="bottom"
-                    android:paddingEnd="@dimen/padding_medium"
-                    android:paddingLeft="@dimen/padding_medium"
-                    android:paddingRight="@dimen/padding_medium"
-                    android:paddingStart="@dimen/padding_medium"
-                    android:src="@drawable/solid_white_all_rounded_corner_ios"
-                    app:colorTint="@{vm.bottomColor}"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.5"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/text"
-                    tools:tint="@color/material_black"/>
-            </android.support.constraint.ConstraintLayout>
-     <!--   </android.support.constraint.ConstraintLayout>-->
+            <ImageView
+                android:id="@+id/imageView2"
+                android:layout_width="match_parent"
+                android:layout_height="10dp"
+                android:gravity="bottom"
+                android:paddingEnd="@dimen/padding_medium"
+                android:paddingLeft="@dimen/padding_medium"
+                android:paddingRight="@dimen/padding_medium"
+                android:paddingStart="@dimen/padding_medium"
+                android:src="@drawable/solid_white_all_rounded_corner_ios"
+                app:colorTint="@{vm.bottomColor}"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/text"
+                tools:tint="@color/material_black" />
+        </android.support.constraint.ConstraintLayout>
+        <!--   </android.support.constraint.ConstraintLayout>-->
     </android.support.v7.widget.CardView>
 
 

@@ -1,26 +1,11 @@
 package com.braingroom.tutor.view.activity.barcodereader.camera;
 
 
-/*
- * Copyright (C) The Android Open Source Project
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
-
 import android.Manifest;
+import android.app.Activity;
 import android.content.Context;
 import android.content.res.Configuration;
+import android.graphics.Point;
 import android.support.annotation.RequiresPermission;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -28,12 +13,14 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.ViewGroup;
 
-import com.braingroom.tutor.utils.GraphicOverlay;
+import android.widget.RelativeLayout;
+
 import com.google.android.gms.common.images.Size;
 
 import java.io.IOException;
 
-@SuppressWarnings("unused")
+import timber.log.Timber;
+
 public class CameraSourcePreview extends ViewGroup {
     private static final String TAG = "CameraSourcePreview";
 
@@ -44,12 +31,17 @@ public class CameraSourcePreview extends ViewGroup {
     private CameraSource mCameraSource;
 
     private GraphicOverlay mOverlay;
+    private final int screenHeight;
+    RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
+
 
     public CameraSourcePreview(Context context, AttributeSet attrs) {
         super(context, attrs);
         mContext = context;
         mStartRequested = false;
         mSurfaceAvailable = false;
+        screenHeight = getScreenHeight((Activity) mContext);
+
 
         mSurfaceView = new SurfaceView(context);
         mSurfaceView.getHolder().addCallback(new SurfaceCallback());
@@ -97,10 +89,12 @@ public class CameraSourcePreview extends ViewGroup {
                 Size size = mCameraSource.getPreviewSize();
                 int min = Math.min(size.getWidth(), size.getHeight());
                 int max = Math.max(size.getWidth(), size.getHeight());
+                mOverlay.screenHeight = screenHeight;
                 if (isPortraitMode()) {
                     // Swap width and height sizes when in portrait, since it will be rotated by
                     // 90 degrees
                     mOverlay.setCameraInfo(min, max, mCameraSource.getCameraFacing());
+
                 } else {
                     mOverlay.setCameraInfo(max, min, mCameraSource.getCameraFacing());
                 }
@@ -108,6 +102,8 @@ public class CameraSourcePreview extends ViewGroup {
             }
             mStartRequested = false;
         }
+
+
     }
 
     private class SurfaceCallback implements SurfaceHolder.Callback {
@@ -130,6 +126,7 @@ public class CameraSourcePreview extends ViewGroup {
 
         @Override
         public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
+
         }
     }
 
@@ -143,6 +140,8 @@ public class CameraSourcePreview extends ViewGroup {
                 width = size.getWidth();
                 height = size.getHeight();
             }
+
+
         }
 
         // Swap width and height sizes when in portrait, since it will be rotated 90 degrees
@@ -152,7 +151,6 @@ public class CameraSourcePreview extends ViewGroup {
             width = height;
             height = tmp;
         }
-
         final int layoutWidth = right - left;
         final int layoutHeight = bottom - top;
 
@@ -177,6 +175,8 @@ public class CameraSourcePreview extends ViewGroup {
         } catch (IOException e) {
             Log.e(TAG, "Could not start camera source.", e);
         }
+
+
     }
 
     private boolean isPortraitMode() {
@@ -188,7 +188,14 @@ public class CameraSourcePreview extends ViewGroup {
             return true;
         }
 
-        Log.d(TAG, "isPortraitMode returning false by default");
+        Timber.tag(TAG).d("isPortraitMode returning false by default");
         return false;
+    }
+
+    private int getScreenHeight(Activity activity) {
+        Point size = new Point();
+        activity.getWindowManager().getDefaultDisplay().getSize(size);
+        return size.y;
+
     }
 }

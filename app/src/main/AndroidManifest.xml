@@ -44,7 +44,9 @@
             android:name=".view.activity.HomeActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".view.activity.MyClassesActivity" />
+        <activity
+            android:name=".view.activity.MyClassesActivity"
+            android:theme="@style/AppTheme" />
 
         <!--My Profile Activity-->
         <activity android:name=".view.activity.MyProfileActivity" />
@@ -55,9 +57,6 @@
         <activity android:name=".view.activity.MediaActivity" />
         <activity android:name=".view.activity.MessageThreadActivity" />
         <activity android:name=".view.activity.ReviewActivity" />
-        <activity
-            android:name=".view.activity.AttendanceActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".view.activity.ChangePasswordActivity" />
 
         <!--FaceBook Login-->
@@ -87,11 +86,32 @@
         <activity
             android:name=".view.activity.BarcodeCaptureActivity"
             android:label=""
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar  " />
         <activity android:name=".view.activity.ManualAttendanceActivity" />
         <activity android:name=".view.activity.BroadcastMessageActivity" />
         <activity android:name=".view.activity.ClassDetailActivity" />
 
 
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="@string/google_maps_key" />
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="daf5ece1b04b791eaebc08ac2106413d127a80f7" />
+
+        <!--Services -->
+        <service android:name=".services.MyFirebaseMessagingService">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+        <service android:name=".services.MyFirebaseInstanceIDService">
+            <intent-filter>
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
+            </intent-filter>
+        </service>
+        <!--Services -->
     </application>
+
+
 </manifest>

@@ -4,14 +4,14 @@ import com.braingroom.tutor.model.data.CommonIdRealmWrapper
 import com.braingroom.tutor.model.data.CommonIdSnippetWrapper
 import com.braingroom.tutor.model.resp.CommonIdResp
 import io.reactivex.Observable
-import io.realm.Realm
-import io.realm.RealmList
+
+
 
 
 /*
  * Created by ashketchup on 11/12/17.
  */
-public class RealmCacheService : CacheService {
+public class RealmCacheService /*: CacheService*/ {/*
     override fun getCachedCommon(searchQuery: String): Observable<CommonIdResp> {
         val realm = Realm.getDefaultInstance()
         val x = CommonIdRealmWrapper()
@@ -36,5 +36,5 @@ public class RealmCacheService : CacheService {
             it.insert(CommonIdRealmWrapper.create(realmList, searchQuery))
         }
         return CommonIdResp(commonIdRespList)
-    }
+    }*/
 }

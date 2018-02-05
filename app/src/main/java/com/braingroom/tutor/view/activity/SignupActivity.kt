@@ -68,7 +68,6 @@ class SignupActivity : Activity() {
             }
 
             override fun signUp() {
-                Log.d("why", "why")
                 navigator.finishActivity()
             }
         }, object : FragmentHelper {

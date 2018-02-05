@@ -13,6 +13,8 @@ import io.reactivex.disposables.Disposable
 import io.reactivex.functions.Action
 import io.reactivex.functions.Function
 import io.reactivex.subjects.ReplaySubject
+import java.util.*
+import kotlin.collections.ArrayList
 
 /*
  * Created by ashketchup on 6/12/17.
@@ -77,7 +79,7 @@ class MediaViewModel(helperFactory: HelperFactory) : ViewModel(helperFactory) {
         }
         pageNumber == 1 -> {
             pageNumber = -1
-            resp.data.map { EmptyItemViewModel("", R.drawable.ic_no_post_64dp, "No Media") }
+            Collections.singletonList(EmptyItemViewModel("", R.drawable.ic_no_post_64dp, "No Media"))
         }
         else -> {
             pageNumber = -1

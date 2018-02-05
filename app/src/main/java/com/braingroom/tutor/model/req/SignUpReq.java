@@ -1,6 +1,5 @@
 package com.braingroom.tutor.model.req;
 
-import com.braingroom.tutor.model.resp.BaseResp;
 import com.google.gson.annotations.SerializedName;
 
 public class SignUpReq {
@@ -59,8 +58,8 @@ public class SignUpReq {
         }
 
 
-        public void setLocality(String locality) {
-            this.locality = locality;
+        public void setLocalityId(String localityId) {
+            this.localityId = localityId;
         }
 
 
@@ -195,10 +194,10 @@ public class SignUpReq {
         String referralCode = "";
         @SerializedName("gender")
         String gender;
-        @SerializedName("city_id")
+        @SerializedName("city")
         String cityId = "";
-        @SerializedName("locality")
-        String locality = "";
+        @SerializedName("localityId")
+        String localityId = "";
         @SerializedName("category_id")
         String categoryId = "1";
         @SerializedName("vendor_type_id")
@@ -230,7 +229,7 @@ public class SignUpReq {
         @SerializedName("coaching_experience")
         String coachingExperience = "";
 
-        @SerializedName("country_id")
+        @SerializedName("country")
         String countryId = "";
 
         @SerializedName("identity_of_primary_verification1")
@@ -270,12 +269,16 @@ public class SignUpReq {
         String longitude = "";
         @SerializedName("community_id")
         String communityId = "";
-        @SerializedName("state_id")
+        @SerializedName("state")
         String stateId = "";
 
 
         public void setGender(String gender) {
             this.gender = gender + "";
+        }
+
+        public void setGender(boolean gender) {
+            this.gender = (gender ? 1 : 2) + "";
         }
 
 

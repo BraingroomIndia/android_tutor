@@ -13,11 +13,11 @@ public class CityReq {
 
     public static class Snippet {
         @SerializedName("state_id")
-        private Integer id;
+        private String id;
         @SerializedName("only_major_cities")
         private String majorCity;
 
-        public Snippet(Integer id) {
+        public Snippet(String id) {
             this.id = id;
             majorCity = null;
         }
@@ -28,7 +28,7 @@ public class CityReq {
         }
     }
 
-    public CityReq(Integer stateId) {
+    public CityReq(String stateId) {
         this.data = new Snippet(stateId);
     }
 

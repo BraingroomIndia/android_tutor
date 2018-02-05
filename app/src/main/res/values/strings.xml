@@ -23,6 +23,7 @@
     <string name="barcode_error">"Error reading barcode: %1$s"</string>
     <string name="navigation_drawer_open">Open Navigation</string>
     <string name="navigation_drawer_close">Close Navigation</string>
+    <string name="action_notification">Notification</string>
 
     <string-array name="primary_id_type">
         <item>Select one</item>
@@ -72,12 +73,13 @@ Credential verified vendor will have a credential verified logo in the respectiv
     <string name="a12">For mobile application users, a push notification will be sent if there is any booking. Web users will get a notification in their respective BrainGroom dashboard for booking details.</string>
 
     <!--Keys-->
-    <string name="facebook_app_id" translatable="false">1949694208609258</string>
-    <string name="fb_login_protocol_scheme" translatable="false">fb1949694208609258</string>
+    <string name="facebook_app_id" translatable="false">1594155390619834</string>
+    <string name="fb_login_protocol_scheme" translatable="false">fb1594155390619834</string>
     <string name="enter_start_end_code">Enter Start/End Code</string>
     <string name="scan_qr_code">Scan Qr Code</string>
     <string name="sign_up">Sign Up</string>
     <string name="step_1">Step 1</string>
     <string name="save">SAVE</string>
     <string name="clear">CLEAR</string>
+    <string name="google_maps_key" translatable="false">AIzaSyBXMqBKSN7KnfPy0rWGQgw4fMH9vf07HK0</string>
 </resources>

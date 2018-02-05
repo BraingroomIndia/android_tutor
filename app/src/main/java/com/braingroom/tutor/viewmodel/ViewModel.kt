@@ -14,6 +14,7 @@ import com.braingroom.tutor.viewmodel.item.RecyclerViewItem
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import io.reactivex.subjects.ReplaySubject
+import timber.log.Timber
 
 
 /*
@@ -110,7 +111,7 @@ open class ViewModel(val helperFactory: HelperFactory) {
     }
 
     internal fun handleError(throwable: Throwable) {
-        Log.e(TAG, throwable.message, throwable)
+        Timber.tag(TAG).e(throwable, throwable.message)
 
     }
 

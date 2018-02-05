@@ -2,6 +2,7 @@ package com.braingroom.tutor.model.resp;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -14,7 +15,7 @@ public class ChatMessageResp extends BaseResp {
     List<Snippet> data;
 
     public List<Snippet> getData() {
-        return getResCode() ? data : Collections.singletonList(new Snippet());
+        return getResCode() ? data : new ArrayList<>();
     }
 
     @Override

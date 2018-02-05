@@ -2,10 +2,7 @@ package com.braingroom.tutor.viewmodel.item
 
 import android.databinding.ObservableBoolean
 import android.databinding.ObservableField
-import android.util.Log
-import android.view.View
-import com.afollestad.materialdialogs.DialogAction
-import com.afollestad.materialdialogs.MaterialDialog
+
 import com.braingroom.tutor.common.modules.HelperFactory
 
 import com.braingroom.tutor.model.data.ListDialogData
@@ -18,6 +15,7 @@ import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.functions.Action
 import io.reactivex.functions.Consumer
+import timber.log.Timber
 
 /*
  * Created by godara on 13/10/17.
@@ -71,7 +69,7 @@ class ListDialogViewModel(helperFactory: HelperFactory, val title: String, sourc
 
             }
         }.doOnSubscribe { compositeDisposable.add(it) }.
-                doOnError { Log.e(TAG, it.message, it) }.share()
+                doOnError { Timber.tag(TAG).e(it, it.message) }.share()
 
 
     }

@@ -2,6 +2,7 @@ package com.braingroom.tutor.model.resp;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -16,7 +17,7 @@ public class MessageGetResp extends BaseResp {
     List<Snippet> data;
 
     public List<Snippet> getData() {
-        return !isEmpty(data) ? data : Collections.singletonList(new Snippet());
+        return !isEmpty(data) ? data : new ArrayList<>();
     }
 
     public void setData(List<Snippet> data) {

@@ -17,19 +17,30 @@ class ChangePasswordViewModel(helperFactory: HelperFactory) : ViewModel(helperFa
     val confirmPassword = ObservableField("")
     val onChangePasswordClicked: Action by lazy {
         Action {
-            if (newPassword.get() == confirmPassword.get())
+            if (validate())
                 apiService.changePassword(ChangePasswordReq.Snippet(userId, oldPassword.get(), newPassword.get())).subscribe { resp ->
-                    if (resp.resCode) {
+                    messageHelper.showMessage(resp.resMsg)
+                    if (resp.resCode)
                         messageHelper.logout()
-                    } else {
-                        messageHelper.showMessage(resp.resMsg)
-                    }
+
                 }
             else {
-                messageHelper.showMessage("Password doesn't match")
+                messageHelper.showMessage("Please fill all the field correctly")
                 newPassword.set("")
                 confirmPassword.set("")
+                oldPassword.set("")
             }
         }
+    }
+
+    private fun validate(): Boolean {
+        if (oldPassword.get().isNullOrBlank())
+            return false
+        if (newPassword.get().isNullOrBlank())
+            return false
+        if (confirmPassword.get().isNullOrBlank())
+            return false
+        return newPassword.get() == confirmPassword.get()
+
     }
 }

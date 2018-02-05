@@ -14,6 +14,7 @@ import com.braingroom.tutor.viewmodel.ViewModel
 import com.braingroom.tutor.viewmodel.item.*
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
+import java.util.*
 
 /*
  * Created by ashketchup on 7/12/17.
@@ -53,7 +54,7 @@ class NotificationViewModel(helperFactory: HelperFactory) : ViewModel(helperFact
         }
         pageNumber == 1 -> {
             pageNumber = -1
-            resp.data.map { EmptyItemViewModel("", R.drawable.ic_no_post_64dp, "No Notification") }
+            Collections.singletonList(EmptyItemViewModel("", R.drawable.ic_no_post_64dp, "No Notification"))
         }
         else -> {
             pageNumber = -1

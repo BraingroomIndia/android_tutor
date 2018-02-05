@@ -1,11 +1,9 @@
 package com.braingroom.tutor.viewmodel.fragment;
 
 import android.databinding.ObservableField;
-import android.support.annotation.NonNull;
 
 import com.braingroom.tutor.common.modules.HelperFactory;
 import com.braingroom.tutor.viewmodel.ViewModel;
-import com.braingroom.tutor.utils.DialogHelper;
 
 import io.reactivex.functions.Action;
 

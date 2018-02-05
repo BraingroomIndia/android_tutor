@@ -28,16 +28,20 @@ import android.support.annotation.DrawableRes
 import android.widget.*
 import com.braingroom.tutor.viewmodel.item.RecyclerViewItem
 import android.support.annotation.ColorRes
+import android.support.annotation.IdRes
 import android.support.v4.content.ContextCompat
 import android.support.v4.graphics.drawable.DrawableCompat
 import android.support.v4.graphics.drawable.DrawableCompat.setTint
+import timber.log.Timber
 
 
 /*
  * Created by godara on 27/09/17.
  */
-public val defaultBinder: ViewModelBinder by lazy {
-    Log.d("Default Binder", "created")
+val TAG = "BindingUti"
+val defaultBinder: ViewModelBinder by lazy {
+    Timber.tag(TAG).v("created")
+
     object : ViewModelBinder {
         override fun bindRecyclerView(viewDataBinding: ViewDataBinding?, viewModel: RecyclerViewItem?) {
             viewDataBinding?.setVariable(BR.vm, viewModel)
@@ -123,6 +127,15 @@ fun setBackground(view: View?, drawable: Drawable?) {
         view?.setBackgroundDrawable(drawable)
 }
 
+@BindingAdapter("background")
+fun setBackground(view: View?, res: Int) {
+    @Suppress("DEPRECATION")
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN)
+        view?.setBackgroundResource(res)
+    else
+        view?.setBackgroundResource(res)
+}
+
 /*
 @BindingAdapter("android:OnEditorActionListener")
 fun setOnEditorActionListener(view: TextView?, listener: TextView.OnEditorActionListener) {
@@ -130,8 +143,9 @@ fun setOnEditorActionListener(view: TextView?, listener: TextView.OnEditorAction
 }
 */
 
-@BindingAdapter("android:drawableTint")
-fun setBackground(view: TextView?, color: Int) {
+@BindingAdapter("drawableTint")
+fun setDrawableTint(view: TextView?, color: Int) {
+
     view?.compoundDrawables?.let {
         it.forEach { drawable -> drawable.setColorFilter(color, PorterDuff.Mode.MULTIPLY) }
     }
@@ -144,6 +158,7 @@ fun setErrorMessage(view: EditText, errorMessage: String?) {
         else -> view.error = errorMessage
     }
 }
+
 @BindingAdapter("errorText")
 fun setErrorMessage(view: TextInputLayout, errorMessage: String?) {
     when (errorMessage.isNullOrBlank()) {

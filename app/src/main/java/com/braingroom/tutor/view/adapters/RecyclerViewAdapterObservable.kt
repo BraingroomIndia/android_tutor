@@ -15,6 +15,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.ReplaySubject
+import timber.log.Timber
 import java.util.*
 
 
@@ -30,15 +31,15 @@ class RecyclerViewAdapterObservable(observableViewModels: ReplaySubject<out Recy
     init {
         source = observableViewModels?.repeat()?.observeOn(AndroidSchedulers.mainThread())?.subscribeOn(Schedulers.io())?.
                 doOnNext {
-                    //                    Log.d(TAG, "doOnNext called") it?.let {
                     val iterator = latestViewModels.listIterator(latestViewModels.size)
                     when (it) {
                         is RemoveLoadingViewModel -> {
-                            Log.v(TAG, "Removing Loading Items")
+                            Timber.tag(TAG).v("Removing Loading Items")
+                            Timber.tag(TAG).v("Removing Loading Items")
                             while (iterator.hasPrevious() && iterator.previous() is LoadingViewModel) iterator.remove()
                         }
                         is RefreshViewModel -> {
-                            Log.v(TAG, "Removing All Items")
+                            Timber.tag(TAG).v("Removing All Items")
                             latestViewModels.clear()
                         }
                         is NotifyDataSetChanged -> {
@@ -46,17 +47,17 @@ class RecyclerViewAdapterObservable(observableViewModels: ReplaySubject<out Recy
 
                         }
                         is LoadingViewModel -> {
-                            Log.v(TAG, "Added Loading items ")
+                            Timber.tag(TAG).v("Added Loading items ")
                             iterator.add(it)
                         }
                         else -> {
-                            Log.v(TAG, "Added Actual items Named " + it.TAG)
+                            Timber.tag(TAG).v("Added Actual items Named " + it.TAG)
                             iterator.add(it)
                         }
                     }
 
 
-                }?.doOnSubscribe { Log.v(TAG, "Subscribed") }?.share()
+                }?.doOnSubscribe { Timber.tag(TAG).v("Subscribed") }?.share()
     }
 
 
@@ -67,9 +68,9 @@ class RecyclerViewAdapterObservable(observableViewModels: ReplaySubject<out Recy
             return viewProvider.getView(latestViewModels[position])
         } catch (e: Exception) {
             when (e) {
-                is NoSuchFieldException -> Log.e(TAG, "No layout found corresponding to " + latestViewModels[position].TAG, e)
-                is NullPointerException -> Log.e(TAG, "Null pointer error at position" + position, e)
-                else -> Log.e(TAG, "No Idea", e)
+                is NoSuchFieldException -> Timber.tag(TAG).e(e, "No layout found corresponding to " + latestViewModels[position].TAG)
+                is NullPointerException -> Timber.tag(TAG).e(e, "Null pointer error at position" + position)
+                else -> Timber.tag(TAG).e(e, "No Idea")
             }
         }
         return 0

@@ -5,14 +5,12 @@ import android.annotation.SuppressLint
 import android.app.Application
 import android.content.SharedPreferences
 import android.preference.PreferenceManager
-import android.util.Log
 import com.braingroom.tutor.BuildConfig.DEBUG
 import com.braingroom.tutor.services.ApiService
 import com.braingroom.tutor.services.CustomInterceptor
 import com.braingroom.tutor.services.DataFlowService
-import com.braingroom.tutor.services.RealmCacheService
+
 import com.braingroom.tutor.utils.*
-import com.braingroom.tutor.view.activity.Activity
 import com.facebook.stetho.okhttp3.StethoInterceptor
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
@@ -40,11 +38,14 @@ class AppModule(private val application: Application) {
         GsonBuilder().create()
     }
     private val okHttpClient: OkHttpClient by lazy {
-        val loggingInterceptor = HttpLoggingInterceptor()
-        loggingInterceptor.level = HttpLoggingInterceptor.Level.BODY
+        val bodyLog = HttpLoggingInterceptor()
+        bodyLog.level = HttpLoggingInterceptor.Level.BODY
+        val headerLog = HttpLoggingInterceptor()
+        headerLog.level = HttpLoggingInterceptor.Level.HEADERS
         if (DEBUG)
             OkHttpClient.Builder()
-                    .addInterceptor(CustomInterceptor()).addInterceptor(loggingInterceptor)
+                    .addInterceptor(CustomInterceptor()).addInterceptor(bodyLog)
+                    .addInterceptor(headerLog)
                     .addNetworkInterceptor(StethoInterceptor())
                     .cache(Cache(application.cacheDir, cacheSize.toLong()))
                     .connectTimeout(1000, SECONDS)
@@ -78,11 +79,8 @@ class AppModule(private val application: Application) {
                     .client(okHttpClient)
                     .build().create(ApiService::class.java)
     }
-    val realmCacheService by lazy {
-        RealmCacheService()
-    }
     val dataFlowService: DataFlowService by lazy {
-        DataFlowService(apiService, realmCacheService)
+        DataFlowService(apiService)
     }
     val userPreferences: SharedPreferences by lazy {
         PreferenceManager.getDefaultSharedPreferences(application)

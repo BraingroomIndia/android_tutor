@@ -12,14 +12,14 @@ public class LocalityReq {
 
     public static class Snippet {
         @SerializedName("city_id")
-        private Integer cityId;
+        private String cityId;
 
-        public Snippet(Integer cityId) {
+        public Snippet(String cityId) {
             this.cityId = cityId;
         }
     }
 
-    public LocalityReq(Integer cityId) {
+    public LocalityReq(String cityId) {
         this.data = new Snippet(cityId);
     }
 }

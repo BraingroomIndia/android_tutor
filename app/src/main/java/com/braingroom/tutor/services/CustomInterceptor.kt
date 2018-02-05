@@ -2,8 +2,11 @@ package com.braingroom.tutor.services
 
 
 import android.util.Log
+import com.braingroom.tutor.BuildConfig.VERSION_CODE
+import com.braingroom.tutor.common.CustomApplication
 import okhttp3.Interceptor
 import okhttp3.Response
+import timber.log.Timber
 import java.io.IOException
 import java.net.ConnectException
 import java.net.SocketTimeoutException
@@ -22,20 +25,24 @@ class CustomInterceptor : Interceptor {
         val original = chain.request()
         val requestBuilder = original.newBuilder()
                 .addHeader("X-App-Type", "BGTUT01")
+                .addHeader("X-App-Version", VERSION_CODE.toString())
+                .addHeader("X-App-Geo", CustomApplication.GEO_TAG)
+                .addHeader("X-App-Platform", "Android")
+
         val request = requestBuilder.build()
         val response: Response
         try {
             response = chain.proceed(request)
         } catch (e: ConnectException) {
-            Log.e(TAG, e.message + e)
+            Timber.tag(TAG).e(e, e.message)
             /* TutorApplication.getInstance().getInternetStatusBus().onNext(false);*/
             throw e
         } catch (e: SocketTimeoutException) {
-            Log.e(TAG, e.message + e)
+            Timber.tag(TAG).e(e, e.message)
             /* TutorApplication.getInstance().getInternetStatusBus().onNext(false);*/
             throw e
         } catch (e: UnknownHostException) {
-            Log.e(TAG, e.message + e)
+            Timber.tag(TAG).e(e, e.message)
             /*TutorApplication.getInstance().getInternetStatusBus().onNext(false);*/
             throw e
         }

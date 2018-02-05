@@ -1,6 +1,3 @@
-package com.braingroom.tutor.view.activity;
-
-
 /*
  * Copyright (C) The Android Open Source Project
  *
@@ -16,70 +13,70 @@ package com.braingroom.tutor.view.activity;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
+package com.braingroom.tutor.view.activity;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
-
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
-import android.graphics.drawable.ColorDrawable;
+import android.graphics.Point;
 import android.hardware.Camera;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.Display;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 import android.view.View;
+import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
-
-import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.afollestad.materialdialogs.MaterialDialog.SingleButtonCallback;
 import com.braingroom.tutor.R;
+import com.braingroom.tutor.common.CustomApplication;
+import com.braingroom.tutor.common.modules.HelperFactory;
+import com.braingroom.tutor.common.modules.MessageHelper;
 import com.braingroom.tutor.model.req.AttendanceDetailReq;
 import com.braingroom.tutor.model.resp.AttendanceDetailResp;
-import com.braingroom.tutor.utils.GraphicOverlay;
+import com.braingroom.tutor.services.DataFlowService;
 import com.braingroom.tutor.view.activity.barcodereader.BarcodeGraphic;
 import com.braingroom.tutor.view.activity.barcodereader.BarcodeGraphicTracker;
 import com.braingroom.tutor.view.activity.barcodereader.BarcodeTrackerFactory;
 import com.braingroom.tutor.view.activity.barcodereader.camera.CameraSource;
 import com.braingroom.tutor.view.activity.barcodereader.camera.CameraSourcePreview;
-import com.braingroom.tutor.view.fragment.AttendanceStatusFragment;
-import com.braingroom.tutor.viewmodel.ViewModel;
+import com.braingroom.tutor.view.activity.barcodereader.camera.GraphicOverlay;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.common.api.CommonStatusCodes;
-
 
 import com.google.android.gms.vision.MultiProcessor;
 import com.google.android.gms.vision.barcode.Barcode;
 import com.google.android.gms.vision.barcode.BarcodeDetector;
 import com.google.gson.Gson;
 
-import org.jetbrains.annotations.NotNull;
-
 import java.io.IOException;
 
 import io.reactivex.functions.Consumer;
+import timber.log.Timber;
 
 /**
  * Activity for the multi-tracker app.  This app detects barcodes and displays the value with the
  * rear facing camera. During detection overlay graphics are drawn to indicate the position,
  * size, and ID of each barcode.
  */
-public final class BarcodeCaptureActivity extends Activity implements BarcodeGraphicTracker.BarcodeUpdateListener {
+public final class BarcodeCaptureActivity extends AppCompatActivity implements BarcodeGraphicTracker.BarcodeUpdateListener {
     private static final String TAG = "Barcode-reader";
 
     // intent request code to handle updating play services if needed.
@@ -100,7 +97,12 @@ public final class BarcodeCaptureActivity extends Activity implements BarcodeGra
     // helper objects for detecting taps and pinches.
     private ScaleGestureDetector scaleGestureDetector;
     private GestureDetector gestureDetector;
-    private final Gson gson = getApplicationContext().getAppModule().getGson();
+    private Gson gson;
+    MessageHelper messageHelper;
+    private HelperFactory helperFactory;
+    DataFlowService apiService = CustomApplication.getInstance().getAppModule().getDataFlowService();
+    AttendanceDetailReq req = null;
+    private boolean scanInProgress = false;
 
     /**
      * Initializes the UI and creates the detector pipeline.
@@ -108,14 +110,15 @@ public final class BarcodeCaptureActivity extends Activity implements BarcodeGra
     @Override
     public void onCreate(Bundle icicle) {
         super.onCreate(icicle);
+        helperFactory = new HelperFactory(this);
+        setContentView(R.layout.activity_attendance);
+        messageHelper = helperFactory.getMessageHelper();
 
         mPreview = findViewById(R.id.preview);
         mGraphicOverlay = findViewById(R.id.graphicOverlay);
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.material_black)));
-        }
+        gson = CustomApplication.getInstance().getAppModule().getGson();
         // read parameters from the intent used to launch the activity.
-        boolean autoFocus = getIntent().getBooleanExtra(AutoFocus, true);
+        boolean autoFocus = true;
         boolean useFlash = getIntent().getBooleanExtra(UseFlash, false);
 
         // Check for the camera permission before accessing the camera.  If the
@@ -140,6 +143,7 @@ public final class BarcodeCaptureActivity extends Activity implements BarcodeGra
      * showing a "Snackbar" message of why the permission is needed then
      * sending the request.
      */
+
     private void requestCameraPermission() {
         Log.w(TAG, "Camera permission is not granted. Requesting permission");
 
@@ -153,13 +157,7 @@ public final class BarcodeCaptureActivity extends Activity implements BarcodeGra
 
         final Activity thisActivity = this;
 
-        View.OnClickListener listener = new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                ActivityCompat.requestPermissions(thisActivity, permissions,
-                        RC_HANDLE_CAMERA_PERM);
-            }
-        };
+        View.OnClickListener listener = view -> ActivityCompat.requestPermissions(thisActivity, permissions, RC_HANDLE_CAMERA_PERM);
 
         findViewById(R.id.topLayout).setOnClickListener(listener);
         Snackbar.make(mGraphicOverlay, R.string.permission_camera_rationale,
@@ -185,7 +183,7 @@ public final class BarcodeCaptureActivity extends Activity implements BarcodeGra
      * Suppressing InlinedApi since there is a check that the minimum version is met before using
      * the constant.
      */
-    @SuppressLint({"InlinedApi", "ObsoleteSdkInt"})
+    @SuppressLint("InlinedApi")
     private void createCameraSource(boolean autoFocus, boolean useFlash) {
         Context context = getApplicationContext();
 
@@ -212,8 +210,8 @@ public final class BarcodeCaptureActivity extends Activity implements BarcodeGra
 
             // Check for low storage.  If there is low storage, the native library will not be
             // downloaded, so detection will not become operational.
-            IntentFilter lowStorageFilter = new IntentFilter(Intent.ACTION_DEVICE_STORAGE_LOW);
-            boolean hasLowStorage = registerReceiver(null, lowStorageFilter) != null;
+            IntentFilter lowstorageFilter = new IntentFilter(Intent.ACTION_DEVICE_STORAGE_LOW);
+            boolean hasLowStorage = registerReceiver(null, lowstorageFilter) != null;
 
             if (hasLowStorage) {
                 Toast.makeText(this, R.string.low_storage_error, Toast.LENGTH_LONG).show();
@@ -230,10 +228,8 @@ public final class BarcodeCaptureActivity extends Activity implements BarcodeGra
                 .setRequestedFps(15.0f);
 
         // make sure that auto focus is an available option
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
-            builder = builder.setFocusMode(
-                    autoFocus ? Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE : null);
-        }
+        builder = builder.setFocusMode(
+                autoFocus ? Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE : null);
 
         mCameraSource = builder
                 .setFlashMode(useFlash ? Camera.Parameters.FLASH_MODE_TORCH : null)
@@ -293,34 +289,28 @@ public final class BarcodeCaptureActivity extends Activity implements BarcodeGra
                                            @NonNull String[] permissions,
                                            @NonNull int[] grantResults) {
         if (requestCode != RC_HANDLE_CAMERA_PERM) {
-            Log.d(TAG, "Got unexpected permission result: " + requestCode);
+            Timber.tag(TAG).d("Got unexpected permission result: " + requestCode);
             super.onRequestPermissionsResult(requestCode, permissions, grantResults);
             return;
         }
 
         if (grantResults.length != 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-            Log.d(TAG, "Camera permission granted - initialize the camera source");
+            Timber.tag(TAG).d("Camera permission granted - initialize the camera source");
             // we have permission, so create the camerasource
             boolean autoFocus = getIntent().getBooleanExtra(AutoFocus, false);
             boolean useFlash = getIntent().getBooleanExtra(UseFlash, false);
             createCameraSource(autoFocus, useFlash);
             return;
         }
-
-        Log.e(TAG, "Permission not granted: results len = " + grantResults.length +
+        Timber.tag(TAG).e("Permission not granted: results len = " + grantResults.length +
                 " Result code = " + (grantResults.length > 0 ? grantResults[0] : "(empty)"));
-
-        DialogInterface.OnClickListener listener = new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
-                finish();
-            }
-        };
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Multitracker sample")
                 .setMessage(R.string.no_camera_permission)
-                .setPositiveButton(R.string.ok, listener)
+                .setPositiveButton(R.string.ok, (dialog, id) -> finish())
                 .show();
+
     }
 
     /**
@@ -342,7 +332,7 @@ public final class BarcodeCaptureActivity extends Activity implements BarcodeGra
             try {
                 mPreview.start(mCameraSource, mGraphicOverlay);
             } catch (IOException e) {
-                Log.e(TAG, "Unable to start camera source.", e);
+                Timber.tag(TAG).e(e, "Unable to start camera source.");
                 mCameraSource.release();
                 mCameraSource = null;
             }
@@ -390,21 +380,6 @@ public final class BarcodeCaptureActivity extends Activity implements BarcodeGra
             return true;
         }
         return false;
-    }
-
-    private ViewModel viewModel;
-
-    @NotNull
-    @Override
-    public ViewModel getVm() {
-        if (viewModel == null)
-            return new ViewModel(getHelperFactory());
-        else return viewModel;
-    }
-
-    @Override
-    protected int getLayoutId() {
-        return R.layout.activity_attendance;
     }
 
     private class CaptureGestureListener extends GestureDetector.SimpleOnGestureListener {
@@ -468,26 +443,77 @@ public final class BarcodeCaptureActivity extends Activity implements BarcodeGra
         }
     }
 
-    public void enterStartEndCode(View v) {
-        getNavigator().openFragment(AttendanceStatusFragment.Companion.newInstance());
+    public void enterStartCodeOrEndCode(View view) {
+        helperFactory.getNavigator().navigateActivity(ManualAttendanceActivity.class);
+        finish();
     }
 
     @Override
     public void onBarcodeDetected(Barcode barcode) {
-        //Log.d("onBarcodeDetected", barcode.displayValue);
-        Log.d("onBarcodeDetected", gson.toJson(new AttendanceDetailReq(getVm().getUserId(), "123141234", true)));
-        if (barcode.displayValue.contains("braingroom")) {
-            getMessageHelper().showProgressDialog("Wait", "Communicating with server ");
-            getApiService().getStartOrEndDetails(gson.fromJson(barcode.displayValue, AttendanceDetailReq.class)).subscribe(resp -> {
-                if (!resp.getResCode())
-                    getMessageHelper().showAcceptableInfo("", resp.getResMsg(), "Cancel", (dialog, which) -> Log.v(TAG, resp.getResMsg()));
-                else
-                    getMessageHelper().showAcceptableInfo("Ticket Info", resp.getData().getLearnerName() + resp.getData().getLearnerName(), "Confirm", "Cancel",
-                            (dialog, which) -> Log.v(TAG, resp.getResMsg()),
-                            (dialog, which) -> Log.v(TAG, resp.getResMsg())
-                    );
+        if (scanInProgress)
+            return;
+
+        if (barcode == null)
+            return;
+        if (barcode.rawValue == null)
+            return;
+        if (barcode.rawValue.trim().isEmpty())
+            return;
+        if (barcode.rawValue.contains("braingroom")) {
+            try {
+                req = gson.fromJson(barcode.rawValue, AttendanceDetailReq.class);
+            } catch (Exception e) {
+                Timber.tag(TAG).e(e, e.getMessage());
+            }
+        }
+        if (req != null && !scanInProgress) {
+            scanInProgress = true;
+            messageHelper.showProgressDialog("Wait", "Communicating with server ");
+            apiService.getStartOrEndDetails(req).subscribe(resp -> {
+                scanInProgress = false;
+                messageHelper.dismissActiveProgress();
+                if (resp.getResCode()) {
+                    if (!resp.getCodeStatus())
+                        messageHelper.showDismissInfo("Ticket Info", "Name: " + resp.getData().getLearnerName() + "\n Class Name: " + resp.getData().getClassTopic() + "\nStatus: " + resp.getResMsg(), "Dismiss");
+                    else
+                        messageHelper.showAcceptableInfo("Ticket Info", "Name: " + resp.getData().getLearnerName() + "\n Class Topic: " + resp.getData().getClassTopic() + "\nStatus: " + resp.getResMsg(), "Confirm", "Cancel",
+
+                                (dialog, which) ->
+                                        apiService.updateAttendance(resp.getData().getLearnerId(), req.getData().getStartOrEndCode(), req.getData().getIsStartCode()).subscribe(resp1 ->
+                                                {
+                                                    scanInProgress = false;
+                                                    dialog.dismiss();
+                                                    messageHelper.showMessage(resp1.getResMsg());
+                                                }
+                                        ), (dialog, which) -> {
+                                    scanInProgress = false;
+                                    dialog.dismiss();
+                                });
+                } else messageHelper.showMessage(resp.getResMsg());
 
             });
         }
     }
+
+
+    public void showAcceptableInfo(String title, String content, String positiveText, String negativeText,
+                                   MaterialDialog.SingleButtonCallback positiveCallback, MaterialDialog.SingleButtonCallback negativeCallBack) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                new MaterialDialog.Builder(BarcodeCaptureActivity.this).
+                        canceledOnTouchOutside(false).
+                        cancelable(false).
+                        title(title).
+                        content(content).autoDismiss(false).
+                        positiveText(positiveText).
+                        onPositive(positiveCallback).
+                        negativeText(negativeText).
+                        onNegative(negativeCallBack).
+                        show();
+            }
+        });
+
+    }
+
 }

@@ -1,6 +1,7 @@
 package com.braingroom.tutor.model.resp;
 
 import android.support.annotation.NonNull;
+import android.view.View;
 
 import com.google.gson.annotations.SerializedName;
 
@@ -29,7 +30,11 @@ public class AttendanceDetailResp {
     private int requestType = 0; /// 1 Start code // 2 End code
 
     public boolean getResCode() {
-        return !isEmpty(data) && (requestType == 1 ? getData().startStatus == 0 : requestType == 2 && getData().endStatus == 0);
+        return !isEmpty(data);
+    }
+
+    public boolean getCodeStatus() {
+        return !isEmpty(data) && (requestType == 1 ? getData().startStatus == 0 : (requestType == 2 && getData().startStatus == 1 && getData().endStatus == 0));
     }
 
 
@@ -84,9 +89,8 @@ public class AttendanceDetailResp {
     }
 
     @NonNull
-
     public String getResMsg() {
-        return isEmpty(getData().getMessage()) ? "Network Error" : getData().getMessage();
+        return isEmpty(getData().getMessage()) ? (isEmpty(resMsg) ? "Network error" : resMsg) : getData().getMessage();
     }
 
     public static boolean isEmpty(String value) {

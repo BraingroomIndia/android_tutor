@@ -11,9 +11,11 @@ import android.widget.Toast
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.MaterialDialog.Builder
 import com.afollestad.materialdialogs.MaterialDialog.SingleButtonCallback
+import com.afollestad.materialdialogs.Theme
 import com.braingroom.tutor.R
 import com.braingroom.tutor.utils.*
 import com.braingroom.tutor.view.activity.LoginActivity
+import com.braingroom.tutor.view.activity.SplashActivity
 import com.braingroom.tutor.view.fragment.BaseFragment
 import com.braingroom.tutor.viewmodel.item.DatePickerViewModel
 import com.braingroom.tutor.viewmodel.item.ListDialogViewModel
@@ -36,7 +38,7 @@ class HelperFactory(val activity: Activity) {
                     activity.vm.preferencesEditor.remove(mobile)
                     activity.vm.preferencesEditor.remove(lodgedIn)
                     activity.vm.preferencesEditor.remove(name).apply()
-                    navigator.navigateActivity(Intent(activity, LoginActivity::class.java).
+                    navigator.navigateActivity(Intent(activity, SplashActivity::class.java).
                             addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK))
                 }
             }
@@ -54,7 +56,7 @@ class HelperFactory(val activity: Activity) {
                 dismissActiveProgress()
                 activity.let {
                     it.runOnUiThread {
-                        Builder(it).
+                        Builder(it).theme(Theme.LIGHT)?.
                                 title(title)?.
                                 content(content)?.
                                 positiveText(buttonText)?.
@@ -67,7 +69,7 @@ class HelperFactory(val activity: Activity) {
                 dismissActiveProgress()
                 activity.let {
                     it.runOnUiThread {
-                        Builder(it).content(content)?.
+                        Builder(it).theme(Theme.LIGHT)?.content(content)?.
                                 onPositive(positiveCallback)?.
                                 positiveText(positiveText)?.
                                 title(title)?.show()
@@ -80,11 +82,11 @@ class HelperFactory(val activity: Activity) {
                 if (negativeCallBack != null)
                     activity.let {
                         it.runOnUiThread {
-                            Builder(it).
+                            Builder(it).theme(Theme.LIGHT)?.
                                     canceledOnTouchOutside(false)?.
                                     cancelable(false)?.
                                     title(title)?.
-                                    content(content)?.
+                                    content(content)?.autoDismiss(false)?.
                                     positiveText(positiveText)?.
                                     onPositive(positiveCallback)?.
                                     negativeText(negativeText)?.
@@ -95,7 +97,7 @@ class HelperFactory(val activity: Activity) {
                 else
                     activity.let {
                         it.runOnUiThread {
-                            Builder(it).
+                            Builder(it).theme(Theme.LIGHT)?.
                                     canceledOnTouchOutside(false)?.
                                     cancelable(false)?.
                                     title(title)?.
@@ -112,11 +114,11 @@ class HelperFactory(val activity: Activity) {
                 dismissActiveProgress()
                 activity.let {
                     it.runOnUiThread {
-                        progressDialog = Builder(it).
+                        progressDialog = Builder(it).theme(Theme.LIGHT)?.
                                 title(title)?.
                                 content(content)?.
-                                cancelable(true)?.
-                                canceledOnTouchOutside(true)?.
+                                cancelable(false)?.
+                                canceledOnTouchOutside(false)?.
                                 progress(true, 0)?.
                                 show()
                     }
@@ -127,7 +129,7 @@ class HelperFactory(val activity: Activity) {
                 if (dismissCallback != null)
                     activity.let {
                         it.runOnUiThread {
-                            progressDialog = Builder(it).
+                            progressDialog = Builder(it).theme(Theme.LIGHT)?.
                                     title(title)?.
                                     content(content)?.
                                     cancelable(cancelAble)?.
@@ -140,7 +142,7 @@ class HelperFactory(val activity: Activity) {
                 else
                     activity.let {
                         it.runOnUiThread {
-                            progressDialog = Builder(it).
+                            progressDialog = Builder(it).theme(Theme.LIGHT)?.
                                     title(title)?.
                                     content(content)?.
                                     cancelable(cancelAble)?.
@@ -278,7 +280,7 @@ class HelperFactory(val activity: Activity) {
                 messageHelper.dismissActiveProgress()
                 when {
                     items?.isNotEmpty() == true -> activity.let {
-                        Builder(it).title(title).items(items).itemsCallbackMultiChoice(if (selectedItems.isNotEmpty()) selectedItems else Array<Int>(1, { -1 })) { materialDialog, selectedIdx, charSequence ->
+                        Builder(it).theme(Theme.LIGHT).title(title).items(items).itemsCallbackMultiChoice(if (selectedItems.isNotEmpty()) selectedItems else Array<Int>(1, { -1 })) { materialDialog, selectedIdx, charSequence ->
                             viewModel.setSelectedItems(selectedIdx)
                             true
                         }.positiveText(positiveText).onPositive { dialog, which ->
@@ -293,7 +295,7 @@ class HelperFactory(val activity: Activity) {
                 messageHelper.dismissActiveProgress()
                 when {
                     items?.isNotEmpty() == true -> activity.let {
-                        Builder(it).title(title).items(items).itemsCallbackSingleChoice(if (selectedItems.isNotEmpty()) selectedItems[0] else -1) { materialDialog, view, selectedIdx, charSequence ->
+                        Builder(it).theme(Theme.LIGHT).title(title).items(items).itemsCallbackSingleChoice(if (selectedItems.isNotEmpty()) selectedItems[0] else -1) { materialDialog, view, selectedIdx, charSequence ->
                             view.visibility
                             viewModel.setSelectedItem(selectedIdx)
                             true

@@ -1,7 +1,3 @@
-package com.braingroom.tutor.view.activity.barcodereader;
-
-
-
 /*
  * Copyright (C) The Android Open Source Project
  *
@@ -17,23 +13,26 @@ package com.braingroom.tutor.view.activity.barcodereader;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-
-import com.braingroom.tutor.R;
-import com.braingroom.tutor.utils.GraphicOverlay;
+package com.braingroom.tutor.view.activity.barcodereader;
 
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Point;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffXfermode;
 import android.graphics.RectF;
+import android.util.DisplayMetrics;
 
+
+import com.braingroom.tutor.common.CustomApplication;
+import com.braingroom.tutor.view.activity.barcodereader.camera.GraphicOverlay;
 import com.google.android.gms.vision.barcode.Barcode;
 
 /**
  * Graphic instance for rendering barcode position, size, and ID within an associated graphic
  * overlay view.
  */
-@SuppressWarnings({"WeakerAccess", "unused"})
 public class BarcodeGraphic extends GraphicOverlay.Graphic {
 
     private int mId;
@@ -41,9 +40,12 @@ public class BarcodeGraphic extends GraphicOverlay.Graphic {
     private static final int COLOR_CHOICES[] = {
             Color.BLUE,
             Color.CYAN,
-            Color.GREEN,
-            Color.TRANSPARENT
+            Color.GREEN
     };
+    private float left, top, endY;
+    private int rectWidth, rectHeight;
+    private int lineColor, lineWidth;
+    private boolean revAnimation;
 
     private static int mCurrentColorIndex = 0;
 
@@ -55,7 +57,7 @@ public class BarcodeGraphic extends GraphicOverlay.Graphic {
         super(overlay);
 
         mCurrentColorIndex = (mCurrentColorIndex + 1) % COLOR_CHOICES.length;
-        final int selectedColor = overlay.getContext().getResources().getColor(R.color.transparentWhite);
+        final int selectedColor = COLOR_CHOICES[mCurrentColorIndex];
 
         mRectPaint = new Paint();
         mRectPaint.setColor(selectedColor);
@@ -93,6 +95,8 @@ public class BarcodeGraphic extends GraphicOverlay.Graphic {
      */
     @Override
     public void draw(Canvas canvas) {
+
+
         Barcode barcode = mBarcode;
         if (barcode == null) {
             return;
@@ -107,6 +111,11 @@ public class BarcodeGraphic extends GraphicOverlay.Graphic {
         canvas.drawRect(rect, mRectPaint);
 
         // Draws a label at the bottom of the barcode indicate the barcode value that was detected.
-        canvas.drawText(barcode.rawValue, rect.left, rect.bottom, mTextPaint);
+        canvas.drawText(barcode.displayValue, rect.left, rect.bottom, mTextPaint);
+    }
+
+    private int dpToPx(int dp) {
+        DisplayMetrics displayMetrics = CustomApplication.getInstance().getResources().getDisplayMetrics();
+        return Math.round(dp * (displayMetrics.xdpi / DisplayMetrics.DENSITY_DEFAULT));
     }
 }

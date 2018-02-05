@@ -15,7 +15,7 @@
     <dimen name="category_container_height">85dp</dimen>
 
     <dimen name="text_size_small">10sp</dimen>
-    <dimen name="text_size_medium">15sp</dimen>
+    <dimen name="text_size_medium">16sp</dimen>
     <dimen name="text_size_large">20sp</dimen>
 
     <dimen name="padding_small">5dp</dimen>

@@ -60,7 +60,7 @@ class MessageActivityViewModel(helperFactory: HelperFactory) : ViewModel(helperF
         }
         pageNumber == 1 -> {
             pageNumber = -1
-            resp.data.map { EmptyItemViewModel("", R.drawable.ic_no_post_64dp, "No Message") }
+            Collections.singletonList(EmptyItemViewModel("", R.drawable.ic_no_post_64dp, "No Message"))
         }
         else -> {
             pageNumber = -1

@@ -4,6 +4,7 @@ import android.support.annotation.NonNull;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -24,7 +25,7 @@ public class PaymentDetailByClassResp extends BaseResp {
 
     @NonNull
     public List<Snippet> getData() {
-        return isEmpty(data) ? Collections.singletonList(new Snippet()) : data;
+        return isEmpty(data) ? new ArrayList<>() : data;
     }
 
     public static class Snippet {
@@ -89,7 +90,7 @@ public class PaymentDetailByClassResp extends BaseResp {
 
         @NonNull
         public List<Ticket> getTickets() {
-            return isEmpty(tickets) ? Collections.singletonList(new Ticket()) : tickets;
+            return isEmpty(tickets) ? new ArrayList<>() : tickets;
         }
     }
 

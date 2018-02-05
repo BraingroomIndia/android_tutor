@@ -57,7 +57,7 @@ class ReviewActivityViewModel(helperFactory: HelperFactory) : ViewModel(helperFa
         }
         pageNumber == 1 -> {
             pageNumber = -1
-            resp.data.map { EmptyItemViewModel("", R.drawable.ic_no_post_64dp, "No Review Found") }
+            Collections.singletonList(EmptyItemViewModel("", R.drawable.ic_no_post_64dp, "No Review Found"))
         }
         else -> {
             pageNumber = -1

@@ -4,13 +4,12 @@ import android.support.annotation.NonNull;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import io.realm.RealmObject;
 
 import static com.braingroom.tutor.utils.CommonUtilsKt.getNonNull;
-import static java.util.Collections.singletonList;
 
 
 public class CommonIdResp extends BaseResp {
@@ -84,6 +83,6 @@ public class CommonIdResp extends BaseResp {
     }
 
     public List<Snippet> getData() {
-        return isEmpty(data) ? Collections.singletonList(new Snippet()) : data;
+        return isEmpty(data) ? new ArrayList<>() : data;
     }
 }

@@ -21,11 +21,12 @@ import io.reactivex.functions.Action
 import io.reactivex.functions.Consumer
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.PublishSubject
+import timber.log.Timber
 import java.util.*
 import java.util.concurrent.TimeUnit
 
 
-class DynamicSearchSelectListViewModel(helperFactory: HelperFactory,val title: String, searchHint: String, dependencyMessage: String, isMultipleSelect: Boolean, private var observableApi: DynamicSearchAPIObservable?, private val saveConsumer: Consumer<HashMap<String, Int>>, private var selectedDataMap: HashMap<String, Int>) : ViewModel(helperFactory) {
+class DynamicSearchSelectListViewModel(helperFactory: HelperFactory, val title: String, searchHint: String, dependencyMessage: String, isMultipleSelect: Boolean, private var observableApi: DynamicSearchAPIObservable?, private val saveConsumer: Consumer<HashMap<String, Int>>, private var selectedDataMap: HashMap<String, Int>) : ViewModel(helperFactory) {
 
     interface DynamicSearchAPIObservable {
         fun getData(keyword: String): Observable<HashMap<String, Int>>?
@@ -37,6 +38,7 @@ class DynamicSearchSelectListViewModel(helperFactory: HelperFactory,val title: S
         searchQuery.set("")
         selectedItemsText.set("select items")
         saveConsumer.accept(selectedDataMap)
+        selectAllorClearAll.onNext(false)
     }
 
     val viewProvider = object : ViewProvider {
@@ -68,7 +70,9 @@ class DynamicSearchSelectListViewModel(helperFactory: HelperFactory,val title: S
     val searchHint = ObservableField<String>(searchHint)
     val dataMap: TreeMap<String, Int> = TreeMap()
     val selectedItems: PublishSubject<SearchSelectListItemViewModel> by lazy { PublishSubject.create<SearchSelectListItemViewModel>() }
-
+    val selectAllorClearAll by lazy {
+        PublishSubject.create<Boolean>()
+    }
     val start = FieldUtils.toObservable(searchQuery)
             .debounce(200, TimeUnit.MILLISECONDS).map({ keyword: String ->
         observableApi?.getData(keyword)?.subscribeOn(Schedulers.io())?.observeOn(Schedulers.computation())?.map { data ->
@@ -78,7 +82,7 @@ class DynamicSearchSelectListViewModel(helperFactory: HelperFactory,val title: S
             dataMap.keys
                     .filter { it.contains(keyword, true) }
                     .forEach {
-                        Log.v(TAG, it)
+                        Timber.tag(TAG).v(it)
                         item.onNext(SearchSelectListItemViewModel(it, dataMap[it], selectedDataMap.containsKey(it),
                                 isMultipleSelect, object : MyConsumer<SearchSelectListItemViewModel> {
                             override fun accept(@NonNull var1: SearchSelectListItemViewModel) {
@@ -93,7 +97,7 @@ class DynamicSearchSelectListViewModel(helperFactory: HelperFactory,val title: S
                                 selectedItems.onNext(var1)
 
                             }
-                        }, selectedItems))
+                        }, selectAllorClearAll))
                     }
             item.onNext(NotifyDataSetChanged())
         }?.subscribe()

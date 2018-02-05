@@ -8,7 +8,7 @@ const val FONT_BOLD = "roboto_bold.ttf"
 
 const val BASE_URL = "https://www.braingroom.com/"
 const val DEV_BASE_URL = "https://dev.braingroom.com/"
-const val bundleData = "bundleData"
+
 const val lodgedIn = "lodgedIn"
 const val name = "userName"
 const val email = "userEmail"
@@ -32,5 +32,14 @@ const val pastValue = "past"
 const val pastId = 1
 const val currentValue = "current"
 const val currentId = 2
-const val upComingValue = "upComing"
+const val upComingValue = "upcoming"
 const val upComingId = 3
+var GEO_TAG = ""
+const val FCM_TOKEN = "fcm_token"
+
+
+/*Bundle Keys */
+const val bundleData = "bundleData"
+const val classBudleData = "classData"
+const val pushNotification = "pushNotification"
+/*Bundle Keys */

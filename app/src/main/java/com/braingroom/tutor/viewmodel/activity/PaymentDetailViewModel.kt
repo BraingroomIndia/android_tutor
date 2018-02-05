@@ -17,6 +17,7 @@ import com.braingroom.tutor.viewmodel.item.*
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.functions.Action
 import io.reactivex.functions.Function
+import timber.log.Timber
 import java.util.ArrayList
 import java.util.concurrent.TimeUnit
 
@@ -90,7 +91,7 @@ class PaymentDetailViewModel(helperFactory: HelperFactory) : ViewModel(helperFac
             pending.set(data.pendingAmount)
             tickets.set(data.totalTicket)
         }, { throwable ->
-            Log.e(TAG, throwable.message, throwable)
+            Timber.tag(TAG).e(throwable, throwable.message)
         })
 
         FieldUtils.toObservable(callAgain).filter({ _ -> pageNumber > -1 && !paginationInProgress }).subscribe { _ ->
@@ -115,7 +116,7 @@ class PaymentDetailViewModel(helperFactory: HelperFactory) : ViewModel(helperFac
                         }
                         item.onNext(NotifyDataSetChanged())
                         paginationInProgress = false
-                    }, { throwable -> Log.e(TAG, throwable.message, throwable) }
+                    }, { throwable -> Timber.tag(TAG).e(throwable, throwable.message) }
             )
         }
     }

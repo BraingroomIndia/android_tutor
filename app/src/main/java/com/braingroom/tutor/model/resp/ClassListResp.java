@@ -1,6 +1,9 @@
 
 package com.braingroom.tutor.model.resp;
 
+import android.support.annotation.NonNull;
+
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -21,7 +24,7 @@ public class ClassListResp extends BaseResp {
     private List<Snippet> data;
 
     public List<Snippet> getData() {
-        return isEmpty(data) ? Collections.singletonList(new Snippet()) : data;
+        return isEmpty(data) ? new ArrayList<>() : data;
     }
 
 
@@ -43,6 +46,8 @@ public class ClassListResp extends BaseResp {
         private String mClassType;
         @SerializedName("expired")
         private String mExpired;
+        @SerializedName("status")
+        private String status;
         @SerializedName("locality")
         private String mClassLocality;
         @SerializedName("no_of_session")
@@ -100,6 +105,11 @@ public class ClassListResp extends BaseResp {
 
         public String getNoOfSession() {
             return getNonNull(mNoOfSession);
+        }
+
+        @NonNull
+        public String getStatus() {
+            return getNonNull(status);
         }
 
 

@@ -4,7 +4,7 @@ import com.afollestad.materialdialogs.MaterialDialog
 import com.braingroom.tutor.viewmodel.item.DatePickerViewModel
 import com.braingroom.tutor.viewmodel.item.ListDialogViewModel
 
-/**
+/*
  * Created by godara on 11/01/18.
  */
 interface DialogHelper {

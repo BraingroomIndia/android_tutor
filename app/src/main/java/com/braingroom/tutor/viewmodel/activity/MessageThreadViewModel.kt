@@ -15,6 +15,7 @@ import com.braingroom.tutor.viewmodel.ViewModel
 import com.braingroom.tutor.viewmodel.item.*
 import io.reactivex.disposables.Disposable
 import io.reactivex.functions.Action
+import java.util.*
 
 
 /*
@@ -72,7 +73,7 @@ class MessageThreadViewModel(helperFactory: HelperFactory, val senderId: String,
         }
         pageNumber == 1 -> {
             pageNumber = -1
-            resp.data.map { EmptyItemViewModel("", R.drawable.ic_no_post_64dp, "No Media") }
+            Collections.singletonList(EmptyItemViewModel("", R.drawable.ic_no_post_64dp, "No Media"))
         }
         else -> {
             pageNumber = -1

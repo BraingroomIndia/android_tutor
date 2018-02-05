@@ -13,6 +13,13 @@ import retrofit2.http.*
  */
 
 interface ApiService {
+
+    @GET("apis/getGeoDetail")
+    fun getGeoDetail(): Observable<CommonIdResp>
+
+    @POST("apis/registerUserDevice")
+    fun registerUserDevice(@Body req: RegisterFCMToken): Observable<Any>
+
     @POST("apis/login")
     fun login(@Body req: LoginReq): Observable<LoginResp?>
 
@@ -30,7 +37,7 @@ interface ApiService {
     fun getAllClasses(@Path("pageIndex") pageIndex: String, @Body req: ClassListReq): Observable<ClassListResp>
 
     @POST("apis/viewClassDetail")
-    fun getClassDetail(@Body req:CommonIdReq) :Observable<ClassDetailResp>
+    fun getClassDetail(@Body req: CommonIdReq): Observable<ClassDetailResp>
 
     @POST("apis/BuyerRegistration")
     fun signUp(@Body req: SignUpReq): Observable<SignUpResp>
@@ -38,8 +45,8 @@ interface ApiService {
     @POST("tutorApi/getPaymentSummaryByClasses/{pageIndex}")
     fun getPaymentSummaryByClasses(@Path("pageIndex") pageIndex: String, @Body req: PaymentSummaryReq): Observable<PaymentDetailsResp>
 
-    @POST("getInstitions")
-    fun getInstitute(@Body req: InstituteReq): Observable<CommonIdResp>
+ /*   @POST("getInstitions")
+    fun getInstitute(@Body req: InstituteReq): Observable<CommonIdResp>*/
 
     @POST("tutorApi/getUserListByTutor")
     fun getUser(@Body req: UserListReq): Observable<CommonIdResp>
@@ -108,9 +115,10 @@ interface ApiService {
     fun getStartOrEndDetails(@Body req: AttendanceDetailReq?): Observable<AttendanceDetailResp>
 
     @POST("tutorApi/updateAttendance")
-    fun updateAttendance(@Body req: UpdateAttendanceReq): Observable<UpdateAttendanceResp>
+    fun updateAttendance(@Body req: UpdateAttendanceReq): Observable<AttendanceDetailResp>
 
     @POST("tutorApi/getClassListByTutor")
     fun getClassList(@Body req: CommonTutorIdReq): Observable<CommonIdResp>
+
 
 }

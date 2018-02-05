@@ -2,15 +2,12 @@ package com.braingroom.tutor.model.data;
 
 import java.util.List;
 
-import io.realm.RealmList;
-import io.realm.RealmObject;
-import io.realm.annotations.PrimaryKey;
 
 /**
  * Created by ashketchup on 11/12/17.
  */
-public class CommonIdRealmWrapper extends RealmObject{
-    RealmList<CommonIdSnippetWrapper> data;
+public class CommonIdRealmWrapper {
+    /*RealmList<CommonIdSnippetWrapper> data;
     public void setData(RealmList<CommonIdSnippetWrapper> data){
         this.data=data;
     }
@@ -36,5 +33,5 @@ public class CommonIdRealmWrapper extends RealmObject{
         public static CommonIdRealmWrapper create(RealmList<CommonIdSnippetWrapper> realmList,String searchQuery){
             return new CommonIdRealmWrapper(realmList,searchQuery);
 
-        }
-    }
+        }*/
+}
