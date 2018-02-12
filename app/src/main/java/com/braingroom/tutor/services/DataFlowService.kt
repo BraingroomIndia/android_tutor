@@ -1,7 +1,6 @@
 package com.braingroom.tutor.services
 
 
-import android.util.Log
 import com.braingroom.tutor.common.CustomApplication
 import com.braingroom.tutor.model.req.*
 import com.braingroom.tutor.model.req.CommonIdReq
@@ -15,7 +14,6 @@ import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import java.io.File
 import java.util.ArrayList
-import retrofit2.http.Body
 
 
 /*
@@ -59,7 +57,7 @@ class DataFlowService(private val api: ApiService) {
     }
 
     fun forgetPassword(email: String): Observable<String> {
-        return api.forgotPassword(LoginReq(email)).subscribeOn(Schedulers.io()).map { it.resMsg }.observeOn(AndroidSchedulers.mainThread())
+        return api.forgotPassword(LoginReq(email)).subscribeOn(Schedulers.io()).map { it.resMsg }.onErrorReturn { it.localizedMessage }.observeOn(AndroidSchedulers.mainThread())
     }
 
     fun getMyProfile(id: String): Observable<MyProfileResp> {
@@ -76,16 +74,21 @@ class DataFlowService(private val api: ApiService) {
         return api.getClassDetail(CommonIdReq(classId)).subscribeOn(Schedulers.io()).observeOn(Schedulers.computation())
     }
 
-    fun getPaymentDetails(pageNumber: Int, starDate: String, endDate: String, keyword: String): Observable<PaymentDetailsResp> {
+    fun getPaymentDetails(pageNumber: Int, starDate: String, endDate: String, keyword: String): Observable<PaymentClassListResp> {
         return api.getPaymentSummaryByClasses(if (pageNumber > 1) pageNumber.toString() else "", PaymentSummaryReq(userId, starDate, endDate, keyword)).subscribeOn(Schedulers.io()).observeOn(Schedulers.computation()).
-                onErrorReturn { PaymentDetailsResp() }
+                onErrorReturn { PaymentClassListResp() }
     }
 
-  /*  fun getInstitute(keyword: String): Observable<CommonIdResp> {//Cache
+    fun getPaymentDetailByClass(pageNumber: Int, classId: String): Observable<PaymentClassDetailResp> {
+        return api.getPaymentDetailByClass(if (pageNumber > 1) pageNumber.toString() else "", PaymentClassDetailReq(userId, classId)).subscribeOn(Schedulers.io()).observeOn(Schedulers.computation()).
+                onErrorReturn { PaymentClassDetailResp() }
+    }
 
-        return api.getInstitute(InstituteReq(InstituteReq.Snippet(keyword))).subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-    }*/
+    /*  fun getInstitute(keyword: String): Observable<CommonIdResp> {//Cache
+
+          return api.getInstitute(InstituteReq(InstituteReq.Snippet(keyword))).subscribeOn(Schedulers.io())
+                  .observeOn(AndroidSchedulers.mainThread())
+      }*/
 
     fun getLearner(type: Int?, classId: String?): Observable<CommonIdResp> {
 
@@ -273,10 +276,14 @@ class DataFlowService(private val api: ApiService) {
             api.getGeoDetail().map { it.data[0]?.textValue ?: "" }.onErrorReturn { "" }.subscribeOn(Schedulers.io()).
                     subscribe({
                         GEO_TAG = it
-                        api.registerUserDevice(RegisterFCMToken(fcmToken, userId)).subscribeOn(Schedulers.io()).subscribe()
+                        api.registerUserDevice(RegisterFCMToken(fcmToken, userId)).onErrorReturn { "" }.subscribeOn(Schedulers.io()).subscribe()
                     })
         else
             api.registerUserDevice(RegisterFCMToken(fcmToken, userId)).onErrorReturn { "" }.subscribeOn(Schedulers.io()).subscribe()
 
+    }
+
+    fun saveMedia(filePath: String, mediaType: String): Observable<CommonIdResp> {
+        return api.saveMedia(SaveMediaReq(userId, filePath, mediaType)).onErrorReturn { CommonIdResp() }.observeOn(Schedulers.computation()).subscribeOn(Schedulers.io())
     }
 }

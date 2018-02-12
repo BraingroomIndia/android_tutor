@@ -12,7 +12,7 @@ class PaymentDetailActivity : Activity() {
         PaymentDetailViewModel(helperFactory);
     }
     override val layoutId: Int by lazy {
-        R.layout.activity_payment_detail
+        R.layout.activity_home
     }
 
 }

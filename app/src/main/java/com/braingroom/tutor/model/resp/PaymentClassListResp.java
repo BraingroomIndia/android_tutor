@@ -1,11 +1,13 @@
 package com.braingroom.tutor.model.resp;
 
 import android.support.annotation.NonNull;
+import android.text.Spanned;
 
 import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
+import static com.braingroom.tutor.utils.CommonUtilsKt.fromHtml;
 import static com.braingroom.tutor.utils.CommonUtilsKt.getNonNull;
 import static com.braingroom.tutor.utils.CommonUtilsKt.getRandomNumberInRange;
 import static java.util.Collections.*;
@@ -14,7 +16,7 @@ import static java.util.Collections.*;
  * Created by godara on 20/12/17.
  */
 
-public class PaymentDetailsResp extends BaseResp {
+public class PaymentClassListResp extends BaseResp {
     @Override
     public boolean getResCode() {
         return !isEmpty(data);
@@ -44,7 +46,7 @@ public class PaymentDetailsResp extends BaseResp {
         @SerializedName("total_ticket")
         private Integer totalTicket;
 
-        @SerializedName("recevied_amount")
+        @SerializedName("received_amount")
         private Integer receviedAmount;
 
         @SerializedName("pending_amount")
@@ -53,8 +55,12 @@ public class PaymentDetailsResp extends BaseResp {
         @SerializedName("refund_amount")
         private Integer refundAmount;
 
-        @SerializedName("totalAmount")
+        @SerializedName("total")
         private Integer totalAmount;
+
+        @SerializedName("price_symbol")
+        private String priceSymbol;
+
 
         private final int[] resources = {com.braingroom.tutor.R.drawable.class_ph_1, com.braingroom.tutor.R.drawable.class_ph_2, com.braingroom.tutor.R.drawable.class_ph_3, com.braingroom.tutor.R.drawable.class_ph_4, com.braingroom.tutor.R.drawable.class_ph_5};
         private final int placeHolder = resources[getRandomNumberInRange(0, resources.length - 1)];
@@ -98,6 +104,13 @@ public class PaymentDetailsResp extends BaseResp {
         @NonNull
         public Integer getTotalAmount() {
             return getNonNull(totalAmount);
+        }
+
+        @NonNull
+        public Spanned getPriceSymbol() {
+            if (isEmpty(priceSymbol))
+                priceSymbol = "&#8377;";
+            return fromHtml(priceSymbol);
         }
 
         @NonNull

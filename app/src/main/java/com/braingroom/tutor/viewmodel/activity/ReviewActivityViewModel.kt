@@ -6,6 +6,7 @@ import com.braingroom.tutor.common.modules.HelperFactory
 import com.braingroom.tutor.model.resp.NotificationListResp
 import com.braingroom.tutor.model.resp.ReviewGetResp
 import com.braingroom.tutor.utils.FieldUtils
+import com.braingroom.tutor.utils.FieldUtils.toObservable
 import com.braingroom.tutor.utils.VERTICAL
 import com.braingroom.tutor.utils.convertDpToPixel
 import com.braingroom.tutor.utils.isEmpty
@@ -23,29 +24,27 @@ import kotlin.collections.ArrayList
  */
 class ReviewActivityViewModel(helperFactory: HelperFactory) : ViewModel(helperFactory) {
 
-    val view: ViewProvider by lazy {
-        object : ViewProvider {
-            override fun getView(vm: RecyclerViewItem?): Int {
-                return when (vm) {
-                    is ReviewItemViewModel -> R.layout.item_review
-                    is LoadingViewModel -> R.layout.item_loading_media
-                    null -> throw NullPointerException()
-                    else -> throw NoSuchFieldError()
-                }
-            }
+
+    fun view(vm: RecyclerViewItem?): Int {
+        return when (vm) {
+            is ReviewItemViewModel -> R.layout.item_review
+            is LoadingViewModel -> R.layout.item_loading_media
+            null -> throw NullPointerException()
+            else -> throw NoSuchFieldError()
         }
     }
+
+
     val decor: RecyclerView.ItemDecoration = EqualSpacingItemDecoration(convertDpToPixel(11).toInt(), VERTICAL)
 
     init {
-        FieldUtils.toObservable(callAgain).filter { pageNumber > -1 && !paginationInProgress }.subscribe({
+        toObservable(callAgain).filter { pageNumber > -1 && !paginationInProgress }.subscribe({
             paginationInProgress = true
             apiService.getReview(pageNumber).doOnSubscribe(this::addLoadingItems).map(this::respToViewModelList).subscribe(this::addActualItems, this::handleError)
         })
     }
 
     override fun paginate() {
-        super.paginate()
         if (pageNumber > -1 && !paginationInProgress)
             callAgain.set(callAgain.get()!! + 1)
     }

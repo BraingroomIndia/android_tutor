@@ -15,5 +15,6 @@
         android:layout_height="match_parent"
         bind:decor="@{vm.decoration}"
         bind:items="@{vm.item}"
-        bind:view="@{vm.viewProvider}" />
+        bind:view="@{vm.viewProvider}"
+       />
 </layout>

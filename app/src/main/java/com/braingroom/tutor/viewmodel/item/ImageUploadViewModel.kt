@@ -2,7 +2,6 @@ package com.braingroom.tutor.viewmodel.item
 
 import android.content.Intent
 import android.databinding.ObservableField
-import android.util.Log
 
 import com.braingroom.tutor.viewmodel.ViewModel
 
@@ -23,11 +22,13 @@ class ImageUploadViewModel : ViewModel {
     val remoteAddress: ObservableField<String>
     val onUploadClicked: Action
     val requestCode: Int
+    val onUploadFinish: Action?
 
     constructor(helperFactory: HelperFactory, placeHolder: Int, remoteAddress: String, requestCode: Int) : super(helperFactory) {
         this.requestCode = requestCode
         this.placeHolder = placeHolder
         this.remoteAddress = ObservableField(remoteAddress)
+        this.onUploadFinish = null;
         onUploadClicked = Action {
             navigator.launchImageChooserActivity(requestCode)
         }
@@ -37,6 +38,17 @@ class ImageUploadViewModel : ViewModel {
         this.requestCode = requestCode
         this.placeHolder = 0
         this.remoteAddress = ObservableField(remoteAddress)
+        this.onUploadFinish = null
+        onUploadClicked = Action {
+            navigator.launchImageChooserActivity(requestCode)
+        }
+    }
+
+    constructor(helperFactory: HelperFactory, remoteAddress: String, onUploadFinish: Action, requestCode: Int) : super(helperFactory) {
+        this.requestCode = requestCode
+        this.placeHolder = 0
+        this.remoteAddress = ObservableField(remoteAddress)
+        this.onUploadFinish = onUploadFinish
         onUploadClicked = Action {
             navigator.launchImageChooserActivity(requestCode)
         }
@@ -55,9 +67,10 @@ class ImageUploadViewModel : ViewModel {
             messageHelper.showProgressDialog("Wait", "uploading...")
             apiService.uploadImage(filePath, fileType).subscribe {
                 messageHelper.dismissActiveProgress()
-                messageHelper.showMessage(it.resMsg)
-                if (it.resCode)
+                if (it.resCode) {
                     remoteAddress.set(it.data.url)
+                    onUploadFinish?.run()
+                }
 
             }
 

@@ -32,6 +32,9 @@ import android.support.annotation.IdRes
 import android.support.v4.content.ContextCompat
 import android.support.v4.graphics.drawable.DrawableCompat
 import android.support.v4.graphics.drawable.DrawableCompat.setTint
+import android.support.v4.view.ViewCompat
+import android.support.v7.widget.RecyclerView
+import retrofit2.http.Body
 import timber.log.Timber
 
 
@@ -74,6 +77,23 @@ fun toOnClickListener(listener: Action?): View.OnClickListener? {
     }
 }
 
+@BindingConversion
+fun toOnClickListener(body: () -> Unit): View.OnClickListener? {
+    return when {
+        body != null -> View.OnClickListener {
+            try {
+                body()
+            } catch (e: Exception) {
+                Log.e("toOnClickListener", e.message, e)
+            }
+        }
+        else -> null
+    }
+}
+
+@BindingConversion
+fun toSetTextColor(body: () -> Int) = body()
+
 @BindingAdapter("android:src")
 fun setImageUri(view: ImageView?, imageUrl: String?) {
     if (!isEmpty(imageUrl)) {
@@ -85,7 +105,7 @@ fun setImageUri(view: ImageView?, imageUrl: String?) {
 @BindingAdapter(value = *arrayOf("android:src", "placeHolder"), requireAll = true)
 fun setImageUri(view: ImageView?, imageUrl: String?, placeHolder: Int?) {
     if (!imageUrl.isNullOrBlank()) {
-        Log.v("setImageUri", imageUrl + "   " + placeHolder)
+        //   Log.v("setImageUri", imageUrl + "   " + placeHolder)
         if (placeHolder != null && placeHolder != 0)
             view?.let { picasso.load(imageUrl).placeholder(placeHolder).error(placeHolder).fit().centerCrop().into(it) }
         else setImageUri(view, imageUrl)
@@ -116,6 +136,7 @@ fun setDrawableBottom(view: TextView?,
         view?.setCompoundDrawablesRelativeWithIntrinsicBounds(drawableLeft, drawableTop, drawableRight, drawableBottom)
     else
         view?.setCompoundDrawablesWithIntrinsicBounds(drawableLeft, drawableTop, drawableRight, drawableBottom)
+
 }
 
 @BindingAdapter("android:background")
@@ -198,5 +219,10 @@ fun setImageResource(imageView: ImageView, resource: Int) {
 fun setColorTint(view: ImageView, @ColorRes color: Int) {
     if (color != 0)
         setTint(view.drawable, ContextCompat.getColor(CustomApplication.getInstance(), color))
+}
+
+@BindingAdapter("nestedScrollingEnabled")
+fun setNestedScrollingEnabled(view: RecyclerView, isNestedScrollingEnabled: Boolean) {
+    ViewCompat.setNestedScrollingEnabled(view, isNestedScrollingEnabled)
 }
 

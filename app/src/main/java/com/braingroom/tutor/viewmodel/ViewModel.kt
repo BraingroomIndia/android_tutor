@@ -117,7 +117,7 @@ open class ViewModel(val helperFactory: HelperFactory) {
 
 
     internal fun addLoadingItems(disposable: Disposable) {
-        (0..5).forEach { item.onNext(LoadingViewModel()) }
+        (0..3).forEach { item.onNext(LoadingViewModel()) }
         item.onNext(NotifyDataSetChanged())
         compositeDisposable.add(disposable)
     }

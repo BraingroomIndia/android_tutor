@@ -24,6 +24,7 @@ import com.braingroom.tutor.common.CustomApplication
 import io.reactivex.Observable
 import java.io.File
 import io.reactivex.ObservableOnSubscribe
+import java.sql.Timestamp
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.regex.Pattern
@@ -145,7 +146,6 @@ fun getThumbnail(url: String): String {
 }
 
 
-
 val youTubeUrlRegEx = "^(https?)?(://)?(www.)?(m.)?((youtube.com)|(youtu.be))/"
 val videoIdRegex = arrayOf("\\?vi?=([^&]*)", "watch\\?.*v=([^&]*)", "(?:embed|vi?)/([^/?]*)", "^([A-Za-z0-9\\-]*)")
 
@@ -174,6 +174,58 @@ fun getHumanDate(timeStamp: String): String {
         val time = Integer.valueOf(timeStamp)!!.toLong()
         val sdf = SimpleDateFormat("MM/dd/yyyy")
         val netDate = Date(time * 1000)
+        return sdf.format(netDate)
+    } catch (ex: Exception) {
+        return "xx"
+    }
+
+}
+
+fun getDate(timeStamp: Timestamp): String {
+
+    try {
+
+        val sdf = SimpleDateFormat("dd")
+        val netDate = Date(timeStamp.time)
+        return sdf.format(netDate)
+    } catch (ex: Exception) {
+        return "xx"
+    }
+
+}
+
+fun getDay(timeStamp: Timestamp): String {
+
+    try {
+
+        val sdf = SimpleDateFormat("EEEE")
+        val netDate = Date(timeStamp.time)
+        return sdf.format(netDate)
+    } catch (ex: Exception) {
+        return "xx"
+    }
+
+}
+
+fun getMonth(timeStamp: Timestamp): String {
+
+    try {
+
+        val sdf = SimpleDateFormat("MMM")
+        val netDate = Date(timeStamp.time)
+        return sdf.format(netDate)
+    } catch (ex: Exception) {
+        return "xx"
+    }
+
+}
+
+fun getYear(timeStamp: Timestamp): String {
+
+    try {
+
+        val sdf = SimpleDateFormat("YYYY")
+        val netDate = Date(timeStamp.time)
         return sdf.format(netDate)
     } catch (ex: Exception) {
         return "xx"

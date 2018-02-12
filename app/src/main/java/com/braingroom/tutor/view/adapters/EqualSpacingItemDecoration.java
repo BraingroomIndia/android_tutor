@@ -15,17 +15,42 @@ import static com.braingroom.tutor.utils.ConstantsKt.HORIZONTAL;
 import static com.braingroom.tutor.utils.ConstantsKt.VERTICAL;
 
 public class EqualSpacingItemDecoration extends RecyclerView.ItemDecoration {
-    private final int spacing;
+
+    private final int spacingLeft;
+    private final int spacingRight;
+    private final int spacingTop;
+    private final int spacingBottom;
     private String displayMode;
 
 
     public EqualSpacingItemDecoration(int spacing) {
-        this.spacing = spacing;
+        this.spacingLeft = spacing;
+        this.spacingRight = spacing;
+        this.spacingTop = spacing;
+        this.spacingBottom = spacing;
     }
 
     public EqualSpacingItemDecoration(int spacing, String displayMode) {
-        this.spacing = spacing;
+        this.spacingLeft = spacing;
+        this.spacingRight = spacing;
+        this.spacingTop = spacing;
+        this.spacingBottom = spacing;
         this.displayMode = displayMode;
+    }
+
+    public EqualSpacingItemDecoration(int spacingLeft, int spacingRight, int spacingTop, int spacingBottom, String displayMode) {
+        this.spacingLeft = spacingLeft;
+        this.spacingRight = spacingRight;
+        this.spacingTop = spacingTop;
+        this.spacingBottom = spacingBottom;
+        this.displayMode = displayMode;
+    }
+
+    public EqualSpacingItemDecoration(int spacingLeft, int spacingRight, int spacingTop, int spacingBottom) {
+        this.spacingLeft = spacingLeft;
+        this.spacingRight = spacingRight;
+        this.spacingTop = spacingTop;
+        this.spacingBottom = spacingBottom;
     }
 
     @Override
@@ -48,16 +73,16 @@ public class EqualSpacingItemDecoration extends RecyclerView.ItemDecoration {
 
         switch (displayMode) {
             case HORIZONTAL:
-                outRect.left = spacing;
-                outRect.right = position == itemCount - 1 ? spacing : 0;
-                outRect.top = spacing;
-                outRect.bottom = spacing;
+                outRect.left = spacingLeft;
+                outRect.right = position == itemCount - 1 ? spacingRight : 0;
+                outRect.top = spacingTop;
+                outRect.bottom = spacingBottom;
                 break;
             case VERTICAL:
-                outRect.left = spacing;
-                outRect.right = spacing;
-                outRect.top = spacing;
-                outRect.bottom = position == itemCount - 1 ? spacing : 0;
+                outRect.left = spacingLeft;
+                outRect.right = spacingRight;
+                outRect.top = spacingTop;
+                outRect.bottom = position == itemCount - 1 ? spacingBottom : 0;
                 break;
             case GRID:
                 if (layoutManager instanceof GridLayoutManager) {
@@ -65,10 +90,10 @@ public class EqualSpacingItemDecoration extends RecyclerView.ItemDecoration {
                     int cols = gridLayoutManager.getSpanCount();
                     int rows = itemCount / cols;
 
-                    outRect.left = spacing;
-                    outRect.right = position % cols == cols - 1 ? spacing : 0;
-                    outRect.top = spacing;
-                    outRect.bottom = position / cols == rows - 1 ? spacing : 0;
+                    outRect.left = spacingLeft;
+                    outRect.right = position % cols == cols - 1 ? spacingRight : 0;
+                    outRect.top = spacingTop;
+                    outRect.bottom = position / cols == rows - 1 ? spacingBottom : 0;
                 }
                 break;
         }

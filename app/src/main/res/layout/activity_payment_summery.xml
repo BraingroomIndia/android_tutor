@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:bind="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="vm"
+            type="com.braingroom.tutor.viewmodel.activity.PaymentSummeryViewModel" />
+
+    </data>
+
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/splash_screen">
+
+        <android.support.constraint.Guideline
+            android:id="@+id/top_horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            bind:layout_constraintGuide_begin="146dp" />
+
+        <android.support.constraint.Guideline
+            android:id="@+id/bottom_horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            bind:layout_constraintGuide_begin="442dp" />
+
+        <android.support.v7.widget.CardView
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginEnd="26dp"
+            android:layout_marginLeft="26dp"
+            android:layout_marginRight="26dp"
+            android:layout_marginStart="26dp"
+            app:cardCornerRadius="5dp"
+            app:cardElevation="2dp"
+            app:layout_constraintBottom_toBottomOf="@id/bottom_horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/top_horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="top|center_horizontal"
+                android:layout_marginTop="35dp"
+                android:fontFamily="@font/roboto_medium"
+                android:text="@{vm.userName}"
+                android:textColor="@color/material_red300"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                tools:text="Tutor Name" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="22dp"
+                android:layout_marginRight="22dp"
+                android:layout_marginTop="70dp"
+                android:background="@color/material_bluegrey50"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/bottom_line_drawable"
+                    android:gravity="center_horizontal"
+                    android:padding="4dp"
+                    android:text='@{"Total Booked Ticket  "+ vm.totalBookedTickets}'
+                    android:textColor="@color/material_black"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    tools:text="Total Booked Ticket 200" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/roboto_regular"
+                    android:gravity="center_horizontal"
+                    android:padding="4dp"
+                    android:text='@{"Amount Received  "+ vm.priceSymbol+vm.amountReceived}'
+                    android:textColor="@color/material_grey700"
+                    android:textSize="14sp"
+                    android:textStyle="normal"
+                    tools:text="Amount Received" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:fontFamily="@font/roboto_regular"
+                    android:gravity="center_horizontal"
+                    android:padding="4dp"
+                    android:text='@{"Amount Pending  "+ vm.priceSymbol+vm.amountPending}'
+                    android:textColor="@color/material_grey700"
+                    android:textSize="14sp"
+                    android:textStyle="normal"
+                    tools:text="Amount Pending" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:fontFamily="@font/roboto_regular"
+                    android:gravity="center_horizontal"
+                    android:padding="6dp"
+                    android:text="Total Amount"
+                    android:textColor="@color/material_black"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    tools:text="Total Amount" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginBottom="40dp"
+                    android:layout_marginTop="8dp"
+                    android:background="@drawable/rounded_corner_line_orange"
+                    android:padding="@dimen/padding_small"
+                    android:text="@{vm.priceSymbol +vm.totalAmount}"
+                    android:textColor="@color/material_black"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    tools:text="500" />
+            </LinearLayout>
+
+        </android.support.v7.widget.CardView>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="26dp"
+            android:background="@drawable/solid_white_bottom_rounded_corner_ios"
+            android:fontFamily="@font/roboto_medium"
+            android:gravity="center_horizontal"
+            android:onClick="@{vm.onGetDetailsClicked}"
+            android:padding="12dp"
+            android:text="Get Details"
+            android:textColor="@color/material_red300"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent" />
+    </android.support.constraint.ConstraintLayout>
+
+
+</layout>

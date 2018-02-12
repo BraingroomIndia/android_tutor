@@ -42,6 +42,34 @@ public class NotificationListResp extends BaseResp {
         @SerializedName("status")
         private String status;
 
+        @SerializedName("sender_id")
+        private String messageSenderId;
+
+        public String getMessageSenderId() {
+            return getNonNull(messageSenderId);
+        }
+
+        public String getMessageSenderName() {
+            return getNonNull(messageSenderName);
+        }
+
+        public String getPostId() {
+            return getNonNull(postId);
+        }
+
+        public Integer getNotificationType() {
+            return getNonNull(notificationType);
+        }
+
+        @SerializedName("sender_name")
+        private String messageSenderName;
+
+        @SerializedName("post_id")
+        private String postId;
+
+        @SerializedName("notification_type")
+        private Integer notificationType;
+
         public Snippet(String notificationId, String classId, String description, String status) {
             this.notificationId = notificationId;
             this.classId = classId;

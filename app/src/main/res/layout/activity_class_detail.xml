@@ -338,7 +338,7 @@
                         <android.support.v7.widget.RecyclerView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:nestedScrollingEnabled="false"
+                            bind:nestedScrollingEnabled="@{false}"
                             android:paddingBottom="@dimen/margin_med"
                             android:paddingEnd="@dimen/margin_med"
                             android:paddingLeft="@dimen/margin_large"

@@ -46,8 +46,7 @@
             <android.support.v7.widget.RecyclerView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:nestedScrollingEnabled="false"
-
+                bind:nestedScrollingEnabled="@{false}"
                 bind:decor="@{vm.decor}"
                 bind:items='@{vm.items}'
                 bind:view='@{vm.viewProvider}'

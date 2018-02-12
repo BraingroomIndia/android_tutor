@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="vm"
+            type="com.braingroom.tutor.viewmodel.item.ItemTransactionSummery" />
+    </data>
+
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/solid_white_bottom_rounded_corner_ios">
+
+        <android.support.constraint.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:paddingTop="2dp">
+
+            <android.support.constraint.Guideline
+                android:id="@+id/vertical_30"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.25" />
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/learner_pic"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:src="@{vm.learnerImage}"
+                app:layout_constraintEnd_toStartOf="@id/vertical_30"
+                app:layout_constraintStart_toStartOf="parent"
+                app:placeHolder='@{vm.learnerImagePlaceholder}'
+                tools:src="@drawable/avatar_male" />
+
+            <TextView
+                android:id="@+id/booking_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{vm.bookingDate}"
+                android:textColor="@color/material_black"
+                android:textSize="30sp"
+                android:textStyle="normal"
+                app:layout_constraintEnd_toEndOf="@id/learner_pic"
+                app:layout_constraintStart_toStartOf="@id/learner_pic"
+                app:layout_constraintTop_toBottomOf="@id/learner_pic"
+                tools:text="17" />
+
+            <TextView
+                android:id="@+id/booking_day"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingBottom="5dp"
+                android:text="@{vm.bookindDay}"
+                android:textColor="@color/material_black"
+                android:textSize="15sp"
+                app:layout_constraintEnd_toEndOf="@id/learner_pic"
+                app:layout_constraintStart_toStartOf="@id/learner_pic"
+                app:layout_constraintTop_toBottomOf="@id/booking_date"
+                tools:text="Wednesday" />
+
+
+            <TextView
+                android:id="@+id/tickets"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text='@{"Tickets: "+vm.numberOfTicket}'
+                android:textSize="16sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.25"
+                app:layout_constraintStart_toStartOf="@id/vertical_30"
+                tools:text="# Tickets 6" />
+
+
+            <TextView
+                android:id="@+id/payment_mode"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="@{vm.paymentModeLabel}"
+                android:textSize="16sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="1"
+                app:layout_constraintStart_toEndOf="@id/tickets"
+                tools:text="Payment Online" />
+
+            <TextView
+                android:id="@+id/amount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:maxLines="1"
+                android:text="@{vm.priceSymbol +vm.totalAmount}"
+                android:textColor="@color/material_black"
+                android:textSize="30sp"
+                app:layout_constraintStart_toStartOf="@id/tickets"
+                app:layout_constraintTop_toBottomOf="@id/tickets"
+                tools:text="\u20A8   500" />
+
+            <TextView
+                android:id="@+id/learner_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="1dp"
+                android:text="@{vm.learnerName}"
+                android:textSize="15sp"
+                app:layout_constraintStart_toStartOf="@id/tickets"
+                app:layout_constraintTop_toBottomOf="@id/amount"
+                tools:text="Vikas Godara" />
+
+            <TextView
+                android:id="@+id/txn_id"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="1dp"
+                android:text="@{vm.txnId}"
+                android:textSize="15sp"
+                app:layout_constraintStart_toStartOf="@id/tickets"
+                app:layout_constraintTop_toBottomOf="@id/learner_name"
+                tools:text="TXNId" />
+
+            <ImageView
+                android:id="@+id/divider"
+
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:src="@drawable/bottom_line_drawable"
+
+                app:layout_constraintTop_toBottomOf="@id/booking_day" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingTop="5dp"
+                android:text="@{vm.bookingMonthYear}"
+                android:textColor="@color/material_grey600"
+                android:textSize="15sp"
+                app:layout_constraintEnd_toEndOf="@id/learner_pic"
+                app:layout_constraintStart_toStartOf="@id/learner_pic"
+                app:layout_constraintTop_toBottomOf="@id/divider"
+                tools:text="Jan 2018" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingTop="5dp"
+                android:text="@{vm.paymentStatus}"
+                android:textSize="15sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/divider"
+                tools:text="PENDING"
+                tools:textColor="@color/materialGreen" />
+        </android.support.constraint.ConstraintLayout>
+
+
+    </android.support.v7.widget.CardView>
+</layout>

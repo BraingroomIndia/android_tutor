@@ -92,8 +92,6 @@ class AppModule(private val application: Application) {
 
     fun providePicasso(): Picasso {
         val picasso = Picasso.with(application)
-        picasso.setIndicatorsEnabled(true)
-        picasso.isLoggingEnabled = true
         return picasso
     }
 }

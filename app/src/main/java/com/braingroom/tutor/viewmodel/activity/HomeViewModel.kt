@@ -29,19 +29,17 @@ class HomeViewModel(helperFactory: HelperFactory) : ViewModel(helperFactory) {
     }
     val spanCount = 2
 
-    val view: ViewProvider by lazy {
-        object : ViewProvider {
-            override fun getView(vm: RecyclerViewItem?): Int {
-                if (vm == null)
-                    throw NullPointerException()
-                return when (vm) {
-                    is HomeItemViewModel -> R.layout.item_home
-                    else -> throw NoSuchFieldError()
-                }
 
-            }
+     fun getView(vm: RecyclerViewItem?): Int {
+
+        return when (vm) {
+            is HomeItemViewModel -> R.layout.item_home
+            null -> throw NullPointerException()
+            else -> throw NoSuchFieldError()
         }
+
     }
+
     private val bottomDrawableList = ArrayList<@ColorRes Int>(8)
     private val topDrawableList = ArrayList<@DrawableRes Int>(8)
     private val textList = ArrayList<String>(8)
@@ -52,9 +50,7 @@ class HomeViewModel(helperFactory: HelperFactory) : ViewModel(helperFactory) {
         topDrawableList += R.drawable.ic_myclass_36dp//1
         textList += "My Class"   //1
         bottomDrawableList += R.color.material_blue400  //1
-        actionList += Action { navigator.navigateActivity(MyClassesActivity::class.java) } //1
-
-
+        actionList += Action { navigator.navigateActivity(MyClassesActivity::class.java) } //
         topDrawableList += R.drawable.ic_attendance_36dp//2
         textList += "Attendance" //2
         bottomDrawableList += R.color.material_lightgreen500 //2
@@ -78,22 +74,27 @@ class HomeViewModel(helperFactory: HelperFactory) : ViewModel(helperFactory) {
         actionList += Action { navigator.navigateActivity(MediaActivity::class.java) } //5
 
 
-        topDrawableList += R.drawable.ic_calnder_36dp//6
-        textList += "Booking Calender" //6
-        bottomDrawableList += R.color.material_cyan300  //6
-        actionList += Action { messageHelper.showDismissInfo("Info", "Comming Soon", "Dismiss") } //6
+        topDrawableList += R.drawable.ic_payment_36dp//6
+        textList += "Payment Details" //6
+        bottomDrawableList += R.color.material_pink200  //6
+        actionList += Action { navigator.navigateActivity(PaymentSummeryActivity::class.java) } //6
+
+
+
+        topDrawableList += R.drawable.ic_calnder_36dp//7
+        textList += "Booking Calender" //7
+        bottomDrawableList += R.color.material_cyan300  //7
+        actionList += Action { messageHelper.showDismissInfo("Info", "Comming Soon", "Dismiss") } //7
+
+
 
 
         topDrawableList += R.drawable.ic_add_class//8
-        textList += "Add Class"  //1
+        textList += "Add Class"  //8
         bottomDrawableList += R.color.material_pinkA400 //8
-        actionList += Action { messageHelper.showDismissInfo("Info", "Comming Soon", "Dismiss") } //1
+        actionList += Action { messageHelper.showDismissInfo("Info", "Comming Soon", "Dismiss") } //8
 
 
-        topDrawableList += R.drawable.ic_payment_36dp//3
-        textList += "Payment Details" //3
-        bottomDrawableList += R.color.material_pink200  //3
-        actionList += Action { messageHelper.showDismissInfo("Info", "Comming Soon", "Dismiss") } //3
 
 
         (0..7).forEach { item.onNext(HomeItemViewModel(topDrawableList[it], bottomDrawableList[it], textList[it], actionList[it])) }

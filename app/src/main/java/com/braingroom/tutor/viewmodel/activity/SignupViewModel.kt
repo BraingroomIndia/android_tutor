@@ -138,7 +138,7 @@ class SignupViewModel(helperFactory: HelperFactory, val uiHelper: SignupActivity
     }
 
     val datePicker by lazy {
-        DatePickerViewModel(helperFactory, "DOB", "12-12-2012")
+        DatePickerViewModel(helperFactory, "DOB", "12-12-2012", Runnable { })
     }
 
 
