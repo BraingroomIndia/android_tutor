@@ -1,5 +1,6 @@
 package com.braingroom.tutor.viewmodel.item
 
+import android.databinding.generated.callback.OnClickListener
 import android.graphics.Color
 import android.os.Bundle
 import com.braingroom.tutor.R
@@ -12,25 +13,9 @@ import io.reactivex.functions.Action
 /*
  * Created by ashketchup on 26/12/17.
  */
-class NotificationsItemViewModel(helperFactory: HelperFactory, val title: String, val postId: String,
-                                 val classId: String,
-                                 val readStatus: Boolean) : ViewModel(helperFactory), RecyclerViewItem {
-    val onClick: Action by lazy {
-        Action {
-            if (classId.isBlank())
-                return@Action
+class NotificationsItemViewModel(helperFactory: HelperFactory, val title: String,
+                                 val readStatus: Boolean, val onClick: Action) : ViewModel(helperFactory), RecyclerViewItem {
 
-            apiService.getClassDetail(classId).doOnError(this::handleError).doOnSubscribe { compositeDisposable.add(it) }.
-                    subscribe({
-                        if (!it.resCode)
-                            return@subscribe
-                        val bundle = Bundle()
-                        bundle.putSerializable("classData", it.data)
-                        navigator.navigateActivity(ClassDetailActivity::class.java, bundle)
-
-                    })
-        }
-    }
     val color by lazy {
         if (readStatus)
             R.color.material_grey200
@@ -38,6 +23,6 @@ class NotificationsItemViewModel(helperFactory: HelperFactory, val title: String
             R.color.material_white
     }
 
-    constructor(helperFactory: HelperFactory, snippet: NotificationListResp.Snippet) : this(helperFactory, snippet.getDescription(), "", snippet.getClassId(), snippet.getStatus())
+    constructor(helperFactory: HelperFactory, snippet: NotificationListResp.Snippet, onClick: Action) : this(helperFactory, snippet.getDescription(), snippet.getStatus(), onClick)
 
 }

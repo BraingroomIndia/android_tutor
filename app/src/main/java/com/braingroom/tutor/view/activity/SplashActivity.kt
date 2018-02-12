@@ -43,18 +43,8 @@ class SplashActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        try {
-            val info = packageManager.getPackageInfo("com.braingroom.tutor", PackageManager.GET_SIGNATURES)
-            for (signature in info.signatures) {
-                val md = MessageDigest.getInstance("SHA")
-                md.update(signature.toByteArray())
-                Log.e("MY KEY HASH:", Base64.encodeToString(md.digest(), Base64.DEFAULT))
-            }
-        } catch (e: PackageManager.NameNotFoundException) {
 
-        } catch (e: NoSuchAlgorithmException) {
 
-        }
 
         bundleReceived = intent.getBundleExtra(pushNotification) ?: Bundle()
         loggedIn = userPreferences.getBoolean(lodgedIn, false)
@@ -89,12 +79,12 @@ class SplashActivity : AppCompatActivity() {
 
     private fun pushNotification() {
         apiServices.registerFCMToken(userPreferences.getString(FCM_TOKEN, ""))
-        var postId: String? = null
-        var classId: String? = null
-        var messageSenderId: String? = null
-        var messageSenderName: String? = null
-        var nonfictionPurpose: String? = null
-        var userId: String? = null
+        val postId: String?
+        val classId: String?
+        val messageSenderId: String?
+        val messageSenderName: String?
+        val notificationType: Int?
+        val userId: String?
 
         val data: HashMap<String, String>
         //if onMessageReceived called
@@ -103,40 +93,55 @@ class SplashActivity : AppCompatActivity() {
 
             }.type)
             Timber.tag(TAG).d("hashMap data" + data.toString())
+
             postId = data["post_id"]
             classId = data["class_id"]
             messageSenderId = data["sender_id"]
             messageSenderName = data["sender_name"]
-            nonfictionPurpose = data["notification_type"]
+            notificationType = data["notification_type"]?.toIntOrNull()
             userId = data["user_id"]
-            // if onMessageReceived not called
-        }
-        if (postId != null) {
-            val bundle = Bundle()
-            bundle.putString("postId", postId)
-            navigateActivity(HomeActivity::class.java, null)
-        } else if (classId != null) {
-            apiServices.getClassDetail(classId).subscribe({
-                if (it.resCode) {
-                    val bundle = Bundle()
-                    bundle.putSerializable(classBudleData, it.data)
-                    navigateActivity(ClassDetailActivity::class.java, bundle)
-                } else navigateToIndex()
-            })
-        } else if (messageSenderId != null && messageSenderName != null) {
-            val bundle = Bundle()
-            bundle.putString("sender_id", messageSenderId)
-            bundle.putString("sender_name", messageSenderName)
-            if ("0".equals(messageSenderId, ignoreCase = true))
-            //If message is from admin open Inbox
-                navigateActivity(MessageActivity::class.java, bundle)
-            else
-            // For every one else open Chat thread
-                navigateActivity(MessageThreadActivity::class.java, bundle)
 
-        } else {
-            navigateToIndex()
-        }
+            if (postId != null) {
+                val bundle = Bundle()
+                bundle.putString("postId", postId)
+                bundle.putBoolean(pushNotification, true)
+                navigateActivity(HomeActivity::class.java, null)
+            } else if (classId != null) {
+
+                apiServices.getClassDetail(classId).subscribe({
+                    if (it.resCode) {
+                        if (notificationType == 10) {
+                            val bundle = Bundle()
+                            bundle.putBoolean(pushNotification, true)
+                            bundle.putString(classIdBundleData, classId);
+                            bundle.putString(className, it.data.classTopic)
+                            bundle.putString(classImage, it.data.classPic)
+                            navigateActivity(PaymentClassDetailActivity::class.java, bundle)
+                        } else {
+                            val bundle = Bundle()
+                            bundle.putBoolean(pushNotification, true)
+                            bundle.putSerializable(classBudleData, it.data)
+                            navigateActivity(ClassDetailActivity::class.java, bundle)
+                        }
+                    } else navigateToIndex()
+                })
+            } else if (messageSenderId != null && messageSenderName != null) {
+                val bundle = Bundle()
+                bundle.putBoolean(pushNotification, true)
+                bundle.putString("sender_id", messageSenderId)
+                bundle.putString("sender_name", messageSenderName)
+                if ("0".equals(messageSenderId, ignoreCase = true))
+                //If message is from admin open Inbox
+                    navigateActivity(MessageActivity::class.java, bundle)
+                else
+                // For every one else open Chat thread
+                    navigateActivity(MessageThreadActivity::class.java, bundle)
+
+            } else {
+                navigateToIndex()
+            }
+
+        } else navigateToIndex()
 
 
     }

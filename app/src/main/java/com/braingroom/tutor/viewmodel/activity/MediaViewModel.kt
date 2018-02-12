@@ -1,5 +1,6 @@
 package com.braingroom.tutor.viewmodel.activity
 
+import android.content.Intent
 import android.databinding.ObservableBoolean
 import android.util.Log
 import com.braingroom.tutor.R
@@ -20,34 +21,37 @@ import kotlin.collections.ArrayList
  * Created by ashketchup on 6/12/17.
  */
 class MediaViewModel(helperFactory: HelperFactory) : ViewModel(helperFactory) {
-    val viewProvider: ViewProvider  by lazy {
-        object : ViewProvider {
-            override fun getView(vm: RecyclerViewItem?): Int {
-                return when (vm) {
-                    is LoadingViewModel -> R.layout.item_loading_media
-                    is TextIconViewModel -> R.layout.item_media
-                    null -> throw NullPointerException()
-                    else -> throw NoSuchFieldError()
-                }
-            }
+
+    fun getView(vm: RecyclerViewItem?): Int {
+        return when (vm) {
+            is LoadingViewModel -> R.layout.item_loading_media
+            is TextIconViewModel -> R.layout.item_media
+            null -> throw NullPointerException()
+            else -> throw NoSuchFieldError()
         }
     }
 
+    val imageUpload = ImageUploadViewModel(helperFactory, "", Action { onUploadFinish() }, 12563)
+
 
     var isVideo = ObservableBoolean(false)
-    val onVideo: Action by lazy {
+    val onVideo by lazy {
         Action {
             if (!isVideo.get()) {
                 isVideo.set(!isVideo.get())
                 item.onNext(RefreshViewModel())
+                pageNumber = 1
                 makeCall()
             }
         }
     }
-    val onImage: Action by lazy {
+
+
+    val onImage by lazy {
         Action {
             if (isVideo.get()) {
                 isVideo.set(!isVideo.get())
+                pageNumber = 1
                 item.onNext(RefreshViewModel())
                 makeCall()
             }
@@ -96,5 +100,13 @@ class MediaViewModel(helperFactory: HelperFactory) : ViewModel(helperFactory) {
         paginationInProgress = false
     }
 
+    fun onUploadFinish() {
+        apiService.saveMedia(imageUpload.remoteAddress.get(), "image").subscribe { messageHelper.showDismissInfo("Info", it.resMsg, "Okay") }
+    }
 
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        imageUpload.onActivityResult(requestCode, resultCode, data)
+    }
 }

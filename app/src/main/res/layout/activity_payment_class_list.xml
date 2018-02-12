@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:bind="http://schemas.android.com/tools"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="vm"
+            type="com.braingroom.tutor.viewmodel.activity.PaymentClassListViewModel" />
+
+    </data>
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/solid_white_bottom_rounded_corner_ios"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:id="@+id/date"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:baselineAligned="false"
+            android:orientation="horizontal">
+
+            <include
+                android:id="@+id/first_date"
+                layout="@layout/item_date_dialog_opener"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="6dp"
+                android:layout_weight="1"
+                app:vm="@{vm.firstDate}" />
+
+            <include
+                android:id="@+id/second_date"
+                layout="@layout/item_date_dialog_opener"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="6dp"
+                android:layout_weight="1"
+                app:vm="@{vm.secondDate}" />
+        </LinearLayout>
+
+
+        <android.support.v7.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/date"
+            android:layout_marginTop="5dp"
+            bind:decor="@{vm.decor}"
+            bind:items="@{vm.item}"
+            bind:nestedScrollingEnabled="@{false}"
+            bind:paginate="@{vm::paginate}"
+            bind:view="@{vm::getView}"
+            tools:listitem="@layout/item_payment_details" />
+        <!---->
+    </RelativeLayout>
+</layout>

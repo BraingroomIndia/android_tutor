@@ -1,6 +1,7 @@
 package com.braingroom.tutor.services
 
 import com.braingroom.tutor.model.req.*
+import com.braingroom.tutor.model.req.PaymentClassDetailReq
 import com.braingroom.tutor.model.resp.*
 import io.reactivex.Observable
 import okhttp3.MultipartBody
@@ -43,10 +44,11 @@ interface ApiService {
     fun signUp(@Body req: SignUpReq): Observable<SignUpResp>
 
     @POST("tutorApi/getPaymentSummaryByClasses/{pageIndex}")
-    fun getPaymentSummaryByClasses(@Path("pageIndex") pageIndex: String, @Body req: PaymentSummaryReq): Observable<PaymentDetailsResp>
+    fun getPaymentSummaryByClasses(@Path("pageIndex") pageIndex: String, @Body req: PaymentSummaryReq): Observable<PaymentClassListResp>
 
- /*   @POST("getInstitions")
-    fun getInstitute(@Body req: InstituteReq): Observable<CommonIdResp>*/
+    @POST("tutorApi/getPaymentDetailByClass/{pageIndex}")
+    fun getPaymentDetailByClass(@Path("pageIndex") pageIndex: String, @Body req: PaymentClassDetailReq): Observable<PaymentClassDetailResp>
+
 
     @POST("tutorApi/getUserListByTutor")
     fun getUser(@Body req: UserListReq): Observable<CommonIdResp>
@@ -119,6 +121,9 @@ interface ApiService {
 
     @POST("tutorApi/getClassListByTutor")
     fun getClassList(@Body req: CommonTutorIdReq): Observable<CommonIdResp>
+
+    @POST("/tutorApi/saveMedia")
+    fun saveMedia(@Body req: SaveMediaReq):Observable<CommonIdResp>
 
 
 }

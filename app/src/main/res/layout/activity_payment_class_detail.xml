@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:bind="http://schemas.android.com/tools"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="vm"
+            type="com.braingroom.tutor.viewmodel.activity.PaymentClassDetailViewModel" />
+
+    </data>
+
+   <!-- <android.support.v4.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+-->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:id="@+id/class_image"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:orientation="vertical">
+
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="5"
+                    android:scaleType="centerCrop"
+                    android:src="@{vm.classImage}"
+                    tools:src="@drawable/splash_screen" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="2"
+                    android:background="@drawable/solid_white_bottom_rounded_corner_ios"
+                    android:ellipsize="end"
+                    android:fontFamily="@font/roboto_regular"
+                    android:gravity="center_vertical"
+                    android:maxLines="3"
+                    android:padding="5dp"
+                    android:text="@{vm.classTitle}"
+                    android:textColor="@color/material_black"
+                    android:textSize="@dimen/text_size_large"
+                    tools:text="@string/app_name" />
+            </LinearLayout>
+
+            <android.support.v7.widget.RecyclerView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/class_image"
+                android:layout_marginTop="5dp"
+                bind:decor="@{vm.decor}"
+                bind:items="@{vm.item}"
+                bind:nestedScrollingEnabled="@{true}"
+                bind:paginate="@{vm::paginate}"
+                bind:view="@{vm::getView}"
+                tools:listitem="@layout/item_transaction" />
+        </RelativeLayout>
+   <!-- </android.support.v4.widget.NestedScrollView>-->
+
+</layout>

@@ -4,7 +4,7 @@
     xmlns:bind="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-   <data>
+    <data>
 
         <import type="android.view.View" />
 
@@ -12,7 +12,7 @@
             name="vm"
             type="com.braingroom.tutor.viewmodel.fragment.DynamicSearchSelectListViewModel" />
 
-   </data>
+    </data>
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -41,6 +41,7 @@
             android:layout_above="@+id/footer_container"
             android:layout_below="@+id/search"
             bind:items="@{vm.item}"
+            bind:nestedScrollingEnabled="@{false}"
             bind:view="@{vm.viewProvider}"
             tools:listitems="@layout/item_search_select_text" />
 

@@ -1,5 +1,6 @@
 package com.braingroom.tutor.view.activity
 
+import android.support.v7.widget.SearchView
 import com.braingroom.tutor.R
 import com.braingroom.tutor.viewmodel.ViewModel
 import com.braingroom.tutor.viewmodel.activity.MyClassesViewModel
@@ -14,4 +15,5 @@ class MyClassesActivity : Activity() {
         MyClassesViewModel(helperFactory)
     }
     override val layoutId: Int = R.layout.activity_my_classes
+
 }

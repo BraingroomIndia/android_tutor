@@ -1,10 +1,13 @@
 package com.braingroom.tutor.model.resp;
 
 import android.support.annotation.NonNull;
+import android.text.Spanned;
 
 import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
+
+import static com.braingroom.tutor.utils.CommonUtilsKt.fromHtml;
 
 /*
  * Created by godara on 27/12/17.
@@ -18,7 +21,7 @@ public class PaymentSummaryResp extends BaseResp {
 
 
     public Snippet getData() {
-        return isEmpty(data) ? new Snippet() : data.get(0);
+        return !getResCode() ? new Snippet() : data.get(0);
     }
 
     @SerializedName("braingroom")
@@ -39,6 +42,8 @@ public class PaymentSummaryResp extends BaseResp {
 
         @SerializedName("total")
         private int totalAmount;
+        @SerializedName("price_symbol")
+        private String priceSymbol;
 
         @NonNull
         public String getTotalTicket() {
@@ -63,6 +68,13 @@ public class PaymentSummaryResp extends BaseResp {
         @NonNull
         public String getTotalAmount() {
             return totalAmount + "";
+        }
+
+        @NonNull
+        public Spanned getPriceSymbol() {
+            if (isEmpty(priceSymbol))
+                priceSymbol = "&#8377;";
+            return fromHtml(priceSymbol);
         }
 
 

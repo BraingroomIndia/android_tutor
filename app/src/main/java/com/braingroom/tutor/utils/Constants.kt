@@ -42,4 +42,7 @@ const val FCM_TOKEN = "fcm_token"
 const val bundleData = "bundleData"
 const val classBudleData = "classData"
 const val pushNotification = "pushNotification"
+const val classIdBundleData ="classId"
+const val className="className"
+const val classImage ="classImage"
 /*Bundle Keys */

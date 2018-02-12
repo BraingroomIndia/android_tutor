@@ -26,6 +26,7 @@
             <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
+                android:theme="@style/AppTheme.AppBarOverlay"
                 android:layout_height="?attr/actionBarSize"
                 android:background="?attr/colorPrimary" />
         </android.support.design.widget.AppBarLayout>
@@ -67,14 +68,15 @@
                 android:paddingLeft="@dimen/padding_large"
                 android:paddingRight="@dimen/padding_large"
                 android:paddingStart="@dimen/padding_large"
-                app:layoutManager="android.support.v7.widget.GridLayoutManager"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:spanCount="2"
                 bind:items='@{vm.item}'
-                bind:span='@{vm.spanCount}'
-                bind:view='@{vm.view}'
-                tools:listitem="@layout/item_home" />
+                bind:nestedScrollingEnabled="@{false}"
+                bind:spanCount="@{2}"
+                bind:view='@{vm::getView}'
+                tools:layoutManager="android.support.v7.widget.GridLayoutManager"
+                tools:listitem="@layout/item_home"
+                tools:spanCount="2" />
 
             <FrameLayout
                 android:id="@+id/fragment_container"
