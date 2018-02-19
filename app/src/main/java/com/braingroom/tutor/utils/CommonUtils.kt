@@ -15,6 +15,7 @@ import android.os.Build
 import android.os.Environment
 import android.provider.DocumentsContract
 import android.provider.MediaStore
+import android.support.v4.content.ContextCompat
 import android.text.Html
 import android.text.Spanned
 import android.util.DisplayMetrics
@@ -144,6 +145,8 @@ fun isValidName(target: CharSequence?): Boolean {
 fun getThumbnail(url: String): String {
     return "http://img.youtube.com/vi/" + extractYoutubeId(url) + "/0.jpg"
 }
+
+fun getEmbeddedYoutubeUrl(url: String) = "https://www.youtube.com/embed/" + extractYoutubeId(url)
 
 
 val youTubeUrlRegEx = "^(https?)?(://)?(www.)?(m.)?((youtube.com)|(youtu.be))/"
@@ -364,4 +367,23 @@ fun isDownloadsDocument(uri: Uri): Boolean {
  */
 fun isMediaDocument(uri: Uri): Boolean {
     return "com.android.providers.media.documents" == uri.authority
+}
+
+fun getScreenWidth(): Int {
+    return Resources.getSystem().displayMetrics.widthPixels
+}
+
+fun getScreenHeight(): Int {
+    return Resources.getSystem().displayMetrics.heightPixels
+}
+
+fun max(vararg n: Number): Number {
+    var i = 0
+    var max = n[i]
+
+    while (++i < n.size)
+        if (n[i].toDouble() > max.toDouble())
+            max = n[i]
+
+    return max
 }

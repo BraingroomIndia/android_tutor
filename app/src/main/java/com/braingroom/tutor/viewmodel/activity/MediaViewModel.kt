@@ -2,11 +2,15 @@ package com.braingroom.tutor.viewmodel.activity
 
 import android.content.Intent
 import android.databinding.ObservableBoolean
+import android.text.InputType
 import android.util.Log
+import com.afollestad.materialdialogs.MaterialDialog
 import com.braingroom.tutor.R
+import com.braingroom.tutor.common.CustomApplication
 import com.braingroom.tutor.common.modules.HelperFactory
 import com.braingroom.tutor.model.req.GalleryReq
 import com.braingroom.tutor.model.resp.GalleryResp
+import com.braingroom.tutor.utils.getEmbeddedYoutubeUrl
 import com.braingroom.tutor.view.adapters.ViewProvider
 import com.braingroom.tutor.viewmodel.ViewModel
 import com.braingroom.tutor.viewmodel.item.*
@@ -20,7 +24,7 @@ import kotlin.collections.ArrayList
 /*
  * Created by ashketchup on 6/12/17.
  */
-class MediaViewModel(helperFactory: HelperFactory) : ViewModel(helperFactory) {
+class MediaViewModel(helperFactory: HelperFactory, val videoUpload: () -> Unit) : ViewModel(helperFactory) {
 
     fun getView(vm: RecyclerViewItem?): Int {
         return when (vm) {
@@ -46,6 +50,13 @@ class MediaViewModel(helperFactory: HelperFactory) : ViewModel(helperFactory) {
         }
     }
 
+    val onUploadClicked = Action {
+        if (isVideo.get())
+            videoUpload()
+        else
+            imageUpload.onUploadClicked.run()
+
+    }
 
     val onImage by lazy {
         Action {
@@ -101,7 +112,10 @@ class MediaViewModel(helperFactory: HelperFactory) : ViewModel(helperFactory) {
     }
 
     fun onUploadFinish() {
-        apiService.saveMedia(imageUpload.remoteAddress.get(), "image").subscribe { messageHelper.showDismissInfo("Info", it.resMsg, "Okay") }
+        apiService.saveMedia(imageUpload.remoteAddress.get(), "image").subscribe {
+            messageHelper.showDismissInfo("Info", it.resMsg, "Okay")
+            makeCall()
+        }
     }
 
 

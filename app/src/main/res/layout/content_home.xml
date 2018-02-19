@@ -14,7 +14,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:background="@drawable/splash_screen"
         android:orientation="vertical">
 
@@ -26,70 +26,27 @@
             <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
-                android:theme="@style/AppTheme.AppBarOverlay"
                 android:layout_height="?attr/actionBarSize"
-                android:background="?attr/colorPrimary" />
+                android:background="?attr/colorPrimary"
+                android:theme="@style/AppTheme.AppBarOverlay" />
         </android.support.design.widget.AppBarLayout>
 
-        <android.support.constraint.ConstraintLayout
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recyclerView2"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            tools:context=".view.activity.HomeActivity"
-            tools:showIn="@layout/content_home">
+            android:layout_height="wrap_content"
+            android:paddingLeft="@dimen/padding_large"
+            android:paddingRight="@dimen/padding_large"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            bind:items='@{vm.homeItems}'
+            bind:nestedScrollingEnabled="@{false}"
+            bind:spanCount="@{2}"
+            bind:view='@{vm::getView}'
+            tools:layoutManager="android.support.v7.widget.GridLayoutManager"
+            tools:listitem="@layout/item_home"
+            tools:spanCount="2" />
 
-            <!--        <android.support.constraint.Guideline
-                        android:id="@+id/guideline5"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        app:layout_constraintGuide_begin="20dp" />-->
-
-
-            <!-- <TextView
-                 android:id="@+id/textView"
-                 android:layout_width="wrap_content"
-                 android:layout_height="wrap_content"
-                 android:layout_marginEnd="8dp"
-                 android:layout_marginStart="8dp"
-                 android:layout_marginTop="8dp"
-                 android:text="@{vm.userName}"
-                 app:layout_constraintEnd_toEndOf="parent"
-                 app:layout_constraintHorizontal_bias="0.5"
-                 app:layout_constraintStart_toStartOf="parent"
-                 app:layout_constraintTop_toBottomOf="@+id/image" />
-     -->
-
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/recyclerView2"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-
-                android:paddingEnd="@dimen/padding_large"
-                android:paddingLeft="@dimen/padding_large"
-                android:paddingRight="@dimen/padding_large"
-                android:paddingStart="@dimen/padding_large"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                bind:items='@{vm.item}'
-                bind:nestedScrollingEnabled="@{false}"
-                bind:spanCount="@{2}"
-                bind:view='@{vm::getView}'
-                tools:layoutManager="android.support.v7.widget.GridLayoutManager"
-                tools:listitem="@layout/item_home"
-                tools:spanCount="2" />
-
-            <FrameLayout
-                android:id="@+id/fragment_container"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-
-            <!--       <android.support.constraint.Guideline
-                       android:id="@+id/guideline2"
-                       android:layout_width="wrap_content"
-                       android:layout_height="wrap_content"
-                       android:orientation="vertical"
-                       app:layout_constraintGuide_begin="20dp" />-->
-        </android.support.constraint.ConstraintLayout>
 
     </LinearLayout>
 </layout>

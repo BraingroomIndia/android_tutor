@@ -1,15 +1,10 @@
-@file:Suppress("USELESS_ELVIS")
-
 package com.braingroom.tutor.utils
 
 import android.databinding.BindingAdapter
 import android.databinding.BindingConversion
 import android.databinding.ViewDataBinding
-import android.graphics.PorterDuff
 import android.graphics.drawable.Drawable
-import android.os.Build
 import android.support.design.widget.NavigationView
-import android.support.design.widget.TextInputLayout
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -21,26 +16,20 @@ import com.braingroom.tutor.viewmodel.ViewModel
 import com.braingroom.tutor.viewmodel.activity.HomeViewModel
 import io.reactivex.functions.Action
 import android.databinding.InverseBindingListener
-import android.support.v7.widget.AppCompatSpinner
 import android.databinding.InverseBindingAdapter
-import android.databinding.adapters.ImageViewBindingAdapter
 import android.support.annotation.DrawableRes
 import android.widget.*
 import com.braingroom.tutor.viewmodel.item.RecyclerViewItem
 import android.support.annotation.ColorRes
-import android.support.annotation.IdRes
 import android.support.v4.content.ContextCompat
-import android.support.v4.graphics.drawable.DrawableCompat
 import android.support.v4.graphics.drawable.DrawableCompat.setTint
 import android.support.v4.view.ViewCompat
+import android.support.v4.widget.NestedScrollView
 import android.support.v7.widget.RecyclerView
-import retrofit2.http.Body
+import com.braingroom.tutor.common.modules.GlideApp
 import timber.log.Timber
 
 
-/*
- * Created by godara on 27/09/17.
- */
 val TAG = "BindingUti"
 val defaultBinder: ViewModelBinder by lazy {
     Timber.tag(TAG).v("created")
@@ -55,9 +44,6 @@ val defaultBinder: ViewModelBinder by lazy {
         }
     }
 }
-val picasso by lazy {
-    CustomApplication.getInstance().appModule.picasso
-}
 
 
 @BindingAdapter("android:visibility")
@@ -70,46 +56,23 @@ fun toOnClickListener(listener: Action?): View.OnClickListener? {
             try {
                 listener.run()
             } catch (e: Exception) {
-                Log.e("toOnClickListener", e.message, e)
+                Timber.tag("toOnClickListener").e(e, e.message)
             }
         }
         else -> null
     }
 }
 
-@BindingConversion
-fun toOnClickListener(body: () -> Unit): View.OnClickListener? {
-    return when {
-        body != null -> View.OnClickListener {
-            try {
-                body()
-            } catch (e: Exception) {
-                Log.e("toOnClickListener", e.message, e)
-            }
-        }
-        else -> null
-    }
-}
 
-@BindingConversion
-fun toSetTextColor(body: () -> Int) = body()
-
-@BindingAdapter("android:src")
-fun setImageUri(view: ImageView?, imageUrl: String?) {
-    if (!isEmpty(imageUrl)) {
-        Log.v("setImageUri", imageUrl)
-        view?.let { picasso.load(imageUrl).into(it) }
-    }
-}
-
-@BindingAdapter(value = *arrayOf("android:src", "placeHolder"), requireAll = true)
+@BindingAdapter(value = *arrayOf("src", "placeHolder"), requireAll = false)
 fun setImageUri(view: ImageView?, imageUrl: String?, placeHolder: Int?) {
+    CustomApplication.getInstance()?.refWatcher?.watch(view?.drawable)
+    Timber.tag("setImageUri").d(imageUrl)
     if (!imageUrl.isNullOrBlank()) {
-        //   Log.v("setImageUri", imageUrl + "   " + placeHolder)
         if (placeHolder != null && placeHolder != 0)
-            view?.let { picasso.load(imageUrl).placeholder(placeHolder).error(placeHolder).fit().centerCrop().into(it) }
-        else setImageUri(view, imageUrl)
-    } else if (placeHolder != null && placeHolder != 0) view?.let { picasso.load(placeHolder).fit().centerCrop().into(it) }
+            view?.let { GlideApp.with(it).load(imageUrl).placeholder(placeHolder).error(placeHolder).fitCenter().centerCrop().into(it) }
+        else view?.let { GlideApp.with(it).load(imageUrl).into(it) }
+    } else if (placeHolder != null && placeHolder != 0) view?.let { GlideApp.with(it).load(placeHolder).fitCenter().centerCrop().into(it) }
 }
 
 
@@ -121,17 +84,10 @@ fun loadHeader(view: NavigationView, model: HomeViewModel?) {
     view.addHeaderView(binding.root)
 }
 
-/*@BindingAdapter(value = *arrayOf("android:src", "placeHolder"), requireAll = true)
-fun setImageUrl(imageView: ImageView?, url: String?, placeHolder: Int?) {
-    Log.v("Binding Utils", "setImageUrl: " + url ?: "null")
-    if (!url.isNullOrBlank())
-        imageView?.let { picasso?.load(url)?.placeholder(placeHolder)?.error(placeHolder)?.*//*centerInside()?.resize(it.width, it.height)?.*//*into(it) }
-}*/
-
 
 @BindingAdapter(value = *arrayOf("android:drawableLeft", "android:drawableRight", "android:drawableTop", "android:drawableBottom"), requireAll = false)
-fun setDrawableBottom(view: TextView?,
-                      drawableLeft: Drawable?, drawableRight: Drawable?, drawableTop: Drawable?, drawableBottom: Drawable?) {
+fun setCompoundDrawable(view: TextView?,
+                        drawableLeft: Drawable?, drawableRight: Drawable?, drawableTop: Drawable?, drawableBottom: Drawable?) {
     if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.JELLY_BEAN_MR1)
         view?.setCompoundDrawablesRelativeWithIntrinsicBounds(drawableLeft, drawableTop, drawableRight, drawableBottom)
     else
@@ -139,37 +95,11 @@ fun setDrawableBottom(view: TextView?,
 
 }
 
-@BindingAdapter("android:background")
-fun setBackground(view: View?, drawable: Drawable?) {
-    @Suppress("DEPRECATION")
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN)
-        view?.background = drawable
-    else
-        view?.setBackgroundDrawable(drawable)
-}
 
 @BindingAdapter("background")
-fun setBackground(view: View?, res: Int) {
-    @Suppress("DEPRECATION")
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN)
-        view?.setBackgroundResource(res)
-    else
-        view?.setBackgroundResource(res)
-}
-
-/*
-@BindingAdapter("android:OnEditorActionListener")
-fun setOnEditorActionListener(view: TextView?, listener: TextView.OnEditorActionListener) {
-    view?.setOnEditorActionListener(listener)
-}
-*/
-
-@BindingAdapter("drawableTint")
-fun setDrawableTint(view: TextView?, color: Int) {
-
-    view?.compoundDrawables?.let {
-        it.forEach { drawable -> drawable.setColorFilter(color, PorterDuff.Mode.MULTIPLY) }
-    }
+fun setBackground(view: View?, @DrawableRes res: Int) {
+    if (res != 0)
+        view?.let { ViewCompat.setBackground(view, ContextCompat.getDrawable(view.context, res)) }
 }
 
 @BindingAdapter("errorText")
@@ -179,15 +109,6 @@ fun setErrorMessage(view: EditText, errorMessage: String?) {
         else -> view.error = errorMessage
     }
 }
-
-@BindingAdapter("errorText")
-fun setErrorMessage(view: TextInputLayout, errorMessage: String?) {
-    when (errorMessage.isNullOrBlank()) {
-        true -> view.error = null
-        else -> view.error = errorMessage
-    }
-}
-
 
 @Suppress("UNCHECKED_CAST")
 @BindingAdapter(value = *arrayOf("selectedValue", "selectedValueAttrChanged"), requireAll = false)
@@ -218,11 +139,22 @@ fun setImageResource(imageView: ImageView, resource: Int) {
 @BindingAdapter("colorTint")
 fun setColorTint(view: ImageView, @ColorRes color: Int) {
     if (color != 0)
-        setTint(view.drawable, ContextCompat.getColor(CustomApplication.getInstance(), color))
+        setTint(view.drawable, ContextCompat.getColor(view.context, color))
 }
 
 @BindingAdapter("nestedScrollingEnabled")
 fun setNestedScrollingEnabled(view: RecyclerView, isNestedScrollingEnabled: Boolean) {
     ViewCompat.setNestedScrollingEnabled(view, isNestedScrollingEnabled)
+}
+
+@BindingAdapter("paginate")
+fun paginateInNestedScrollView(nestedScrollView: NestedScrollView?, paginate: Action?) {
+    nestedScrollView?.viewTreeObserver?.addOnScrollChangedListener {
+        val view = nestedScrollView.getChildAt(nestedScrollView.childCount - 1) as View
+        val diff = view.bottom - (nestedScrollView.height + nestedScrollView.scrollY)
+        if (diff == 0) {
+            paginate?.run()
+        }
+    }
 }
 

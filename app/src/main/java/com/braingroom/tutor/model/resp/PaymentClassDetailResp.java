@@ -134,15 +134,23 @@ public class PaymentClassDetailResp extends BaseResp {
         public String getPaymentStatus() {
             int pending = 0;
             int transferred = 0;
+            int refund = 0;
             for (Ticket ticket : tickets) {
                 if (ticket.getPaymentStatus().equalsIgnoreCase("0"))
                     pending++;
                 else if (ticket.getPaymentStatus().equalsIgnoreCase("1"))
                     transferred++;
+                else if (ticket.getPaymentStatus().equalsIgnoreCase("2"))
+                    refund++;
             }
-            if (pending > transferred)
+            int max = CommonUtilsKt.max(pending, transferred, refund).intValue();
+            if (max == pending)
                 return "Pending";
-            else return "Transferred";
+            else if (max == transferred)
+                return "Transferred";
+            else if (max == refund)
+                return "Cancelled";
+            return "";
         }
 
         @NonNull

@@ -69,7 +69,7 @@
                                 android:layout_height="match_parent"
                                 android:layout_alignParentLeft="true"
                                 android:layout_alignParentStart="true"
-                                android:src="@{vm.uploadPrimaryImage1.remoteAddress}"
+                                app:src="@{vm.uploadPrimaryImage1.remoteAddress}"
                                 app:placeHolder="@{vm.uploadPrimaryImage1.placeHolder}" />
 
                             <TextView
@@ -127,7 +127,7 @@
                                 android:layout_height="match_parent"
                                 android:layout_alignParentLeft="true"
                                 android:layout_alignParentStart="true"
-                                android:src="@{vm.uploadPrimaryImage2.remoteAddress}"
+                                app:src="@{vm.uploadPrimaryImage2.remoteAddress}"
                                 app:placeHolder="@{vm.uploadPrimaryImage2.placeHolder}" />
 
                             <TextView
@@ -204,7 +204,7 @@
                                 android:layout_height="match_parent"
                                 android:layout_alignParentLeft="true"
                                 android:layout_alignParentStart="true"
-                                android:src="@{vm.uploadSecondaryImage1.remoteAddress}"
+                                app:src="@{vm.uploadSecondaryImage1.remoteAddress}"
                                 app:placeHolder="@{vm.uploadSecondaryImage1.placeHolder}" />
 
                             <TextView
@@ -244,7 +244,7 @@
                                 android:layout_height="match_parent"
                                 android:layout_alignParentLeft="true"
                                 android:layout_alignParentStart="true"
-                                android:src="@{vm.uploadSecondaryImage2.remoteAddress}"
+                                app:src="@{vm.uploadSecondaryImage2.remoteAddress}"
                                 app:placeHolder="@{vm.uploadSecondaryImage2.placeHolder}" />
 
                             <TextView
@@ -284,7 +284,7 @@
                                 android:layout_height="match_parent"
                                 android:layout_alignParentLeft="true"
                                 android:layout_alignParentStart="true"
-                                android:src="@{vm.uploadSecondaryImage3.remoteAddress}"
+                                app:src="@{vm.uploadSecondaryImage3.remoteAddress}"
                                 app:placeHolder="@{vm.uploadSecondaryImage3.placeHolder}" />
 
                             <TextView

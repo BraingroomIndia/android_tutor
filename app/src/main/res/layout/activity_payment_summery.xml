@@ -17,34 +17,32 @@
         android:layout_height="match_parent"
         android:background="@drawable/splash_screen">
 
-        <android.support.constraint.Guideline
-            android:id="@+id/top_horizontal"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            bind:layout_constraintGuide_begin="146dp" />
+        <!--   <android.support.constraint.Guideline
+               android:id="@+id/top_horizontal"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:orientation="horizontal"
+               app:layout_constraintGuide_percent="0.15" />
 
-        <android.support.constraint.Guideline
-            android:id="@+id/bottom_horizontal"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            bind:layout_constraintGuide_begin="442dp" />
+           <android.support.constraint.Guideline
+               android:id="@+id/bottom_horizontal"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:orientation="horizontal"
+               app:layout_constraintGuide_percent="0.70" />-->
 
         <android.support.v7.widget.CardView
             android:layout_width="0dp"
-            android:layout_height="0dp"
+            android:layout_height="wrap_content"
             android:layout_marginEnd="26dp"
-            android:layout_marginLeft="26dp"
-            android:layout_marginRight="26dp"
             android:layout_marginStart="26dp"
             app:cardCornerRadius="5dp"
             app:cardElevation="2dp"
-            app:layout_constraintBottom_toBottomOf="@id/bottom_horizontal"
+            app:layout_constraintBottom_toTopOf="@+id/textView"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@id/top_horizontal">
+            app:layout_constraintTop_toTopOf="parent">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -61,6 +59,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="30dp"
                 android:layout_marginLeft="22dp"
                 android:layout_marginRight="22dp"
                 android:layout_marginTop="70dp"
@@ -70,6 +69,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
                     android:background="@drawable/bottom_line_drawable"
                     android:gravity="center_horizontal"
                     android:padding="4dp"
@@ -135,6 +135,7 @@
         </android.support.v7.widget.CardView>
 
         <TextView
+            android:id="@+id/textView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="26dp"
@@ -147,7 +148,10 @@
             android:textColor="@color/material_red300"
             android:textSize="20sp"
             android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="parent" />
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent" />
     </android.support.constraint.ConstraintLayout>
 
 

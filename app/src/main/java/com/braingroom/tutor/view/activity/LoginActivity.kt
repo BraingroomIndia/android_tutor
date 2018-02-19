@@ -86,7 +86,7 @@ class LoginActivity : Activity(), OnConnectionFailedListener {
                     }
 
                     override fun onError(exception: FacebookException) {
-                        Timber.tag(TAG).e(exception, "Fb Login onError: " + exception.message)
+                        Timber.tag(TAG).e(exception, exception.message)
                         messageHelper.showMessage("Facebook login error")
                         LoginManager.getInstance().logOut()
                     }

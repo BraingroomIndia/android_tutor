@@ -32,7 +32,7 @@
                 android:id="@+id/learner_pic"
                 android:layout_width="60dp"
                 android:layout_height="60dp"
-                android:src="@{vm.learnerImage}"
+                app:src="@{vm.learnerImage}"
                 app:layout_constraintEnd_toStartOf="@id/vertical_30"
                 app:layout_constraintStart_toStartOf="parent"
                 app:placeHolder='@{vm.learnerImagePlaceholder}'

@@ -11,6 +11,8 @@ import android.widget.TextView;
 import com.braingroom.tutor.BuildConfig;
 import com.braingroom.tutor.common.modules.AppModule;
 import com.braingroom.tutor.utils.TimberLogImplementation;
+import com.bumptech.glide.annotation.GlideModule;
+import com.bumptech.glide.module.AppGlideModule;
 import com.facebook.stetho.Stetho;
 
 import android.app.Application.ActivityLifecycleCallbacks;
@@ -33,7 +35,7 @@ import static com.braingroom.tutor.utils.ConstantsKt.FONT_BOLD;
  * Created by godara on 06/10/17.
  */
 
-public class CustomApplication extends MultiDexApplication implements ActivityLifecycleCallbacks {
+public class CustomApplication extends MultiDexApplication {
     private static CustomApplication sInstance;
     private String TAG = CustomApplication.class.getSimpleName();
     public boolean loggedIn = false;
@@ -45,6 +47,7 @@ public class CustomApplication extends MultiDexApplication implements ActivityLi
     public String userId = "";
     public String userPic = "";
     public static String GEO_TAG = "";
+
 
     @Override
     public void onCreate() {
@@ -86,67 +89,5 @@ public class CustomApplication extends MultiDexApplication implements ActivityLi
         return refWatcher;
     }
 
-    public void putFontCache(String key, String name) {
-        if (fontCache.get(key) == null) {
-            fontCache.put(key, Typeface.createFromAsset(getApplicationContext().getAssets(), "font/" + name));
-        } else {
-            Timber.tag(TAG).d("putFontCache: Already in cache");
-        }
-    }
 
-
-    @SuppressWarnings("unused")
-    public void setRegularTypeface(TextView textView) {
-        if (getFont(FONT_REGULAR) == null)
-            putFontCache(FONT_REGULAR, FONT_REGULAR);
-        textView.setTypeface(getFont(FONT_REGULAR));
-    }
-
-    @SuppressWarnings("unused")
-    public void setBoldTypeface(TextView textView) {
-        if (getFont(FONT_BOLD) == null)
-            putFontCache(FONT_BOLD, FONT_BOLD);
-        textView.setTypeface(getFont(FONT_BOLD));
-    }
-
-    @Override
-    public void onActivityCreated(Activity activity, Bundle bundle) {
-
-    }
-
-    @Override
-    public void onActivityStarted(Activity activity) {
-
-    }
-
-    @Override
-    public void onActivityResumed(Activity activity) {
-
-    }
-
-    @Override
-    public void onActivityPaused(Activity activity) {
-
-
-    }
-
-    @Override
-    public void onActivityStopped(Activity activity) {
-
-
-    }
-
-    @Override
-    public void onActivitySaveInstanceState(Activity activity, Bundle bundle) {
-    }
-
-    @Override
-    public void onActivityDestroyed(Activity activity) {
-
-
-    }
-
-    private void clearActivityReferences(Activity activity) {
-
-    }
 }
