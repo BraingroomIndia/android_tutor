@@ -11,10 +11,11 @@ import com.braingroom.tutor.services.CustomInterceptor
 import com.braingroom.tutor.services.DataFlowService
 
 import com.braingroom.tutor.utils.*
+import com.bumptech.glide.annotation.GlideModule;
+import com.bumptech.glide.module.AppGlideModule;
 import com.facebook.stetho.okhttp3.StethoInterceptor
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
-import com.squareup.picasso.Picasso
 import okhttp3.Cache
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -31,6 +32,7 @@ import java.util.concurrent.TimeUnit.SECONDS
 @SuppressLint("CommitPrefEdits")
 @Suppress("unused", "MemberVisibilityCanPrivate")
 class AppModule(private val application: Application) {
+
 
     private val cacheSize = 10 * 1024 * 1024 // 10 MiB
 
@@ -60,9 +62,6 @@ class AppModule(private val application: Application) {
                     .writeTimeout(1000, SECONDS).build()
     }
 
-    val picasso: Picasso by lazy {
-        providePicasso()
-    }
     val apiService: ApiService by lazy {
         if (DEBUG)
             Retrofit.Builder()
@@ -90,8 +89,4 @@ class AppModule(private val application: Application) {
     }
 
 
-    fun providePicasso(): Picasso {
-        val picasso = Picasso.with(application)
-        return picasso
-    }
 }

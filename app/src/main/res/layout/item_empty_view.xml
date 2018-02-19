@@ -22,8 +22,8 @@
             android:layout_centerInParent="true"
             android:layout_gravity="center_horizontal"
             android:padding="@dimen/margin_small"
-            android:src="@{vm.image}"
-            app:placeHolder="@{vm.placeHolder}" />
+            app:placeHolder="@{vm.placeHolder}"
+            app:src="@{vm.image}" />
 
         <TextView
             android:layout_width="match_parent"

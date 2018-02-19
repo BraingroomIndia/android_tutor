@@ -5,20 +5,15 @@ import android.util.Log;
 import com.braingroom.tutor.common.CustomApplication;
 import com.crashlytics.android.Crashlytics;
 
-import java.util.Map;
-
 import timber.log.Timber;
 
-import static android.util.Log.ERROR;
-import static android.util.Log.WARN;
-
-/**
+/*
  * Created by godara on 30/01/18.
  */
 
 public class ReleaseTree extends Timber.Tree {
 
-    public ReleaseTree() {
+    ReleaseTree() {
         Crashlytics.setUserEmail(CustomApplication.getInstance().userEmail);
         Crashlytics.setUserName(CustomApplication.getInstance().userName);
     }

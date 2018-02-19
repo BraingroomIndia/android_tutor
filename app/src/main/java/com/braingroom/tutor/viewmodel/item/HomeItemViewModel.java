@@ -6,7 +6,6 @@ import android.support.annotation.DrawableRes;
 import android.support.annotation.NonNull;
 
 import com.braingroom.tutor.R;
-import com.braingroom.tutor.utils.CustomDrawable;
 import com.braingroom.tutor.viewmodel.ViewModel;
 
 import org.jetbrains.annotations.NotNull;
@@ -30,7 +29,7 @@ public class HomeItemViewModel implements RecyclerViewItem {
     public HomeItemViewModel(@DrawableRes int drawableTop, @ColorRes int color, @NonNull String text, Action onClick) {
         this.drawableTop = drawableTop;
         this.drawableBottom = R.drawable.rounded_corner_line;
-        this.bottomColor=color;
+        this.bottomColor = color;
         this.text = text;
         this.onClick = onClick;
     }

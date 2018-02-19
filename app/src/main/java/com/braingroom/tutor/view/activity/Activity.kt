@@ -53,7 +53,6 @@ abstract class Activity : AppCompatActivity() {
         get() = this::class.java.simpleName ?: ""
 
 
-    @Suppress("unused")
     val applicationContext: CustomApplication by lazy {
         CustomApplication.getInstance()
     }
@@ -67,17 +66,14 @@ abstract class Activity : AppCompatActivity() {
         }
 
 
-    @Suppress("unused")
     val apiService by lazy {
         applicationContext.appModule.dataFlowService
     }
 
-    @Suppress("unused")
     val messageHelper by lazy {
         helperFactory.messageHelper
     }
 
-    @Suppress("unused")
     val navigator by lazy {
         helperFactory.navigator
     }
@@ -86,11 +82,12 @@ abstract class Activity : AppCompatActivity() {
     val dialogHelper by lazy {
         helperFactory.dialogHelper
     }
-
+    @Suppress("unused")
     private val userPreferences by lazy {
         applicationContext.appModule.userPreferences
     }
 
+    @Suppress("unused")
     private val preferencesEditor by lazy {
         applicationContext.appModule.preferencesEditor
     }
@@ -99,21 +96,14 @@ abstract class Activity : AppCompatActivity() {
         HelperFactory(this)
     }
 
-    open val backButtonEnalebd = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
-
         super.onCreate(savedInstanceState)
         requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
-        CustomApplication.getInstance().refWatcher?.watch(this)
         binding = DataBindingUtil.setContentView(this, layoutId)
         defaultBinder.bind(binding, vm)
 
-        supportActionBar?.setHomeButtonEnabled(true)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-
     }
-
 
     override fun onPause() {
         super.onPause()
@@ -121,13 +111,11 @@ abstract class Activity : AppCompatActivity() {
     }
 
     override fun onResume() {
-
         super.onResume()
         vm.onResume()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-
         super.onActivityResult(requestCode, resultCode, data)
         vm.onActivityResult(requestCode, resultCode, data)
     }
@@ -137,13 +125,13 @@ abstract class Activity : AppCompatActivity() {
         vm.onDestroy()
         defaultBinder.bind(binding, null)
         binding.executePendingBindings()
-
+        applicationContext.refWatcher?.watch(this, TAG)
         super.onDestroy()
 
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        return if (item?.itemId == android.R.id.home && backButtonEnalebd) {
+        return if (item?.itemId == android.R.id.home) {
             finish()
             true
         } else super.onOptionsItemSelected(item)
@@ -153,7 +141,6 @@ abstract class Activity : AppCompatActivity() {
 
     open fun getFragmentViewModel(title: String) = ViewModel(helperFactory)
 
-    @Suppress("unused")
     fun getIntentString(key: String) = extras?.getString(key) ?: ""
 
     @Suppress("unused")
@@ -167,10 +154,8 @@ abstract class Activity : AppCompatActivity() {
     fun getIntentSerializable(key: String): Serializable? = extras?.getSerializable(key)
 
     fun popBackStack(title: String) {
-        val count = fragmentManager.backStackEntryCount
-        if (count > 0) {
+        if (fragmentManager.backStackEntryCount > 0)  //Check if any fragment is in backStack
             fragmentManager.popBackStack(title, FragmentManager.POP_BACK_STACK_INCLUSIVE)
-        }
 
     }
 

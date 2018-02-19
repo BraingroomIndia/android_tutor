@@ -1,7 +1,6 @@
 package com.braingroom.tutor.view.activity
 
 
-import android.content.Context
 import android.content.Intent
 import android.graphics.drawable.LayerDrawable
 import android.os.Bundle
@@ -17,6 +16,7 @@ import com.afollestad.materialdialogs.MaterialDialog.SingleButtonCallback
 import com.braingroom.tutor.R
 import com.braingroom.tutor.utils.*
 import com.braingroom.tutor.viewmodel.activity.HomeViewModel
+import io.reactivex.android.schedulers.AndroidSchedulers
 
 /*
  * Created by godara on 27/09/17.
@@ -32,11 +32,10 @@ class HomeActivity : Activity(), NavigationView.OnNavigationItemSelectedListener
     }
 
     private var nonfictionItem: MenuItem? = null
-    override val backButtonEnalebd = false
 
     var navigationView: NavigationView? = null
     var drawer: DrawerLayout? = null
-    var toggle: ActionBarDrawerToggle? = null;
+    var toggle: ActionBarDrawerToggle? = null
     var toolbar: Toolbar? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -108,14 +107,15 @@ class HomeActivity : Activity(), NavigationView.OnNavigationItemSelectedListener
 
     }
 
+    override fun onResume() {
+        super.onResume()
+        apiService.getUnreadNotificationCount().observeOn(AndroidSchedulers.mainThread()).subscribe(this::setNotificationCount, vm::handleError)
+    }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.action_bar_activity_home, menu)
         nonfictionItem = menu.findItem(R.id.action_notifications)
-        apiService.getUnreadNotificationCount().subscribe(this::setNotificationCount, vm::handleError)
-        /*  itemMessage = menu.findItem(R.id.action_messages)
-          setNotificationCount(itemNotification, this, ViewModel.notificationCount)
-          setNotificationCount(itemMessage, this, ViewModel.messageCount)*/
+        apiService.getUnreadNotificationCount().observeOn(AndroidSchedulers.mainThread()).subscribe(this::setNotificationCount, vm::handleError)
         return true
     }
 
@@ -125,10 +125,6 @@ class HomeActivity : Activity(), NavigationView.OnNavigationItemSelectedListener
             navigator.navigateActivity(NotificationActivity::class.java)
             return true
         }
-        /*   if (item?.itemId == android.R.id.home) {
-               return toggle?.onOptionsItemSelected(item) ?: false
-
-           }*/
         return super.onOptionsItemSelected(item)
     }
 
@@ -149,7 +145,3 @@ class HomeActivity : Activity(), NavigationView.OnNavigationItemSelectedListener
         }
     }
 }
-
-
-/* ;
-                    startActivity(i);*/

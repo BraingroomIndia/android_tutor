@@ -82,7 +82,7 @@
                             android:layout_width="80dp"
                             android:layout_height="match_parent"
                             android:layout_alignParentLeft="true"
-                            android:src="@{vm.uploadProfilePic.remoteAddress}"
+                            app:src="@{vm.uploadProfilePic.remoteAddress}"
                             app:placeHolder="@{vm.uploadProfilePic.placeHolder}"
                             tools:src="@drawable/individual" />
 
@@ -125,7 +125,7 @@
                             android:layout_width="80dp"
                             android:layout_height="match_parent"
                             android:layout_alignParentLeft="true"
-                            android:src="@{vm.uploadOrganizationPic.remoteAddress}"
+                            app:src="@{vm.uploadOrganizationPic.remoteAddress}"
                             app:placeHolder="@{vm.uploadOrganizationPic.placeHolder}" />
 
                         <TextView

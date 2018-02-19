@@ -3,16 +3,12 @@ package com.braingroom.tutor.viewmodel.activity;
 import android.content.Intent;
 import android.databinding.ObservableField;
 import android.support.annotation.NonNull;
-import android.util.Log;
 
-import com.braingroom.tutor.R;
 import com.braingroom.tutor.common.CustomApplication;
 import com.braingroom.tutor.common.modules.HelperFactory;
 import com.braingroom.tutor.model.req.LoginReq;
 import com.braingroom.tutor.model.req.SocialLoginReq;
 import com.braingroom.tutor.model.resp.LoginResp;
-import com.braingroom.tutor.utils.CustomDrawable;
-import com.braingroom.tutor.view.activity.LoginActivity;
 import com.braingroom.tutor.view.activity.LoginActivity.UIHelper;
 import com.braingroom.tutor.view.activity.SignupActivity;
 import com.braingroom.tutor.viewmodel.ViewModel;
@@ -45,7 +41,6 @@ public class LoginViewModel extends ViewModel {
     public final ObservableField<String> emailError = new ObservableField<>("");
     public final ObservableField<String> password = new ObservableField<>("");
     public final ObservableField<String> passwordError = new ObservableField<>("");
-    public final CustomDrawable loginButton;
     public final Action onLoginClicked = new Action() {
         @Override
         public void run() throws Exception {
@@ -53,12 +48,7 @@ public class LoginViewModel extends ViewModel {
         }
     };
 
-    public final Action onRegisterCLicked = new Action() {
-        @Override
-        public void run() throws Exception {
-            getNavigator().navigateActivity(SignupActivity.class);
-        }
-    };
+    public final Action onRegisterCLicked = () -> getNavigator().navigateActivity(SignupActivity.class);
     public final Action onForgetPassword = new Action() {
 
         @Override
@@ -86,7 +76,6 @@ public class LoginViewModel extends ViewModel {
 
     public LoginViewModel(HelperFactory helperFactory, UIHelper uiHelper) {
         super(helperFactory);
-        loginButton = new CustomDrawable(R.drawable.rounded_corner_line, R.color.material_deeporange600);
         this.uiHelper = uiHelper;
 
     }
@@ -101,7 +90,8 @@ public class LoginViewModel extends ViewModel {
                 GoogleSignInAccount account = result.getSignInAccount();
                 if (account != null && account.getDisplayName() != null && account.getEmail() != null && account.getId() != null)
                     socialLogin(account.getDisplayName(), account.getEmail(), account.getPhotoUrl() != null ? account.getPhotoUrl().toString() : "", account.getId());
-            }
+            } else
+                getMessageHelper().showMessage(Auth.GoogleSignInApi.getSignInResultFromIntent(data).getStatus().getStatusMessage() + "");
         }
     }
 

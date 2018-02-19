@@ -52,7 +52,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_chainStyle="spread"
-                tools:src="@drawable/ic_add_class" />
+                tools:src="@drawable/ic_add_class_36dp" />
 
             <TextView
                 android:id="@+id/text"

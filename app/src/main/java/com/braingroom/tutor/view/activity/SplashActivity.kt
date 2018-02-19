@@ -16,6 +16,7 @@ import android.content.pm.PackageManager
 import android.content.pm.PackageInfo
 import android.util.Base64
 import android.util.Log
+import com.braingroom.tutor.common.modules.HelperFactory
 import java.security.MessageDigest
 import java.security.NoSuchAlgorithmException
 
@@ -40,6 +41,10 @@ class SplashActivity : AppCompatActivity() {
         CustomApplication.getInstance().appModule.userPreferences
     }
     val cls: Class<out Activity> = HomeActivity::class.java
+
+    val helperFactory by lazy {
+        HelperFactory(this)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -108,7 +113,7 @@ class SplashActivity : AppCompatActivity() {
                 navigateActivity(HomeActivity::class.java, null)
             } else if (classId != null) {
 
-                apiServices.getClassDetail(classId).subscribe({
+                apiServices.getClassDetail(classId).doOnSubscribe { helperFactory.messageHelper.showProgressDialog("Wait", "Loading") }.doOnComplete { helperFactory.messageHelper.dismissActiveProgress() }.subscribe({
                     if (it.resCode) {
                         if (notificationType == 10) {
                             val bundle = Bundle()

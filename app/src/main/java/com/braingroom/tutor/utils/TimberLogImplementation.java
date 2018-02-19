@@ -2,7 +2,7 @@ package com.braingroom.tutor.utils;
 
 import timber.log.Timber;
 
-/**
+/*
  * Created by godara on 30/01/18.
  */
 

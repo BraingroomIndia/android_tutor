@@ -23,5 +23,6 @@ class PaymentClassDetailActivity : Activity() {
         PaymentClassDetailViewModel(helperFactory, image, name, id)
     }
     override val layoutId: Int
-        get() = R.layout.activity_payment_class_detail//TODO("not implemented") //To change initializer of created properties use File | Settings | File Templates.
+        get() = R.layout.activity_payment_class_detail
+
 }
