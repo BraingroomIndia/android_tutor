@@ -8,7 +8,6 @@ import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import static com.braingroom.tutor.utils.CommonUtilsKt.extractYoutubeId;
@@ -48,7 +47,7 @@ public class ClassData implements Serializable {
     private String classSummary;
 
     @SerializedName("detail_class_link")
-    private String detailClassLink;
+    private String classLink;
 
     @SerializedName("class_type")
     private String classType;
@@ -132,8 +131,8 @@ public class ClassData implements Serializable {
         return getNonNull(classSummary);
     }
 
-    public String getDetailClassLink() {
-        return getNonNull(detailClassLink);
+    public String getClassLink() {
+        return getNonNull(classLink);
     }
 
     public String getClassType() {

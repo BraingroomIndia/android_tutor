@@ -86,7 +86,7 @@
         <activity
             android:name=".view.activity.BarcodeCaptureActivity"
             android:label=""
-            android:theme="@style/AppTheme.NoActionBar  " />
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".view.activity.ManualAttendanceActivity" />
         <activity android:name=".view.activity.BroadcastMessageActivity" />
         <activity android:name=".view.activity.ClassDetailActivity" />
@@ -114,6 +114,17 @@
             </intent-filter>
         </service>
         <!--Services -->
+
+        <meta-data
+            android:name="io.branch.sdk.BranchKey"
+            android:value="@string/branch_key" />
+        <meta-data
+            android:name="io.branch.sdk.BranchKey.test"
+            android:value="@string/branch_key" />
+        <meta-data
+            android:name="io.branch.sdk.TestMode"
+            android:value="@bool/testMode" />
+
     </application>
 
 

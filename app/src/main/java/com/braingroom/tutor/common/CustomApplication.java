@@ -1,21 +1,12 @@
 package com.braingroom.tutor.common;
 
-import android.app.Activity;
-import android.app.Application;
 import android.graphics.Typeface;
-import android.os.Bundle;
 import android.support.multidex.MultiDexApplication;
-import android.util.Log;
-import android.widget.TextView;
 
 import com.braingroom.tutor.BuildConfig;
 import com.braingroom.tutor.common.modules.AppModule;
 import com.braingroom.tutor.utils.TimberLogImplementation;
-import com.bumptech.glide.annotation.GlideModule;
-import com.bumptech.glide.module.AppGlideModule;
 import com.facebook.stetho.Stetho;
-
-import android.app.Application.ActivityLifecycleCallbacks;
 
 import com.squareup.leakcanary.LeakCanary;
 import com.squareup.leakcanary.RefWatcher;
@@ -24,12 +15,8 @@ import java.util.HashMap;
 
 import com.crashlytics.android.Crashlytics;
 
+import io.branch.referral.Branch;
 import io.fabric.sdk.android.Fabric;
-import timber.log.Timber;
-
-
-import static com.braingroom.tutor.utils.ConstantsKt.FONT_REGULAR;
-import static com.braingroom.tutor.utils.ConstantsKt.FONT_BOLD;
 
 /*
  * Created by godara on 06/10/17.
@@ -51,16 +38,18 @@ public class CustomApplication extends MultiDexApplication {
 
     @Override
     public void onCreate() {
+        sInstance = this;
         super.onCreate();
         appModule = new AppModule(this);
-        sInstance = this;
-        if (BuildConfig.DEBUG)
+        if (BuildConfig.DEBUG) {
             Stetho.initializeWithDefaults(this);
+            Branch.enableLogging();
+        }
         if (!BuildConfig.DEBUG || !LeakCanary.isInAnalyzerProcess(this)) {
             LeakCanary.install(this);
             Fabric.with(this, new Crashlytics());
-
         }
+        Branch.getAutoInstance(this);
         TimberLogImplementation.init();
         appModule.getDataFlowService().getGeoDetail();
 
@@ -73,9 +62,6 @@ public class CustomApplication extends MultiDexApplication {
         sInstance = null;
     }
 
-    public Typeface getFont(String key) {
-        return fontCache.get(key);
-    }
 
     synchronized public static CustomApplication getInstance() {
         return sInstance;

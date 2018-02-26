@@ -1,0 +1,7 @@
+<resources>
+
+    <!--Dev Keys Only-->
+
+    <string name="branch_key" translatable="false">key_test_pexsI2ytGiNEj794aRPe2mkgFsnwUtCT</string>
+    <bool name="testMode">true</bool>
+</resources>

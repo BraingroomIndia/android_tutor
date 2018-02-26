@@ -74,13 +74,6 @@
 -keep class com.google.android.gms.ads.identifier.** { *; }
 -printmapping mapping.txt
 
-#-Realm
--keep class io.realm.annotations.RealmModule
--keep @io.realm.annotations.RealmModule class *
--keep class io.realm.internal.Keep
--keep @io.realm.internal.Keep class * { *; }
--dontwarn javax.**
--dontwarn io.realm.**
--keepattributes InnerClasses
--keepnames public class * extends io.realm.RealmObject
--keep public class * extends io.realm.RealmObject { *; }
+# Branch
+-dontwarn com.google.firebase.appindexing.**
+-dontwarn com.android.installreferrer.api.**
